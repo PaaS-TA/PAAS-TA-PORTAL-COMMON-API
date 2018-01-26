@@ -1,0 +1,15 @@
+spring:
+  application:
+      name: PortalApi
+  cloud:
+    config:
+      uri: http://localhost:10001
+
+server:
+  port: ${PORT:8080}
+
+
+
+
+
+
