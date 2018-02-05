@@ -1,4 +1,4 @@
-package org.openpaas.paasta.portal.api.config.security;
+package org.openpaas.paasta.portal.common.api.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
