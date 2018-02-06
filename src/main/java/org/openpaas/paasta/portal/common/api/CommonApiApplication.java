@@ -1,15 +1,9 @@
-package org.openpaas.paasta.portal.api.config;
+package org.openpaas.paasta.portal.common.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.web.client.RestTemplate;
-
-import javax.net.ssl.*;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 
 /**
  * All you need to run a Eureka registration server.
@@ -18,8 +12,8 @@ import java.security.cert.X509Certificate;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@ComponentScan(basePackages = {"org.openpaas.paasta.portal.api"})
-public class ApiApplication {
+@ComponentScan(basePackages = {"org.openpaas.paasta.portal.common.api"})
+public class CommonApiApplication {
 
 	/**
 	 * Run the application using Spring Boot and an embedded servlet engine.
@@ -30,7 +24,7 @@ public class ApiApplication {
 	public static void main(String[] args) {
 		// Tell server to look for registration.properties or registration.yml
 
-		SpringApplication.run(ApiApplication.class, args);
+		SpringApplication.run(CommonApiApplication.class, args);
 	}
 
 }
