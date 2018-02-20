@@ -9,10 +9,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class SupportNoticeService {
 
-    @Autowired
-    private SupportNoticeRepository supportNoticeRepository;
+//    @Autowired
+//    private SupportNoticeRepository supportNoticeRepository;
 
     public SupportNotice insertNotice(SupportNotice supportNotice) {
-        return supportNoticeRepository.save(supportNotice);
+        return null;
+//        return supportNoticeRepository.save(supportNotice);
     }
 }

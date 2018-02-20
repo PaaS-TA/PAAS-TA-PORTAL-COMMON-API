@@ -26,7 +26,7 @@ public class SupportNoticeController {
         supportNotice.setContent("notice");
         supportNotice.setStartDate("20180201");
         supportNotice.setEndDate("20180310");*/
-
-        return supportNoticeService.insertNotice(supportNotice);
+return null;
+//        return supportNoticeService.insertNotice(supportNotice);
     }
 }

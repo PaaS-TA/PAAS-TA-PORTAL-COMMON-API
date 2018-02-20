@@ -1,4 +1,4 @@
-package org.openpaas.paasta.portal.api.config.service.surport;
+package org.openpaas.paasta.portal.common.api.config.service.surport;
 
 import java.lang.annotation.*;
 
