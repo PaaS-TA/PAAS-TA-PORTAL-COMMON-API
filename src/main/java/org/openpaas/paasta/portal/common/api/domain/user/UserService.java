@@ -1,5 +1,6 @@
 package org.openpaas.paasta.portal.common.api.domain.user;
 
+import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
 import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,13 +11,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-//    @Autowired
-//    PortalConfig portalConfig;
-
     @Autowired
     UserDetailRepository userDetailRepository;
-//
-//    private final Logger LOGGER = getLogger(this.getClass());
 
     /**
      * portal db에 등록된 UserDetail 수
@@ -26,11 +22,21 @@ public class UserService {
     public int getUserCount() {
         int userCnt = (int) userDetailRepository.count();
         System.out.println(userCnt);
-//        return userCnt;
-        System.out.println("test");
-        return 0;
-            //return userDetailMapper.getUserDetailCount();
+        return userCnt;
     }
+
+    /**
+     * 사용자 상세 정보
+     *
+     * @param userId the user id
+     * @return UserDetail user
+     */
+    public UserDetail getUser(String userId) {
+        UserDetail userDetail = userDetailRepository.findByUserId(userId);
+        System.out.println(userDetail);
+        return userDetail;
+    }
+
 
 
 

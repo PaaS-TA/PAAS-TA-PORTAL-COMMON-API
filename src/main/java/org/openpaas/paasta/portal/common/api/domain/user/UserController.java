@@ -1,9 +1,11 @@
 package org.openpaas.paasta.portal.common.api.domain.user;
 
+import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,6 +47,20 @@ public class UserController {
         return resultMap;
     }
 
+    /**
+     * Gets user.
+     *
+     * @param userId the user id
+     * @return Map user
+     */
+    @RequestMapping(value = {"/getUser/{userId:.+}"}, method = RequestMethod.GET)
+    public Map getUser(@PathVariable String userId) {
+        LOGGER.info("> into getUser...");
+        UserDetail user= userService.getUser(userId);;
+        Map<String, Object> result = new HashMap<>();
+        result.put("User", user);
+        return result;
+    }
 
 
 }
