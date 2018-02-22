@@ -11,8 +11,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "user_detail")
-//@Getter
-//@Setter
+
 public class UserDetail {
     @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,22 +50,6 @@ public class UserDetail {
 
     @Column(name = "auth_access_cnt", nullable = false)
     private int authAccessCnt;
-
-
-//    public UserDetail() {
-//        //empty
-//    }
-//    public UserDetail(Map user) {
-//        this.userId     = (user.containsKey("userId"))? (String) user.get("userId"):null;
-//        this.userName   = (user.containsKey("userName"))? (String) user.get("userName"):null;
-//        this.status     = (user.containsKey("status"))? (String) user.get("status"):null;
-//        this.addressDetail = (user.containsKey("addressDetail"))? (String) user.get("addressDetail"):null;
-//        this.address    = (user.containsKey("address"))? (String) user.get("address"):null;
-//        this.tellPhone  = (user.containsKey("tellPhone"))? (String) user.get("tellPhone"):null;
-//        this.zipCode    = (user.containsKey("zipCode"))? (String) user.get("zipCode"):null;
-//        this.adminYn    = (user.containsKey("adminYn"))? (String) user.get("adminYn"):null;
-//        this.imgPath    = (user.containsKey("imgPath"))? (String) user.get("imgPath"):null;
-//    }
 
 
     public String getUserId() {

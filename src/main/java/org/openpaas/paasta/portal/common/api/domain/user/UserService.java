@@ -35,6 +35,9 @@ public class UserService {
     @Autowired
     UserDetailRepository userDetailRepository;
 
+    @Autowired
+    private UserService userService;
+
 
     /**
      * portal db에 등록된 UserDetail 수
@@ -42,6 +45,7 @@ public class UserService {
      * @return int user count
      */
     public int getUserCount() {
+        //JpaRepository를 상속하는 인터페이스를 생성하는것 만으로 count기능을 바로 사용
         int userCnt = (int) userDetailRepository.count();
         System.out.println(userCnt);
         return userCnt;
@@ -59,7 +63,6 @@ public class UserService {
         return userDetail;
     }
 
-
     /**
      * 사용자의 상세정보를 조회한다.
      *
@@ -71,11 +74,15 @@ public class UserService {
 
         EntityManager portalEm = portalConfig.portalEntityManager().getNativeEntityManagerFactory().createEntityManager();
 
+        //CriteriaBuilder 인스턴스를 작성한다.
         CriteriaBuilder cb = portalEm.getCriteriaBuilder();
+        //CriteriaQuery 인스턴스를 생성한다.
         CriteriaQuery<Tuple> cq = cb.createTupleQuery();
+        //Root는 영속적 엔티티를 표시하는 쿼리 표현식이다. SQL의 FROM 과 유사함
         Root<UserDetail> from = cq.from(UserDetail.class);
 
-        //select
+        //SQL:Select
+        //alias 튜플 요소에 할당 된 별칭
         cq.multiselect(from.get("userId").alias("userId")
                 , from.get("status").alias("status")
                 , from.get("tellPhone").alias("tellPhone")
@@ -90,7 +97,7 @@ public class UserService {
 
         Predicate predicate = cb.conjunction();
 
-        //where
+        //SQL:WHERE
         if(null != map.get("userId") && !("").equals(map.get("userId").toString())) {
             predicate = cb.and(predicate, cb.equal(from.get("userId"), map.get("userId").toString()));
         }
@@ -124,26 +131,26 @@ public class UserService {
         TypedQuery<Tuple> tq = portalEm.createQuery(cq);
         List<Tuple> resultList = tq.getResultList();
 
-        for (Tuple tuple : resultList) {
-            System.out.print(tuple.get("userId", String.class));
-            System.out.print(", ");
-            System.out.print(tuple.get("status", String.class));
-            System.out.print(", ");
-            System.out.print(tuple.get("tellPhone", String.class));
-            System.out.print(", ");
-            System.out.print(tuple.get("zipCode", String.class));
-            System.out.print(", ");
-            System.out.print(tuple.get("address", String.class));
-            System.out.print(", ");
-            System.out.print(tuple.get("addressDetail", String.class));
-            System.out.print(", ");
-            System.out.print(tuple.get("userName", String.class));
-            System.out.print(", ");
-            System.out.print(tuple.get("adminYn", String.class));
-            System.out.print(", ");
-            System.out.print(tuple.get("refreshToken", String.class));
-            System.out.print("\n");
-        }
+//        for (Tuple tuple : resultList) {
+//            System.out.print(tuple.get("userId", String.class));
+//            System.out.print(", ");
+//            System.out.print(tuple.get("status", String.class));
+//            System.out.print(", ");
+//            System.out.print(tuple.get("tellPhone", String.class));
+//            System.out.print(", ");
+//            System.out.print(tuple.get("zipCode", String.class));
+//            System.out.print(", ");
+//            System.out.print(tuple.get("address", String.class));
+//            System.out.print(", ");
+//            System.out.print(tuple.get("addressDetail", String.class));
+//            System.out.print(", ");
+//            System.out.print(tuple.get("userName", String.class));
+//            System.out.print(", ");
+//            System.out.print(tuple.get("adminYn", String.class));
+//            System.out.print(", ");
+//            System.out.print(tuple.get("refreshToken", String.class));
+//            System.out.print("\n");
+//        }
 
         List<Map<String, Object>> resultList2 = resultList.stream().map(x -> new HashMap<String, Object>(){{
             put("userId", x.get("userId"));
@@ -158,6 +165,8 @@ public class UserService {
 
         return resultList2;
     }
+
+
 
 
 }
