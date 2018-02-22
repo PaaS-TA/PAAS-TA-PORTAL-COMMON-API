@@ -55,7 +55,6 @@ public class AppService {
 
         String thumbImgPath = result.get("thumbImgPath", String.class);
 
-        portalEm.close();
         return thumbImgPath;
     }
 }

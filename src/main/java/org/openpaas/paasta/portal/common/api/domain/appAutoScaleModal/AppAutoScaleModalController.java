@@ -59,9 +59,9 @@ public class AppAutoScaleModalController {
      */
     @RequestMapping(value = {"/insertAppAutoScale"}, method = RequestMethod.POST)
     public Map<String, Object> insertAppAutoScale(@RequestBody AutoScalingConfig autoScalingConfig, HttpServletResponse response) {
-        String resultStr = appAutoScaleModalService.insertAppAutoScale(autoScalingConfig);
-
         Map<String, Object> resultMap = new HashMap<>();
+
+        String resultStr = appAutoScaleModalService.insertAppAutoScale(autoScalingConfig);
         resultMap.put("RESULT", resultStr);
         return resultMap;
     }
@@ -75,9 +75,9 @@ public class AppAutoScaleModalController {
      */
     @RequestMapping(value = {"/updateAppAutoScale"}, method = RequestMethod.POST)
     public Map<String, Object> updateAppAutoScale(@RequestBody AutoScalingConfig autoScalingConfig, HttpServletResponse response) {
-        String resultStr = appAutoScaleModalService.updateAppAutoScale(autoScalingConfig);
-
         Map<String, Object> resultMap = new HashMap<>();
+
+        String resultStr = appAutoScaleModalService.updateAppAutoScale(autoScalingConfig);
         resultMap.put("RESULT", resultStr);
         return resultMap;
     }
@@ -91,9 +91,9 @@ public class AppAutoScaleModalController {
      */
     @RequestMapping(value = {"/deleteAppAutoScale"}, method = RequestMethod.POST)
     public Map<String, Object> deleteAppAutoScale(@RequestBody AutoScalingConfig autoScalingConfig, HttpServletResponse response) {
-        String resultStr = appAutoScaleModalService.deleteAppAutoScale(autoScalingConfig);
-
         Map<String, Object> resultMap = new HashMap<>();
+
+        String resultStr = appAutoScaleModalService.deleteAppAutoScale(autoScalingConfig);
         resultMap.put("RESULT", resultStr);
         return resultMap;
     }

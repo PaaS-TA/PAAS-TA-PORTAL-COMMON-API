@@ -10,6 +10,8 @@ public class Constants {
      */
     public Constants(){};
 
+    public static final String STRING_DATE_TYPE = "yyyy-MM-dd HH:mm:ss";
+
     /**
      * 사용유무 사용
      */

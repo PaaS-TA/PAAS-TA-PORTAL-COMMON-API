@@ -1,8 +1,6 @@
 package org.openpaas.paasta.portal.common.api.domain.supportNotice;
 
 
-import org.openpaas.paasta.portal.common.api.config.LocalDateTimeAttributeConverter;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -53,11 +51,9 @@ public class SupportNotice {
     private String endDate;
 
     @Column(name = "created", nullable = false)
-    @Convert(converter = LocalDateTimeAttributeConverter.class)
     private LocalDateTime created;
 
     @Column(name = "lastmodified")
-    @Convert(converter = LocalDateTimeAttributeConverter.class)
     private LocalDateTime lastModified;
 
 
