@@ -1,21 +1,18 @@
 package org.openpaas.paasta.portal.common.api.entity.portal;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Map;
+import java.util.Date;
 
 /**
  * Created by SEJI on 2018-02-20.
  */
 @Entity
 @Table(name = "user_detail")
-@Getter
-@Setter
+//@Getter
+//@Setter
 public class UserDetail {
     @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,20 +43,126 @@ public class UserDetail {
     @Column(name = "img_path", nullable = false)
     private String imgPath;
 
+    @Column(name = "refresh_token", nullable = false)
+    private String refreshToken;
 
-    public UserDetail() {
-        //empty
+    @Column(name = "auth_access_time", nullable = false)
+    private Date authAccessTime;
+
+    @Column(name = "auth_access_cnt", nullable = false)
+    private int authAccessCnt;
+
+
+//    public UserDetail() {
+//        //empty
+//    }
+//    public UserDetail(Map user) {
+//        this.userId     = (user.containsKey("userId"))? (String) user.get("userId"):null;
+//        this.userName   = (user.containsKey("userName"))? (String) user.get("userName"):null;
+//        this.status     = (user.containsKey("status"))? (String) user.get("status"):null;
+//        this.addressDetail = (user.containsKey("addressDetail"))? (String) user.get("addressDetail"):null;
+//        this.address    = (user.containsKey("address"))? (String) user.get("address"):null;
+//        this.tellPhone  = (user.containsKey("tellPhone"))? (String) user.get("tellPhone"):null;
+//        this.zipCode    = (user.containsKey("zipCode"))? (String) user.get("zipCode"):null;
+//        this.adminYn    = (user.containsKey("adminYn"))? (String) user.get("adminYn"):null;
+//        this.imgPath    = (user.containsKey("imgPath"))? (String) user.get("imgPath"):null;
+//    }
+
+
+    public String getUserId() {
+        return userId;
     }
-    public UserDetail(Map user) {
-        this.userId     = (user.containsKey("userId"))? (String) user.get("userId"):null;
-        this.userName   = (user.containsKey("userName"))? (String) user.get("userName"):null;
-        this.status     = (user.containsKey("status"))? (String) user.get("status"):null;
-        this.addressDetail = (user.containsKey("addressDetail"))? (String) user.get("addressDetail"):null;
-        this.address    = (user.containsKey("address"))? (String) user.get("address"):null;
-        this.tellPhone  = (user.containsKey("tellPhone"))? (String) user.get("tellPhone"):null;
-        this.zipCode    = (user.containsKey("zipCode"))? (String) user.get("zipCode"):null;
-        this.adminYn    = (user.containsKey("adminYn"))? (String) user.get("adminYn"):null;
-        this.imgPath    = (user.containsKey("imgPath"))? (String) user.get("imgPath"):null;
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getTellPhone() {
+        return tellPhone;
+    }
+
+    public void setTellPhone(String tellPhone) {
+        this.tellPhone = tellPhone;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getAddressDetail() {
+        return addressDetail;
+    }
+
+    public void setAddressDetail(String addressDetail) {
+        this.addressDetail = addressDetail;
+    }
+
+    public String getAdminYn() {
+        return adminYn;
+    }
+
+    public void setAdminYn(String adminYn) {
+        this.adminYn = adminYn;
+    }
+
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public Date getAuthAccessTime() {
+        return authAccessTime;
+    }
+
+    public void setAuthAccessTime(Date authAccessTime) {
+        this.authAccessTime = authAccessTime;
+    }
+
+    public int getAuthAccessCnt() {
+        return authAccessCnt;
+    }
+
+    public void setAuthAccessCnt(int authAccessCnt) {
+        this.authAccessCnt = authAccessCnt;
     }
 }
 
