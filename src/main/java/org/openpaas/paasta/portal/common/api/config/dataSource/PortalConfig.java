@@ -56,7 +56,7 @@ public class PortalConfig {
 //        dataSource.setUsername("portaladmin");
 //        dataSource.setPassword("admin");
 //        dataSource.setDriverClassName(env.getRequiredProperty("spring.datasource.mysql.driverClassName"));
-        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://115.68.46.219:3306/portaldb");
         dataSource.setUsername("root");
         dataSource.setPassword("!paas_ta202");
