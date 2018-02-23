@@ -131,27 +131,6 @@ public class UserService {
         TypedQuery<Tuple> tq = portalEm.createQuery(cq);
         List<Tuple> resultList = tq.getResultList();
 
-//        for (Tuple tuple : resultList) {
-//            System.out.print(tuple.get("userId", String.class));
-//            System.out.print(", ");
-//            System.out.print(tuple.get("status", String.class));
-//            System.out.print(", ");
-//            System.out.print(tuple.get("tellPhone", String.class));
-//            System.out.print(", ");
-//            System.out.print(tuple.get("zipCode", String.class));
-//            System.out.print(", ");
-//            System.out.print(tuple.get("address", String.class));
-//            System.out.print(", ");
-//            System.out.print(tuple.get("addressDetail", String.class));
-//            System.out.print(", ");
-//            System.out.print(tuple.get("userName", String.class));
-//            System.out.print(", ");
-//            System.out.print(tuple.get("adminYn", String.class));
-//            System.out.print(", ");
-//            System.out.print(tuple.get("refreshToken", String.class));
-//            System.out.print("\n");
-//        }
-
         List<Map<String, Object>> resultList2 = resultList.stream().map(x -> new HashMap<String, Object>(){{
             put("userId", x.get("userId"));
             put("status", x.get("status"));
@@ -166,7 +145,22 @@ public class UserService {
         return resultList2;
     }
 
+    /**
+     * 사용자 상세화면에서
+     * 사용자 정보 수정
+     *
+     * @param userId     the user id
+     * @param userDetail the user detail
+     * @return Int updateCount
+     */
+    public int updateUser(String userId, UserDetail userDetail) {
 
+        int resultCnt = userDetailRepository.countByUserId(userId);
+            if(resultCnt > 0) {
+                userDetailRepository.save(userDetail);
+            }
 
+        return resultCnt;
+    }
 
 }

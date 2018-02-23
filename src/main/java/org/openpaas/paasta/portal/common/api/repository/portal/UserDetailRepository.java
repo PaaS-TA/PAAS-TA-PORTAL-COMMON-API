@@ -12,4 +12,5 @@ public interface UserDetailRepository extends JpaRepository<UserDetail, Integer>
 
     UserDetail findByUserId(String userId);
 
+    int countByUserId(String userId);
 }
