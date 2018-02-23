@@ -159,7 +159,6 @@ public class UserService {
             if(resultCnt > 0) {
                 userDetailRepository.save(userDetail);
             }
-
         return resultCnt;
     }
 

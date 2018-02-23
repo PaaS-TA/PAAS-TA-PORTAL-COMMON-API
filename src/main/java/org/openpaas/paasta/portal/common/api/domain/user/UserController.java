@@ -141,7 +141,6 @@ public class UserController {
 
         LOGGER.info("> into updateUser...");
 
-        //UserDetail user = new UserDetail(body);
         UserDetail user = null;
         Map<String, Object> result = new HashMap<>();
 
