@@ -4,6 +4,8 @@ import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Created by SEJI on 2018-02-20.
  */
@@ -13,4 +15,7 @@ public interface UserDetailRepository extends JpaRepository<UserDetail, Integer>
     UserDetail findByUserId(String userId);
 
     int countByUserId(String userId);
+
+    List<UserDetail> findAll();
+
 }

@@ -22,7 +22,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 @RestController
 @Transactional
 @RequestMapping(value = {"/user"})
-public class UserController {
+public class UserController  {
 
     private final Logger LOGGER = getLogger(this.getClass());
 
@@ -97,6 +97,45 @@ public class UserController {
 //        userService.authAddAccessCnt(requestMap);
         resultMap.put("resultUser",listUser.size());
         resultMap.put("listResultUser",listUser);
+        return resultMap;
+    }
+
+    /**
+     * 이메일 인증을 통한 CF 사용자 추가
+     *
+     * @param userDetail the user detail
+     * @return map
+     * @throws Exception the exception
+     */
+    @Transactional
+    @RequestMapping(value = {"/authAddUser"}, method = RequestMethod.POST)
+    public Map<String, Object> authAddUser(@RequestBody HashMap userDetail) throws Exception {
+        UserDetail updateUser = new UserDetail();
+        Map<String, Object> resultMap = new HashMap();
+        HashMap<String, Object> paramMap = userDetail;
+        String userId = (String)userDetail.getOrDefault("userId","");
+        updateUser.setUserId(userId);
+        updateUser.setUserName((String)userDetail.getOrDefault("username",""));
+//        updateUser.setPassword((String)userDetail.getOrDefault("password",""));
+//        if(adminUserName.equals(updateUser.getUserId())){
+//            updateUser.setAdminYn("Y");
+//        } else {
+//            updateUser.setAdminYn("N");
+//        }
+        updateUser.setStatus("1");
+        int resultCreateUser = userService.updateUser(userId, updateUser); //일단 status를 1로 만들어준다.
+
+//        todo CF 생략.
+//        if(resultCreateUser > 0) {
+//            CustomCloudFoundryClient adminCcfc = getCustomCloudFoundryClient(adminUserName, adminPassword);
+//            boolean resultUaa = userService.create(userDetail);
+//        }
+        paramMap.put("searchUserId", paramMap.get("userId"));
+        paramMap.put("refreshToken", "");
+//        paramMap.put("authAccessTime", new Date());
+        paramMap.put("authAccessCnt", 0);
+//        userService.authAddUser(paramMap);
+        resultMap.put("bRtn", true);
         return resultMap;
     }
 

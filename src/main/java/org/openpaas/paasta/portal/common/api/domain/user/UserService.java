@@ -1,10 +1,12 @@
 package org.openpaas.paasta.portal.common.api.domain.user;
 
+import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
 import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
 import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -27,7 +29,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 @Service
 public class UserService {
 
-    private final Logger LOGGER = getLogger(this.getClass());
+    private final Logger logger = getLogger(this.getClass());
 
     @Autowired
     PortalConfig portalConfig;
@@ -161,5 +163,73 @@ public class UserService {
             }
         return resultCnt;
     }
+
+    /**
+     * 이메일 인증된 사용자의 추가 정보를 저장한다.
+     *
+     * @param map (이름, 비밀번호)
+     * @return boolean
+     */
+    public List<Map<String, Object>> authAddUser(HashMap map) {
+
+        String resultStr = Constants.RESULT_STATUS_SUCCESS;
+        EntityManager portalEm = portalConfig.portalEntityManager().getNativeEntityManagerFactory().createEntityManager();
+
+        try {
+            if(null != map.get("userId") && !("").equals(map.get("userId").toString()))
+                throw new NullPointerException();
+
+            CriteriaBuilder cb = portalEm.getCriteriaBuilder();
+            CriteriaQuery<Tuple> cq = cb.createTupleQuery();
+            Root<UserDetail> from = cq.from(UserDetail.class);
+
+            Predicate predicate = cb.conjunction();
+
+            //SQL:WHERE
+            if(null != map.get("userId") && !("").equals(map.get("userId").toString())) {
+                predicate = cb.and(predicate, cb.equal(from.get("userId"), map.get("userId").toString()));
+            }
+            if(null != map.get("username") && !("").equals(map.get("username").toString())) {
+                predicate = cb.and(predicate, cb.equal(from.get("username"), map.get("username").toString()));
+            }
+            if(null != map.get("tellPhone") && !("").equals(map.get("tellPhone").toString())) {
+                predicate = cb.and(predicate, cb.equal(from.get("tellPhone"), map.get("tellPhone").toString()));
+            }
+            if(null != map.get("zipCode") && !("").equals(map.get("zipCode").toString())) {
+                predicate = cb.and(predicate, cb.equal(from.get("zipCode"), map.get("zipCode").toString()));
+            }
+            if(null != map.get("address") && !("").equals(map.get("address").toString())) {
+                predicate = cb.and(predicate, cb.equal(from.get("address"), map.get("address").toString()));
+            }
+            if(null != map.get("addressDetail") && !("").equals(map.get("addressDetail").toString())) {
+                predicate = cb.and(predicate, cb.equal(from.get("addressDetail"), map.get("addressDetail").toString()));
+            }
+            if(null != map.get("userName") && !("").equals(map.get("userName").toString())) {
+                predicate = cb.and(predicate, cb.equal(from.get("userName"), map.get("userName").toString()));
+            }
+            if(null != map.get("adminYn") && !("").equals(map.get("adminYn").toString())) {
+                predicate = cb.and(predicate, cb.equal(from.get("adminYn"), map.get("adminYn").toString()));
+            }
+            if(null != map.get("refreshToken") && !("").equals(map.get("refreshToken").toString())) {
+                predicate = cb.and(predicate, cb.equal(from.get("refreshToken"), map.get("refreshToken").toString()));
+            }
+
+            cq.where(cb.equal(from.get("searchUserId"), map.get("searchUserId").toString()));
+
+
+        }catch (DataAccessException ex) {
+            logger.error("Exception :: DataAccessException :: {}", ex.getCause().getMessage());
+            resultStr = Constants.RESULT_STATUS_FAIL;
+        } catch (NullPointerException nex) {
+            logger.error("Exception :: NullPointerException :: {}", nex.getCause().getMessage());
+            resultStr = Constants.RESULT_STATUS_FAIL;
+        } finally {
+            portalEm.close();
+        }
+
+        return null;
+
+    }
+
 
 }
