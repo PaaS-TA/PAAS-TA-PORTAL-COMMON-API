@@ -12,7 +12,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "organizations")
-public class OrganizationsCc {
+public class OrganizationsTolCc {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,18 +47,14 @@ public class OrganizationsCc {
     @Column(name = "default_isolation_segment_guid")
     private String defaultIsolationSegmentGuid;
 
-    @Formula("(SELECT COUNT(o.id) FROM organizations o)")
-    private int organizationCount;
-
-    @Formula("SUM(COALESCE((SELECT COUNT(s.organization_id) FROM spaces s WHERE s.organization_id = id GROUP BY s.organization_id), 0))")
+    @Formula("COALESCE((SELECT COUNT(s.organization_id) FROM spaces s WHERE s.organization_id = id GROUP BY s.organization_id), 0)")
     private int spaceCount;
 
-    @Formula("SUM(COALESCE((SELECT COUNT(a.id) FROM apps a WHERE a.space_guid IN (SELECT s.guid FROM spaces s WHERE s.organization_id = id)), 0))")
+    @Formula("COALESCE((SELECT COUNT(a.id) FROM apps a WHERE a.space_guid IN (SELECT s.guid FROM spaces s WHERE s.organization_id = id)), 0)")
     private int applicationCount;
 
-    @Formula("SUM(COALESCE((SELECT COUNT(*) FROM organizations_users ou WHERE ou.organization_id = id GROUP BY ou.organization_id), 0))")
+    @Formula("COALESCE((SELECT COUNT(*) FROM organizations_users ou WHERE ou.organization_id = id GROUP BY ou.organization_id), 0)")
     private int userCount;
-
 
 
 
@@ -134,14 +130,6 @@ public class OrganizationsCc {
         this.defaultIsolationSegmentGuid = defaultIsolationSegmentGuid;
     }
 
-    public int getOrganizationCount() {
-        return organizationCount;
-    }
-
-    public void setOrganizationCount(int organizationCount) {
-        this.organizationCount = organizationCount;
-    }
-
     public int getSpaceCount() {
         return spaceCount;
     }
@@ -165,5 +153,4 @@ public class OrganizationsCc {
     public void setUserCount(int userCount) {
         this.userCount = userCount;
     }
-
 }

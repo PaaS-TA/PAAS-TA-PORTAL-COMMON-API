@@ -48,7 +48,7 @@ public class ConfigInfo {
         this.value = value;
     }
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -57,7 +57,7 @@ public class ConfigInfo {
         this.createdAt = createdAt;
     }
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     public Date getUpdatedAt() {
         return updatedAt;
     }

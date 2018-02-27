@@ -1,4 +1,4 @@
-package org.openpaas.paasta.portal.common.api.domain.Service;
+package org.openpaas.paasta.portal.common.api.domain.service;
 
 import org.openpaas.paasta.portal.common.api.entity.portal.ServicepackCategory;
 import org.slf4j.Logger;

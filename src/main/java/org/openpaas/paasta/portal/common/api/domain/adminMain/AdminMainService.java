@@ -1,7 +1,10 @@
 package org.openpaas.paasta.portal.common.api.domain.adminMain;
 
+import org.jinq.orm.stream.JinqStream;
+import org.openpaas.paasta.portal.common.api.config.JinqSource;
 import org.openpaas.paasta.portal.common.api.config.dataSource.CcConfig;
 import org.openpaas.paasta.portal.common.api.entity.cc.OrganizationsCc;
+import org.openpaas.paasta.portal.common.api.entity.cc.OrganizationsTolCc;
 import org.openpaas.paasta.portal.common.api.entity.cc.SpacesCc;
 import org.openpaas.paasta.portal.common.api.entity.cc.SpaceunionViewCc;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +14,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,93 +28,57 @@ public class AdminMainService {
     @Autowired
     CcConfig ccConfig;
 
+    @Autowired
+    JinqSource jinqSource;
+
 
     public Map<String, Object>getTotalCountList() {
-        List<Map<String, Object>> resultList = new ArrayList<>();
-        Map<String, Object> resultMap = new HashMap<String, Object>();
+        JinqStream<OrganizationsCc> streams = jinqSource.streamAllCc(OrganizationsCc.class);
 
-        EntityManager ccEm = ccConfig.ccEntityManager().getNativeEntityManagerFactory().createEntityManager();
-
-        CriteriaBuilder cb = ccEm.getCriteriaBuilder();
-        CriteriaQuery<Tuple> cq = cb.createTupleQuery();
-        Root<OrganizationsCc> from = cq.from(OrganizationsCc.class);
-
-        cq.multiselect(from.get("organizationCount").alias("organizationCount")
-                , from.get("spaceCount").alias("spaceCount")
-                , from.get("applicationCount").alias("applicationCount")
-                , from.get("userCount").alias("userCount"));
-
-        TypedQuery<Tuple> tq = ccEm.createQuery(cq);
-        Tuple result = tq.getSingleResult();
-
-        int organizationCount   = result.get("organizationCount", Integer.class);
-        int spaceCount          = result.get("spaceCount", Integer.class);
-        int applicationCount    = result.get("applicationCount", Integer.class);
-        int userCount           = result.get("userCount", Integer.class);
-
-        resultMap.put("organizationCount", organizationCount);
-        resultMap.put("spaceCount", spaceCount);
-        resultMap.put("applicationCount", applicationCount);
-        resultMap.put("userCount", userCount);
-
-        //TODO 꼭 list로 넘겨야 하나??
-        resultList.add(resultMap);
-//        List<Tuple> resultList = tq.getResultList();
-//        for (Tuple tuple : resultList) {
-//            System.out.print(tuple.get("organizationCount", Integer.class));
-//            System.out.print(",");
-//            System.out.print(tuple.get("spaceCount", Integer.class));
-//            System.out.print(",");
-//            System.out.print(tuple.get("applicationCount", Integer.class));
-//            System.out.print(",");
-//            System.out.print(tuple.get("userCount", Integer.class));
-//        }
+        List<Map<String, Object>> resultList = streams.map(x -> new HashMap<String, Object>(){{
+            put("organizationCount", x.getOrganizationCount());
+            put("spaceCount", x.getSpaceCount());
+            put("applicationCount", x.getApplicationCount());
+            put("userCount", x.getUserCount());
+        }}).collect(Collectors.toList());
 
         return new HashMap<String, Object>() {{
             put("list", resultList);
         }};
-//        return resultMap;
     }
 
     public Map<String, Object>getTotalOrganizationList(Map<String, Object> reqParam) {
-        EntityManager ccEm = ccConfig.ccEntityManager().getNativeEntityManagerFactory().createEntityManager();
+        JinqStream<OrganizationsTolCc> streams = jinqSource.streamAllCc(OrganizationsTolCc.class);
 
-        CriteriaBuilder cb = ccEm.getCriteriaBuilder();
-        CriteriaQuery<Tuple> cq = cb.createTupleQuery();
-        Root<OrganizationsCc> from = cq.from(OrganizationsCc.class);
-
-        cq.multiselect(from.get("id").alias("organizationId")
-                , from.get("name").alias("organizationName")
-                , from.get("spaceCountTOL").alias("spaceCount")
-                , from.get("applicationCountTOL").alias("applicationCount")
-                , from.get("userCountTOL").alias("userCount"));
-
-        Predicate predicate = cb.conjunction();
-
-        if(null != reqParam.get("organizationId") && !("").equals(reqParam.get("organizationId").toString())) {
-            predicate = cb.and(predicate, cb.equal(from.get("id"), reqParam.get("organizationId").toString()));
+        if(null != reqParam.get("organizationId")) {
+            int id = Integer.parseInt(reqParam.get("organizationId").toString());
+            streams = streams.where(c -> c.getId() == id);
         }
 
-        cq.where(predicate);
-        cq.orderBy(cb.asc(from.get("id")));
+        streams = streams.sortedBy(c -> c.getId());
 
-        TypedQuery<Tuple> tq = ccEm.createQuery(cq);
-        List<Tuple> resultList = tq.getResultList();
-
-        List<Map<String, Object>> resultList2 = resultList.stream().map(x -> new HashMap<String, Object>(){{
-            put("organizationId", x.get("organizationId"));
-            put("organizationName", x.get("organizationName"));
-            put("spaceCount", x.get("spaceCount"));
-            put("applicationCount", x.get("applicationCount"));
-            put("userCount", x.get("userCount"));
+        List<Map<String, Object>> resultList = streams.map(x -> new HashMap<String, Object>(){{
+            put("organizationId", x.getId());
+            put("organizationName", x.getName());
+            put("spaceCount", x.getSpaceCount());
+            put("applicationCount", x.getApplicationCount());
+            put("userCount", x.getUserCount());
         }}).collect(Collectors.toList());
 
         return new HashMap<String, Object>() {{
-            put("list", resultList2);
+            put("list", resultList);
         }};
     }
 
     public Map<String, Object>getTotalSpaceList(Map<String, Object> reqParam) {
+//        JinqStream<SpacesCc> streams = jinqSource.streamAllCc(SpacesCc.class);
+//
+//        if(null != reqParam.get("organizationId")) {
+//            int id = Integer.parseInt(reqParam.get("organizationId").toString());
+//            streams = streams.where(c -> c.getOrganizationId() == id);
+//        }
+
+
         EntityManager ccEm = ccConfig.ccEntityManager().getNativeEntityManagerFactory().createEntityManager();
 
         CriteriaBuilder cb = ccEm.getCriteriaBuilder();
@@ -134,13 +100,6 @@ public class AdminMainService {
         TypedQuery<Tuple> tq = ccEm.createQuery(cq);
         List<Tuple> resultList = tq.getResultList();
 
-//        for (Tuple tuple : resultList) {
-//            System.out.print(tuple.get("spaceId", Integer.class));
-//            System.out.print(",");
-//            System.out.print(tuple.get("spaceName", String.class));
-//            System.out.print("\n");
-//        }
-
         CriteriaQuery<Tuple> cq2 = cb.createTupleQuery();
         Root<SpaceunionViewCc> from2 = cq2.from(SpaceunionViewCc.class);
         cq2.multiselect(from2.get("spaceId").alias("spaceId")
@@ -156,7 +115,6 @@ public class AdminMainService {
 
             Predicate predicate2 = cb.conjunction();
             predicate2 = cb.and(predicate2, cb.equal(subFrom.get("id"), subM.get("spaceId")));
-//            predicate2 = cb.and(predicate2, cb.equal(subFrom.get("id"), from2.get("spaceId")));
             predicate2 = cb.and(predicate2, cb.equal(subFrom.get("organizationId"), reqParam.get("organizationId").toString()));
 
             subQuery.where(predicate2);
@@ -188,11 +146,11 @@ public class AdminMainService {
                     resultList1f.get(i).put("applicationCount", 0);
                 }
             }
-//            System.out.println(resultList1f.get(i).get("spaceId") + ", "+ resultList1f.get(i).get("applicationCount") + ", "+ resultList1f.get(i).get("spaceName"));
         }
 
         return new HashMap<String, Object>() {{
             put("list", resultList1f);
         }};
+//        return null;
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -50,7 +51,12 @@ public class ConfigInfoService {
     public String updateValue(ConfigInfo configInfo)  {
         String resultStr = Constants.RESULT_STATUS_SUCCESS;
 
-
+        if(configInfoRepository.countByName(configInfo.getName()) > 0) {
+            configInfo.setUpdatedAt(new Date());
+            configInfoRepository.save(configInfo);
+        } else {
+            resultStr = Constants.RESULT_STATUS_FAIL;
+        }
 
         return resultStr;
     }

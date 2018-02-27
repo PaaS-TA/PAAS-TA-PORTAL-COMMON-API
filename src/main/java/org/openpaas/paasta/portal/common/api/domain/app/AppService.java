@@ -45,9 +45,6 @@ public class AppService {
         Predicate predicate = cb.conjunction();
         predicate = cb.and(predicate, cb.equal(from.get("buildpackName"), buildPack.getAdminBuildpackName().toString()));
 
-
-
-
         Expression maxThumbImgPath = cb.max(from.get("thumbImgPath"));
 
         cq.multiselect(maxThumbImgPath.alias("thumbImgPath"));

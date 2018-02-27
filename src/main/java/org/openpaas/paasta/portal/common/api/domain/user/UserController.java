@@ -1,7 +1,6 @@
 package org.openpaas.paasta.portal.common.api.domain.user;
 
 import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
-import org.openpaas.paasta.portal.api.service.AppAutoScaleModalService;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
 import org.slf4j.Logger;
@@ -26,7 +25,7 @@ import java.util.Map;
 public class UserController  {
 
     /** 로그객체*/
-    private  static final Logger LOGGER = LoggerFactory.getLogger(AppAutoScaleModalService.class);
+    private  static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserService userService;

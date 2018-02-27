@@ -1,5 +1,6 @@
 package org.openpaas.paasta.portal.common.api.entity.portal;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -172,6 +173,7 @@ public class BuildpackCategory {
         this.userId = userId;
     }
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     public Date getCreated() {
         return created;
     }
@@ -180,6 +182,7 @@ public class BuildpackCategory {
         this.created = created;
     }
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     public Date getLastmodified() {
         return lastmodified;
     }
