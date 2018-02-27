@@ -31,9 +31,6 @@ public class UserController  {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    Constants constants;
-
 
     /**
      * 사용자 총 명수
@@ -254,7 +251,7 @@ public class UserController  {
      * Delete user map.
      *
      * @param userId   the user id
-     * @param body     the body
+     * @param user     the user
      * @param response the response
      * @return the map
      * @throws Exception the exception
@@ -274,6 +271,51 @@ public class UserController  {
 
         result.put("result", deleteResult);
         return result;
+    }
+
+    /**
+     * Reset password map.
+     *
+     * @param userDetail the user detail
+     * @param response   the response
+     * @return map
+     * @throws IOException        the io exception
+     * @throws MessagingException the messaging exception
+     */
+//    @RequestMapping(value = {"/resetPassword"}, method = RequestMethod.GET)
+//    public Map<String, Object> resetPassword(@RequestBody UserDetail userDetail, HttpServletResponse response) throws IOException, MessagingException {
+//        HashMap body = new HashMap();
+//        Map<String, Object> resultMap = new HashMap();
+//
+//        body.put("userId", userDetail.getUserId());
+//
+//        LOGGER.info("userId : " + userDetail.getUserId() + " : request : " + response.toString());
+////        body.put("status", "1");
+//        List<Map<String, Object>> listUser = userService.getUserDetailInfo(body);
+//        if(listUser.size() >= 1) {
+//            HashMap map = body;
+//            map.put("searchUserId", userDetail.getUserId());
+//            Boolean resultCreateUser = userService.resetPassword(map);
+//            resultMap.put("resetPassword", resultCreateUser);
+//
+//        }
+//        resultMap.put("resultUser",listUser.size());
+//        return resultMap;
+//    }
+//
+
+    /**
+     * 모든 Uaa 유저의 이름과 Guid를 목록으로 가져온다.
+     *
+     * @return map all user name
+     * @throws Exception the exception
+     */
+    @RequestMapping(value = {"/getUserInfo"}, method = RequestMethod.GET)
+    public Map<String, Object> getAllUserName() throws Exception {
+        List<Map<String, Object>> userInfo = userService.getUserInfo();
+        Map<String, Object> resultMap = new HashMap();
+        resultMap.put("userInfo", userInfo);
+        return resultMap;
     }
 
 }

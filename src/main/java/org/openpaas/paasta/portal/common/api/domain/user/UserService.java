@@ -2,7 +2,9 @@ package org.openpaas.paasta.portal.common.api.domain.user;
 
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
+import org.openpaas.paasta.portal.common.api.config.dataSource.UaaConfig;
 import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
+import org.openpaas.paasta.portal.common.api.entity.uaa.Users;
 import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ public class UserService {
 
     @Autowired
     PortalConfig portalConfig;
+
+    @Autowired
+    UaaConfig uaaConfig;
 
     @Autowired
     UserDetailRepository userDetailRepository;
@@ -241,6 +246,12 @@ public class UserService {
 
     }
 
+    /**
+     * 사용자 자동생성
+     *
+     * @param userDetail the user detail
+     * @return int int
+     */
     public int createUser(UserDetail userDetail) {
         int createResult = 1;
         if(createResult > 0){
@@ -249,12 +260,45 @@ public class UserService {
         return createResult;
     }
 
-
+    /**
+     * DB에서 사용자 삭제
+     *
+     * @param userId the user id
+     * @return 삭제 정보
+     */
     public int deleteUser(String userId) {
         int deleteResult = userDetailRepository.deleteByUserId(userId);
         return deleteResult;
     }
 
+    /**
+     * 전체 UAA 유저의 userName과 userGuid를 가져온다.
+     *
+     * @return userInfo list
+     */
+    public List<Map<String, Object>> getUserInfo(){
+        //List<Map<String,String>> userInfo = userMapper.getUserInfo();
+
+        EntityManager portalEm = uaaConfig.uaaEntityManager().getNativeEntityManagerFactory().createEntityManager();
+
+        CriteriaBuilder cb = portalEm.getCriteriaBuilder();
+        CriteriaQuery<Tuple> cq = cb.createTupleQuery();
+        Root<Users> from = cq.from(Users.class);
+
+        //SQL:Select
+        cq.multiselect(from.get("userName").alias("userName")
+                , from.get("id").alias("id"));
+
+        TypedQuery<Tuple> tq = portalEm.createQuery(cq);
+        List<Tuple> resultList = tq.getResultList();
+
+        List<Map<String, Object>> userInfo = resultList.stream().map(x -> new HashMap<String, Object>(){{
+            put("userName", x.get("userName"));
+            put("userGuid", x.get("id"));
+        }}).collect(Collectors.toList());
+
+        return userInfo;
+    }
 
 }
 
