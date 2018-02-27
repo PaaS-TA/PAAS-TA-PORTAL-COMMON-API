@@ -216,7 +216,7 @@ public class UserController  {
     /**
      * Insert user map.
      *
-     * @param body     the body
+     * @param user     the user
      * @param response the response
      * @return Map map
      * @throws Exception the exception
@@ -226,7 +226,6 @@ public class UserController  {
 
         LOGGER.info("> into insertUser...");
 
-//        UserDetail user = new UserDetail();
         Map<String, Object> result = new HashMap<>();
 
         int createResult = 0;
@@ -248,6 +247,32 @@ public class UserController  {
             createResult = userService.createUser(user);
             result.put("result", createResult);
         }
+        return result;
+    }
+
+    /**
+     * Delete user map.
+     *
+     * @param userId   the user id
+     * @param body     the body
+     * @param response the response
+     * @return the map
+     * @throws Exception the exception
+     */
+    @RequestMapping(value = {"/deleteUser/{userId:.+}"}, method = RequestMethod.DELETE)
+    public Map deleteUser(@PathVariable String userId, @RequestBody UserDetail user, HttpServletResponse response) throws Exception {
+        LOGGER.info("> into deleteUser");
+
+        Map<String, Object> result = new HashMap<>();
+        int deleteResult = -1;
+
+            deleteResult = userService.deleteUser(userId);
+
+            if (deleteResult < 1) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "User does not exist.");
+            }
+
+        result.put("result", deleteResult);
         return result;
     }
 

@@ -160,14 +160,14 @@ public class WebIdeUserService {
                 throw new NullPointerException();
 
         } catch (DataAccessException ex) {
-            logger.error("Exception :: DataAccessException :: {}", ex.getCause().getMessage());
-            resultStr = Constants.RESULT_STATUS_FAIL;
-        } catch (NullPointerException nex) {
-            logger.error("Exception :: NullPointerException :: {}", nex.getCause().getMessage());
-            resultStr = Constants.RESULT_STATUS_FAIL;
-        } finally {
-            portalEm.close();
-        }
+        logger.error("Exception :: DataAccessException :: {}", ex.getCause().getMessage());
+        resultStr = Constants.RESULT_STATUS_FAIL;
+    } catch (NullPointerException nex) {
+        logger.error("Exception :: NullPointerException :: {}", nex.getCause().getMessage());
+        resultStr = Constants.RESULT_STATUS_FAIL;
+    } finally {
+        portalEm.close();
+    }
 
         return resultStr;
     }

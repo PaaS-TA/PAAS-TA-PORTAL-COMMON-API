@@ -1,6 +1,6 @@
 package org.openpaas.paasta.portal.common.api.domain.user;
 
-        import org.openpaas.paasta.portal.common.api.config.Constants;
+import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
 import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
 import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailRepository;
@@ -248,5 +248,15 @@ public class UserService {
         }
         return createResult;
     }
+
+
+    public int deleteUser(String userId) {
+        int deleteResult = userDetailRepository.deleteByUserId(userId);
+        return deleteResult;
+    }
+
+
 }
+
+
 
