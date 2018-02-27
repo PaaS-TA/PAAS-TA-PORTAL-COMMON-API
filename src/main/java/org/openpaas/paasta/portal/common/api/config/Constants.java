@@ -1,8 +1,11 @@
 package org.openpaas.paasta.portal.common.api.config;
 
+import org.springframework.context.annotation.Configuration;
+
 /**
  * Created by indra on 2018-02-20.
  */
+@Configuration
 public class Constants {
 
     /**
@@ -135,4 +138,12 @@ public class Constants {
      * Org 권한 users
      */
     public static final String SPACEMANAGER = "SpaceManager";
+
+    /*
+    * cloudfoundry.user.admin.username
+    @Value("${cloudfoundry.user.admin.username}")
+    public String adminUserName;
+     */
+    public static final String adminUserName = "admin";
+
 }

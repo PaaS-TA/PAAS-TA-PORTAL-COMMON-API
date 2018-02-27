@@ -42,8 +42,6 @@ dependencies {
     compile ('org.springframework.cloud:spring-cloud-starter-eureka')
     //JPA
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
-    //lombok(add getter/setter)
-    compile('org.projectlombok:lombok:1.16.10')
 
     //DB
     compile ('org.springframework.boot:spring-boot-starter-jdbc')

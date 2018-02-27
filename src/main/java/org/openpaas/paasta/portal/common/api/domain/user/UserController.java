@@ -1,8 +1,11 @@
 package org.openpaas.paasta.portal.common.api.domain.user;
 
 import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
+import org.openpaas.paasta.portal.api.service.AppAutoScaleModalService;
+import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
 
 /**
  * Created by SEJI on 2018-02-20.
@@ -24,10 +25,15 @@ import static org.slf4j.LoggerFactory.getLogger;
 @RequestMapping(value = {"/user"})
 public class UserController  {
 
-    private final Logger LOGGER = getLogger(this.getClass());
+    /** 로그객체*/
+    private  static final Logger LOGGER = LoggerFactory.getLogger(AppAutoScaleModalService.class);
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    Constants constants;
+
 
     /**
      * 사용자 총 명수
@@ -116,6 +122,7 @@ public class UserController  {
         String userId = (String)userDetail.getOrDefault("userId","");
         updateUser.setUserId(userId);
         updateUser.setUserName((String)userDetail.getOrDefault("username",""));
+        updateUser.setAdminYn("Y");
 //        updateUser.setPassword((String)userDetail.getOrDefault("password",""));
 //        if(adminUserName.equals(updateUser.getUserId())){
 //            updateUser.setAdminYn("Y");
@@ -206,5 +213,42 @@ public class UserController  {
         return result;
     }
 
+    /**
+     * Insert user map.
+     *
+     * @param body     the body
+     * @param response the response
+     * @return Map map
+     * @throws Exception the exception
+     */
+    @RequestMapping(value = {"/insertUser"},method = RequestMethod.POST)
+    public Map insertUser(@RequestBody UserDetail user, HttpServletResponse response) throws Exception {
+
+        LOGGER.info("> into insertUser...");
+
+//        UserDetail user = new UserDetail();
+        Map<String, Object> result = new HashMap<>();
+
+        int createResult = 0;
+
+        System.out.println("Constants.adminUserName : "+Constants.adminUserName);
+        System.out.println("user.getUserId() : "+user.getUserId());
+
+        if ( userService.getUser(user.getUserId()) != null && !Constants.adminUserName.equals(user.getUserId())) {
+            System.out.println("if");
+            response.sendError(HttpServletResponse.SC_CONFLICT, "User already exists.");
+        } else {
+            System.out.println("else");
+
+            if(Constants.adminUserName.equals(user.getUserId())){
+                user.setAdminYn("Y");
+            }
+            LOGGER.info("> constants.ADMIN_USER_NAME");
+
+            createResult = userService.createUser(user);
+            result.put("result", createResult);
+        }
+        return result;
+    }
 
 }

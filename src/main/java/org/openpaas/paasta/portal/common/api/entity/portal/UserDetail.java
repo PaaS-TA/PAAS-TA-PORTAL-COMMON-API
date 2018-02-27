@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -36,6 +37,7 @@ public class UserDetail {
     @Column(name = "address_detail", nullable = false)
     private String addressDetail;
 
+    @NotNull
     @Column(name = "admin_yn", nullable = false)
     private String adminYn;
 
@@ -50,7 +52,6 @@ public class UserDetail {
 
     @Column(name = "auth_access_cnt", nullable = false)
     private int authAccessCnt;
-
 
     public String getUserId() {
         return userId;
@@ -147,5 +148,7 @@ public class UserDetail {
     public void setAuthAccessCnt(int authAccessCnt) {
         this.authAccessCnt = authAccessCnt;
     }
+
+
 }
 

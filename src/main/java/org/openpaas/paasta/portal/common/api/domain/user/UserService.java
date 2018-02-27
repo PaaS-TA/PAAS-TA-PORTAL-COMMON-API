@@ -1,21 +1,18 @@
 package org.openpaas.paasta.portal.common.api.domain.user;
 
-import org.openpaas.paasta.portal.common.api.config.Constants;
+        import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
 import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
 import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +58,7 @@ public class UserService {
      */
     public UserDetail getUser(String userId) {
         UserDetail userDetail = userDetailRepository.findByUserId(userId);
-        System.out.println(userDetail);
+
         return userDetail;
     }
 
@@ -158,9 +155,9 @@ public class UserService {
     public int updateUser(String userId, UserDetail userDetail) {
 
         int resultCnt = userDetailRepository.countByUserId(userId);
-            if(resultCnt > 0) {
-                userDetailRepository.save(userDetail);
-            }
+        if(resultCnt > 0) {
+            userDetailRepository.save(userDetail);
+        }
         return resultCnt;
     }
 
@@ -170,66 +167,86 @@ public class UserService {
      * @param map (이름, 비밀번호)
      * @return boolean
      */
-    public List<Map<String, Object>> authAddUser(HashMap map) {
-
+    public boolean authAddUser(HashMap map) {
+        Boolean bRtn = false;
         String resultStr = Constants.RESULT_STATUS_SUCCESS;
+
         EntityManager portalEm = portalConfig.portalEntityManager().getNativeEntityManagerFactory().createEntityManager();
+        Date d = new Date();
 
         try {
-            if(null != map.get("userId") && !("").equals(map.get("userId").toString()))
-                throw new NullPointerException();
+            UserDetail updateUser = userDetailRepository.findByUserId(map.get("searchUserId").toString());
+            String status = updateUser.getStatus();
 
             CriteriaBuilder cb = portalEm.getCriteriaBuilder();
-            CriteriaQuery<Tuple> cq = cb.createTupleQuery();
-            Root<UserDetail> from = cq.from(UserDetail.class);
+            CriteriaUpdate<UserDetail> update = cb.createCriteriaUpdate(UserDetail.class);
+            Root e = update.from(UserDetail.class);
+
+            update.set("updatedAt", d);
+
+            if(null != map.get("userId") && !("").equals(map.get("userId").toString())) {
+                update.set("userId", map.get("userId"));
+            }
+            if(null != map.get("username") && !("").equals(map.get("username").toString())) {
+                update.set("username", map.get("username"));
+            }
+            if(null != map.get("tellPhone") && !("").equals(map.get("tellPhone").toString())) {
+                update.set("tellPhone", map.get("tellPhone"));
+            }
+            if(null != map.get("zipCode") && !("").equals(map.get("zipCode").toString())) {
+                update.set("zipCode", map.get("zipCode"));
+            }
+            if(null != map.get("address") && !("").equals(map.get("address").toString())) {
+                update.set("address", map.get("address"));
+
+            } if(null != map.get("addressDetail") && !("").equals(map.get("addressDetail").toString())) {
+                update.set("addressDetail", map.get("addressDetail"));
+
+            } if(null != map.get("adminYn") && !("").equals(map.get("adminYn").toString())) {
+                update.set("adminYn", map.get("adminYn"));
+
+            } if(null != map.get("refreshToken") && !("").equals(map.get("refreshToken").toString())) {
+                update.set("refreshToken", map.get("refreshToken"));
+
+            } if(null != map.get("authAccessTime") && !("").equals(map.get("authAccessTime").toString())) {
+                update.set("authAccessTime", map.get("authAccessTime"));
+
+            } if(null != map.get("authAccessCnt") && !("").equals(map.get("authAccessCnt").toString())) {
+                update.set("authAccessCnt", map.get("authAccessCnt"));
+            }
 
             Predicate predicate = cb.conjunction();
 
             //SQL:WHERE
-            if(null != map.get("userId") && !("").equals(map.get("userId").toString())) {
-                predicate = cb.and(predicate, cb.equal(from.get("userId"), map.get("userId").toString()));
+            if(null != map.get("searchUserId") && !("").equals(map.get("searchUserId").toString())) {
+                predicate = cb.and(predicate, cb.equal(e.get("searchUserId"), map.get("searchUserId").toString()));
             }
-            if(null != map.get("username") && !("").equals(map.get("username").toString())) {
-                predicate = cb.and(predicate, cb.equal(from.get("username"), map.get("username").toString()));
-            }
-            if(null != map.get("tellPhone") && !("").equals(map.get("tellPhone").toString())) {
-                predicate = cb.and(predicate, cb.equal(from.get("tellPhone"), map.get("tellPhone").toString()));
-            }
-            if(null != map.get("zipCode") && !("").equals(map.get("zipCode").toString())) {
-                predicate = cb.and(predicate, cb.equal(from.get("zipCode"), map.get("zipCode").toString()));
-            }
-            if(null != map.get("address") && !("").equals(map.get("address").toString())) {
-                predicate = cb.and(predicate, cb.equal(from.get("address"), map.get("address").toString()));
-            }
-            if(null != map.get("addressDetail") && !("").equals(map.get("addressDetail").toString())) {
-                predicate = cb.and(predicate, cb.equal(from.get("addressDetail"), map.get("addressDetail").toString()));
-            }
-            if(null != map.get("userName") && !("").equals(map.get("userName").toString())) {
-                predicate = cb.and(predicate, cb.equal(from.get("userName"), map.get("userName").toString()));
-            }
-            if(null != map.get("adminYn") && !("").equals(map.get("adminYn").toString())) {
-                predicate = cb.and(predicate, cb.equal(from.get("adminYn"), map.get("adminYn").toString()));
-            }
-            if(null != map.get("refreshToken") && !("").equals(map.get("refreshToken").toString())) {
-                predicate = cb.and(predicate, cb.equal(from.get("refreshToken"), map.get("refreshToken").toString()));
-            }
+            update.where(predicate);
 
-            cq.where(cb.equal(from.get("searchUserId"), map.get("searchUserId").toString()));
+            portalEm.getTransaction().begin();
+            int rtn = portalEm.createQuery(update).executeUpdate();
+            portalEm.getTransaction().commit();
 
+            if (rtn < 1) {
+                bRtn = true;
+            } throw new NullPointerException();
 
-        }catch (DataAccessException ex) {
-            logger.error("Exception :: DataAccessException :: {}", ex.getCause().getMessage());
-            resultStr = Constants.RESULT_STATUS_FAIL;
         } catch (NullPointerException nex) {
             logger.error("Exception :: NullPointerException :: {}", nex.getCause().getMessage());
             resultStr = Constants.RESULT_STATUS_FAIL;
         } finally {
             portalEm.close();
         }
-
-        return null;
+        return bRtn;
 
     }
 
-
+    public int createUser(UserDetail userDetail) {
+        int createResult = 1;
+        if(createResult > 0){
+            userDetailRepository.save(userDetail);
+        }
+        return createResult;
+    }
 }
+
