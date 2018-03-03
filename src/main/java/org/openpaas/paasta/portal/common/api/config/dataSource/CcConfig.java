@@ -1,6 +1,7 @@
 package org.openpaas.paasta.portal.common.api.config.dataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -25,11 +26,24 @@ import java.util.HashMap;
 )
 public class CcConfig {
 
+
+    @Value("${eureka.client.serviceUrl.defaultZone}")
+    String eureka;
+
     @Autowired
     private Environment env;
 
     @Bean
     public LocalContainerEntityManagerFactoryBean ccEntityManager() {
+
+        System.out.println("############################################");
+        System.out.println("############################################");
+        System.out.println("Eureka : " + eureka);
+        System.out.println("############################################");
+        System.out.println("############################################");
+
+
+
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(ccDataSource());
         em.setPackagesToScan(new String[] { "org.openpaas.paasta.portal.common.api.entity.cc" });
