@@ -1,6 +1,7 @@
 package org.openpaas.paasta.portal.common.api.domain.user;
 
-import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
+
+
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
 import org.slf4j.Logger;
@@ -82,7 +83,7 @@ public class UserController  {
      * @throws MessagingException the messaging exception
      */
     @RequestMapping(value = {"/confirmAuthUser"})
-    public Map<String, Object> confirmAuthUser(@RequestBody UserDetail userDetail, HttpServletResponse response) throws IOException, MessagingException {
+    public Map<String, Object> confirmAuthUser(@RequestBody UserDetail userDetail, HttpServletResponse response) throws IOException {
         HashMap body = new HashMap();
         Map<String, Object> resultMap = new HashMap();
         HashMap<String, Object> requestMap = new HashMap();
@@ -152,7 +153,7 @@ public class UserController  {
      * @throws MessagingException the messaging exception
      */
     @RequestMapping(value = {"/authUser"},  method = RequestMethod.POST)
-    public Map<String, Object> authUser(@RequestBody UserDetail userDetail, HttpServletResponse response) throws IOException, MessagingException {
+    public Map<String, Object> authUser(@RequestBody UserDetail userDetail, HttpServletResponse response) throws IOException {
         HashMap body = new HashMap();
         Map<String, Object> resultMap = new HashMap();
 

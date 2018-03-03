@@ -16,7 +16,7 @@ import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 import java.util.HashMap;
 
-import static com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type.Root;
+
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
