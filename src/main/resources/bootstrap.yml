@@ -10,9 +10,9 @@ server:
 
 
 # Discovery Server Access
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://127.0.0.1:2221/eureka/
-  instance:
-    hostname: localhost
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: http://127.0.0.1:2221/eureka/
+#  instance:
+#    hostname: localhost
