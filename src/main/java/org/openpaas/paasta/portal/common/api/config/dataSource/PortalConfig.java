@@ -51,16 +51,17 @@ public class PortalConfig {
     @Bean
     public DataSource portalDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-//        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setDriverClassName("org.postgresql.Driver");
 //        dataSource.setUrl("jdbc:postgresql://localhost:5524/portaldb");
-//        dataSource.setUsername("portaladmin");
-//        dataSource.setPassword("admin");
+        dataSource.setUrl("jdbc:postgresql://10.30.190.42:5524/portaldb");
+        dataSource.setUsername("portaladmin");
+        dataSource.setPassword("admin");
 
-        dataSource.setDriverClassName(env.getRequiredProperty("spring.datasource.mysql.driverClassName"));
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://115.68.46.219:3306/portaldb");
-        dataSource.setUsername("root");
-        dataSource.setPassword("!paas_ta202");
+//        dataSource.setDriverClassName(env.getRequiredProperty("spring.datasource.mysql.driverClassName"));
+//        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+//        dataSource.setUrl("jdbc:mysql://115.68.46.219:3306/portaldb");
+//        dataSource.setUsername("root");
+//        dataSource.setPassword("!paas_ta202");
 
         return dataSource;
     }

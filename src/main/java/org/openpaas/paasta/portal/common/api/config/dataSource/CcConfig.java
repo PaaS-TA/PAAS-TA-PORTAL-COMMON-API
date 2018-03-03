@@ -52,8 +52,8 @@ public class CcConfig {
         em.setJpaVendorAdapter(vendorAdapter);
         HashMap<String, Object> properties = new HashMap<>();
         properties.put("hibernate.hbm2ddl.auto","update");//create-drop
-//        properties.put("hibernate.dialect","org.hibernate.dialect.PostgreSQLDialect");
-        properties.put("hibernate.dialect","org.hibernate.dialect.MySQL5Dialect");
+        properties.put("hibernate.dialect","org.hibernate.dialect.PostgreSQLDialect");
+//        properties.put("hibernate.dialect","org.hibernate.dialect.MySQL5Dialect");
         em.setJpaPropertyMap(properties);
 
         return em;
@@ -62,15 +62,16 @@ public class CcConfig {
     @Bean
     public DataSource ccDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://115.68.46.219:3306/ccdb");
-        dataSource.setUsername("root");
-        dataSource.setPassword("!paas_ta202");
+//        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+//        dataSource.setUrl("jdbc:mysql://115.68.46.219:3306/ccdb");
+//        dataSource.setUsername("root");
+//        dataSource.setPassword("!paas_ta202");
 
-//        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setDriverClassName("org.postgresql.Driver");
 //        dataSource.setUrl("jdbc:postgresql://localhost:5524/ccdb");
-//        dataSource.setUsername("ccadmin");
-//        dataSource.setPassword("admin");
+        dataSource.setUrl("jdbc:postgresql://10.30.190.42:5524/ccdb");
+        dataSource.setUsername("ccadmin");
+        dataSource.setPassword("admin");
 
         return dataSource;
     }
