@@ -1,10 +1,9 @@
 package org.openpaas.paasta.portal.common.api.config.dataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -26,8 +25,11 @@ import java.util.HashMap;
 )
 public class PortalConfig {
 
-    @Autowired
-    private Environment env;
+    @Value("${spring.datasource.mysql.driverClassName}") String mysqlDriverClassName;
+    @Value("${spring.datasource.portal.url}") String portalUrl;
+    @Value("${spring.datasource.portal.username}") String portalUsername;
+    @Value("${spring.datasource.portal.password}") String portalPassword;
+
 
     @Bean
     @Primary
@@ -51,17 +53,10 @@ public class PortalConfig {
     @Bean
     public DataSource portalDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");
-//        dataSource.setUrl("jdbc:postgresql://localhost:5524/portaldb");
-        dataSource.setUrl("jdbc:postgresql://10.30.190.42:5524/portaldb");
-        dataSource.setUsername("portaladmin");
-        dataSource.setPassword("admin");
-
-//        dataSource.setDriverClassName(env.getRequiredProperty("spring.datasource.mysql.driverClassName"));
-//        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-//        dataSource.setUrl("jdbc:mysql://115.68.46.219:3306/portaldb");
-//        dataSource.setUsername("root");
-//        dataSource.setPassword("!paas_ta202");
+        dataSource.setDriverClassName(mysqlDriverClassName);
+        dataSource.setUrl(portalUrl);
+        dataSource.setUsername(portalUsername);
+        dataSource.setPassword(portalPassword);
 
         return dataSource;
     }

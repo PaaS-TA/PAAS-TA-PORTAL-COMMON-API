@@ -1,9 +1,8 @@
 package org.openpaas.paasta.portal.common.api.config.dataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -25,8 +24,11 @@ import java.util.HashMap;
 )
 public class UaaConfig {
 
-    @Autowired
-    private Environment env;
+    @Value("${spring.datasource.mysql.driverClassName}") String mysqlDriverClassName;
+    @Value("${spring.datasource.uaa.url}") String uaaUrl;
+    @Value("${spring.datasource.uaa.username}") String uaaUsername;
+    @Value("${spring.datasource.uaa.password}") String uaaPassword;
+
 
     @Bean
     public LocalContainerEntityManagerFactoryBean uaaEntityManager() {
@@ -38,8 +40,8 @@ public class UaaConfig {
         em.setJpaVendorAdapter(vendorAdapter);
         HashMap<String, Object> properties = new HashMap<>();
         properties.put("hibernate.hbm2ddl.auto","update");//create-drop
-        properties.put("hibernate.dialect","org.hibernate.dialect.PostgreSQLDialect");
-//        properties.put("hibernate.dialect","org.hibernate.dialect.MySQL5Dialect");
+//        properties.put("hibernate.dialect","org.hibernate.dialect.PostgreSQLDialect");
+        properties.put("hibernate.dialect","org.hibernate.dialect.MySQL5Dialect");
         em.setJpaPropertyMap(properties);
 
         return em;
@@ -48,17 +50,10 @@ public class UaaConfig {
     @Bean
     public DataSource uaaDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-//        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-//        dataSource.setUrl("jdbc:mysql://115.68.46.219:3306/ccdb");
-//        dataSource.setUsername("root");
-//        dataSource.setPassword("!paas_ta202");
-
-        dataSource.setDriverClassName("org.postgresql.Driver");
-//        dataSource.setUrl("jdbc:postgresql://localhost:5524/uaadb");
-        dataSource.setUrl("jdbc:postgresql://10.30.190.42:5524/uaadb");
-        dataSource.setUsername("uaaadmin");
-        dataSource.setPassword("admin");
-
+        dataSource.setDriverClassName(mysqlDriverClassName);
+        dataSource.setUrl(uaaUrl);
+        dataSource.setUsername(uaaUsername);
+        dataSource.setPassword(uaaPassword);
 
         return dataSource;
     }
