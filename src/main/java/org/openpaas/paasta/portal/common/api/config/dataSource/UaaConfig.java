@@ -24,10 +24,12 @@ import java.util.HashMap;
 )
 public class UaaConfig {
 
-    @Value("${spring.datasource.mysql.driverClassName}") String mysqlDriverClassName;
+    @Value("${spring.datasource.uaa.driver-class-name}") String uaaDriverClassName;
     @Value("${spring.datasource.uaa.url}") String uaaUrl;
     @Value("${spring.datasource.uaa.username}") String uaaUsername;
     @Value("${spring.datasource.uaa.password}") String uaaPassword;
+    @Value("${spring.jpa.hibernate.ddl-auto}") String ddlAuto;
+    @Value("${spring.jpa.hibernate.naming.strategy}") String dialect;
 
 
     @Bean
@@ -39,9 +41,8 @@ public class UaaConfig {
         HibernateJpaVendorAdapter vendorAdapter= new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
         HashMap<String, Object> properties = new HashMap<>();
-        properties.put("hibernate.hbm2ddl.auto","update");//create-drop
-//        properties.put("hibernate.dialect","org.hibernate.dialect.PostgreSQLDialect");
-        properties.put("hibernate.dialect","org.hibernate.dialect.MySQL5Dialect");
+        properties.put("hibernate.hbm2ddl.auto",ddlAuto);
+        properties.put("hibernate.dialect",dialect);
         em.setJpaPropertyMap(properties);
 
         return em;
@@ -50,7 +51,7 @@ public class UaaConfig {
     @Bean
     public DataSource uaaDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(mysqlDriverClassName);
+        dataSource.setDriverClassName(uaaDriverClassName);
         dataSource.setUrl(uaaUrl);
         dataSource.setUsername(uaaUsername);
         dataSource.setPassword(uaaPassword);

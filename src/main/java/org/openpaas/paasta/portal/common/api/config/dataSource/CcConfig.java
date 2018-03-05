@@ -24,10 +24,12 @@ import java.util.HashMap;
 )
 public class CcConfig {
 
-    @Value("${spring.datasource.mysql.driverClassName}") String mysqlDriverClassName;
+    @Value("${spring.datasource.cc.driver-class-name}") String ccDriverClassName;
     @Value("${spring.datasource.cc.url}") String ccUrl;
     @Value("${spring.datasource.cc.username}") String ccUsername;
     @Value("${spring.datasource.cc.password}") String ccPassword;
+    @Value("${spring.jpa.hibernate.ddl-auto}") String ddlAuto;
+    @Value("${spring.jpa.hibernate.naming.strategy}") String dialect;
 
 
     @Bean
@@ -39,9 +41,8 @@ public class CcConfig {
         HibernateJpaVendorAdapter vendorAdapter= new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
         HashMap<String, Object> properties = new HashMap<>();
-        properties.put("hibernate.hbm2ddl.auto","update");//create-drop
-//        properties.put("hibernate.dialect","org.hibernate.dialect.PostgreSQLDialect");
-        properties.put("hibernate.dialect","org.hibernate.dialect.MySQL5Dialect");
+        properties.put("hibernate.hbm2ddl.auto",ddlAuto);
+        properties.put("hibernate.dialect",dialect);
         em.setJpaPropertyMap(properties);
 
         return em;
@@ -50,7 +51,7 @@ public class CcConfig {
     @Bean
     public DataSource ccDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(mysqlDriverClassName);
+        dataSource.setDriverClassName(ccDriverClassName);
         dataSource.setUrl(ccUrl);
         dataSource.setUsername(ccUsername);
         dataSource.setPassword(ccPassword);

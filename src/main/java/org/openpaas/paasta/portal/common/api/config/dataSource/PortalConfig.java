@@ -25,10 +25,12 @@ import java.util.HashMap;
 )
 public class PortalConfig {
 
-    @Value("${spring.datasource.mysql.driverClassName}") String mysqlDriverClassName;
+    @Value("${spring.datasource.portal.driver-class-name}") String portalDriverClassName;
     @Value("${spring.datasource.portal.url}") String portalUrl;
     @Value("${spring.datasource.portal.username}") String portalUsername;
     @Value("${spring.datasource.portal.password}") String portalPassword;
+    @Value("${spring.jpa.hibernate.ddl-auto}") String ddlAuto;
+    @Value("${spring.jpa.hibernate.naming.strategy}") String dialect;
 
 
     @Bean
@@ -41,9 +43,8 @@ public class PortalConfig {
         HibernateJpaVendorAdapter vendorAdapter= new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
         HashMap<String, Object> properties = new HashMap<>();
-        properties.put("hibernate.hbm2ddl.auto","update");//create-drop
-//        properties.put("hibernate.dialect","org.hibernate.dialect.PostgreSQLDialect");
-        properties.put("hibernate.dialect","org.hibernate.dialect.MySQL5Dialect");
+        properties.put("hibernate.hbm2ddl.auto",ddlAuto);//validate
+        properties.put("hibernate.dialect",dialect);    //hibernate.dialect","org.hibernate.dialect.PostgreSQLDialect
         em.setJpaPropertyMap(properties);
 
         return em;
@@ -53,10 +54,13 @@ public class PortalConfig {
     @Bean
     public DataSource portalDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(mysqlDriverClassName);
+        dataSource.setDriverClassName(portalDriverClassName);
         dataSource.setUrl(portalUrl);
         dataSource.setUsername(portalUsername);
         dataSource.setPassword(portalPassword);
+        System.out.println("========================");
+        System.out.println(portalDriverClassName);
+        System.out.println("========================");
 
         return dataSource;
     }
