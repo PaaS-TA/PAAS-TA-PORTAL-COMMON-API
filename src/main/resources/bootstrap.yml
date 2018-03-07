@@ -1,6 +1,6 @@
 spring:
   application:
-      name: PortalCommonApi2
+      name: PortalCommonApi
   cloud:
     config:
       uri: http://localhost:8004
