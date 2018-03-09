@@ -1,9 +1,6 @@
 package org.openpaas.paasta.portal.common.api.entity.portal;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -11,6 +8,38 @@ import java.util.Date;
  * Created by SEJI on 2018-02-20.
  */
 @Entity
+@NamedNativeQueries({
+        @NamedNativeQuery(name = "UserDetail.getUserInfoList",
+                query = "SELECT " +
+                        "    ud.userId, " +
+                        "    ud.status " +
+                        "   (SELECT cd.value FROM code_detail cd WHERE cd.key = ud.status AND cd.group_id = 'USER_STATUS') AS statusValue " +
+                        "   (SELECT " +
+                        "       COUNT(1) " +
+                        "   FROM user_detail ud2 " +
+                        "   WHERE 1=1 " +
+                        "   CASE WHEN userId THEN IS NOT NULL " +
+                        "       AND ud2.user_id = #{userId}" +
+                        "   CASE WHEN searchKeyword IS NOT NULL " +
+                        "       AND (LOWER(ud2.user_name) LIKE concat('%', #{searchKeyword},'%') OR LOWER(ud2.user_id) LIKE concat('%', #{searchKeyword},'%'))" +
+                        "   AS totalCount," +
+                        "   COALESCE (ud.tell_phone, '-') AS tellPhone,"  +
+                        "   COALESCE(ud.zip_code, '-') AS zipCode,"  +
+                        "   COALESCE(ud.address, '-') AS address,"  +
+                        "   COALESCE(ud.address_detail, '-') AS addressDetail,"  +
+                        "   COALESCE(ud.user_name, '-') AS userName,"  +
+                        "   COALESCE(ud.admin_yn, '-') AS adminYn,"  +
+                        "   COALESCE(ud.refresh_token, '-') AS refreshToken"  +
+                        " FROM user_detail ud " +
+                        "WHERE 1=1 " +
+                        "   CASE WHEN searchKeyword IS NOT NULL " +
+                        "AND ud2.user_id = #{userId}" +
+                        "   CASE WHEN searchKeyword IS NOT NULL " +
+                        "AND (LOWER(ud.user_name) LIKE concat('%', #{searchKeyword},'%') OR LOWER(ud.user_id) LIKE concat('%', #{searchKeyword},'%'))"+
+                        "ORDER BY ud.user_id ASC",
+                resultClass = UserDetail.class
+        )
+})
 @Table(name = "user_detail")
 
 public class UserDetail {
