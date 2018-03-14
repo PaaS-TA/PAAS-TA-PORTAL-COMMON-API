@@ -1,14 +1,21 @@
 package org.openpaas.paasta.portal.common.api.domain.catalog;
 
+import org.jinq.orm.stream.JinqStream;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
+import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
 import org.openpaas.paasta.portal.common.api.entity.portal.Catalog;
+import org.openpaas.paasta.portal.common.api.entity.portal.ServicepackCategory;
 import org.openpaas.paasta.portal.common.api.repository.portal.CatalogRepository;
+import org.openpaas.paasta.portal.common.api.repository.portal.ServicepackCatagoryRepository;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Created by SEJI on 2018-03-06.
@@ -16,12 +23,19 @@ import java.util.Map;
 @Service
 public class CatalogService {
 
+    private final Logger logger = getLogger(this.getClass());
+
     @Autowired
-    JinqSource jinqSource;
+    PortalConfig portalConfig;
 
     @Autowired
     CatalogRepository catalogRepository;
 
+    @Autowired
+    ServicepackCatagoryRepository servicepackCatagoryRepository;
+
+    @Autowired
+    JinqSource jinqSource;
 
     /**
      * 서비스 카탈로그 목록을 조회한다.
@@ -29,11 +43,41 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    public Map<String, Object> getServicePackCatalogList(Catalog param) {
-        return new HashMap<String, Object>() {{
-//            put("list", catalogMapper.getServicePackCatalogList(param));
-        }};
+    public HashMap<String, Object> getServicePackCatalogList(Catalog param) {
+        JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class);
+
+
+        int no = param.getNo();
+        String searchKeyword = param.getSearchKeyword();
+        String searchTypeColumn = param.getSearchTypeColumn();
+        String searchTypeUseYn = param.getSearchTypeUseYn();
+
+        if(null != searchKeyword && !"".equals(searchKeyword)) {
+            if(null != searchTypeColumn && !"".equals(searchTypeColumn)) {
+                if(searchTypeColumn.equals("name")) {
+                    streams = streams.where(c -> streams.);      //AND LOWER("name") LIKE concat('%', #{searchKeyword},'%')
+                } else if(searchTypeColumn.equals("summary")) {
+                    streams = streams.where(c -> c.getNo() == no);      //AND LOWER(summary) LIKE concat('%', #{searchKeyword},'%')
+                } else if(searchTypeColumn.equals("ALL")) {
+                    streams = streams.where(c -> c.getNo() == no);      //AND (LOWER("name") LIKE concat('%', #{searchKeyword},'%') OR LOWER(summary) LIKE concat('%', #{searchKeyword},'%'))
+                }
+            }
+        }
+
+        if(null != searchTypeUseYn && !"".equals(searchTypeUseYn)) {
+            if(searchTypeUseYn.equals("Y") || searchTypeUseYn.equals("N")) {
+                streams = streams.where(c -> c.getNo() == no);      //AND use_yn = #{searchTypeUseYn}
+            }
+        }
+        streams = streams.sortedDescendingBy(c -> c.getNo());
+
+        streams.forEach(
+                c -> System.out.println(c.getServicePackName() )
+        );
+
+        return null;
     }
+
 
     /**
      * 앱 개발환경 카탈로그 개수를 조회한다.

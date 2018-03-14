@@ -1,14 +1,14 @@
 package org.openpaas.paasta.portal.common.api.entity.portal;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
 
 /**
- * Created by indra on 2018-02-22.
+ * Created by SEJI on 2018-03-06.
  */
 @Entity
 @Table(name = "servicepack_category")
@@ -20,24 +20,24 @@ public class ServicepackCategory {
     private int no;
 
     @Column(name = "name", nullable = false)
-    private String name;
+    private int name;
 
     @Column(name = "classification", nullable = false)
-    private String classification;
+    private int classification;
 
     @Column(name = "summary", nullable = false)
     private String summary;
 
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     private String description;
 
     @Column(name = "service_name", nullable = false)
-    private String serviceName;
+    private String servicePackName;
 
-    @Column(name = "thumb_img_name")
-    private String thumbImgName;
+    @Column(name = "thumb_img_name", nullable = false)
+    private String thumbIimgName;
 
-    @Column(name = "thumb_img_path")
+    @Column(name = "thumb_img_path", nullable = false)
     private String thumbImgPath;
 
     @Column(name = "use_yn", nullable = false)
@@ -46,7 +46,7 @@ public class ServicepackCategory {
     @Column(name = "user_id", nullable = false)
     private String userId;
 
-    @CreationTimestamp
+    @UpdateTimestamp
     @Column(name = "created", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
     private Date created;
@@ -56,10 +56,10 @@ public class ServicepackCategory {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastmodified;
 
-    @Column(name = "parameter")
+    @Column(name = "parameter", nullable = false)
     private String parameter;
 
-    @Column(name = "app_bind_parameter")
+    @Column(name = "app_bind_parameter", nullable = false)
     private String appBindParameter;
 
     @Column(name = "dashboard_use_yn", nullable = false)
@@ -67,6 +67,12 @@ public class ServicepackCategory {
 
     @Column(name = "app_bind_yn", nullable = false)
     private String appBindYn;
+
+    @Formula("(SELECT cd.value FROM code_detail cd WHERE cd.key = sc.classification AND cd.group_id = 'SERVICE_PACK_CATALOG')")
+    private String classificationValue;
+
+    @Formula("(SELECT cd.summary FROM code_detail cd WHERE cd.key = sc.classification AND cd.group_id = 'SERVICE_PACK_CATALOG')")
+    private String classificationSummary;
 
 
     public int getNo() {
@@ -77,19 +83,19 @@ public class ServicepackCategory {
         this.no = no;
     }
 
-    public String getName() {
+    public int getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(int name) {
         this.name = name;
     }
 
-    public String getClassification() {
+    public int getClassification() {
         return classification;
     }
 
-    public void setClassification(String classification) {
+    public void setClassification(int classification) {
         this.classification = classification;
     }
 
@@ -109,20 +115,20 @@ public class ServicepackCategory {
         this.description = description;
     }
 
-    public String getServiceName() {
-        return serviceName;
+    public String getServicePackName() {
+        return servicePackName;
     }
 
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
+    public void setServicePackName(String servicePackName) {
+        this.servicePackName = servicePackName;
     }
 
-    public String getThumbImgName() {
-        return thumbImgName;
+    public String getThumbIimgName() {
+        return thumbIimgName;
     }
 
-    public void setThumbImgName(String thumbImgName) {
-        this.thumbImgName = thumbImgName;
+    public void setThumbIimgName(String thumbIimgName) {
+        this.thumbIimgName = thumbIimgName;
     }
 
     public String getThumbImgPath() {
@@ -198,4 +204,21 @@ public class ServicepackCategory {
     public void setAppBindYn(String appBindYn) {
         this.appBindYn = appBindYn;
     }
+
+    public String getClassificationValue() {
+        return classificationValue;
+    }
+
+    public void setClassificationValue(String classificationValue) {
+        this.classificationValue = classificationValue;
+    }
+
+    public String getClassificationSummary() {
+        return classificationSummary;
+    }
+
+    public void setClassificationSummary(String classificationSummary) {
+        this.classificationSummary = classificationSummary;
+    }
+
 }
