@@ -1,5 +1,6 @@
 package org.openpaas.paasta.portal.common.api.domain.catalog;
 
+import org.jinq.jpa.JPQL;
 import org.jinq.orm.stream.JinqStream;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -45,37 +47,53 @@ public class CatalogService {
      */
     public HashMap<String, Object> getServicePackCatalogList(Catalog param) {
         JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class);
-
+        System.out.println("getServicePackCatalogList in~~");
 
         int no = param.getNo();
         String searchKeyword = param.getSearchKeyword();
         String searchTypeColumn = param.getSearchTypeColumn();
         String searchTypeUseYn = param.getSearchTypeUseYn();
 
+        System.out.println("no : " + no);
+        System.out.println("searchKeyword : " + searchKeyword);
+        System.out.println("searchTypeColumn : " + searchTypeColumn);
+        System.out.println("searchTypeUseYn : " + searchTypeUseYn);
+
+
+
+
+        if(no != 0) {
+            streams = streams.where(c -> c.getNo() == no);
+        }
+
         if(null != searchKeyword && !"".equals(searchKeyword)) {
             if(null != searchTypeColumn && !"".equals(searchTypeColumn)) {
                 if(searchTypeColumn.equals("name")) {
-                    streams = streams.where(c -> streams.);      //AND LOWER("name") LIKE concat('%', #{searchKeyword},'%')
+                    streams = streams.where(c -> JPQL.like(c.getName(), searchTypeColumn)); //AND LOWER("name") LIKE concat('%', #{searchKeyword},'%')
                 } else if(searchTypeColumn.equals("summary")) {
-                    streams = streams.where(c -> c.getNo() == no);      //AND LOWER(summary) LIKE concat('%', #{searchKeyword},'%')
+                    streams = streams.where(c -> JPQL.like(c.getSummary(), searchTypeColumn));      //AND LOWER(summary) LIKE concat('%', #{searchKeyword},'%')
                 } else if(searchTypeColumn.equals("ALL")) {
-                    streams = streams.where(c -> c.getNo() == no);      //AND (LOWER("name") LIKE concat('%', #{searchKeyword},'%') OR LOWER(summary) LIKE concat('%', #{searchKeyword},'%'))
+                    streams = streams.where(c -> JPQL.like(c.getName(), searchTypeColumn) || JPQL.like(c.getSummary(), searchTypeColumn));      //AND (LOWER("name") LIKE concat('%', #{searchKeyword},'%') OR LOWER(summary) LIKE concat('%', #{searchKeyword},'%'))
                 }
             }
         }
 
         if(null != searchTypeUseYn && !"".equals(searchTypeUseYn)) {
             if(searchTypeUseYn.equals("Y") || searchTypeUseYn.equals("N")) {
-                streams = streams.where(c -> c.getNo() == no);      //AND use_yn = #{searchTypeUseYn}
+                streams = streams.where(c -> c.getUseYn() == searchTypeUseYn);      //AND use_yn = #{searchTypeUseYn}
             }
         }
         streams = streams.sortedDescendingBy(c -> c.getNo());
 
-        streams.forEach(
-                c -> System.out.println(c.getServicePackName() )
-        );
+        List<ServicepackCategory> menuList = streams.toList();
 
-        return null;
+//        streams.forEach(
+//                c -> System.out.println(c.getNo() + " " + c.getName() )
+//        );
+
+        return new HashMap<String, Object>() {{
+            put("item", menuList);
+        }};
     }
 
 
