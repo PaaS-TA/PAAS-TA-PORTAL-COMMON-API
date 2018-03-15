@@ -1,6 +1,7 @@
 package org.openpaas.paasta.portal.common.api.entity.portal;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -14,30 +15,29 @@ import java.util.Date;
 @Table(name = "servicepack_category")
 public class ServicepackCategory {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id     //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "no", nullable = false)
     private int no;
 
     @Column(name = "name", nullable = false)
-    private int name;
+    private String name;
 
     @Column(name = "classification", nullable = false)
-    private int classification;
+    private String classification;
 
     @Column(name = "summary", nullable = false)
     private String summary;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
     private String description;
 
     @Column(name = "service_name", nullable = false)
     private String servicePackName;
 
-    @Column(name = "thumb_img_name", nullable = false)
+    @Column(name = "thumb_img_name")
     private String thumbIimgName;
 
-    @Column(name = "thumb_img_path", nullable = false)
+    @Column(name = "thumb_img_path")
     private String thumbImgPath;
 
     @Column(name = "use_yn", nullable = false)
@@ -46,7 +46,7 @@ public class ServicepackCategory {
     @Column(name = "user_id", nullable = false)
     private String userId;
 
-    @UpdateTimestamp
+    @CreationTimestamp
     @Column(name = "created", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
     private Date created;
@@ -56,22 +56,22 @@ public class ServicepackCategory {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastmodified;
 
-    @Column(name = "parameter", nullable = false)
+    @Column(name = "parameter")
     private String parameter;
 
-    @Column(name = "app_bind_parameter", nullable = false)
+    @Column(name = "app_bind_parameter")
     private String appBindParameter;
 
     @Column(name = "dashboard_use_yn", nullable = false)
     private String dashboardUseYn;
 
-    @Column(name = "app_bind_yn", nullable = false)
+    @Column(name = "app_bind_yn")
     private String appBindYn;
 
-    @Formula("(SELECT cd.value FROM code_detail cd WHERE cd.key = sc.classification AND cd.group_id = 'SERVICE_PACK_CATALOG')")
+    @Formula("(SELECT cd.value FROM code_detail cd WHERE cd.key = classification AND cd.group_id = 'SERVICE_PACK_CATALOG')")
     private String classificationValue;
 
-    @Formula("(SELECT cd.summary FROM code_detail cd WHERE cd.key = sc.classification AND cd.group_id = 'SERVICE_PACK_CATALOG')")
+    @Formula("(SELECT cd.summary FROM code_detail cd WHERE cd.key = classification AND cd.group_id = 'SERVICE_PACK_CATALOG')")
     private String classificationSummary;
 
 
@@ -83,19 +83,19 @@ public class ServicepackCategory {
         this.no = no;
     }
 
-    public int getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(int name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public int getClassification() {
+    public String getClassification() {
         return classification;
     }
 
-    public void setClassification(int classification) {
+    public void setClassification(String classification) {
         this.classification = classification;
     }
 
@@ -220,5 +220,4 @@ public class ServicepackCategory {
     public void setClassificationSummary(String classificationSummary) {
         this.classificationSummary = classificationSummary;
     }
-
 }
