@@ -23,6 +23,16 @@ public class CatalogController {
     @Autowired
     private CatalogService catalogService;
 
+    /**
+     * 앱 개발환경 카탈로그 목록을 조회한다.
+     *
+     * @param param Catalog(모델클래스)
+     * @return Map(자바클래스)
+     */
+    @RequestMapping(value = {"/getBuildPackCatalogList"}, method = RequestMethod.POST, consumes = "application/json")
+    public Map<String, Object> getBuildPackCatalogList(@RequestBody Catalog param) {
+        return catalogService.getBuildPackCatalogList(param);
+    }
 
     /**
      * 서비스 카탈로그 목록을 조회한다.

@@ -1,14 +1,12 @@
 package org.openpaas.paasta.portal.common.api.domain.catalog;
 
-import org.jinq.jpa.JPQL;
 import org.jinq.orm.stream.JinqStream;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
-import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
+import org.openpaas.paasta.portal.common.api.entity.portal.BuildpackCategory;
 import org.openpaas.paasta.portal.common.api.entity.portal.Catalog;
 import org.openpaas.paasta.portal.common.api.entity.portal.ServicepackCategory;
 import org.openpaas.paasta.portal.common.api.repository.portal.CatalogRepository;
-import org.openpaas.paasta.portal.common.api.repository.portal.ServicepackCatagoryRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,16 +26,49 @@ public class CatalogService {
     private final Logger logger = getLogger(this.getClass());
 
     @Autowired
-    PortalConfig portalConfig;
-
-    @Autowired
     CatalogRepository catalogRepository;
 
     @Autowired
-    ServicepackCatagoryRepository servicepackCatagoryRepository;
-
-    @Autowired
     JinqSource jinqSource;
+
+    /**
+     * 앱 개발환경 카탈로그 목록을 조회한다.
+     *
+     * @param param Catalog(모델클래스)
+     * @return Map(자바클래스)
+     */
+    public Map<String, Object> getBuildPackCatalogList(Catalog param) {
+
+        JinqStream<BuildpackCategory> streams = jinqSource.streamAllPortal(BuildpackCategory.class);
+        System.out.println("getBuildPackCatalogList in~~");
+
+        int no = param.getNo();
+        String searchKeyword = param.getSearchKeyword();
+        String searchTypeColumn = param.getSearchTypeColumn();
+        String searchTypeUseYn = param.getSearchTypeUseYn();
+
+        System.out.println("no : " + no);
+        System.out.println("searchKeyword : " + searchKeyword);
+        System.out.println("searchTypeColumn : " + searchTypeColumn);
+        System.out.println("searchTypeUseYn : " + searchTypeUseYn);
+
+        if(no != 0) {
+            streams = streams.where(c -> c.getNo() == no);
+        }
+
+        if(null != searchTypeUseYn && !"".equals(searchTypeUseYn)) {
+            if(searchTypeUseYn.equals("Y") || searchTypeUseYn.equals("N")) {
+                streams = streams.where(c -> c.getUseYn() == searchTypeUseYn);      //AND use_yn = #{searchTypeUseYn}
+            }
+        }
+        streams = streams.sortedDescendingBy(c -> c.getNo());
+
+        List<BuildpackCategory> buildpackCategoryList = streams.toList();
+
+        return new HashMap<String, Object>() {{
+            put("list", buildpackCategoryList);
+        }};
+    }
 
     /**
      * 서비스 카탈로그 목록을 조회한다.
@@ -59,24 +90,29 @@ public class CatalogService {
         System.out.println("searchTypeColumn : " + searchTypeColumn);
         System.out.println("searchTypeUseYn : " + searchTypeUseYn);
 
-
-
-
         if(no != 0) {
             streams = streams.where(c -> c.getNo() == no);
         }
 
-        if(null != searchKeyword && !"".equals(searchKeyword)) {
-            if(null != searchTypeColumn && !"".equals(searchTypeColumn)) {
-                if(searchTypeColumn.equals("name")) {
-                    streams = streams.where(c -> JPQL.like(c.getName(), searchTypeColumn)); //AND LOWER("name") LIKE concat('%', #{searchKeyword},'%')
-                } else if(searchTypeColumn.equals("summary")) {
-                    streams = streams.where(c -> JPQL.like(c.getSummary(), searchTypeColumn));      //AND LOWER(summary) LIKE concat('%', #{searchKeyword},'%')
-                } else if(searchTypeColumn.equals("ALL")) {
-                    streams = streams.where(c -> JPQL.like(c.getName(), searchTypeColumn) || JPQL.like(c.getSummary(), searchTypeColumn));      //AND (LOWER("name") LIKE concat('%', #{searchKeyword},'%') OR LOWER(summary) LIKE concat('%', #{searchKeyword},'%'))
-                }
-            }
-        }
+//        if(null != searchKeyword && !"".equals(searchKeyword)) {
+//            System.out.println("in 1");
+//            if(null != searchTypeColumn && !"".equals(searchTypeColumn)) {
+//                System.out.println("in 2");
+//                if(searchTypeColumn.equals("name")) {
+//                    System.out.println("name in~~");
+//                    streams = streams.where(c -> JPQL.like(c.getName(), searchKeyword)); //AND LOWER("name") LIKE concat('%', #{searchKeyword},'%')
+//                } else if(searchTypeColumn.equals("summary")) {
+//                    System.out.println("summary in~~");
+//                    streams = streams.where(c -> JPQL.like(c.getSummary(), searchKeyword));      //AND LOWER(summary) LIKE concat('%', #{searchKeyword},'%')
+//                } else if(searchTypeColumn.equals("ALL")) {
+//                    System.out.println("ALL in~~");
+//                    streams = streams.where(c -> JPQL.like(c.getName(), searchKeyword) || JPQL.like(c.getSummary(), searchKeyword ));      //AND (LOWER("name") LIKE concat('%', #{searchKeyword},'%') OR LOWER(summary) LIKE concat('%', #{searchKeyword},'%'))
+//                }else{
+//                    System.out.println("else");
+//                }
+//            }
+//        }
+//        System.out.println("in 3");
 
         if(null != searchTypeUseYn && !"".equals(searchTypeUseYn)) {
             if(searchTypeUseYn.equals("Y") || searchTypeUseYn.equals("N")) {
@@ -85,14 +121,14 @@ public class CatalogService {
         }
         streams = streams.sortedDescendingBy(c -> c.getNo());
 
-        List<ServicepackCategory> menuList = streams.toList();
+        List<ServicepackCategory> servicePackCatalogList = streams.toList();
 
 //        streams.forEach(
-//                c -> System.out.println(c.getNo() + " " + c.getName() )
+//                c -> System.out.println(c.getNo() + " " +" " +c.getServicePackName() )
 //        );
 
         return new HashMap<String, Object>() {{
-            put("item", menuList);
+            put("list", servicePackCatalogList);
         }};
     }
 
