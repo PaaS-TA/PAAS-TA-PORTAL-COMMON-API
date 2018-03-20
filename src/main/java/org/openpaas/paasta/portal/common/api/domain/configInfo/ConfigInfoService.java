@@ -28,16 +28,17 @@ public class ConfigInfoService {
     /**
      * 설정 정보 값을 조회한다.
      *
-     * @param configInfo the config info
+     * @param name
      * @return value value
      * @throws Exception the exception
      */
-    public HashMap<String, Object> getValue(ConfigInfo configInfo)  {
+    public HashMap<String, Object> getValue(String name) {
         HashMap<String, Object> resultMap = new HashMap<>();
-
-        Specifications specifications = Specifications.where(ConfigInfoSpecifications.nameEq(configInfo.getName()));
-
-        resultMap.put("list", configInfoRepository.findAll(specifications));
+        if (name == null) {
+            resultMap.put("list", configInfoRepository.findAll());
+        } else {
+            resultMap.put("list", configInfoRepository.findAllByName(name));
+        }
         return resultMap;
     }
 
@@ -48,10 +49,10 @@ public class ConfigInfoService {
      * @return map
      * @throws Exception the exception
      */
-    public String updateValue(ConfigInfo configInfo)  {
+    public String updateValue(ConfigInfo configInfo) {
         String resultStr = Constants.RESULT_STATUS_SUCCESS;
 
-        if(configInfoRepository.countByName(configInfo.getName()) > 0) {
+        if (configInfoRepository.countByName(configInfo.getName()) > 0) {
             configInfo.setUpdatedAt(new Date());
             configInfoRepository.save(configInfo);
         } else {

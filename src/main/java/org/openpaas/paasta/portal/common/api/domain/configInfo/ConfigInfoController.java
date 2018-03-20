@@ -16,13 +16,25 @@ import static org.slf4j.LoggerFactory.getLogger;
  * Created by indra on 2018-02-22.
  */
 @RestController
-@RequestMapping("/configInfo")
+@RequestMapping("/configInfos")
 public class ConfigInfoController {
 
     private static final Logger logger = getLogger(ConfigInfoController.class);
 
     @Autowired
     private ConfigInfoService configInfoService;
+
+
+    /**
+     * 설정 정보 전체 값을 조회한다.
+     *
+     * @return value value
+     * @throws Exception the exception
+     */
+    @GetMapping({""})
+    public Map<String, Object> getValues() {
+        return configInfoService.getValue(null);
+    }
 
 
     /**
@@ -33,8 +45,8 @@ public class ConfigInfoController {
      * @throws Exception the exception
      */
     @GetMapping("/{name:.+}")
-    public Map<String, Object> getValue(@PathVariable String name, @RequestBody ConfigInfo configInfo) {
-        return configInfoService.getValue(configInfo);
+    public Map<String, Object> getValue(@PathVariable String name) {
+        return configInfoService.getValue(name);
     }
 
     /**
