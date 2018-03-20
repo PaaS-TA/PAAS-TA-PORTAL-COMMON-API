@@ -50,7 +50,7 @@ public class BuildpackCategory {
     private String appSampleFileName;
 
     @Column(name = "app_sample_file_path")
-    private String appSampleFilePaht;
+    private String appSampleFilePath;
 
     @Column(name = "app_sample_file_size")
     private String appSampleFileSize;
@@ -155,11 +155,11 @@ public class BuildpackCategory {
     }
 
     public String getAppSampleFilePaht() {
-        return appSampleFilePaht;
+        return appSampleFilePath;
     }
 
     public void setAppSampleFilePaht(String appSampleFilePaht) {
-        this.appSampleFilePaht = appSampleFilePaht;
+        this.appSampleFilePath = appSampleFilePaht;
     }
 
     public String getAppSampleFileSize() {
