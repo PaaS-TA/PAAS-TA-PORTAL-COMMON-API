@@ -22,6 +22,18 @@ public class CatalogController {
     private CatalogService catalogService;
 
     /**
+     * 앱 템플릿 목록을 조회한다.
+     *
+     * @param param Catalog(모델클래스)
+     * @return Map(자바클래스)
+     */
+    @GetMapping("/starternameCatalogs")
+    public Map<String, Object> getStarterNames(@ModelAttribute Catalog param) {
+        return catalogService.getStarterNamesList(param);
+    }
+
+
+    /**
      * 앱 개발환경 카탈로그 목록을 조회한다.
      */
     @GetMapping("/buildpackCatalogs")

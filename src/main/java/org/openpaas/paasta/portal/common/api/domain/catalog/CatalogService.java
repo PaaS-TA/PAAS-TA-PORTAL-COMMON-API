@@ -5,8 +5,10 @@ import org.openpaas.paasta.portal.common.api.config.JinqSource;
 import org.openpaas.paasta.portal.common.api.entity.portal.BuildpackCategory;
 import org.openpaas.paasta.portal.common.api.entity.portal.Catalog;
 import org.openpaas.paasta.portal.common.api.entity.portal.ServicepackCategory;
+import org.openpaas.paasta.portal.common.api.entity.portal.StarterCategory;
 import org.openpaas.paasta.portal.common.api.repository.portal.BuildpackCategoryRepository;
 import org.openpaas.paasta.portal.common.api.repository.portal.ServicepackCategoryRepository;
+import org.openpaas.paasta.portal.common.api.repository.portal.StarterCategoryRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,9 @@ public class CatalogService {
     private final Logger logger = getLogger(this.getClass());
 
     @Autowired
+    StarterCategoryRepository starterCategoryRepository;
+
+    @Autowired
     BuildpackCategoryRepository buildpackCategoryRepository;
 
     @Autowired
@@ -33,6 +38,46 @@ public class CatalogService {
 
     @Autowired
     JinqSource jinqSource;
+
+    /**
+     * 앱 템플릿명 목록을 조회한다.
+     *
+     * @param param Catalog(모델클래스)
+     * @return Map(자바클래스)
+     */
+    public Map<String, Object> getStarterNamesList(Catalog param) {
+        JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class);
+        System.out.println("getBuildPackCatalogList in~~");
+
+        int no = param.getNo();
+        String searchKeyword = param.getSearchKeyword();
+        String searchTypeColumn = param.getSearchTypeColumn();
+        String searchTypeUseYn = param.getSearchTypeUseYn();
+
+        System.out.println("no : " + no);
+        System.out.println("searchKeyword : " + searchKeyword);
+        System.out.println("searchTypeColumn : " + searchTypeColumn);
+        System.out.println("searchTypeUseYn : " + searchTypeUseYn);
+
+        if(no != 0) {
+            streams = streams.where(c -> c.getNo() == no);
+        }
+
+        if(null != searchTypeUseYn && !"".equals(searchTypeUseYn)) {
+            if(searchTypeUseYn.equals("Y") || searchTypeUseYn.equals("N")) {
+                streams = streams.where(c -> c.getUseYn() == searchTypeUseYn);      //AND use_yn = #{searchTypeUseYn}
+            }
+        }
+        streams = streams.sortedDescendingBy(c -> c.getNo());
+
+        List<StarterCategory> starterCategoryList = streams.toList();
+
+        return new HashMap<String, Object>() {{
+            put("list", starterCategoryList);
+        }};
+    }
+
+
 
     /**
      * 앱 개발환경 카탈로그 목록을 조회한다.
@@ -137,5 +182,6 @@ public class CatalogService {
         System.out.println(servicePackCnt);
         return servicePackCnt;
     }
+
 
 }
