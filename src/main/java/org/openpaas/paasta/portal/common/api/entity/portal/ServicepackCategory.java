@@ -15,7 +15,8 @@ import java.util.Date;
 @Table(name = "servicepack_category")
 public class ServicepackCategory {
 
-    @Id     //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "no", nullable = false)
     private int no;
 
@@ -220,4 +221,5 @@ public class ServicepackCategory {
     public void setClassificationSummary(String classificationSummary) {
         this.classificationSummary = classificationSummary;
     }
+
 }
