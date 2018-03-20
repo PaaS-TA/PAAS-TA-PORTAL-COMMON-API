@@ -84,20 +84,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/**").hasRole("USER")
                 .antMatchers("/userManagement/**").hasRole("USER")
                 .antMatchers("/webIdeUser/**").hasRole("USER")
-//                .antMatchers("/**").permitAll()//hasRole("USER")
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
                 .and()
-                .csrf().disable();
-        /*http
+                .csrf().disable().cors().disable();
 
-                .authorizeRequests()
-                .antMatchers("/external/**").permitAll()
-                .antMatchers("/**")
-                .permitAll()
-                .and()
-                .csrf().disable();*/
     }
 
 }
