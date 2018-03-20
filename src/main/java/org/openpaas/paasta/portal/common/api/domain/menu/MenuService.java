@@ -88,9 +88,9 @@ public class MenuService {
             menuRe.setParentNo(0);
         }
 
-        int no = menuRe.getNo();
+        int no = menuRe.getNo();        //TODO menu.getNo(); ???
         int parentNo = menuRe.getParentNo();
-        String useYn = menuRe.getUseYn();
+        String useYn = menuRe.getUseYn();       //TODO menu.getUseYn(); ???
 
         JinqStream<Menu> streams = jinqSource.streamAllPortal(Menu.class);
 
@@ -112,6 +112,7 @@ public class MenuService {
 
         List<Menu> menuList = streams.toList();
 
+        //DB이름 형변환시키는 for 문
         for (Menu menuModel : menuList) {
             HashMap<String, Object> menuItemMap = new HashMap<String, Object>() {{
                 put("id", menuModel.getNo());
