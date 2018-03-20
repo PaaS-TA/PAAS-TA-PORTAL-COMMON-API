@@ -33,7 +33,7 @@ public class ServicepackCategory {
     private String description;
 
     @Column(name = "service_name", nullable = false)
-    private String servicePackName;
+    private String serviceName;
 
     @Column(name = "thumb_img_name")
     private String thumbIimgName;
@@ -116,12 +116,12 @@ public class ServicepackCategory {
         this.description = description;
     }
 
-    public String getServicePackName() {
-        return servicePackName;
+    public String getServiceName() {
+        return serviceName;
     }
 
-    public void setServicePackName(String servicePackName) {
-        this.servicePackName = servicePackName;
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
     }
 
     public String getThumbIimgName() {
