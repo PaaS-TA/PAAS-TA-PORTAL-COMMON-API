@@ -24,15 +24,28 @@ public class CatalogController {
     /**
      * 앱 개발환경 카탈로그 목록을 조회한다.
      */
-    @RequestMapping(value = {"/getBuildPackCatalogList"}, method = RequestMethod.POST, consumes = "application/json")
-    public Map<String, Object> getBuildPackCatalogList(@RequestBody Catalog param) {
+    @GetMapping("/buildpackCatalogs")
+    public Map<String, Object> getBuildPackCatalogList(@ModelAttribute Catalog param) {
         return catalogService.getBuildPackCatalogList(param);
     }
+
+
+    /**
+     * 서비스 카탈로그 목록을 조회한다.
+     *
+     * @param param Catalog(모델클래스)
+     * @return Map(자바클래스)
+     */
+    @GetMapping("/servicepackCatalogs")
+    public Map<String, Object> getServicePackCatalogList(@ModelAttribute Catalog param) {
+        return catalogService.getServicePackCatalogList(param);
+    }
+
 
     /**
      * 앱 개발환경 목록 개수를 조회한다.
      */
-    @GetMapping("/BuildPackCatalogs/count")
+    @GetMapping("/buildpackCatalogs/count")
     public Map<String, Object> getBuildPackCatalogCount() throws Exception {
 
         int buildPackCnt = catalogService.getBuildPackCatalogCount();
@@ -49,7 +62,7 @@ public class CatalogController {
     /**
      * 서비스 목록 개수를 조회한다.
      */
-    @GetMapping("/ServicePackCatalogs/count")
+    @GetMapping("/servicepackCatalogs/count")
     public Map<String, Object> getServicePackCatalogCount() throws Exception {
 
         int servicePackCnt = catalogService.getServicePackCatalogCount();
@@ -61,4 +74,6 @@ public class CatalogController {
 
         return resultMap;
     }
+
+
 }

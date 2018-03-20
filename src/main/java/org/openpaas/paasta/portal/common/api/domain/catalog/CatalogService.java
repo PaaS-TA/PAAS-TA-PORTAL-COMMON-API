@@ -73,6 +73,7 @@ public class CatalogService {
         }};
     }
 
+
     /**
      * 서비스 카탈로그 목록을 조회한다.
      *
@@ -97,26 +98,6 @@ public class CatalogService {
             streams = streams.where(c -> c.getNo() == no);
         }
 
-//        if(null != searchKeyword && !"".equals(searchKeyword)) {
-//            System.out.println("in 1");
-//            if(null != searchTypeColumn && !"".equals(searchTypeColumn)) {
-//                System.out.println("in 2");
-//                if(searchTypeColumn.equals("name")) {
-//                    System.out.println("name in~~");
-//                    streams = streams.where(c -> JPQL.like(c.getName(), searchKeyword)); //AND LOWER("name") LIKE concat('%', #{searchKeyword},'%')
-//                } else if(searchTypeColumn.equals("summary")) {
-//                    System.out.println("summary in~~");
-//                    streams = streams.where(c -> JPQL.like(c.getSummary(), searchKeyword));      //AND LOWER(summary) LIKE concat('%', #{searchKeyword},'%')
-//                } else if(searchTypeColumn.equals("ALL")) {
-//                    System.out.println("ALL in~~");
-//                    streams = streams.where(c -> JPQL.like(c.getName(), searchKeyword) || JPQL.like(c.getSummary(), searchKeyword ));      //AND (LOWER("name") LIKE concat('%', #{searchKeyword},'%') OR LOWER(summary) LIKE concat('%', #{searchKeyword},'%'))
-//                }else{
-//                    System.out.println("else");
-//                }
-//            }
-//        }
-//        System.out.println("in 3");
-
         if(null != searchTypeUseYn && !"".equals(searchTypeUseYn)) {
             if(searchTypeUseYn.equals("Y") || searchTypeUseYn.equals("N")) {
                 streams = streams.where(c -> c.getUseYn() == searchTypeUseYn);      //AND use_yn = #{searchTypeUseYn}
@@ -125,10 +106,6 @@ public class CatalogService {
         streams = streams.sortedDescendingBy(c -> c.getNo());
 
         List<ServicepackCategory> servicePackCatalogList = streams.toList();
-
-//        streams.forEach(
-//                c -> System.out.println(c.getNo() + " " +" " +c.getServicePackName() )
-//        );
 
         return new HashMap<String, Object>() {{
             put("list", servicePackCatalogList);
@@ -160,7 +137,5 @@ public class CatalogService {
         System.out.println(servicePackCnt);
         return servicePackCnt;
     }
-
-
 
 }
