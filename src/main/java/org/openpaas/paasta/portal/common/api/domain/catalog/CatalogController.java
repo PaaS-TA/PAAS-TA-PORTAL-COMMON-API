@@ -32,7 +32,7 @@ public class CatalogController {
     /**
      * 앱 개발환경 목록 개수를 조회한다.
      */
-    @RequestMapping(value = {"/BuildPackCatalogs/count"}, method = RequestMethod.GET)
+    @GetMapping("/BuildPackCatalogs/count")
     public Map<String, Object> getBuildPackCatalogCount() throws Exception {
 
         int buildPackCnt = catalogService.getBuildPackCatalogCount();
@@ -49,7 +49,7 @@ public class CatalogController {
     /**
      * 서비스 목록 개수를 조회한다.
      */
-    @RequestMapping(value = {"/ServicePackCatalogs/count"}, method = RequestMethod.GET)
+    @GetMapping("/ServicePackCatalogs/count")
     public Map<String, Object> getServicePackCatalogCount() throws Exception {
 
         int servicePackCnt = catalogService.getServicePackCatalogCount();
