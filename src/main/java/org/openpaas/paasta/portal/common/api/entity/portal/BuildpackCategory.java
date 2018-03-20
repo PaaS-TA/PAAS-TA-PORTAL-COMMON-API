@@ -2,6 +2,7 @@ package org.openpaas.paasta.portal.common.api.entity.portal;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -49,7 +50,7 @@ public class BuildpackCategory {
     private String appSampleFileName;
 
     @Column(name = "app_sample_file_path")
-    private String appSampleFilePaht;
+    private String appSampleFilePath;
 
     @Column(name = "app_sample_file_size")
     private String appSampleFileSize;
@@ -67,7 +68,11 @@ public class BuildpackCategory {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastmodified;
 
+    @Formula("(SELECT cd.value FROM code_detail cd WHERE cd.key = classification AND cd.group_id = 'BUILD_PACK_CATALOG')")
+    private String classificationValue;
 
+    @Formula("(SELECT cd.summary FROM code_detail cd WHERE cd.key = classification AND cd.group_id = 'BUILD_PACK_CATALOG')")
+    private String classificationSummary;
 
     public int getNo() {
         return no;
@@ -150,11 +155,11 @@ public class BuildpackCategory {
     }
 
     public String getAppSampleFilePaht() {
-        return appSampleFilePaht;
+        return appSampleFilePath;
     }
 
     public void setAppSampleFilePaht(String appSampleFilePaht) {
-        this.appSampleFilePaht = appSampleFilePaht;
+        this.appSampleFilePath = appSampleFilePaht;
     }
 
     public String getAppSampleFileSize() {
@@ -191,4 +196,19 @@ public class BuildpackCategory {
         this.lastmodified = lastmodified;
     }
 
+    public String getClassificationValue() {
+        return classificationValue;
+    }
+
+    public void setClassificationValue(String classificationValue) {
+        this.classificationValue = classificationValue;
+    }
+
+    public String getClassificationSummary() {
+        return classificationSummary;
+    }
+
+    public void setClassificationSummary(String classificationSummary) {
+        this.classificationSummary = classificationSummary;
+    }
 }

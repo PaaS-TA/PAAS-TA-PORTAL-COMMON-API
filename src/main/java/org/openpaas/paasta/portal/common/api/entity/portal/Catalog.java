@@ -37,6 +37,15 @@ public class Catalog {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastmodified;
 
+    @Transient
+    private String searchKeyword;
+
+    @Transient
+    private String searchTypeColumn;
+
+    @Transient
+    private String searchTypeUseYn;
+
     public int getNo() {
         return no;
     }
@@ -87,4 +96,27 @@ public class Catalog {
         this.lastmodified = lastmodified;
     }
 
+    public String getSearchKeyword() {
+        return searchKeyword;
+    }
+
+    public void setSearchKeyword(String searchKeyword) {
+        this.searchKeyword = searchKeyword;
+    }
+
+    public String getSearchTypeColumn() {
+        return searchTypeColumn;
+    }
+
+    public void setSearchTypeColumn(String searchTypeColumn) {
+        this.searchTypeColumn = searchTypeColumn;
+    }
+
+    public String getSearchTypeUseYn() {
+        return searchTypeUseYn;
+    }
+
+    public void setSearchTypeUseYn(String searchTypeUseYn) {
+        this.searchTypeUseYn = searchTypeUseYn;
+    }
 }
