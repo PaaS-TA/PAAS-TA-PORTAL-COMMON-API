@@ -1,12 +1,12 @@
 package org.openpaas.paasta.portal.common.api.domain.catalog;
 
 import org.jinq.orm.stream.JinqStream;
-import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
 import org.openpaas.paasta.portal.common.api.entity.portal.BuildpackCategory;
 import org.openpaas.paasta.portal.common.api.entity.portal.Catalog;
 import org.openpaas.paasta.portal.common.api.entity.portal.ServicepackCategory;
-import org.openpaas.paasta.portal.common.api.repository.portal.CatalogRepository;
+import org.openpaas.paasta.portal.common.api.repository.portal.BuildpackCategoryRepository;
+import org.openpaas.paasta.portal.common.api.repository.portal.ServicepackCategoryRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,10 @@ public class CatalogService {
     private final Logger logger = getLogger(this.getClass());
 
     @Autowired
-    CatalogRepository catalogRepository;
+    BuildpackCategoryRepository buildpackCategoryRepository;
+
+    @Autowired
+    ServicepackCategoryRepository servicepackCategoryRepository;
 
     @Autowired
     JinqSource jinqSource;
@@ -135,45 +138,29 @@ public class CatalogService {
 
     /**
      * 앱 개발환경 카탈로그 개수를 조회한다.
-     *
-     * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
-    public Map<String, Object> getBuildPackCatalogCount(Catalog param) throws Exception {
+    public int getBuildPackCatalogCount() {
 
-        int CatalogBuildCount =(int)catalogRepository.count();
-
-        if (CatalogBuildCount > 0) {
-//            commonService.getCustomSendError(res, HttpStatus.CONFLICT, "common.info.result.fail.duplicated");
-            System.out.print("getBuildPackCatalogCountSendError");
-        }
-        return new HashMap<String, Object>() {{
-            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
-        }};
-
+        int buildPackCnt =(int)buildpackCategoryRepository.count();
+        System.out.println(buildPackCnt);
+        return buildPackCnt;
     }
+
 
     /**
      * 서비스 카탈로그 개수를 조회한다.
-     *
-     * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
+    public int getServicePackCatalogCount() {
 
-    public Map<String,Object> getServicePackCatalogCount(Catalog param) {
-        int CatalogCount =(int)catalogRepository.count();
-
-        if (CatalogCount > 0) {
-//            commonService.getCustomSendError(res, HttpStatus.CONFLICT, "common.info.result.fail.duplicated");
-            System.out.print("getServicePackCatalogSendError");
-        }
-        return new HashMap<String, Object>() {{
-            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
-        }};
-
+        int servicePackCnt =(int)servicepackCategoryRepository.count();
+        System.out.println(servicePackCnt);
+        return servicePackCnt;
     }
+
 
 
 }
