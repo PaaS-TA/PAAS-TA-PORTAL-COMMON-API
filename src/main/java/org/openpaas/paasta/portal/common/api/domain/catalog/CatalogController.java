@@ -55,6 +55,23 @@ public class CatalogController {
 
 
     /**
+     * 앱 템플릿 카탈로그 개수를 조회한다.
+     */
+    @GetMapping("/starterCatalogs/count")
+    public Map<String, Object> getStarterCatalogCount() throws Exception {
+
+        int buildPackCnt = catalogService.getStarterCatalogCount();
+
+        logger.info("getStarterCatalogCount : " + buildPackCnt);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("getStarterCatalogCount", buildPackCnt);
+
+        return resultMap;
+    }
+
+
+    /**
      * 앱 개발환경 목록 개수를 조회한다.
      */
     @GetMapping("/buildpackCatalogs/count")
@@ -86,6 +103,8 @@ public class CatalogController {
 
         return resultMap;
     }
+
+
 
 
 }

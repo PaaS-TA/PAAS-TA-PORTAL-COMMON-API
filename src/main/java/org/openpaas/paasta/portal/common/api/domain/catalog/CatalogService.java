@@ -157,6 +157,18 @@ public class CatalogService {
         }};
     }
 
+    /**
+     * 앱 템플릿 카탈로그 개수를 조회한다.
+     * @return Map(자바클래스)
+     * @throws Exception Exception(자바클래스)
+     */
+    public int getStarterCatalogCount() {
+
+        int buildPackCnt =(int)starterCategoryRepository.count();
+        System.out.println(buildPackCnt);
+        return buildPackCnt;
+    }
+
 
     /**
      * 앱 개발환경 카탈로그 개수를 조회한다.
