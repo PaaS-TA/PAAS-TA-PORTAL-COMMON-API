@@ -49,16 +49,20 @@ public class ConfigInfoService {
      * @return map
      * @throws Exception the exception
      */
-    public String updateValue(ConfigInfo configInfo) {
+    public String updateValue(String name, ConfigInfo configInfo) {
         String resultStr = Constants.RESULT_STATUS_SUCCESS;
-
-        if (configInfoRepository.countByName(configInfo.getName()) > 0) {
+        if(configInfoRepository.findAllByName(name) != null)
+        {
+            configInfo.setName(name);
             configInfo.setUpdatedAt(new Date());
             configInfoRepository.save(configInfo);
-        } else {
+        }else {
             resultStr = Constants.RESULT_STATUS_FAIL;
         }
-
+//        if (configInfoRepository.countByName(configInfo.getName()) > 0) {
+//            configInfo.setUpdatedAt(new Date());
+//            configInfoRepository.save(configInfo);
+//        }
         return resultStr;
     }
 }

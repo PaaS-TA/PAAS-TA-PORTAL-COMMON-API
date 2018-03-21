@@ -44,7 +44,7 @@ public class ConfigInfoController {
      * @return value value
      * @throws Exception the exception
      */
-    @GetMapping("/{name:.+}")
+    @GetMapping("/{name}")
     public Map<String, Object> getValue(@PathVariable String name) {
         return configInfoService.getValue(name);
     }
@@ -64,15 +64,15 @@ public class ConfigInfoController {
 
     /**
      * 설정 정보 값을 수정한다.
-     *
-     * @param name - primary key, configInfo the config info
+     * @param name - primary key
+     * @param configInfo - configInfo the config info
      * @return map map
      * @throws Exception the exception
      */
-    @PutMapping(value = {"/{name:.+}"})
+    @PutMapping({"/{name}"})
     public Map<String, Object> updateValue(@PathVariable String name, @RequestBody ConfigInfo configInfo) {
         Map<String, Object> resultMap = new HashMap<>();
-        String resultStr = configInfoService.updateValue(configInfo);
+        String resultStr = configInfoService.updateValue(name, configInfo);
         resultMap.put("RESULT", resultStr);
         return resultMap;
     }
