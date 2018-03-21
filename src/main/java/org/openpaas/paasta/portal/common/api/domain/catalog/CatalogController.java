@@ -1,6 +1,8 @@
 package org.openpaas.paasta.portal.common.api.domain.catalog;
 
+import org.openpaas.paasta.portal.common.api.entity.portal.BuildpackCategory;
 import org.openpaas.paasta.portal.common.api.entity.portal.Catalog;
+import org.openpaas.paasta.portal.common.api.entity.portal.ServicepackCategory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -59,9 +61,7 @@ public class CatalogController {
      */
     @GetMapping("/starterCatalogs/count")
     public Map<String, Object> getStarterCatalogCount() throws Exception {
-
         int buildPackCnt = catalogService.getStarterCatalogCount();
-
         logger.info("getStarterCatalogCount : " + buildPackCnt);
 
         Map<String, Object> resultMap = new HashMap<>();
@@ -76,9 +76,7 @@ public class CatalogController {
      */
     @GetMapping("/buildpackCatalogs/count")
     public Map<String, Object> getBuildPackCatalogCount() throws Exception {
-
         int buildPackCnt = catalogService.getBuildPackCatalogCount();
-
         logger.info("getBuildPackCatalogCount : " + buildPackCnt);
 
         Map<String, Object> resultMap = new HashMap<>();
@@ -93,9 +91,7 @@ public class CatalogController {
      */
     @GetMapping("/servicepackCatalogs/count")
     public Map<String, Object> getServicePackCatalogCount() throws Exception {
-
         int servicePackCnt = catalogService.getServicePackCatalogCount();
-
         logger.info("getServicePackCatalogCount : " + servicePackCnt);
 
         Map<String, Object> resultMap = new HashMap<>();
@@ -105,6 +101,84 @@ public class CatalogController {
     }
 
 
+    /**
+     * 앱 개발환경 카탈로그를 생성한다.
+     *
+     * @param param Catalog(모델클래스)
+     * @return Map(자바클래스)
+     * @RequestMapping(value = {"/insertBuildPackCatalog"}, method = RequestMethod.POST, consumes = "application/json")
+     */
+    @PostMapping("/buildpackCatalogs")
+    public Map<String, Object> insertBuildPackCatalog(@RequestBody BuildpackCategory param) {
+        return catalogService.insertBuildPackCatalog(param);
+    }
 
+
+    /**
+     * 서비스 카탈로그를 저장한다.
+     *
+     * @param param Catalog(모델클래스)
+     * @return Map(자바클래스)
+     */
+    @PostMapping("/servicepackCatalogs")
+    public Map<String, Object> insertServicePackCatalog(@RequestBody ServicepackCategory param) {
+        return catalogService.insertServicePackCatalog(param);
+    }
+
+
+    /**
+     * 앱 개발환경 카탈로그를 수정한다.
+     *
+     * @param param Catalog(모델클래스)
+     * @return Map(자바클래스)
+     * @RequestMapping(value = {"/updateBuildPackCatalog"}, method = RequestMethod.PUT, consumes = "application/json")
+     */
+    @PutMapping(value = {"buildpackCatalogs/{no}"})
+    public BuildpackCategory updateBuildPackCatalog(@PathVariable int no, @RequestBody BuildpackCategory param) {
+        logger.info("###################### " + no);
+        param.setNo(no);
+
+        BuildpackCategory resultStr = catalogService.updateBuildPackCatalog(param);
+        return resultStr;
+    }
+
+
+    /**
+     * 서비스 카탈로그를 수정한다.
+     *
+     * @param param Catalog(모델클래스)
+     * @return Map(자바클래스)
+     */
+    @PutMapping(value = {"servicepackCatalogs/{no}"})
+    public ServicepackCategory updateServicePackCatalog(@PathVariable int no, @RequestBody ServicepackCategory param) {
+        logger.info("###################### " + no);
+        param.setNo(no);
+
+        ServicepackCategory resultStr = catalogService.updateServicePackCatalog(param);
+        return resultStr;
+    }
+
+
+    /**
+     * 앱 개발환경 카탈로그를 삭제한다.
+     *
+     * @return Map(자바클래스)
+     * @RequestMapping(value = {"/deleteBuildPackCatalog"}, method = RequestMethod.POST, consumes = "application/json")
+     */
+    @DeleteMapping(value = {"buildpackCatalogs/{no}"})
+    public Map<String, Object> deleteBuildPackCatalog(@PathVariable int no) {
+        return catalogService.deleteBuildPackCatalog(no);
+    }
+
+    /**
+     * 서비스 카탈로그를 삭제한다.
+     *
+     * @return Map(자바클래스)
+     * @RequestMapping(value = {"/updateServicePackCatalog"}, method = RequestMethod.PUT, consumes = "application/json")
+     */
+    @DeleteMapping(value = {"servicepackCatalogs/{no}"})
+    public Map<String, Object> deleteServicePackCatalog(@PathVariable int no) {
+        return catalogService.deleteServicePackCatalog(no);
+    }
 
 }
