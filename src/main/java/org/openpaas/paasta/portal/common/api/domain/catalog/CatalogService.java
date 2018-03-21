@@ -1,7 +1,9 @@
 package org.openpaas.paasta.portal.common.api.domain.catalog;
 
 import org.jinq.orm.stream.JinqStream;
+import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
+import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
 import org.openpaas.paasta.portal.common.api.entity.portal.BuildpackCategory;
 import org.openpaas.paasta.portal.common.api.entity.portal.Catalog;
 import org.openpaas.paasta.portal.common.api.entity.portal.ServicepackCategory;
@@ -13,6 +15,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +41,9 @@ public class CatalogService {
 
     @Autowired
     JinqSource jinqSource;
+
+    @Autowired
+    PortalConfig portalConfig;
 
     /**
      * 앱 템플릿명 목록을 조회한다.
@@ -76,7 +82,6 @@ public class CatalogService {
             put("list", starterCategoryList);
         }};
     }
-
 
 
     /**
@@ -194,6 +199,99 @@ public class CatalogService {
         System.out.println(servicePackCnt);
         return servicePackCnt;
     }
+
+
+    /**
+     * 앱 개발환경 카탈로그를 저장한다.
+     *
+     * @param param Catalog(모델클래스)
+     * @return Map(자바클래스)
+     */
+    public Map<String, Object> insertBuildPackCatalog(BuildpackCategory param) {
+        logger.info("insertBuildPackCatalog");
+        buildpackCategoryRepository.save(param);
+
+        return new HashMap<String, Object>() {{
+            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+        }};
+    }
+
+
+    /**
+     * 서비스 카탈로그를 저장한다.
+     *
+     * @param param Catalog(모델클래스)
+     * @return Map(자바클래스)
+     */
+    public Map<String, Object> insertServicePackCatalog(ServicepackCategory param) {
+        logger.info("insertServicePackCatalog");
+        servicepackCategoryRepository.save(param);
+
+        return new HashMap<String, Object>() {{
+            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+        }};
+    }
+
+
+    /**
+     * 앱 개발환경 카탈로그를 수정한다.
+     *
+     * @param param Catalog(모델클래스)
+     * @return Map(자바클래스)
+     */
+    public BuildpackCategory updateBuildPackCatalog(BuildpackCategory param) {
+        logger.info("updateBuildPackCatalog");
+        BuildpackCategory update = buildpackCategoryRepository.findOne(param.getNo());
+        param.setCreated(update.getCreated());
+        param.setLastmodified(new Date());
+        BuildpackCategory buildpackCategory = buildpackCategoryRepository.save(param);
+        return buildpackCategory;
+    }
+
+    /**
+     * 앱 개발환경 카탈로그를 수정한다.
+     *
+     * @param param Catalog(모델클래스)
+     * @return Map(자바클래스)
+     */
+    public ServicepackCategory updateServicePackCatalog(ServicepackCategory param) {
+        logger.info("updateBuildPackCatalog");
+        ServicepackCategory update = servicepackCategoryRepository.findOne(param.getNo());
+        param.setCreated(update.getCreated());
+        param.setLastmodified(new Date());
+        ServicepackCategory buildpackCategory = servicepackCategoryRepository.save(param);
+        return buildpackCategory;
+    }
+
+
+    /**
+     * 앱 개발환경 카탈로그를 삭제한다.
+     *
+     * @param no
+     * @return Map(자바클래스)
+     */
+    public Map<String, Object> deleteBuildPackCatalog(int no) {
+        buildpackCategoryRepository.delete(no);
+        return new HashMap<String, Object>() {{
+            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+        }};
+    }
+
+
+    /**
+     * 서비스 카탈로그를 삭제한다.
+     *
+     * @param no
+     * @return Map(자바클래스)
+     */
+    public Map<String, Object> deleteServicePackCatalog(int no) {
+        servicepackCategoryRepository.delete(no);
+        return new HashMap<String, Object>() {{
+            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+        }};
+    }
+
+
 
 
 }
