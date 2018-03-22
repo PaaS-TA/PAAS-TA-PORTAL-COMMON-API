@@ -1,5 +1,6 @@
 package org.openpaas.paasta.portal.common.api.domain.catalog;
 
+import org.jinq.jpa.JPQL;
 import org.jinq.orm.stream.JinqStream;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
@@ -53,34 +54,28 @@ public class CatalogService {
      */
     public Map<String, Object> getStarterNamesList(Catalog param) {
         JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class);
-        System.out.println("getBuildPackCatalogList in~~");
 
         int no = param.getNo();
         String searchKeyword = param.getSearchKeyword();
-        String searchTypeColumn = param.getSearchTypeColumn();
-        String searchTypeUseYn = param.getSearchTypeUseYn();
 
         System.out.println("no : " + no);
         System.out.println("searchKeyword : " + searchKeyword);
-        System.out.println("searchTypeColumn : " + searchTypeColumn);
-        System.out.println("searchTypeUseYn : " + searchTypeUseYn);
 
-        if(no != 0) {
-            streams = streams.where(c -> c.getNo() == no);
+        if(null != searchKeyword && !"".equals(searchKeyword)) {
+            System.out.println("searchKeyword in~~~~~~~~");
+            streams = streams.where(c -> JPQL.like(c.getName(), searchKeyword) || JPQL.like(c.getSummary(), searchKeyword));      //AND (LOWER("name") LIKE concat('%', #{searchKeyword},'%') OR LOWER(summary) LIKE concat('%', #{searchKeyword},'%'))
+
         }
 
-        if(null != searchTypeUseYn && !"".equals(searchTypeUseYn)) {
-            if(searchTypeUseYn.equals("Y") || searchTypeUseYn.equals("N")) {
-                streams = streams.where(c -> c.getUseYn() == searchTypeUseYn);      //AND use_yn = #{searchTypeUseYn}
-            }
-        }
-        streams = streams.sortedDescendingBy(c -> c.getNo());
-
+        streams = streams.sortedDescendingBy(c -> c.getName());
         List<StarterCategory> starterCategoryList = streams.toList();
+
+        System.out.println("size : " + starterCategoryList.size());
 
         return new HashMap<String, Object>() {{
             put("list", starterCategoryList);
         }};
+
     }
 
 
@@ -290,8 +285,6 @@ public class CatalogService {
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
         }};
     }
-
-
 
 
 }
