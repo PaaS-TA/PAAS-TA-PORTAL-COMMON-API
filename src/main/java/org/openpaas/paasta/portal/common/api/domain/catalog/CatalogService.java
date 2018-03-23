@@ -54,6 +54,7 @@ public class CatalogService {
      */
     public Map<String, Object> getStarterNamesList(Catalog param) {
         JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class);
+        System.out.println("getStarterNamesList in~~");
 
         int no = param.getNo();
         String searchKeyword = param.getSearchKeyword();
@@ -62,12 +63,11 @@ public class CatalogService {
         System.out.println("searchKeyword : " + searchKeyword);
 
         if(null != searchKeyword && !"".equals(searchKeyword)) {
-            System.out.println("searchKeyword in~~~~~~~~");
-            streams = streams.where(c -> JPQL.like(c.getName(), searchKeyword) || JPQL.like(c.getSummary(), searchKeyword));      //AND (LOWER("name") LIKE concat('%', #{searchKeyword},'%') OR LOWER(summary) LIKE concat('%', #{searchKeyword},'%'))
-
+            streams = streams.where(c-> JPQL.like(c.getName(), "%"+searchKeyword+"%"));
+//            streams = streams.where(c-> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
         }
 
-        streams = streams.sortedDescendingBy(c -> c.getName());
+        streams = streams.sortedDescendingBy(c -> c.getNo());
         List<StarterCategory> starterCategoryList = streams.toList();
 
         System.out.println("size : " + starterCategoryList.size());
@@ -92,25 +92,15 @@ public class CatalogService {
 
         int no = param.getNo();
         String searchKeyword = param.getSearchKeyword();
-        String searchTypeColumn = param.getSearchTypeColumn();
-        String searchTypeUseYn = param.getSearchTypeUseYn();
 
         System.out.println("no : " + no);
         System.out.println("searchKeyword : " + searchKeyword);
-        System.out.println("searchTypeColumn : " + searchTypeColumn);
-        System.out.println("searchTypeUseYn : " + searchTypeUseYn);
 
-        if(no != 0) {
-            streams = streams.where(c -> c.getNo() == no);
+        if(null != searchKeyword && !"".equals(searchKeyword)) {
+            streams = streams.where(c-> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
         }
 
-        if(null != searchTypeUseYn && !"".equals(searchTypeUseYn)) {
-            if(searchTypeUseYn.equals("Y") || searchTypeUseYn.equals("N")) {
-                streams = streams.where(c -> c.getUseYn() == searchTypeUseYn);      //AND use_yn = #{searchTypeUseYn}
-            }
-        }
         streams = streams.sortedDescendingBy(c -> c.getNo());
-
         List<BuildpackCategory> buildpackCategoryList = streams.toList();
 
         return new HashMap<String, Object>() {{
@@ -131,25 +121,15 @@ public class CatalogService {
 
         int no = param.getNo();
         String searchKeyword = param.getSearchKeyword();
-        String searchTypeColumn = param.getSearchTypeColumn();
-        String searchTypeUseYn = param.getSearchTypeUseYn();
 
         System.out.println("no : " + no);
         System.out.println("searchKeyword : " + searchKeyword);
-        System.out.println("searchTypeColumn : " + searchTypeColumn);
-        System.out.println("searchTypeUseYn : " + searchTypeUseYn);
 
-        if(no != 0) {
-            streams = streams.where(c -> c.getNo() == no);
+        if(null != searchKeyword && !"".equals(searchKeyword)) {
+            streams = streams.where(c-> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
         }
 
-        if(null != searchTypeUseYn && !"".equals(searchTypeUseYn)) {
-            if(searchTypeUseYn.equals("Y") || searchTypeUseYn.equals("N")) {
-                streams = streams.where(c -> c.getUseYn() == searchTypeUseYn);      //AND use_yn = #{searchTypeUseYn}
-            }
-        }
         streams = streams.sortedDescendingBy(c -> c.getNo());
-
         List<ServicepackCategory> servicePackCatalogList = streams.toList();
 
         return new HashMap<String, Object>() {{
