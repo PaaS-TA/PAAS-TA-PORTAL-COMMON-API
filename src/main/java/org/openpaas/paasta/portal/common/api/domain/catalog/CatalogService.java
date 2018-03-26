@@ -1,6 +1,5 @@
 package org.openpaas.paasta.portal.common.api.domain.catalog;
 
-import org.jinq.jpa.JPQL;
 import org.jinq.orm.stream.JinqStream;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
@@ -54,23 +53,17 @@ public class CatalogService {
      */
     public Map<String, Object> getStarterNamesList(Catalog param) {
         JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class);
-        System.out.println("getStarterNamesList in~~");
 
         int no = param.getNo();
         String searchKeyword = param.getSearchKeyword();
 
-        System.out.println("no : " + no);
-        System.out.println("searchKeyword : " + searchKeyword);
-
         if(null != searchKeyword && !"".equals(searchKeyword)) {
-            streams = streams.where(c-> JPQL.like(c.getName(), "%"+searchKeyword+"%"));
-//            streams = streams.where(c-> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
+//            streams = streams.where(c-> JPQL.like(c.getName(), "%"+searchKeyword+"%"));
+            streams = streams.where(c-> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
         }
 
         streams = streams.sortedDescendingBy(c -> c.getNo());
         List<StarterCategory> starterCategoryList = streams.toList();
-
-        System.out.println("size : " + starterCategoryList.size());
 
         return new HashMap<String, Object>() {{
             put("list", starterCategoryList);
@@ -265,6 +258,5 @@ public class CatalogService {
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
         }};
     }
-
 
 }
