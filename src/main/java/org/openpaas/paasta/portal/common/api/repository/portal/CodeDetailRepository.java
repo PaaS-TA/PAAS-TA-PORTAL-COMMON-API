@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CodeDetailRepository extends JpaRepository<CodeDetail, Integer> {
 
+    String readBy = null;
 }
