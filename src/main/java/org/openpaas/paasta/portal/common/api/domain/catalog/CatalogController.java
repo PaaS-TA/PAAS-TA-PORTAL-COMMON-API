@@ -46,6 +46,14 @@ public class CatalogController {
         return catalogService.getStarterNamesList(param);
     }
 
+    /**
+     * 앱 개발환경 카탈로그 목록을 조회한다.
+     */
+    @GetMapping("/buildpackCatalogs/{no}")
+    public Map<String, Object> getBuildPackCatalogList(@PathVariable("no") int no, @ModelAttribute Catalog param) {
+        param.setNo(no);
+        return catalogService.getBuildPackCatalogList(param);
+    }
 
     /**
      * 앱 개발환경 카탈로그 목록을 조회한다.
@@ -53,6 +61,19 @@ public class CatalogController {
     @GetMapping("/buildpackCatalogs")
     public Map<String, Object> getBuildPackCatalogList(@ModelAttribute Catalog param) {
         return catalogService.getBuildPackCatalogList(param);
+    }
+
+
+    /**
+     * 서비스 카탈로그 목록을 조회한다.
+     *
+     * @param param Catalog(모델클래스)
+     * @return Map(자바클래스)
+     */
+    @GetMapping("/servicepackCatalogs/{no}")
+    public Map<String, Object> getServicePackCatalogList(@PathVariable("no") int no, @ModelAttribute Catalog param) {
+        param.setNo(no);
+        return catalogService.getServicePackCatalogList(param);
     }
 
 

@@ -87,9 +87,9 @@ public class CatalogService {
         int no = param.getNo();
         String searchKeyword = param.getSearchKeyword();
 
-        if(null != searchKeyword && !"".equals(searchKeyword)) {
+        if (null != searchKeyword && !"".equals(searchKeyword)) {
 //            streams = streams.where(c-> JPQL.like(c.getName(), "%"+searchKeyword+"%"));
-            streams = streams.where(c-> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
+            streams = streams.where(c -> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
         }
 
         streams = streams.sortedDescendingBy(c -> c.getNo());
@@ -118,8 +118,12 @@ public class CatalogService {
         System.out.println("no : " + no);
         System.out.println("searchKeyword : " + searchKeyword);
 
-        if(null != searchKeyword && !"".equals(searchKeyword)) {
-            streams = streams.where(c-> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
+        if (null != searchKeyword && !"".equals(searchKeyword)) {
+            streams = streams.where(c -> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
+        }
+
+        if (no != 0) {
+            streams = streams.where(c -> c.getNo() == no);
         }
 
         streams = streams.sortedDescendingBy(c -> c.getNo());
@@ -146,8 +150,12 @@ public class CatalogService {
         System.out.println("no : " + no);
         System.out.println("searchKeyword : " + searchKeyword);
 
-        if(null != searchKeyword && !"".equals(searchKeyword)) {
-            streams = streams.where(c-> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
+        if (null != searchKeyword && !"".equals(searchKeyword)) {
+            streams = streams.where(c -> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
+        }
+
+        if (no != 0) {
+            streams = streams.where(c -> c.getNo() == no);
         }
 
         streams = streams.sortedDescendingBy(c -> c.getNo());
@@ -160,36 +168,39 @@ public class CatalogService {
 
     /**
      * 앱 템플릿 카탈로그 개수를 조회한다.
+     *
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
     public int getStarterCatalogCount() {
 
-        int buildPackCnt =(int)starterCategoryRepository.count();
+        int buildPackCnt = (int) starterCategoryRepository.count();
         System.out.println(buildPackCnt);
         return buildPackCnt;
     }
 
     /**
      * 앱 개발환경 카탈로그 개수를 조회한다.
+     *
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
     public int getBuildPackCatalogCount() {
 
-        int buildPackCnt =(int)buildpackCategoryRepository.count();
+        int buildPackCnt = (int) buildpackCategoryRepository.count();
         System.out.println(buildPackCnt);
         return buildPackCnt;
     }
 
     /**
      * 서비스 카탈로그 개수를 조회한다.
+     *
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
     public int getServicePackCatalogCount() {
 
-        int servicePackCnt =(int)servicepackCategoryRepository.count();
+        int servicePackCnt = (int) servicepackCategoryRepository.count();
         System.out.println(servicePackCnt);
         return servicePackCnt;
     }
@@ -215,6 +226,7 @@ public class CatalogService {
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
         }};
     }
+
 
     /**
      * 앱 개발환경 카탈로그를 저장한다.
