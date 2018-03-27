@@ -31,7 +31,7 @@ public class CatalogController {
      * @return Map(자바클래스)
      */
     @GetMapping("/oneStarterCatalog")
-    public Map<String, Object> getOneStarterCatalog(@ModelAttribute StarterCategory param) {
+    public Map<String, Object> getOneStarterCatalog(@ModelAttribute Catalog param) {
         return catalogService.getOneStarterCatalog(param);
     }
 
@@ -112,6 +112,16 @@ public class CatalogController {
         return resultMap;
     }
 
+    /**
+     * 앱 템플릿 카탈로그를 등록한다.
+     *
+     * @param param Catalog(모델클래스)
+     * @return Map(자바클래스)
+     */
+    @PostMapping("/insertStarterCatalogs")
+    public Map<String, Object> insertStarterCatalog(@RequestBody StarterCategory param) {
+        return catalogService.insertStarterCatalog(param);
+    }
 
     /**
      * 앱 개발환경 카탈로그를 생성한다.
@@ -135,6 +145,21 @@ public class CatalogController {
     @PostMapping("/servicepackCatalogs")
     public Map<String, Object> insertServicePackCatalog(@RequestBody ServicepackCategory param) {
         return catalogService.insertServicePackCatalog(param);
+    }
+
+    /**
+     * 앱 템플릿 카탈로그를 수정한다.
+     *
+     * @param param Catalog(모델클래스)
+     * @return Map(자바클래스)
+     */
+    @PutMapping(value = {"updateStarterCatalogs/{no}"})
+    public StarterCategory updateStarterCatalog(@PathVariable int no,@RequestBody StarterCategory param) {
+        logger.info("###################### " + no);
+        param.setNo(no);
+
+        StarterCategory resultStr = catalogService.updateStarterCatalog(param);
+        return resultStr;
     }
 
 
@@ -168,6 +193,15 @@ public class CatalogController {
 
         ServicepackCategory resultStr = catalogService.updateServicePackCatalog(param);
         return resultStr;
+    }
+
+    /**
+     * 앱 템플릿 카탈로그를 삭제한다.
+     * @return Map(자바클래스)
+     */
+    @DeleteMapping(value = {"starterCatalogs/{no}"})
+    public Map<String, Object> deleteStarterCatalog(@PathVariable int no) {
+        return catalogService.deleteStarterCatalog(no);
     }
 
 

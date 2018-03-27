@@ -3,7 +3,6 @@ package org.openpaas.paasta.portal.common.api.domain.catalog;
 import org.jinq.orm.stream.JinqStream;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
-import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
 import org.openpaas.paasta.portal.common.api.entity.portal.*;
 import org.openpaas.paasta.portal.common.api.repository.portal.BuildpackCategoryRepository;
 import org.openpaas.paasta.portal.common.api.repository.portal.ServicepackCategoryRepository;
@@ -12,7 +11,10 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -36,38 +38,37 @@ public class CatalogService {
     @Autowired
     JinqSource jinqSource;
 
-    @Autowired
-    PortalConfig portalConfig;
-
-
     /**
      * 앱 템플릿 카탈로그 조회
      *
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    public Map<String, Object> getOneStarterCatalog(StarterCategory param) {
+    public Map<String, Object> getOneStarterCatalog(Catalog param) {
 
-        JinqStream<StarterServicepackRelation> streams = jinqSource.streamAllPortal(StarterServicepackRelation.class);
-        JinqStream<StarterCategory> streams2 = jinqSource.streamAllPortal(StarterCategory.class);
-        int no = param.getStarterCategoryNo();
+        //선택한 서비스팩 목록을 조회한다. :: starterServicepackRelationStream
+        JinqStream<StarterServicepackRelation> starterServicepackRelationStream = jinqSource.streamAllPortal(StarterServicepackRelation.class);
+        //스타터 Starter 상세 조회를 한다.:: starterCategoryStream
+        JinqStream<StarterCategory> starterCategoryStream = jinqSource.streamAllPortal(StarterCategory.class);
 
-        streams = streams.where(c -> c.getStarterCatalogNo() == no);
-        streams = streams.sortedBy(c -> c.getServicepackCategoryNo());
+        int no = param.getStarterCatalogNo();
 
-        List<StarterServicepackRelation> a = streams.toList();
+        //WHERE ssr.starter_category_no = ${no}
+        starterServicepackRelationStream = starterServicepackRelationStream.where(c -> c.getStarterCatalogNo() == no);
+        //ORDER BY
+        starterServicepackRelationStream = starterServicepackRelationStream.sortedBy(c -> c.getServicepackCategoryNo());
 
+        List<StarterServicepackRelation> starterServicepackRelations = starterServicepackRelationStream.toList();
 
-        streams2 = streams2.where(c -> c.getNo() == no);
+        starterCategoryStream = starterCategoryStream.where(c -> c.getNo() == no);
 
-        StarterCategory b = streams2.findFirst().get();
-
+        StarterCategory starterCategory = starterCategoryStream.findFirst().get();
 
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> resultMap2 = new HashMap<>();
 
-        resultMap.put("servicePackCategoryNoList", a);
-        resultMap.put("dtarterCategoryNo", b.getNo());
+        resultMap.put("servicePackCategoryNoList", starterServicepackRelations);
+        resultMap.put("StarterCategoryNo", starterCategory.getNo());
 
         resultMap2.put("info", resultMap);
         resultMap2.put("RESULT", Constants.RESULT_STATUS_SUCCESS);
@@ -100,7 +101,6 @@ public class CatalogService {
 
     }
 
-
     /**
      * 앱 개발환경 카탈로그 목록을 조회한다.
      *
@@ -129,7 +129,6 @@ public class CatalogService {
             put("list", buildpackCategoryList);
         }};
     }
-
 
     /**
      * 서비스 카탈로그 목록을 조회한다.
@@ -171,7 +170,6 @@ public class CatalogService {
         return buildPackCnt;
     }
 
-
     /**
      * 앱 개발환경 카탈로그 개수를 조회한다.
      * @return Map(자바클래스)
@@ -183,7 +181,6 @@ public class CatalogService {
         System.out.println(buildPackCnt);
         return buildPackCnt;
     }
-
 
     /**
      * 서비스 카탈로그 개수를 조회한다.
@@ -207,12 +204,17 @@ public class CatalogService {
         logger.info("insertStarterCatalog");
         starterCategoryRepository.save(param);
 
+//        for (int i = 0; i < param.getServicePackCategoryNoList().size(); i++) {
+//            catalogMapper.insertSelectedServicePackList(param.getServicePackCategoryNoList().get(i));
+//        }
+//
+//        resultMap.put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+//
+//        return resultMap;
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
         }};
     }
-
-
 
     /**
      * 앱 개발환경 카탈로그를 저장한다.
@@ -229,7 +231,6 @@ public class CatalogService {
         }};
     }
 
-
     /**
      * 서비스 카탈로그를 저장한다.
      *
@@ -245,6 +246,20 @@ public class CatalogService {
         }};
     }
 
+    /**
+     * 앱 개발환경 카탈로그를 수정한다.
+     *
+     * @param param Catalog(모델클래스)
+     * @return Map(자바클래스)
+     */
+    public StarterCategory updateStarterCatalog(StarterCategory param) {
+        logger.info("updateStarterCatalog");
+        StarterCategory update = starterCategoryRepository.findOne(param.getNo());
+        param.setCreated(update.getCreated());
+        param.setLastmodified(new Date());
+        StarterCategory starterCategory = starterCategoryRepository.save(param);
+        return starterCategory;
+    }
 
     /**
      * 앱 개발환경 카탈로그를 수정한다.
@@ -262,7 +277,7 @@ public class CatalogService {
     }
 
     /**
-     * 앱 개발환경 카탈로그를 수정한다.
+     * 서비스 카탈로그를 수정한다.
      *
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
@@ -276,6 +291,18 @@ public class CatalogService {
         return buildpackCategory;
     }
 
+    /**
+     * 앱 템플릿 카탈로그를 삭제한다.
+     *
+     * @param no
+     * @return Map(자바클래스)
+     */
+    public Map<String, Object> deleteStarterCatalog(int no) {
+        starterCategoryRepository.delete(no);
+        return new HashMap<String, Object>() {{
+            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+        }};
+    }
 
     /**
      * 앱 개발환경 카탈로그를 삭제한다.
@@ -289,7 +316,6 @@ public class CatalogService {
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
         }};
     }
-
 
     /**
      * 서비스 카탈로그를 삭제한다.
