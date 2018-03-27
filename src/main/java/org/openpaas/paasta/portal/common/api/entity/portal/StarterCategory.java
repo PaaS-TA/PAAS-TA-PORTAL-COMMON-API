@@ -60,6 +60,7 @@ public class StarterCategory {
     @Formula("(SELECT cd.summary FROM code_detail cd WHERE cd.key = classification AND cd.group_id = 'STARTER_CATALOG')")
     private String classificationSummary;
 
+
     public int getNo() {
         return no;
     }
@@ -165,4 +166,5 @@ public class StarterCategory {
     public void setClassificationSummary(String classificationSummary) {
         this.classificationSummary = classificationSummary;
     }
+
 }

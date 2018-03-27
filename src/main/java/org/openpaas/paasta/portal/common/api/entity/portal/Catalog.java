@@ -46,6 +46,9 @@ public class Catalog {
     @Transient
     private String searchTypeUseYn;
 
+    @Transient
+    private int starterCatalogNo;
+
     public int getNo() {
         return no;
     }
@@ -118,5 +121,13 @@ public class Catalog {
 
     public void setSearchTypeUseYn(String searchTypeUseYn) {
         this.searchTypeUseYn = searchTypeUseYn;
+    }
+
+    public int getStarterCatalogNo() {
+        return starterCatalogNo;
+    }
+
+    public void setStarterCatalogNo(int starterCatalogNo) {
+        this.starterCatalogNo = starterCatalogNo;
     }
 }
