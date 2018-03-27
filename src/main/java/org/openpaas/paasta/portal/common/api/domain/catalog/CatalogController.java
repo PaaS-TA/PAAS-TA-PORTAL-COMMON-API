@@ -175,7 +175,7 @@ public class CatalogController {
      * @return Map(자바클래스)
      */
     @PutMapping(value = {"updateStarterCatalogs/{no}"})
-    public StarterCategory updateStarterCatalog(@PathVariable int no,@RequestBody StarterCategory param) {
+    public StarterCategory updateStarterCatalog(@PathVariable int no, @RequestBody StarterCategory param) {
         logger.info("###################### " + no);
         param.setNo(no);
 
@@ -218,6 +218,7 @@ public class CatalogController {
 
     /**
      * 앱 템플릿 카탈로그를 삭제한다.
+     *
      * @return Map(자바클래스)
      */
     @DeleteMapping(value = {"starterCatalogs/{no}"})
