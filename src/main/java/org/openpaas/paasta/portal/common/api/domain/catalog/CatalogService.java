@@ -4,10 +4,7 @@ import org.jinq.orm.stream.JinqStream;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
-import org.openpaas.paasta.portal.common.api.entity.portal.BuildpackCategory;
-import org.openpaas.paasta.portal.common.api.entity.portal.Catalog;
-import org.openpaas.paasta.portal.common.api.entity.portal.ServicepackCategory;
-import org.openpaas.paasta.portal.common.api.entity.portal.StarterCategory;
+import org.openpaas.paasta.portal.common.api.entity.portal.*;
 import org.openpaas.paasta.portal.common.api.repository.portal.BuildpackCategoryRepository;
 import org.openpaas.paasta.portal.common.api.repository.portal.ServicepackCategoryRepository;
 import org.openpaas.paasta.portal.common.api.repository.portal.StarterCategoryRepository;
@@ -15,10 +12,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -44,6 +38,41 @@ public class CatalogService {
 
     @Autowired
     PortalConfig portalConfig;
+
+
+    /**
+     * 앱 템플릿 카탈로그 조회
+     *
+     * @param param Catalog(모델클래스)
+     * @return Map(자바클래스)
+     */
+    public Map<String, Object> getOneStarterCatalog(StarterCategory param) {
+
+        JinqStream<StarterServicepackRelation> streams = jinqSource.streamAllPortal(StarterServicepackRelation.class);
+        JinqStream<StarterCategory> streams2 = jinqSource.streamAllPortal(StarterCategory.class);
+        int no = param.getStarterCategoryNo();
+
+        streams = streams.where(c -> c.getStarterCatalogNo() == no);
+        streams = streams.sortedBy(c -> c.getServicepackCategoryNo());
+
+        List<StarterServicepackRelation> a = streams.toList();
+
+
+        streams2 = streams2.where(c -> c.getNo() == no);
+
+        StarterCategory b = streams2.findFirst().get();
+
+
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> resultMap2 = new HashMap<>();
+
+        resultMap.put("servicePackCategoryNoList", a);
+        resultMap.put("dtarterCategoryNo", b.getNo());
+
+        resultMap2.put("info", resultMap);
+        resultMap2.put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+        return resultMap2;
+    }
 
     /**
      * 앱 템플릿명 목록을 조회한다.
@@ -167,6 +196,22 @@ public class CatalogService {
         System.out.println(servicePackCnt);
         return servicePackCnt;
     }
+
+    /**
+     * 앱 템플릿 카탈로그를 저장한다.
+     *
+     * @param param Catalog(모델클래스)
+     * @return Map(자바클래스)
+     */
+    public Map<String, Object> insertStarterCatalog(StarterCategory param) {
+        logger.info("insertStarterCatalog");
+        starterCategoryRepository.save(param);
+
+        return new HashMap<String, Object>() {{
+            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+        }};
+    }
+
 
 
     /**

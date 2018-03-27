@@ -3,6 +3,7 @@ package org.openpaas.paasta.portal.common.api.domain.catalog;
 import org.openpaas.paasta.portal.common.api.entity.portal.BuildpackCategory;
 import org.openpaas.paasta.portal.common.api.entity.portal.Catalog;
 import org.openpaas.paasta.portal.common.api.entity.portal.ServicepackCategory;
+import org.openpaas.paasta.portal.common.api.entity.portal.StarterCategory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,17 @@ public class CatalogController {
 
     @Autowired
     private CatalogService catalogService;
+
+    /**
+     * 앱 템플릿 카탈로그를 조회한다.
+     *
+     * @param param Catalog(모델클래스)
+     * @return Map(자바클래스)
+     */
+    @GetMapping("/oneStarterCatalog")
+    public Map<String, Object> getOneStarterCatalog(@ModelAttribute StarterCategory param) {
+        return catalogService.getOneStarterCatalog(param);
+    }
 
     /**
      * 앱 템플릿 목록을 조회한다.
