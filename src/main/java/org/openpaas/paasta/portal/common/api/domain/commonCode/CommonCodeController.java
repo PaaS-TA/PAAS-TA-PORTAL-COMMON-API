@@ -1,11 +1,10 @@
 package org.openpaas.paasta.portal.common.api.domain.commonCode;
 
+import org.openpaas.paasta.portal.common.api.entity.portal.CodeDetail;
+import org.openpaas.paasta.portal.common.api.entity.portal.CodeGroup;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -33,14 +32,14 @@ public class CommonCodeController {
         return commonCodeService.getCommonCodeById(codeId);
     }
 
-//    /**
-//     * 공통코드 목록을 조회한다.
-//     *
-//     * @param codeDetail,codeGroup  CodeDetail,CodeGroup (모델클래스)
-//     * @return Map(자바클래스)
-//     */
-//    @PostMapping("/commonCode")
-//      public Map<String, Object> getCommonCode(@RequestBody CodeDetail codeDetail, CodeGroup codeGroup) {
-//        return commonCodeService.getCommonCode(codeDetail,codeGroup);
-//    }
+    /**
+     * 공통코드 목록을 조회한다.
+     *
+     * @param codeDetail,codeGroup  CodeDetail,CodeGroup (모델클래스)
+     * @return Map(자바클래스)
+     */
+    @PostMapping("/commonCode")
+      public Map<String, Object> getCommonCode(@RequestBody CodeDetail codeDetail, CodeGroup codeGroup) {
+        return commonCodeService.getCommonCode(codeDetail,codeGroup);
+    }
 }
