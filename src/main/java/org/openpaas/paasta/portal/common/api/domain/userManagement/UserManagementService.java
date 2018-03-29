@@ -2,7 +2,9 @@ package org.openpaas.paasta.portal.common.api.domain.userManagement;
 
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
+import org.openpaas.paasta.portal.common.api.domain.user.UserService;
 import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
+import org.openpaas.paasta.portal.common.api.entity.uaa.Users;
 import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailRepository;
 import org.openpaas.paasta.portal.common.api.repository.uaa.UsersRepository;
 import org.slf4j.Logger;
@@ -16,6 +18,7 @@ import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -28,6 +31,8 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class UserManagementService {
     private final Logger logger = getLogger(this.getClass());
 
+    private final UserService userService;
+
     @Autowired
     PortalConfig portalConfig;
 
@@ -37,83 +42,50 @@ public class UserManagementService {
     @Autowired
     UsersRepository usersRepository;
 
+    @Autowired
+    public UserManagementService(UserService userService) {
+        this.userService = userService;
+    }
     /**
      * 사용자 정보 목록을 조회한다.
      *
-     * @param param UserManagement(모델클래스)
      * @return Map(자바클래스)
      */
-    public Map<String, Object> getUserInfoList(HashMap param) {
-        int pageNo = Constants.PAGE_NO;
-        float pageSize = Constants.PAGE_SIZE;
+    public Map<String, Object> getUserInfoList() {
 
-        HashMap<String, Object> resultMap = new HashMap<>();
-        return resultMap;
-
+        return new HashMap<String, Object>() {{
+            put("list",userDetailRepository.findAll());
+        }};
     }
 
+    /**
+     * 사용자 패스워드 초기화를 한다.
+     *
+     * @param userId userid
+     * @return Map(자바클래스)
+     * @throws Exception Exception(자바클래스)
+     */
+    public Map<String, Object> setResetPassword(String userId) throws Exception {
+        userService.resetPassword(userId);
+
+        return new HashMap<String, Object>() {{
+            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+        }};
+    }
+
+
     /**사용자에게 운영자 권한을 부여한다.*/
-    public String updateOperatingAuthority(HashMap param) {
-
-        String resultStr = Constants.RESULT_STATUS_SUCCESS;
-
-        EntityManager portalEm = portalConfig.portalEntityManager().getNativeEntityManagerFactory().createEntityManager();
-
-        try{
-            CriteriaBuilder cb = portalEm.getCriteriaBuilder();
-            CriteriaUpdate<UserDetail> update = cb.createCriteriaUpdate(UserDetail.class);
-            Root e = update.from(UserDetail.class);
-
-            if(null != param.get("status") && !("").equals(param.get("status").toString())) {
-                update.set("status", param.get("status"));
-            }
-            if(null != param.get("tellPhone") && !("").equals(param.get("tellPhone").toString())) {
-                update.set("tellPhone", param.get("tellPhone"));
-            }
-            if(null != param.get("zipCode") && !("").equals(param.get("zipCode").toString())) {
-                update.set("zipCode", param.get("zipCode"));
-            }
-            if(null != param.get("address") && !("").equals(param.get("address").toString())) {
-                update.set("address", param.get("address"));
-            }
-            if(null != param.get("addressDetail") && !("").equals(param.get("addressDetail").toString())) {
-                update.set("addressDetail", param.get("addressDetail"));
-            }
-            if(null != param.get("userName") && !("").equals(param.get("userName").toString())) {
-                update.set("userName", param.get("userName"));
-            }
-            if(null != param.get("adminYn") && !("").equals(param.get("adminYn").toString())) {
-                update.set("adminYn", param.get("adminYn"));
-            }
-
-            Predicate predicate = cb.conjunction();
-
-            //SQL:WHERE
-            if(null != param.get("userId") && !("").equals(param.get("userId").toString())) {
-                predicate = cb.and(predicate, cb.equal(e.get("userId"), param.get("userId").toString()));
-            }
-            update.where(predicate);
-            portalEm.getTransaction().begin();
-            portalEm.getTransaction().commit();
-
-        }catch (NullPointerException nex) {
-            logger.error("Exception :: NullPointerException :: {}", nex.getCause().getMessage());
-            resultStr = Constants.RESULT_STATUS_FAIL;
-        }finally {
-            portalEm.close();
-        }
-        return  resultStr;
+    public Map<String, Object> updateOperatingAuthority(String userId) {
+        UserDetail userDetail = userDetailRepository.findByUserId(userId);
+        userDetail.setAdminYn("Y");
+        userDetailRepository.save(userDetail);
+        return new HashMap<String, Object>() {{
+            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+        }};
     }
 
     /**사용자를 삭제한다.*/
-    public Map<String, Object> deleteUserAccount(HashMap map)  {
-
-        String userId = new String();
-        String resultUserGuid = new String();
-
-        map.put("userId", userId);
-        map.put("resultUserGuid", resultUserGuid);
-
+    public Map<String, Object> deleteUserAccount(String userId)  {
         userDetailRepository.deleteByUserId(userId);
 
         return new HashMap<String, Object>() {{

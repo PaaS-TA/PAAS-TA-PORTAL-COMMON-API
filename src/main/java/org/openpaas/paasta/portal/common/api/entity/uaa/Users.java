@@ -5,6 +5,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.math.BigInteger;
 import java.util.Date;
 
 /**
@@ -52,7 +54,7 @@ public class Users {
     private int active;
 
     @Column(name = "phonenumber", nullable = false)
-    private long phoneNumber;
+    private String phoneNumber;
 
     @Column(name = "authorities", nullable = false)
     private String authorities;
@@ -78,16 +80,16 @@ public class Users {
     private Date passwdLastmodified;
 
     @Column(name = "legacy_verification_behavior", nullable = false)
-    private  long legacyVerification_behavior;
+    private  int legacyVerification_behavior;
 
     @Column(name = "passwd_change_required", nullable = false)
-    private  long passwdChange_required;
-
+    private  int passwdChange_required;
+//
     @Column(name = "last_logon_success_time", nullable = false)
-    private  long lastLogonSuccessTime;
+    private BigInteger lastLogonSuccessTime;
 
     @Column(name = "previous_logon_success_time", nullable = false)
-    private  long previousLogonSuccessTime;
+    private  BigInteger previousLogonSuccessTime;
 
     public String getId() {
         return id;
@@ -171,11 +173,11 @@ public class Users {
         this.active = active;
     }
 
-    public long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(long phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -236,35 +238,35 @@ public class Users {
         this.passwdLastmodified = passwdLastmodified;
     }
 
-    public long getLegacyVerification_behavior() {
+    public int getLegacyVerification_behavior() {
         return legacyVerification_behavior;
     }
 
-    public void setLegacyVerification_behavior(long legacyVerification_behavior) {
+    public void setLegacyVerification_behavior(int legacyVerification_behavior) {
         this.legacyVerification_behavior = legacyVerification_behavior;
     }
 
-    public long getPasswdChange_required() {
+    public int getPasswdChange_required() {
         return passwdChange_required;
     }
 
-    public void setPasswdChange_required(long passwdChange_required) {
+    public void setPasswdChange_required(int passwdChange_required) {
         this.passwdChange_required = passwdChange_required;
     }
 
-    public long getLastLogonSuccessTime() {
+    public BigInteger getLastLogonSuccessTime() {
         return lastLogonSuccessTime;
     }
 
-    public void setLastLogonSuccessTime(long lastLogonSuccessTime) {
+    public void setLastLogonSuccessTime(BigInteger lastLogonSuccessTime) {
         this.lastLogonSuccessTime = lastLogonSuccessTime;
     }
 
-    public long getPreviousLogonSuccessTime() {
+    public BigInteger getPreviousLogonSuccessTime() {
         return previousLogonSuccessTime;
     }
 
-    public void setPreviousLogonSuccessTime(long previousLogonSuccessTime) {
+    public void setPreviousLogonSuccessTime(BigInteger previousLogonSuccessTime) {
         this.previousLogonSuccessTime = previousLogonSuccessTime;
     }
 

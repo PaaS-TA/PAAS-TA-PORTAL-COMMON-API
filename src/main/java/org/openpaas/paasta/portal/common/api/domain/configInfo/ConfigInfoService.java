@@ -59,10 +59,6 @@ public class ConfigInfoService {
         }else {
             resultStr = Constants.RESULT_STATUS_FAIL;
         }
-//        if (configInfoRepository.countByName(configInfo.getName()) > 0) {
-//            configInfo.setUpdatedAt(new Date());
-//            configInfoRepository.save(configInfo);
-//        }
         return resultStr;
     }
 }
