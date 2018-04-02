@@ -67,7 +67,6 @@ public class UserManagementService {
      */
     public Map<String, Object> setResetPassword(String userId) throws Exception {
         userService.resetPassword(userId);
-
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
         }};
@@ -77,7 +76,7 @@ public class UserManagementService {
     /**사용자에게 운영자 권한을 부여한다.*/
     public Map<String, Object> updateOperatingAuthority(String userId) {
         UserDetail userDetail = userDetailRepository.findByUserId(userId);
-        userDetail.setAdminYn("Y");
+        userDetail.setAdminYn(!userDetail.getAdminYn().equals("Y") ? "Y" : "N");
         userDetailRepository.save(userDetail);
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);

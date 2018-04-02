@@ -1,11 +1,14 @@
 package org.openpaas.paasta.portal.common.api.domain.userManagement;
 
+import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
 import org.openpaas.paasta.portal.common.api.entity.uaa.Users;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,8 +43,8 @@ public class UserManagementController {
      * @throws Exception Exception(자바클래스)
      */
     @RequestMapping(value = {"/ResetPassword/{userId}"}, method = RequestMethod.PUT)
-    public Map<String, Object> setResetPassword(@PathVariable String userId) throws Exception {
-        return userManagementService.setResetPassword(userId);
+    public Map<String, Object> setResetPassword(@PathVariable String userId,  @RequestBody UserDetail userDetail) throws Exception {
+        return userManagementService.setResetPassword(userDetail.getUserId());
     }
 
 
@@ -53,9 +56,9 @@ public class UserManagementController {
      * @param userId userId
      * @return Map(자바클래스)
      */
-    @RequestMapping(value = {"/OperatingAuthority/{userId}"}, method = RequestMethod.DELETE)
-    public Map<String, Object> updateOperatingAuthority(@PathVariable String userId) {
-        return userManagementService.updateOperatingAuthority(userId);
+    @RequestMapping(value = {"/OperatingAuthority/{userId}"}, method = RequestMethod.PUT)
+    public Map<String, Object> updateOperatingAuthority(@PathVariable String userId,  @RequestBody UserDetail userDetail) {
+        return userManagementService.updateOperatingAuthority(userDetail.getUserId());
     }
 
     /**
@@ -65,9 +68,9 @@ public class UserManagementController {
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
-    @RequestMapping(value = {"/UserAccount/{userId}"}, method = RequestMethod.DELETE)
-    public Map<String, Object> deleteUserAccount(@PathVariable String userId) throws Exception {
-        return userManagementService.deleteUserAccount(userId);
+    @RequestMapping(value = {"/deleteUserAccount/{userId}"}, method = RequestMethod.DELETE)
+    public Map<String, Object> deleteUserAccount(@PathVariable String userId,  @RequestBody UserDetail userDetail) throws Exception {
+        return userManagementService.deleteUserAccount(userDetail.getUserId());
     }
 
 

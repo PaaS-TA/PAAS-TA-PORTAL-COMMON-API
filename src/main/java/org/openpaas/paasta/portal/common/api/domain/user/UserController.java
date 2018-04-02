@@ -80,7 +80,6 @@ public class UserController  {
      * @param response   the response
      * @return the map
      * @throws IOException        the io exception
-     * @throws MessagingException the messaging exception
      */
     @RequestMapping(value = {"/confirmAuthUser"})
     public Map<String, Object> confirmAuthUser(@RequestBody UserDetail userDetail, HttpServletResponse response) throws IOException {

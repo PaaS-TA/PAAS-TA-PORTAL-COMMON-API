@@ -86,12 +86,10 @@ public class UserService {
         userDetail.setRefreshToken(randomId);
         userDetail.setAuthAccessCnt(0);
         userDetail.setAuthAccessTime(new Date());
-        logger.info(randomId);
         userDetailRepository.save(userDetail);
-
         Boolean bRtn = false;
         Map<String, Object> map = new HashMap<>();
-        int resultCreateUser = Integer.getInteger(userDetail.getStatus());
+        int resultCreateUser = Integer.parseInt(userDetail.getStatus());
         if (resultCreateUser >= 1) {
             map.put("resetPassword", resultCreateUser);
             map.put("sFile", "resetPassword.html");
