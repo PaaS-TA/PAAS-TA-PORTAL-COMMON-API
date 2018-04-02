@@ -3,18 +3,20 @@ package org.openpaas.paasta.portal.common.api.domain.catalog;
 import org.jinq.orm.stream.JinqStream;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
-import org.openpaas.paasta.portal.common.api.entity.portal.*;
+import org.openpaas.paasta.portal.common.api.entity.portal.BuildpackCategory;
+import org.openpaas.paasta.portal.common.api.entity.portal.Catalog;
+import org.openpaas.paasta.portal.common.api.entity.portal.StarterCategory;
+import org.openpaas.paasta.portal.common.api.entity.portal.ServicepackCategory;
+import org.openpaas.paasta.portal.common.api.entity.portal.StarterServicepackRelation;
 import org.openpaas.paasta.portal.common.api.repository.portal.BuildpackCategoryRepository;
 import org.openpaas.paasta.portal.common.api.repository.portal.ServicepackCategoryRepository;
 import org.openpaas.paasta.portal.common.api.repository.portal.StarterCategoryRepository;
+import org.openpaas.paasta.portal.common.api.repository.portal.StarterServicepackRelationRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -36,6 +38,9 @@ public class CatalogService {
     ServicepackCategoryRepository servicepackCategoryRepository;
 
     @Autowired
+    StarterServicepackRelationRepository starterServicepackRelationRepository;
+
+    @Autowired
     JinqSource jinqSource;
 
     /**
@@ -46,29 +51,26 @@ public class CatalogService {
      */
     public Map<String, Object> getOneStarterCatalog(Catalog param) {
 
-        //선택한 서비스팩 목록을 조회한다. :: starterServicepackRelationStream
         JinqStream<StarterServicepackRelation> starterServicepackRelationStream = jinqSource.streamAllPortal(StarterServicepackRelation.class);
-        //스타터 Starter 상세 조회를 한다.:: starterCategoryStream
         JinqStream<StarterCategory> starterCategoryStream = jinqSource.streamAllPortal(StarterCategory.class);
 
-        int no = param.getStarterCatalogNo();
+       int no = param.getNo();
 
-        //WHERE ssr.starter_category_no = ${no}
-        starterServicepackRelationStream = starterServicepackRelationStream.where(c -> c.getStarterCatalogNo() == no);
-        //ORDER BY
+        starterServicepackRelationStream = starterServicepackRelationStream.where(c -> c.getServicepackCategoryNo() == no);
         starterServicepackRelationStream = starterServicepackRelationStream.sortedBy(c -> c.getServicepackCategoryNo());
-
         List<StarterServicepackRelation> starterServicepackRelations = starterServicepackRelationStream.toList();
 
         starterCategoryStream = starterCategoryStream.where(c -> c.getNo() == no);
-
-        StarterCategory starterCategory = starterCategoryStream.findFirst().get();
+//       StarterCategory starterCategory = starterCategoryStream.findFirst().get();
+        Optional<StarterCategory> starterCategoryRelations = starterCategoryStream.findFirst();
 
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> resultMap2 = new HashMap<>();
 
         resultMap.put("servicePackCategoryNoList", starterServicepackRelations);
-        resultMap.put("StarterCategoryNo", starterCategory.getNo());
+//        resultMap.put("StarterCategoryNo", starterCategory.getNo());
+        resultMap.put("StarterCategoryNo", starterCategoryRelations);
+
 
         resultMap2.put("info", resultMap);
         resultMap2.put("RESULT", Constants.RESULT_STATUS_SUCCESS);
