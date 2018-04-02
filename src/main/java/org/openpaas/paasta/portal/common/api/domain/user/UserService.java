@@ -1,5 +1,7 @@
 package org.openpaas.paasta.portal.common.api.domain.user;
 
+import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
+import org.apache.commons.lang.RandomStringUtils;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
 import org.openpaas.paasta.portal.common.api.config.dataSource.UaaConfig;
@@ -10,15 +12,17 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.activation.DataHandler;
 import javax.persistence.EntityManager;
 import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 import java.util.stream.Collectors;
+
+
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -65,6 +69,37 @@ public class UserService {
         UserDetail userDetail = userDetailRepository.findByUserId(userId);
 
         return userDetail;
+    }
+
+    /**
+     * 비밀번호 인증 을 한다.
+     *z`
+     * @param userId userId
+     * @return 성공, 실패 여부
+     * @throws IOException        the io exception
+     * @throws MessagingException the messaging exception
+     */
+    public boolean resetPassword(String userId) throws IOException, MessagingException {
+
+        UserDetail userDetail = userDetailRepository.findByUserId(userId);
+        String randomId = RandomStringUtils.randomAlphanumeric(17).toUpperCase() + RandomStringUtils.randomAlphanumeric(2).toUpperCase();
+        userDetail.setRefreshToken(randomId);
+        userDetail.setAuthAccessCnt(0);
+        userDetail.setAuthAccessTime(new Date());
+        logger.info(randomId);
+        userDetailRepository.save(userDetail);
+
+        Boolean bRtn = false;
+        Map<String, Object> map = new HashMap<>();
+        int resultCreateUser = Integer.getInteger(userDetail.getStatus());
+        if (resultCreateUser >= 1) {
+            map.put("resetPassword", resultCreateUser);
+            map.put("sFile", "resetPassword.html");
+            map.put("contextUrl", "user/authPassword");
+            bRtn = true;
+            //bRtn = sendEmail(map);
+        }
+        return bRtn;
     }
 
     /**

@@ -150,7 +150,6 @@ public class UserController  {
      * @param response   the response
      * @return map
      * @throws IOException        the io exception
-     * @throws MessagingException the messaging exception
      */
     @RequestMapping(value = {"/authUser"},  method = RequestMethod.POST)
     public Map<String, Object> authUser(@RequestBody UserDetail userDetail, HttpServletResponse response) throws IOException {
