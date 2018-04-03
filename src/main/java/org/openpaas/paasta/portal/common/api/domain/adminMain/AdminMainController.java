@@ -23,23 +23,23 @@ public class AdminMainController {
     /**
      * 전체 조직 수, 영역 수, APPLICATION 수, 사용자 수 목록을 조회한다.
      *
-     * @param reqParam OrganizationsCc
+//     * @param reqParam OrganizationsCc
      * @return Map(자바클래스)
      */
-    @RequestMapping(value = "/getTotalCountList", method = RequestMethod.POST)
-    public Map<String, Object> getTotalCountList(@RequestBody OrganizationsCc reqParam) {
+    @RequestMapping(value = "/getTotalCountList", method = RequestMethod.GET)
+    public Map<String, Object> getTotalCountList() {
         return adminMainService.getTotalCountList();
     }
 
     /**
      * 전체 조직 통계 목록을 조회한다.
      *
-     * @param reqParam OrganizationsCc
+//     * @param reqParam OrganizationsCc
      * @return Map(자바클래스)
      */
-    @RequestMapping(value = "/getTotalOrganizationList", method = RequestMethod.POST)
-    public Map<String, Object> getTotalOrganizationList(@RequestBody Map<String, Object> reqParam) {
-        return adminMainService.getTotalOrganizationList(reqParam);
+    @RequestMapping(value = "/getTotalOrganizationList", method = RequestMethod.GET)
+    public Map<String, Object> getTotalOrganizationList() {
+        return adminMainService.getTotalOrganizationList();
     }
 
     /**
@@ -48,7 +48,7 @@ public class AdminMainController {
      * @param reqParam AdminMain(모델클래스)
      * @return Map(자바클래스)
      */
-    @RequestMapping(value = "/getTotalSpaceList", method = RequestMethod.POST)
+    @RequestMapping(value = "/getTotalSpaceList", method = RequestMethod.GET)
     public Map<String, Object> getTotalSpaceList(@RequestBody Map<String, Object> reqParam) {
         return adminMainService.getTotalSpaceList(reqParam);
     }
