@@ -30,7 +30,7 @@ public class ConfigInfoController {
      * @return value value
      * @throws Exception the exception
      */
-    @GetMapping(V2_URL+ "/configInfos")
+    @GetMapping(V2_URL+"/configInfos")
     public Map<String, Object> getValues() {
         return configInfoService.getValue(null);
     }
@@ -43,7 +43,7 @@ public class ConfigInfoController {
      * @return value value
      * @throws Exception the exception
      */
-    @GetMapping(V2_URL+ "/configInfos/{name}")
+    @GetMapping(V2_URL+"/configInfos/{name}")
     public Map<String, Object> getValue(@PathVariable String name) {
         return configInfoService.getValue(name);
     }
@@ -68,7 +68,7 @@ public class ConfigInfoController {
      * @return map map
      * @throws Exception the exception
      */
-    @PutMapping(V2_URL+ "/configInfos/{name}")
+    @PutMapping(V2_URL+"/configInfos/{name}")
     public Map<String, Object> updateValue(@PathVariable String name, @RequestBody ConfigInfo configInfo) {
         Map<String, Object> resultMap = new HashMap<>();
         String resultStr = configInfoService.updateValue(name, configInfo);
