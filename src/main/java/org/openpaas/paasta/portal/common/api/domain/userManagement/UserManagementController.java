@@ -17,11 +17,10 @@ import java.util.Map;
  * Created by SEJI on 2018-03-08.
  */
 @RestController
-@RequestMapping(value = {"/userManagement"})
 public class UserManagementController {
     /** 로그객체*/
     private  static final Logger LOGGER = LoggerFactory.getLogger(UserManagementController.class);
-
+    private final String V2_URL = "/v2";
     @Autowired
     private UserManagementService userManagementService;
 
@@ -30,7 +29,7 @@ public class UserManagementController {
      *
      * @return Map(자바클래스)
      */
-    @RequestMapping(value = {"/UserInfoList"}, method = RequestMethod.GET)
+    @GetMapping(V2_URL + "/usermanagements")
     public Map<String, Object> getUserInfoList() {
         return userManagementService.getUserInfoList();
     }
@@ -38,12 +37,13 @@ public class UserManagementController {
     /**
      * 비밀번호를 초기화한다.
      *
-     * @param userId userId
+     * @param userDetail UserManagement(모델클래스)
+     * @param userid userId
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
-    @RequestMapping(value = {"/ResetPassword/{userId}"}, method = RequestMethod.PUT)
-    public Map<String, Object> setResetPassword(@PathVariable String userId,  @RequestBody UserDetail userDetail) throws Exception {
+    @PutMapping(V2_URL + "/usermanagements/{userid}/resetpassword")
+    public Map<String, Object> setResetPassword(@PathVariable String userid,  @RequestBody UserDetail userDetail) throws Exception {
         return userManagementService.setResetPassword(userDetail.getUserId());
     }
 
@@ -53,23 +53,25 @@ public class UserManagementController {
     /**
      * 운영권한을 부여한다.
      *
-     * @param userId userId
+     * @param userDetail UserManagement(모델클래스)
+     * @param userid userId
      * @return Map(자바클래스)
      */
-    @RequestMapping(value = {"/OperatingAuthority/{userId}"}, method = RequestMethod.PUT)
-    public Map<String, Object> updateOperatingAuthority(@PathVariable String userId,  @RequestBody UserDetail userDetail) {
+    @PutMapping(V2_URL + "/usermanagements/{userid}/authority")
+    public Map<String, Object> updateOperatingAuthority(@PathVariable String userid,  @RequestBody UserDetail userDetail) {
         return userManagementService.updateOperatingAuthority(userDetail.getUserId());
     }
 
     /**
      * 사용자 계정을 삭제한다.
      *
-     * @param userId UserManagement(모델클래스)
+     * @param userDetail UserManagement(모델클래스)
+     * @param userid userId
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
-    @RequestMapping(value = {"/deleteUserAccount/{userId}"}, method = RequestMethod.DELETE)
-    public Map<String, Object> deleteUserAccount(@PathVariable String userId,  @RequestBody UserDetail userDetail) throws Exception {
+    @DeleteMapping(V2_URL + "/usermanagements/{userid}")
+    public Map<String, Object> deleteUserAccount(@PathVariable String userid, @RequestBody UserDetail userDetail) throws Exception {
         return userManagementService.deleteUserAccount(userDetail.getUserId());
     }
 
