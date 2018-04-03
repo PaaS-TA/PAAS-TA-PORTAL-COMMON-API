@@ -2,10 +2,7 @@ package org.openpaas.paasta.portal.common.api.domain.adminMain;
 
 import org.openpaas.paasta.portal.common.api.entity.cc.OrganizationsCc;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -13,8 +10,9 @@ import java.util.Map;
  * Created by indra on 2018-02-12.
  */
 @RestController
-@RequestMapping("/adminMain")
 public class AdminMainController {
+
+    private final String V2_URL = "/v2";
 
     @Autowired
     private AdminMainService adminMainService;
@@ -26,7 +24,7 @@ public class AdminMainController {
 //     * @param reqParam OrganizationsCc
      * @return Map(자바클래스)
      */
-    @RequestMapping(value = "/getTotalCountList", method = RequestMethod.GET)
+    @GetMapping(value = {V2_URL + "/statistics"})
     public Map<String, Object> getTotalCountList() {
         return adminMainService.getTotalCountList();
     }
@@ -37,19 +35,18 @@ public class AdminMainController {
 //     * @param reqParam OrganizationsCc
      * @return Map(자바클래스)
      */
-    @RequestMapping(value = "/getTotalOrganizationList", method = RequestMethod.GET)
+    @GetMapping(value = {V2_URL + "/statistics/organizations"})
     public Map<String, Object> getTotalOrganizationList() {
         return adminMainService.getTotalOrganizationList();
     }
 
     /**
-     * 전체 공간 통계 목록을 조회한다.
+     * 해당 조직에 대한 공간들의 통계 목록들을 조회한다.
      *
-     * @param reqParam AdminMain(모델클래스)
      * @return Map(자바클래스)
      */
-    @RequestMapping(value = "/getTotalSpaceList", method = RequestMethod.GET)
-    public Map<String, Object> getTotalSpaceList(@RequestBody Map<String, Object> reqParam) {
-        return adminMainService.getTotalSpaceList(reqParam);
+    @GetMapping(value = {V2_URL + "/statistics/organizations/{organizationId}/spaces"})
+    public Map<String, Object> getTotalSpaceList(@PathVariable String organizationId) {
+        return adminMainService.getTotalSpaceList(organizationId);
     }
 }
