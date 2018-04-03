@@ -16,26 +16,36 @@ public class CodeDetail {
 
     @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "key", nullable = false)
+    @Column(name = "[key]",nullable = false)
     private String key;
 
-    @Column(name = "value")
+    @Column(name = "[value]",nullable = false)
     private String value;
 
-    @Column(name = "summary", nullable = false)
+    @Column(name = "summary")
     private String summary;
 
-    @Column(name = "group_id", nullable = false)
+    @Column(name = "group_id",nullable = false)
     private String groupId;
 
-    @Column(name = "use_yn", nullable = false)
+    @Column(name = "use_yn")
     private String useYn;
 
-    @Column(name = "order", nullable = false)
-    private String order;
+    @Column(name = "[order]")
+    private int order;
 
-    @Column(name = "user_id")
+    @Column(name = "user_id",nullable = false)
     private String userId;
+
+    @CreationTimestamp
+    @Column(name = "created", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date created;
+
+    @UpdateTimestamp
+    @Column(name = "lastmodified", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastmodified;
 
     @Transient
     private int pageNo;
@@ -45,16 +55,6 @@ public class CodeDetail {
 
     @Transient
     private String procType;
-
-    @CreationTimestamp
-    @Column(name = "created", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date created;
-
-    @UpdateTimestamp
-    @Column(name = "lastmodified", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastmodified;
 
     public String getKey() {
         return key;
@@ -96,11 +96,11 @@ public class CodeDetail {
         this.useYn = useYn;
     }
 
-    public String getOrder() {
+    public int getOrder() {
         return order;
     }
 
-    public void setOrder(String order) {
+    public void setOrder(int order) {
         this.order = order;
     }
 
@@ -153,6 +153,5 @@ public class CodeDetail {
     public void setLastmodified(Date lastmodified) {
         this.lastmodified = lastmodified;
     }
-
 
 }

@@ -11,14 +11,14 @@ public class StarterServicepackRelation {
 
     @Id
     //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "no", nullable = false)
+    @Column(name = "no")
     private int no;
 
-    @Column(name = "starter_category_no", nullable = false)
-    private int StarterCatalogNo;
+    @Column(name = "starter_category_no")
+    private int starterCatalogNo;
 
-    @Column(name = "servicepack_category_no", nullable = false)
-    private int ServicepackCategoryNo;
+    @Column(name = "servicepack_category_no")
+    private int servicepackCategoryNo;
 
     public int getNo() {
         return no;
@@ -29,19 +29,19 @@ public class StarterServicepackRelation {
     }
 
     public int getStarterCatalogNo() {
-        return StarterCatalogNo;
+        return starterCatalogNo;
     }
 
     public void setStarterCatalogNo(int starterCatalogNo) {
-        StarterCatalogNo = starterCatalogNo;
+        starterCatalogNo = starterCatalogNo;
     }
 
     public int getServicepackCategoryNo() {
-        return ServicepackCategoryNo;
+        return servicepackCategoryNo;
     }
 
     public void setServicepackCategoryNo(int servicepackCategoryNo) {
-        ServicepackCategoryNo = servicepackCategoryNo;
+        servicepackCategoryNo = servicepackCategoryNo;
     }
 
 }
