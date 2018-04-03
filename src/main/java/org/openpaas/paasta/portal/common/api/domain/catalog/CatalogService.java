@@ -54,7 +54,7 @@ public class CatalogService {
         JinqStream<StarterServicepackRelation> starterServicepackRelationStream = jinqSource.streamAllPortal(StarterServicepackRelation.class);
         JinqStream<StarterCategory> starterCategoryStream = jinqSource.streamAllPortal(StarterCategory.class);
 
-       int no = param.getNo();
+        int no = param.getNo();
 
         starterServicepackRelationStream = starterServicepackRelationStream.where(c -> c.getServicepackCategoryNo() == no);
         starterServicepackRelationStream = starterServicepackRelationStream.sortedBy(c -> c.getServicepackCategoryNo());
@@ -90,7 +90,6 @@ public class CatalogService {
         String searchKeyword = param.getSearchKeyword();
 
         if (null != searchKeyword && !"".equals(searchKeyword)) {
-//            streams = streams.where(c-> JPQL.like(c.getName(), "%"+searchKeyword+"%"));
             streams = streams.where(c -> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
         }
 
@@ -112,13 +111,9 @@ public class CatalogService {
     public Map<String, Object> getBuildPackCatalogList(Catalog param) {
 
         JinqStream<BuildpackCategory> streams = jinqSource.streamAllPortal(BuildpackCategory.class);
-        System.out.println("getBuildPackCatalogList in~~");
 
         int no = param.getNo();
         String searchKeyword = param.getSearchKeyword();
-
-        System.out.println("no : " + no);
-        System.out.println("searchKeyword : " + searchKeyword);
 
         if (null != searchKeyword && !"".equals(searchKeyword)) {
             streams = streams.where(c -> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
@@ -144,14 +139,8 @@ public class CatalogService {
      */
     public HashMap<String, Object> getServicePackCatalogList(Catalog param) {
         JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class);
-        System.out.println("getServicePackCatalogList in~~");
-
         int no = param.getNo();
         String searchKeyword = param.getSearchKeyword();
-
-        System.out.println("no : " + no);
-        System.out.println("searchKeyword : " + searchKeyword);
-
         if (null != searchKeyword && !"".equals(searchKeyword)) {
             streams = streams.where(c -> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
         }
@@ -203,7 +192,6 @@ public class CatalogService {
     public int getServicePackCatalogCount() {
 
         int servicePackCnt = (int) servicepackCategoryRepository.count();
-        System.out.println(servicePackCnt);
         return servicePackCnt;
     }
 
