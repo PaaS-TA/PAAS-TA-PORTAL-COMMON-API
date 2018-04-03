@@ -49,6 +49,10 @@ public class Catalog {
     @Transient
     private int starterCatalogNo;
 
+    @Transient
+    private String name;
+
+
     public int getNo() {
         return no;
     }
@@ -129,5 +133,14 @@ public class Catalog {
 
     public void setStarterCatalogNo(int starterCatalogNo) {
         this.starterCatalogNo = starterCatalogNo;
+    }
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

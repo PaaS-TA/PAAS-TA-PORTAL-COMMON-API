@@ -222,4 +222,28 @@ public class ServicepackCategory {
         this.classificationSummary = classificationSummary;
     }
 
+
+    @Override
+    public String toString() {
+        return "ServicepackCategory{" +
+                "no=" + no +
+                ", name='" + name + '\'' +
+                ", classification='" + classification + '\'' +
+                ", summary='" + summary + '\'' +
+                ", description='" + description + '\'' +
+                ", serviceName='" + serviceName + '\'' +
+                ", thumbIimgName='" + thumbIimgName + '\'' +
+                ", thumbImgPath='" + thumbImgPath + '\'' +
+                ", useYn='" + useYn + '\'' +
+                ", userId='" + userId + '\'' +
+                ", created=" + created +
+                ", lastmodified=" + lastmodified +
+                ", parameter='" + parameter + '\'' +
+                ", appBindParameter='" + appBindParameter + '\'' +
+                ", dashboardUseYn='" + dashboardUseYn + '\'' +
+                ", appBindYn='" + appBindYn + '\'' +
+                ", classificationValue='" + classificationValue + '\'' +
+                ", classificationSummary='" + classificationSummary + '\'' +
+                '}';
+    }
 }

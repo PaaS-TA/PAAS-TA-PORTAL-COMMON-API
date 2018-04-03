@@ -163,11 +163,21 @@ public class CatalogService {
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
-    public int getStarterCatalogCount() {
+    public int getStarterCatalogCount(Catalog param) {
 
-        int buildPackCnt = (int) starterCategoryRepository.count();
-        System.out.println(buildPackCnt);
-        return buildPackCnt;
+
+        JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class);
+
+        int startPackCnt = 0;
+        String name = param.getName();
+
+        if (null != name && !"".equals(name)) {
+            streams = streams.where(c -> c.getName().equals(name));
+            streams = streams.sortedDescendingBy(c -> c.getNo());
+            List<StarterCategory> starterCategoryList = streams.toList();
+            startPackCnt = starterCategoryList.size();
+        }
+        return startPackCnt;
     }
 
     /**
@@ -176,10 +186,21 @@ public class CatalogService {
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
-    public int getBuildPackCatalogCount() {
+    public int getBuildPackCatalogCount(Catalog param) {
 
-        int buildPackCnt = (int) buildpackCategoryRepository.count();
-        System.out.println(buildPackCnt);
+        JinqStream<BuildpackCategory> streams = jinqSource.streamAllPortal(BuildpackCategory.class);
+
+        int buildPackCnt = 0;
+        String name = param.getName();
+
+        if (null != name && !"".equals(name)) {
+            streams = streams.where(c -> c.getName().equals(name));
+            streams = streams.sortedDescendingBy(c -> c.getNo());
+            List<BuildpackCategory> buildpackCategoryList = streams.toList();
+            buildPackCnt = buildpackCategoryList.size();
+        }
+
+
         return buildPackCnt;
     }
 
@@ -189,9 +210,20 @@ public class CatalogService {
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
-    public int getServicePackCatalogCount() {
+    public int getServicePackCatalogCount(Catalog param) {
 
-        int servicePackCnt = (int) servicepackCategoryRepository.count();
+        JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class);
+
+        int servicePackCnt = 0;
+        String name = param.getName();
+
+        if (null != name && !"".equals(name)) {
+            streams = streams.where(c -> c.getName().equals(name));
+            streams = streams.sortedDescendingBy(c -> c.getNo());
+            List<ServicepackCategory> servicepackCategoryList = streams.toList();
+            servicePackCnt = servicepackCategoryList.size();
+        }
+
         return servicePackCnt;
     }
 
@@ -202,16 +234,8 @@ public class CatalogService {
      * @return Map(자바클래스)
      */
     public Map<String, Object> insertStarterCatalog(StarterCategory param) {
-        logger.info("insertStarterCatalog");
-        starterCategoryRepository.save(param);
 
-//        for (int i = 0; i < param.getServicePackCategoryNoList().size(); i++) {
-//            catalogMapper.insertSelectedServicePackList(param.getServicePackCategoryNoList().get(i));
-//        }
-//
-//        resultMap.put("RESULT", Constants.RESULT_STATUS_SUCCESS);
-//
-//        return resultMap;
+        starterCategoryRepository.save(param);
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
         }};

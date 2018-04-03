@@ -17,12 +17,14 @@ import static org.slf4j.LoggerFactory.getLogger;
  * Created by SEJI on 2018-03-06.
  */
 @RestController
-@RequestMapping(value = {"/catalogs"})
+
 public class CatalogController {
     private static final Logger logger = getLogger(CatalogController.class);
 
     @Autowired
     private CatalogService catalogService;
+
+    private final String V2_URL = "/v2";
 
 
     /**
@@ -43,7 +45,7 @@ public class CatalogController {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @GetMapping("/starterpacks")
+    @GetMapping(V2_URL + "/starterpacks")
     public Map<String, Object> getStarterNames(@ModelAttribute Catalog param) {
         return catalogService.getStarterNamesList(param);
     }
@@ -54,7 +56,7 @@ public class CatalogController {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @GetMapping("/starterpacks/{no}")
+    @GetMapping(V2_URL + "/starterpacks/{no}")
     public Map<String, Object> getStarterNames(@PathVariable("no") int no, @ModelAttribute Catalog param) {
         param.setNo(no);
         return catalogService.getStarterNamesList(param);
@@ -64,7 +66,7 @@ public class CatalogController {
     /**
      * 앱 개발환경 카탈로그 목록을 조회한다.
      */
-    @GetMapping("/buildpacks")
+    @GetMapping(V2_URL + "/developpacks")
     public Map<String, Object> getBuildPackCatalogList(@ModelAttribute Catalog param) {
         return catalogService.getBuildPackCatalogList(param);
     }
@@ -72,7 +74,7 @@ public class CatalogController {
     /**
      * 앱 개발환경 카탈로그 목록을 조회한다.
      */
-    @GetMapping("/buildpacks/{no}")
+    @GetMapping(V2_URL + "/developpacks/{no}")
     public Map<String, Object> getBuildPackCatalogList(@PathVariable("no") int no, @ModelAttribute Catalog param) {
         param.setNo(no);
         return catalogService.getBuildPackCatalogList(param);
@@ -85,7 +87,7 @@ public class CatalogController {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @GetMapping("/servicepacks")
+    @GetMapping(V2_URL + "/servicepacks")
     public Map<String, Object> getServicePackCatalogList(@ModelAttribute Catalog param) {
         return catalogService.getServicePackCatalogList(param);
     }
@@ -97,7 +99,7 @@ public class CatalogController {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @GetMapping("/servicepacks/{no}")
+    @GetMapping(V2_URL + "/servicepacks/{no}")
     public Map<String, Object> getServicePackCatalogList(@PathVariable("no") int no, @ModelAttribute Catalog param) {
         param.setNo(no);
         return catalogService.getServicePackCatalogList(param);
@@ -106,13 +108,12 @@ public class CatalogController {
     /**
      * 앱 템플릿 카탈로그 개수를 조회한다.
      */
-    @GetMapping("/starterpacks/count")
-    public Map<String, Object> getStarterCatalogCount() throws Exception {
-        int buildPackCnt = catalogService.getStarterCatalogCount();
-        logger.info("getStarterCatalogCount : " + buildPackCnt);
+    @GetMapping(V2_URL + "/starterpacks/count")
+    public Map<String, Object> getStarterCatalogCount(@ModelAttribute Catalog param) throws Exception {
+        int starterCatalogCount = catalogService.getStarterCatalogCount(param);
 
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("getStarterCatalogCount", buildPackCnt);
+        resultMap.put("startpackcount", starterCatalogCount);
 
         return resultMap;
     }
@@ -121,13 +122,12 @@ public class CatalogController {
     /**
      * 앱 개발환경 목록 개수를 조회한다.
      */
-    @GetMapping("/buildpacks/count")
-    public Map<String, Object> getBuildPackCatalogCount() throws Exception {
-        int buildPackCnt = catalogService.getBuildPackCatalogCount();
-        logger.info("getBuildPackCatalogCount : " + buildPackCnt);
+    @GetMapping(V2_URL + "/developpacks/count")
+    public Map<String, Object> getBuildPackCatalogCount(Catalog param) throws Exception {
+        int buildPackCnt = catalogService.getBuildPackCatalogCount(param);
 
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("getBuildPackCatalogCount", buildPackCnt);
+        resultMap.put("buildpackcount", buildPackCnt);
 
         return resultMap;
     }
@@ -136,17 +136,14 @@ public class CatalogController {
     /**
      * 서비스 목록 개수를 조회한다.
      */
-    @GetMapping("/servicepacks/count")
-    public Map<String, Object> getServicePackCatalogCount() throws Exception {
-        int servicePackCnt = catalogService.getServicePackCatalogCount();
-        logger.info("getServicePackCatalogCount : " + servicePackCnt);
-
+    @GetMapping(V2_URL + "/servicepacks/count")
+    public Map<String, Object> getServicePackCatalogCount(@ModelAttribute Catalog param) throws Exception {
+        int servicePackCnt = catalogService.getServicePackCatalogCount(param);
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("getServicePackCatalogCount", servicePackCnt);
+        resultMap.put("servicepackcount", servicePackCnt);
 
         return resultMap;
     }
-
 
 
     /**
@@ -155,7 +152,7 @@ public class CatalogController {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @PostMapping("/starterpacks")
+    @PostMapping(V2_URL + "/starterpacks")
     public Map<String, Object> insertStarterPacks(@RequestBody StarterCategory param) {
         return catalogService.insertStarterCatalog(param);
     }
@@ -167,7 +164,7 @@ public class CatalogController {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @PostMapping("/buildpacks")
+    @PostMapping(V2_URL + "/developpacks")
     public Map<String, Object> insertBuildPackCatalog(@RequestBody BuildpackCategory param) {
         return catalogService.insertBuildPackCatalog(param);
     }
@@ -179,8 +176,9 @@ public class CatalogController {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @PostMapping("/servicepacks")
+    @PostMapping(V2_URL + "/servicepacks")
     public Map<String, Object> insertServicePackCatalog(@RequestBody ServicepackCategory param) {
+        logger.info("############ " + param.toString());
         return catalogService.insertServicePackCatalog(param);
     }
 
@@ -191,7 +189,7 @@ public class CatalogController {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @PutMapping(value = {"/starterpack/{no}"})
+    @PutMapping(value = {V2_URL + "/starterpack/{no}"})
     public StarterCategory updatesStarterPackCatalog(@PathVariable int no, @RequestBody StarterCategory param) {
         param.setNo(no);
         StarterCategory resultStr = catalogService.updateStarterCatalog(param);
@@ -205,7 +203,7 @@ public class CatalogController {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @PutMapping(value = {"/buildpacks/{no}"})
+    @PutMapping(value = {V2_URL + "/developpacks/{no}"})
     public BuildpackCategory updateBuildPackCatalog(@PathVariable int no, @RequestBody BuildpackCategory param) {
         param.setNo(no);
         BuildpackCategory resultStr = catalogService.updateBuildPackCatalog(param);
@@ -219,7 +217,7 @@ public class CatalogController {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @PutMapping(value = {"/servicepacks/{no}"})
+    @PutMapping(value = {V2_URL + "/servicepacks/{no}"})
     public ServicepackCategory updateServicePackCatalog(@PathVariable int no, @RequestBody ServicepackCategory param) {
         param.setNo(no);
         ServicepackCategory resultStr = catalogService.updateServicePackCatalog(param);
@@ -231,7 +229,7 @@ public class CatalogController {
      *
      * @return Map(자바클래스)
      */
-    @DeleteMapping(value = {"/starterpacks/{no}"})
+    @DeleteMapping(value = {V2_URL + "/starterpacks/{no}"})
     public Map<String, Object> deleteStarterCatalog(@PathVariable int no) {
         return catalogService.deleteStarterCatalog(no);
     }
@@ -242,7 +240,7 @@ public class CatalogController {
      *
      * @return Map(자바클래스)
      */
-    @DeleteMapping(value = {"buildpacks/{no}"})
+    @DeleteMapping(value = {V2_URL + "/developpacks/{no}"})
     public Map<String, Object> deleteBuildPackCatalog(@PathVariable int no) {
         return catalogService.deleteBuildPackCatalog(no);
     }
@@ -252,7 +250,7 @@ public class CatalogController {
      *
      * @return Map(자바클래스)
      */
-    @DeleteMapping(value = {"servicepacks/{no}"})
+    @DeleteMapping(value = {V2_URL + "/servicepacks/{no}"})
     public Map<String, Object> deleteServicePackCatalog(@PathVariable int no) {
         return catalogService.deleteServicePackCatalog(no);
     }
