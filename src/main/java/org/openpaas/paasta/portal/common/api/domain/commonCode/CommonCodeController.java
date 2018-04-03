@@ -56,7 +56,7 @@ public class CommonCodeController {
      */
     @GetMapping(V2_URL +"/groupDetail")
     public Map<String, Object> getGroupDetail(@ModelAttribute CodeGroup codeGroup) {
-        return null;
+        return commonCodeService.getGroupDetail(codeGroup);
     }
 
 
@@ -67,8 +67,9 @@ public class CommonCodeController {
      * @return Map(자바클래스)
      */
     @GetMapping(V2_URL +"/groupDetail/{id}")
-    public Map<String, Object> getGroupDetail(@PathVariable("id") String key, @ModelAttribute CodeGroup codeGroup) {
-        return null;
+    public Map<String, Object> getGroupDetail(@PathVariable("id") String  id, @ModelAttribute CodeGroup codeGroup) {
+        codeGroup.setId(id);
+        return commonCodeService.getGroupDetail(codeGroup);
     }
 
 

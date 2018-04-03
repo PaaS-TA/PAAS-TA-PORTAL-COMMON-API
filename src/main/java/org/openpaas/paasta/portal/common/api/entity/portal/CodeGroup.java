@@ -32,6 +32,21 @@ public class CodeGroup {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastmodified;
 
+    @Transient
+    private int pageNo;
+
+    @Transient
+    private int pageSize;
+
+    @Transient
+    private String procType;
+
+    @Transient
+    private String orgKey;
+
+    @Transient
+    private String orgId;
+
     @Column(name = "user_id")
     private String userId;
 
@@ -77,4 +92,43 @@ public class CodeGroup {
         this.userId = userId;
     }
 
+    public int getPageNo() {
+        return pageNo;
+    }
+
+    public void setPageNo(int pageNo) {
+        this.pageNo = pageNo;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public String getProcType() {
+        return procType;
+    }
+
+    public void setProcType(String procType) {
+        this.procType = procType;
+    }
+
+    public String getOrgKey() {
+        return orgKey;
+    }
+
+    public void setOrgKey(String orgKey) {
+        this.orgKey = orgKey;
+    }
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
 }

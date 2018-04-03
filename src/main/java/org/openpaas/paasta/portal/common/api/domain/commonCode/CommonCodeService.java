@@ -116,6 +116,40 @@ public class CommonCodeService {
 
 
     /**
+     * 공통그룹 목록을 조회한다.
+     *
+     * @param codeGroup CodeGroup(아이디)
+     * @return Map(자바클래스)
+     */
+    public Map<String,Object> getGroupDetail(CodeGroup codeGroup) {
+        JinqStream<CodeGroup> streams = jinqSource.streamAllPortal(CodeGroup.class);
+        String id = codeGroup.getId();
+
+        if (null != id && !"".equals(id) && !"null".equals(id.toLowerCase())) {
+            streams = streams.where(c -> c.getId().equals(id));
+        }
+
+        streams = streams.sortedBy(c -> c.getCreated());
+
+        List<Map<String, Object>> resultList = streams.map(x -> new HashMap<String, Object>() {{
+            put("id", x.getId());
+            put("orgId", x.getOrgId());
+            put("name", x.getName());
+            put("created", x.getCreated());
+            put("lastModified", x.getLastmodified());
+            put("userId", x.getUserId());
+            put("pageNo", x.getPageNo());
+            put("pageSize", x.getPageSize());
+            put("procType", x.getProcType());
+        }}).collect(Collectors.toList());
+
+        return new HashMap<String, Object>() {{
+            put("list", resultList);
+        }};
+    }
+
+
+    /**
      * 공통 코드 그룹을 등록한다.
      *
      * @param codeGroup CodeGroup (모델클래스)
