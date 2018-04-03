@@ -1,6 +1,5 @@
 package org.openpaas.paasta.portal.common.api.domain.user;
 
-import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 import org.apache.commons.lang.RandomStringUtils;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
@@ -77,9 +76,8 @@ public class UserService {
      * @param userId userId
      * @return 성공, 실패 여부
      * @throws IOException        the io exception
-     * @throws MessagingException the messaging exception
      */
-    public boolean resetPassword(String userId) throws IOException, MessagingException {
+    public boolean resetPassword(String userId) throws IOException {
 
         UserDetail userDetail = userDetailRepository.findByUserId(userId);
         String randomId = RandomStringUtils.randomAlphanumeric(17).toUpperCase() + RandomStringUtils.randomAlphanumeric(2).toUpperCase();
@@ -99,7 +97,6 @@ public class UserService {
         }
         return bRtn;
     }
-
     /**
      * 사용자의 상세정보를 조회한다.
      *
