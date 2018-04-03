@@ -16,8 +16,8 @@ public class CodeGroup {
 
     @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private String key;
+    @Column(name = "id")
+    private String id;
 
     @Column(name = "name")
     private String name;
@@ -35,12 +35,12 @@ public class CodeGroup {
     @Column(name = "user_id")
     private String userId;
 
-    public String getKey() {
-        return key;
+    public String getId() {
+        return id;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

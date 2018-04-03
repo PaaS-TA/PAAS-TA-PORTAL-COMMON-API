@@ -15,7 +15,10 @@ import java.util.Date;
 public class CodeDetail {
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "no")
+    private int no;
+
     @Column(name = "[key]",nullable = false)
     private String key;
 
@@ -55,6 +58,21 @@ public class CodeDetail {
 
     @Transient
     private String procType;
+
+    @Transient
+    private String orgKey;
+
+    @Transient
+    private String orgId;
+
+
+    public int getNo() {
+        return no;
+    }
+
+    public void setNo(int no) {
+        this.no = no;
+    }
 
     public String getKey() {
         return key;
@@ -154,4 +172,19 @@ public class CodeDetail {
         this.lastmodified = lastmodified;
     }
 
+    public String getOrgKey() {
+        return orgKey;
+    }
+
+    public void setOrgKey(String orgKey) {
+        this.orgKey = orgKey;
+    }
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
 }
