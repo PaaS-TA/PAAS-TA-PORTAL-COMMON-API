@@ -48,13 +48,13 @@ public class AdminMainService {
         }};
     }
 
-    public Map<String, Object>getTotalOrganizationList(Map<String, Object> reqParam) {
+    public Map<String, Object>getTotalOrganizationList() {  //Map<String, Object> reqParam
         JinqStream<OrganizationsTolCc> streams = jinqSource.streamAllCc(OrganizationsTolCc.class);
 
-        if(null != reqParam.get("organizationId")) {
-            int id = Integer.parseInt(reqParam.get("organizationId").toString());
-            streams = streams.where(c -> c.getId() == id);
-        }
+//        if(null != reqParam.get("organizationId")) {
+//            int id = Integer.parseInt(reqParam.get("organizationId").toString());
+//            streams = streams.where(c -> c.getId() == id);
+//        }
 
         streams = streams.sortedBy(c -> c.getId());
 
