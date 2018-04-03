@@ -76,6 +76,14 @@ public class ServicepackCategory {
     private String classificationSummary;
 
 
+    @Transient
+    private String app_bind_parameter;
+
+
+    @Transient
+    private String servicePackName;
+
+
     public int getNo() {
         return no;
     }
@@ -222,6 +230,21 @@ public class ServicepackCategory {
         this.classificationSummary = classificationSummary;
     }
 
+    public String getApp_bind_parameter() {
+        return app_bind_parameter;
+    }
+
+    public void setApp_bind_parameter(String app_bind_parameter) {
+        this.app_bind_parameter = app_bind_parameter;
+    }
+
+    public String getServicePackName() {
+        return servicePackName;
+    }
+
+    public void setServicePackName(String servicePackName) {
+        this.servicePackName = servicePackName;
+    }
 
     @Override
     public String toString() {
@@ -244,6 +267,7 @@ public class ServicepackCategory {
                 ", appBindYn='" + appBindYn + '\'' +
                 ", classificationValue='" + classificationValue + '\'' +
                 ", classificationSummary='" + classificationSummary + '\'' +
+                ", app_bind_parameter='" + app_bind_parameter + '\'' +
                 '}';
     }
 }

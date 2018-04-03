@@ -264,8 +264,29 @@ public class CatalogService {
      * @return Map(자바클래스)
      */
     public Map<String, Object> insertServicePackCatalog(ServicepackCategory param) {
-        logger.info("insertServicePackCatalog");
+        if (param.getApp_bind_parameter() != null) {
+            param.setAppBindParameter(param.getApp_bind_parameter());
+        }
+        logger.info(param.toString());
         servicepackCategoryRepository.save(param);
+        return new HashMap<String, Object>() {{
+            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+        }};
+    }
+
+    /**
+     * 앱 개발환경 카탈로그를 수정한다.
+     *
+     * @param param Catalog(모델클래스)
+     * @return Map(자바클래스)
+     */
+    public Map<String, Object> updateStarterCatalog(StarterCategory param) {
+        logger.info("updateStarterCatalog");
+        StarterCategory update = starterCategoryRepository.findOne(param.getNo());
+        param.setCreated(update.getCreated());
+        param.setLastmodified(new Date());
+        logger.info(param.toString());
+        StarterCategory starterCategory = starterCategoryRepository.save(param);
 
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
@@ -278,28 +299,16 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    public StarterCategory updateStarterCatalog(StarterCategory param) {
-        logger.info("updateStarterCatalog");
-        StarterCategory update = starterCategoryRepository.findOne(param.getNo());
-        param.setCreated(update.getCreated());
-        param.setLastmodified(new Date());
-        StarterCategory starterCategory = starterCategoryRepository.save(param);
-        return starterCategory;
-    }
-
-    /**
-     * 앱 개발환경 카탈로그를 수정한다.
-     *
-     * @param param Catalog(모델클래스)
-     * @return Map(자바클래스)
-     */
-    public BuildpackCategory updateBuildPackCatalog(BuildpackCategory param) {
+    public Map<String, Object> updateBuildPackCatalog(BuildpackCategory param) {
         logger.info("updateBuildPackCatalog");
         BuildpackCategory update = buildpackCategoryRepository.findOne(param.getNo());
         param.setCreated(update.getCreated());
         param.setLastmodified(new Date());
         BuildpackCategory buildpackCategory = buildpackCategoryRepository.save(param);
-        return buildpackCategory;
+
+        return new HashMap<String, Object>() {{
+            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+        }};
     }
 
     /**
@@ -308,13 +317,21 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    public ServicepackCategory updateServicePackCatalog(ServicepackCategory param) {
-        logger.info("updateBuildPackCatalog");
+    public Map<String, Object> updateServicePackCatalog(ServicepackCategory param) {
+
+        param.setServiceName(param.getServicePackName());
+
+        if (param.getApp_bind_parameter() != null) {
+            param.setAppBindParameter(param.getApp_bind_parameter());
+        }
         ServicepackCategory update = servicepackCategoryRepository.findOne(param.getNo());
         param.setCreated(update.getCreated());
         param.setLastmodified(new Date());
-        ServicepackCategory buildpackCategory = servicepackCategoryRepository.save(param);
-        return buildpackCategory;
+        ServicepackCategory servicepackCategory = servicepackCategoryRepository.save(param);
+
+        return new HashMap<String, Object>() {{
+            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+        }};
     }
 
     /**

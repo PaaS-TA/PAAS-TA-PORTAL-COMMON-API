@@ -48,13 +48,13 @@ public class AdminMainService {
         }};
     }
 
-    public Map<String, Object>getTotalOrganizationList(Map<String, Object> reqParam) {
+    public Map<String, Object>getTotalOrganizationList() {  //Map<String, Object> reqParam
         JinqStream<OrganizationsTolCc> streams = jinqSource.streamAllCc(OrganizationsTolCc.class);
 
-        if(null != reqParam.get("organizationId")) {
-            int id = Integer.parseInt(reqParam.get("organizationId").toString());
-            streams = streams.where(c -> c.getId() == id);
-        }
+//        if(null != reqParam.get("organizationId")) {
+//            int id = Integer.parseInt(reqParam.get("organizationId").toString());
+//            streams = streams.where(c -> c.getId() == id);
+//        }
 
         streams = streams.sortedBy(c -> c.getId());
 
@@ -71,7 +71,7 @@ public class AdminMainService {
         }};
     }
 
-    public Map<String, Object>getTotalSpaceList(Map<String, Object> reqParam) {
+    public Map<String, Object>getTotalSpaceList(String organizationId) {
         EntityManager ccEm = ccConfig.ccEntityManager().getNativeEntityManagerFactory().createEntityManager();
 
 //        CriteriaBuilder cb = ccEm.getCriteriaBuilder();
@@ -142,10 +142,10 @@ public class AdminMainService {
 //        }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Query q = null;
-        if(null != reqParam.get("organizationId") && !("").equals(reqParam.get("organizationId").toString())) {
+        if(null != organizationId && !("").equals(organizationId)) {
             q = ccEm.createNamedQuery("SpacesCc.allByOrganizationIdList");
-            q.setParameter(1, reqParam.get("organizationId"));
-            q.setParameter(2, reqParam.get("organizationId"));
+            q.setParameter(1, organizationId);
+            q.setParameter(2, organizationId);
         } else {
             q = ccEm.createNamedQuery("SpacesCc.allList");
         }

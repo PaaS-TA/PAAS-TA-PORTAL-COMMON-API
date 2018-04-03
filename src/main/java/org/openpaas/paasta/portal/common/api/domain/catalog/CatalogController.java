@@ -178,7 +178,6 @@ public class CatalogController {
      */
     @PostMapping(V2_URL + "/servicepacks")
     public Map<String, Object> insertServicePackCatalog(@RequestBody ServicepackCategory param) {
-        logger.info("############ " + param.toString());
         return catalogService.insertServicePackCatalog(param);
     }
 
@@ -190,10 +189,9 @@ public class CatalogController {
      * @return Map(자바클래스)
      */
     @PutMapping(value = {V2_URL + "/starterpack/{no}"})
-    public StarterCategory updatesStarterPackCatalog(@PathVariable int no, @RequestBody StarterCategory param) {
+    public Map<String, Object> updatesStarterPackCatalog(@PathVariable int no, @RequestBody StarterCategory param) {
         param.setNo(no);
-        StarterCategory resultStr = catalogService.updateStarterCatalog(param);
-        return resultStr;
+        return catalogService.updateStarterCatalog(param);
     }
 
 
@@ -204,10 +202,9 @@ public class CatalogController {
      * @return Map(자바클래스)
      */
     @PutMapping(value = {V2_URL + "/developpacks/{no}"})
-    public BuildpackCategory updateBuildPackCatalog(@PathVariable int no, @RequestBody BuildpackCategory param) {
+    public Map<String, Object> updateBuildPackCatalog(@PathVariable int no, @RequestBody BuildpackCategory param) {
         param.setNo(no);
-        BuildpackCategory resultStr = catalogService.updateBuildPackCatalog(param);
-        return resultStr;
+        return catalogService.updateBuildPackCatalog(param);
     }
 
 
@@ -218,10 +215,9 @@ public class CatalogController {
      * @return Map(자바클래스)
      */
     @PutMapping(value = {V2_URL + "/servicepacks/{no}"})
-    public ServicepackCategory updateServicePackCatalog(@PathVariable int no, @RequestBody ServicepackCategory param) {
+    public Map<String, Object> updateServicePackCatalog(@PathVariable int no, @RequestBody ServicepackCategory param) {
         param.setNo(no);
-        ServicepackCategory resultStr = catalogService.updateServicePackCatalog(param);
-        return resultStr;
+        return catalogService.updateServicePackCatalog(param);
     }
 
     /**

@@ -16,11 +16,10 @@ import static org.slf4j.LoggerFactory.getLogger;
  * Created by indra on 2018-02-22.
  */
 @RestController
-@RequestMapping("/configInfos")
 public class ConfigInfoController {
 
     private static final Logger logger = getLogger(ConfigInfoController.class);
-
+    private final String V2_URL = "/v2";
     @Autowired
     private ConfigInfoService configInfoService;
 
@@ -31,7 +30,7 @@ public class ConfigInfoController {
      * @return value value
      * @throws Exception the exception
      */
-    @GetMapping({""})
+    @GetMapping(V2_URL+"/configInfos")
     public Map<String, Object> getValues() {
         return configInfoService.getValue(null);
     }
@@ -44,7 +43,7 @@ public class ConfigInfoController {
      * @return value value
      * @throws Exception the exception
      */
-    @GetMapping("/{name}")
+    @GetMapping(V2_URL+"/configInfos/{name}")
     public Map<String, Object> getValue(@PathVariable String name) {
         return configInfoService.getValue(name);
     }
@@ -69,7 +68,7 @@ public class ConfigInfoController {
      * @return map map
      * @throws Exception the exception
      */
-    @PutMapping({"/{name}"})
+    @PutMapping(V2_URL+"/configInfos/{name}")
     public Map<String, Object> updateValue(@PathVariable String name, @RequestBody ConfigInfo configInfo) {
         Map<String, Object> resultMap = new HashMap<>();
         String resultStr = configInfoService.updateValue(name, configInfo);
