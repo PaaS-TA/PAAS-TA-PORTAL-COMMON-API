@@ -29,7 +29,7 @@ public class CommonCodeController {
      * @param codeDetail CodeDetail(아이디)
      * @return Map(자바클래스)
      */
-    @GetMapping(V2_URL+"/codeDetail")
+    @GetMapping(V2_URL+"/codedetail")
     public Map<String, Object> getCodeDetail(@ModelAttribute CodeDetail codeDetail) {
         return commonCodeService.getCommonCodeDetail(codeDetail);
     }
@@ -41,7 +41,7 @@ public class CommonCodeController {
      * @param codeDetail CodeDetail(아이디)
      * @return Map(자바클래스)
      */
-    @GetMapping(V2_URL + "/codeDetail/{key}")
+    @GetMapping(V2_URL + "/codedetail/{key}")
     public Map<String, Object> getCodeDetail(@PathVariable("key") String key, @ModelAttribute CodeDetail codeDetail) {
         codeDetail.setKey(key);
         return commonCodeService.getCommonCodeDetail(codeDetail);
@@ -54,7 +54,7 @@ public class CommonCodeController {
      * @param codeGroup CodeGroup(아이디)
      * @return Map(자바클래스)
      */
-    @GetMapping(V2_URL +"/groupDetail")
+    @GetMapping(V2_URL +"/groupdetail")
     public Map<String, Object> getGroupDetail(@ModelAttribute CodeGroup codeGroup) {
         return commonCodeService.getGroupDetail(codeGroup);
     }
@@ -66,7 +66,7 @@ public class CommonCodeController {
      * @param codeGroup CodeGroup(아이디)
      * @return Map(자바클래스)
      */
-    @GetMapping(V2_URL +"/groupDetail/{id}")
+    @GetMapping(V2_URL +"/groupdetail/{id}")
     public Map<String, Object> getGroupDetail(@PathVariable("id") String  id, @ModelAttribute CodeGroup codeGroup) {
         codeGroup.setId(id);
         return commonCodeService.getGroupDetail(codeGroup);
@@ -79,7 +79,7 @@ public class CommonCodeController {
      * @param codeDetail,codeGroup CodeDetail,CodeGroup (모델클래스)
      * @return Map(자바클래스)
      */
-    @GetMapping(V2_URL +"/commonCode")
+    @GetMapping(V2_URL +"/commoncode")
     public Map<String, Object> getCommonCodeDetail(@ModelAttribute CodeDetail codeDetail, @ModelAttribute CodeGroup codeGroup) {
         return commonCodeService.getCommonCodeJoinGroup(codeDetail, codeGroup);
     }
@@ -91,7 +91,7 @@ public class CommonCodeController {
      * @param codeGroup CodeGroup (모델클래스)
      * @return Map(자바클래스)
      */
-    @PostMapping(V2_URL +"/groupDetail")
+    @PostMapping(V2_URL +"/groupdetail")
     public Map<String, Object> insertDetailGroup(@RequestBody CodeGroup codeGroup) {
         return commonCodeService.insertDetailGroup(codeGroup);
     }
@@ -103,7 +103,7 @@ public class CommonCodeController {
      * @param codeDetail CodeDetail (모델클래스)
      * @return Map(자바클래스)
      */
-    @PostMapping(V2_URL +"/codeDetail")
+    @PostMapping(V2_URL +"/codedetail")
     public Map<String, Object> insertDetail(@RequestBody CodeDetail codeDetail) {
         return commonCodeService.insertDetail(codeDetail);
     }
@@ -115,7 +115,7 @@ public class CommonCodeController {
      * @param codeGroup CodeGroup (모델클래스)
      * @return Map(자바클래스)
      */
-    @PutMapping(V2_URL +"/groupDetail/{id}")
+    @PutMapping(V2_URL +"/groupdetail/{id}")
     public Map<String, Object> updateCommonGroup(@PathVariable String id, @RequestBody CodeGroup codeGroup) {
         Map<String, Object> resultMap = new HashMap<>();
         String resultStr = commonCodeService.updateCommonGroup(id, codeGroup);
@@ -130,7 +130,7 @@ public class CommonCodeController {
      * @param codeDetail CodeDetail (모델클래스)
      * @return Map(자바클래스)
      */
-    @PutMapping(V2_URL +"/codeDetail/{no}")
+    @PutMapping(V2_URL +"/codedetail/{no}")
     public Map<String, Object> updateCommonDetail(@PathVariable int no, @RequestBody CodeDetail codeDetail) {
         Map<String, Object> resultMap = new HashMap<>();
         String resultStr = commonCodeService.updateCommonDetail(no, codeDetail);
@@ -145,7 +145,7 @@ public class CommonCodeController {
      * @param id
      * * @return Map(자바클래스)
      */
-    @DeleteMapping(V2_URL +"/groupDetail/{id}")
+    @DeleteMapping(V2_URL +"/groupdetail/{id}")
     public Map<String, Object> deleteCommonGroup(@PathVariable String id) {
         // TODO: 코드 그룹을 삭제할경우 그룹에 해당하는 CodeDetail 삭제하도록 개발하세요~
         return commonCodeService.deleteCommonGroup(id);
@@ -158,7 +158,7 @@ public class CommonCodeController {
      * @param no
      * @return Map(자바클래스)
      */
-    @DeleteMapping(V2_URL +"/codeDetail/{no}")
+    @DeleteMapping(V2_URL +"/codedetail/{no}")
     public Map<String, Object> deleteCommonDetail(@PathVariable int no) {
         return commonCodeService.deleteCommonDetail(no);
     }
