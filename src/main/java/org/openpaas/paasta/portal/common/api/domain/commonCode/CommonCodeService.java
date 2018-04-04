@@ -59,6 +59,10 @@ public class CommonCodeService {
             put("key", x.getKey());
             put("value", x.getValue());
             put("summary", x.getSummary());
+            put("groupId", x.getGroupId());
+            put("useyn", x.getUseYn());
+            put("order", x.getOrder());
+            put("userId", x.getUserId());
         }}).collect(Collectors.toList());
 
         return new HashMap<String, Object>() {{
