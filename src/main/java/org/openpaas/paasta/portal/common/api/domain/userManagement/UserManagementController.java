@@ -5,6 +5,7 @@ import org.openpaas.paasta.portal.common.api.entity.uaa.Users;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +35,10 @@ public class UserManagementController {
         return userManagementService.getUserInfoList();
     }
 
+    @GetMapping(V2_URL + "/usermanagements/{userid}")
+    public Map<String, Object> getUserInfoList(@PathVariable String userid) {
+        return userManagementService.getUserInfoList(userid);
+    }
     /**
      * 비밀번호를 초기화한다.
      *

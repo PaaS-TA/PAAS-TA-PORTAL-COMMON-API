@@ -4,7 +4,6 @@ import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
 import org.openpaas.paasta.portal.common.api.domain.user.UserService;
 import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
-import org.openpaas.paasta.portal.common.api.entity.uaa.Users;
 import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailRepository;
 import org.openpaas.paasta.portal.common.api.repository.uaa.UsersRepository;
 import org.slf4j.Logger;
@@ -12,11 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +53,19 @@ public class UserManagementService {
         }};
     }
 
+    public Map<String, Object> getUserInfoList(String userid) {
+        List<UserDetail> userDetailsresult = new ArrayList<>();
+        for (UserDetail detail: userDetailRepository.findAll())
+        {
+            if(detail.getUserId().contains(userid))
+            {
+                userDetailsresult.add(detail);
+            }
+        }
+        return new HashMap<String, Object>() {{
+            put("list", userDetailsresult);
+        }};
+    }
     /**
      * 사용자 패스워드 초기화를 한다.
      *
