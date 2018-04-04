@@ -22,12 +22,11 @@ import java.util.Map;
  */
 @RestController
 @Transactional
-@RequestMapping(value = {"/user"})
 public class UserController  {
 
     /** 로그객체*/
     private  static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
-
+    private final String V2_URL = "/v2";
     @Autowired
     private UserService userService;
 
@@ -38,7 +37,7 @@ public class UserController  {
      * @param
      * @return App user count
      */
-    @RequestMapping(value = {"/getUserCount"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/user/getUserCount"}, method = RequestMethod.GET)
     public Map<String, Object> getUserCount() {
 
         int userCnt = userService.getUserCount();
@@ -59,7 +58,7 @@ public class UserController  {
      * @param userId the user id
      * @return Map user
      */
-    @RequestMapping(value = {"/getUser/{userId:.+}"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/user/getUser/{userId:.+}"}, method = RequestMethod.GET)
     public Map getUser(@PathVariable String userId) {
         LOGGER.info("> into getUser...");
 
@@ -81,7 +80,7 @@ public class UserController  {
      * @return the map
      * @throws IOException        the io exception
      */
-    @RequestMapping(value = {"/confirmAuthUser"})
+    @RequestMapping(value = {"/user/confirmAuthUser"})
     public Map<String, Object> confirmAuthUser(@RequestBody UserDetail userDetail, HttpServletResponse response) throws IOException {
         HashMap body = new HashMap();
         Map<String, Object> resultMap = new HashMap();
@@ -110,7 +109,7 @@ public class UserController  {
      * @throws Exception the exception
      */
     @Transactional
-    @RequestMapping(value = {"/authAddUser"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/user/authAddUser"}, method = RequestMethod.POST)
     public Map<String, Object> authAddUser(@RequestBody HashMap userDetail) throws Exception {
         UserDetail updateUser = new UserDetail();
         Map<String, Object> resultMap = new HashMap();
@@ -150,7 +149,7 @@ public class UserController  {
      * @return map
      * @throws IOException        the io exception
      */
-    @RequestMapping(value = {"/authUser"},  method = RequestMethod.POST)
+    @RequestMapping(value = {"/user/authUser"},  method = RequestMethod.POST)
     public Map<String, Object> authUser(@RequestBody UserDetail userDetail, HttpServletResponse response) throws IOException {
         HashMap body = new HashMap();
         Map<String, Object> resultMap = new HashMap();
@@ -177,7 +176,7 @@ public class UserController  {
      * @return Map { "result": updateCount}
      * @throws Exception the exception
      */
-    @RequestMapping(value = {"/updateUser/{userId:.+}"}, method = RequestMethod.PUT, consumes="application/json")
+    @RequestMapping(value = {"/user/updateUser/{userId:.+}"}, method = RequestMethod.PUT, consumes="application/json")
     public Map updateUser(@PathVariable String userId, @RequestBody Map<String, Object> body, HttpServletResponse response) throws Exception{
 
         LOGGER.info("> into updateUser...");
@@ -216,7 +215,7 @@ public class UserController  {
      * @return Map map
      * @throws Exception the exception
      */
-    @RequestMapping(value = {"/insertUser"},method = RequestMethod.POST)
+    @RequestMapping(value = {"/user/insertUser"},method = RequestMethod.POST)
     public Map insertUser(@RequestBody UserDetail user, HttpServletResponse response) throws Exception {
 
         LOGGER.info("> into insertUser...");
@@ -254,7 +253,7 @@ public class UserController  {
      * @return the map
      * @throws Exception the exception
      */
-    @RequestMapping(value = {"/deleteUser/{userId:.+}"}, method = RequestMethod.DELETE)
+    @RequestMapping(value = {"/user/deleteUser/{userId:.+}"}, method = RequestMethod.DELETE)
     public Map deleteUser(@PathVariable String userId, @RequestBody UserDetail user, HttpServletResponse response) throws Exception {
         LOGGER.info("> into deleteUser");
 
@@ -308,7 +307,7 @@ public class UserController  {
      * @return map all user name
      * @throws Exception the exception
      */
-    @RequestMapping(value = {"/getUserInfo"}, method = RequestMethod.GET)
+    @GetMapping(V2_URL+"/users")
     public Map<String, Object> getAllUserName() throws Exception {
         List<Map<String, Object>> userInfo = userService.getUserInfo();
         Map<String, Object> resultMap = new HashMap();
