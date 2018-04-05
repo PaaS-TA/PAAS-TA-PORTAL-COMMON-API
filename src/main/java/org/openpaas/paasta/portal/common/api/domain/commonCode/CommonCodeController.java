@@ -105,6 +105,7 @@ public class CommonCodeController {
      */
     @PostMapping(V2_URL +"/codedetail")
     public Map<String, Object> insertDetail(@RequestBody CodeDetail codeDetail) {
+        logger.info(codeDetail.toString());
         return commonCodeService.insertDetail(codeDetail);
     }
 
@@ -147,7 +148,6 @@ public class CommonCodeController {
      */
     @DeleteMapping(V2_URL +"/codegroup/{id}")
     public Map<String, Object> deleteCommonGroup(@PathVariable String id) {
-        // TODO: 코드 그룹을 삭제할경우 그룹에 해당하는 CodeDetail 삭제하도록 개발하세요~
         return commonCodeService.deleteCommonGroup(id);
     }
 
