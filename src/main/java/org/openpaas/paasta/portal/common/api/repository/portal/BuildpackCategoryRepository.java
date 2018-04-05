@@ -9,7 +9,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface BuildpackCategoryRepository extends JpaRepository<BuildpackCategory, Integer> {
-
-//    @Query(value = "select max(bc.thumbImgPath) from BuildpackCategory bc where bc.buildpackName = ?1")
-    String findByBuildpackName(String buildpack_name);
+    String findByBuildPackName(String buildpack_name);
 }

@@ -11,7 +11,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "catalog_history")
-public class Catalog {
+public class CatalogHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -142,5 +142,22 @@ public class Catalog {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Catalog{" +
+                "no=" + no +
+                ", catalogNo=" + catalogNo +
+                ", catalogType=" + catalogType +
+                ", userId='" + userId + '\'' +
+                ", created=" + created +
+                ", lastmodified=" + lastmodified +
+                ", searchKeyword='" + searchKeyword + '\'' +
+                ", searchTypeColumn='" + searchTypeColumn + '\'' +
+                ", searchTypeUseYn='" + searchTypeUseYn + '\'' +
+                ", starterCatalogNo=" + starterCatalogNo +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

@@ -1,9 +1,9 @@
 package org.openpaas.paasta.portal.common.api.domain.catalog;
 
 import org.openpaas.paasta.portal.common.api.entity.portal.BuildpackCategory;
-import org.openpaas.paasta.portal.common.api.entity.portal.Catalog;
 import org.openpaas.paasta.portal.common.api.entity.portal.ServicepackCategory;
 import org.openpaas.paasta.portal.common.api.entity.portal.StarterCategory;
+import org.openpaas.paasta.portal.common.api.model.Catalog;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,12 +30,12 @@ public class CatalogController {
     /**
      * 앱 템플릿 카탈로그를 조회한다.
      *
-     * @param param Catalog(모델클래스)
+     * @param no int(모델클래스)
      * @return Map(자바클래스)
      */
-    @GetMapping("/oneStarterCatalog")
-    public Map<String, Object> getOneStarterCatalog(@ModelAttribute Catalog param) {
-        return catalogService.getOneStarterCatalog(param);
+    @GetMapping(V2_URL + "/starterpacks/{no}")
+    public Map<String, Object> getStarterCatalog(@PathVariable int no) {
+        return catalogService.getStarterCatalog(no);
     }
 
 
@@ -47,18 +47,6 @@ public class CatalogController {
      */
     @GetMapping(V2_URL + "/starterpacks")
     public Map<String, Object> getStarterNames(@ModelAttribute Catalog param) {
-        return catalogService.getStarterNamesList(param);
-    }
-
-    /**
-     * 앱 템플릿 목록을 조회한다.
-     *
-     * @param param Catalog(모델클래스)
-     * @return Map(자바클래스)
-     */
-    @GetMapping(V2_URL + "/starterpacks/{no}")
-    public Map<String, Object> getStarterNames(@PathVariable("no") int no, @ModelAttribute Catalog param) {
-        param.setNo(no);
         return catalogService.getStarterNamesList(param);
     }
 
@@ -153,7 +141,7 @@ public class CatalogController {
      * @return Map(자바클래스)
      */
     @PostMapping(V2_URL + "/starterpacks")
-    public Map<String, Object> insertStarterPacks(@RequestBody StarterCategory param) {
+    public Map<String, Object> insertStarterPacks(@RequestBody Catalog param) {
         return catalogService.insertStarterCatalog(param);
     }
 
@@ -188,8 +176,9 @@ public class CatalogController {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @PutMapping(value = {V2_URL + "/starterpack/{no}"})
-    public Map<String, Object> updatesStarterPackCatalog(@PathVariable int no, @RequestBody StarterCategory param) {
+    @PutMapping(value = {V2_URL + "/starterpacks/{no}"})
+    public Map<String, Object> updatesStarterPackCatalog(@PathVariable int no, @RequestBody Catalog param) {
+
         param.setNo(no);
         return catalogService.updateStarterCatalog(param);
     }

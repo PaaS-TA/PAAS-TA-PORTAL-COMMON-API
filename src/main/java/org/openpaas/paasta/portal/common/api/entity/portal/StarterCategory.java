@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by SEJI on 2018-03-06.
@@ -16,7 +17,7 @@ import java.util.Date;
 public class StarterCategory {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "no", nullable = false)
     private int no;
 
@@ -59,6 +60,13 @@ public class StarterCategory {
 
     @Formula("(SELECT cd.summary FROM code_detail cd WHERE cd.key = classification AND cd.group_id = 'STARTER_CATALOG')")
     private String classificationSummary;
+
+
+    @Transient
+    private int buildPackCategoryNo;
+
+    @Transient
+    private List<Integer> servicePackCategoryNoList;
 
 
     public int getNo() {
@@ -167,4 +175,40 @@ public class StarterCategory {
         this.classificationSummary = classificationSummary;
     }
 
+    public int getBuildPackCategoryNo() {
+        return buildPackCategoryNo;
+    }
+
+    public void setBuildPackCategoryNo(int buildPackCategoryNo) {
+        this.buildPackCategoryNo = buildPackCategoryNo;
+    }
+
+    public List<Integer> getServicePackCategoryNoList() {
+        return servicePackCategoryNoList;
+    }
+
+    public void setServicePackCategoryNoList(List<Integer> servicePackCategoryNoList) {
+        this.servicePackCategoryNoList = servicePackCategoryNoList;
+    }
+
+    @Override
+    public String toString() {
+        return "StarterCategory{" +
+                "no=" + no +
+                ", name='" + name + '\'' +
+                ", classification='" + classification + '\'' +
+                ", summary='" + summary + '\'' +
+                ", description='" + description + '\'' +
+                ", thumbIimgName='" + thumbIimgName + '\'' +
+                ", thumbImgPath='" + thumbImgPath + '\'' +
+                ", useYn='" + useYn + '\'' +
+                ", userId='" + userId + '\'' +
+                ", created=" + created +
+                ", lastmodified=" + lastmodified +
+                ", classificationValue='" + classificationValue + '\'' +
+                ", classificationSummary='" + classificationSummary + '\'' +
+                ", buildPackCategoryNo=" + buildPackCategoryNo +
+                ", servicePackCategoryNoList=" + servicePackCategoryNoList +
+                '}';
+    }
 }

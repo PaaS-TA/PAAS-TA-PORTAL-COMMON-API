@@ -42,7 +42,7 @@ public class ServiceService {
         Root<ServicepackCategory> from = cq.from(ServicepackCategory.class);
 
         Predicate predicate = cb.conjunction();
-        predicate = cb.and(predicate, cb.equal(from.get("serviceName"), servicepackCategory.getServiceName().toString()));
+        predicate = cb.and(predicate, cb.equal(from.get("serviceName"), servicepackCategory.getServicePackName().toString()));
 
         Expression maxThumbImgPath = cb.max(from.get("thumbImgPath"));
 

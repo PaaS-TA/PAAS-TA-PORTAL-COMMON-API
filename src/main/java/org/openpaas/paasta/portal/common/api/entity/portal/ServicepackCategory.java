@@ -33,7 +33,7 @@ public class ServicepackCategory {
     private String description;
 
     @Column(name = "service_name", nullable = false)
-    private String serviceName;
+    private String servicePackName;
 
     @Column(name = "thumb_img_name")
     private String thumbIimgName;
@@ -80,10 +80,6 @@ public class ServicepackCategory {
     private String app_bind_parameter;
 
 
-    @Transient
-    private String servicePackName;
-
-
     public int getNo() {
         return no;
     }
@@ -124,12 +120,12 @@ public class ServicepackCategory {
         this.description = description;
     }
 
-    public String getServiceName() {
-        return serviceName;
+    public String getServicePackName() {
+        return servicePackName;
     }
 
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
+    public void setServicePackName(String servicePackName) {
+        this.servicePackName = servicePackName;
     }
 
     public String getThumbIimgName() {
@@ -238,13 +234,6 @@ public class ServicepackCategory {
         this.app_bind_parameter = app_bind_parameter;
     }
 
-    public String getServicePackName() {
-        return servicePackName;
-    }
-
-    public void setServicePackName(String servicePackName) {
-        this.servicePackName = servicePackName;
-    }
 
     @Override
     public String toString() {
@@ -254,7 +243,7 @@ public class ServicepackCategory {
                 ", classification='" + classification + '\'' +
                 ", summary='" + summary + '\'' +
                 ", description='" + description + '\'' +
-                ", serviceName='" + serviceName + '\'' +
+                ", servicePackName='" + servicePackName + '\'' +
                 ", thumbIimgName='" + thumbIimgName + '\'' +
                 ", thumbImgPath='" + thumbImgPath + '\'' +
                 ", useYn='" + useYn + '\'' +

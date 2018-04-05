@@ -35,7 +35,7 @@ public class BuildpackCategory {
     private String description;
 
     @Column(name = "buildpack_name", nullable = false)
-    private String buildpackName;
+    private String buildPackName;
 
     @Column(name = "thumb_img_name")
     private String thumbImgName;
@@ -73,6 +73,7 @@ public class BuildpackCategory {
 
     @Formula("(SELECT cd.summary FROM code_detail cd WHERE cd.key = classification AND cd.group_id = 'BUILD_PACK_CATALOG')")
     private String classificationSummary;
+
 
     public int getNo() {
         return no;
@@ -114,13 +115,6 @@ public class BuildpackCategory {
         this.description = description;
     }
 
-    public String getBuildpackName() {
-        return buildpackName;
-    }
-
-    public void setBuildpackName(String buildpackName) {
-        this.buildpackName = buildpackName;
-    }
 
     public String getThumbImgName() {
         return thumbImgName;
@@ -210,5 +204,44 @@ public class BuildpackCategory {
 
     public void setClassificationSummary(String classificationSummary) {
         this.classificationSummary = classificationSummary;
+    }
+
+    public String getAppSampleFilePath() {
+        return appSampleFilePath;
+    }
+
+    public void setAppSampleFilePath(String appSampleFilePath) {
+        this.appSampleFilePath = appSampleFilePath;
+    }
+
+    public String getBuildPackName() {
+        return buildPackName;
+    }
+
+    public void setBuildPackName(String buildPackName) {
+        this.buildPackName = buildPackName;
+    }
+
+    @Override
+    public String toString() {
+        return "BuildpackCategory{" +
+                "no=" + no +
+                ", name='" + name + '\'' +
+                ", classification='" + classification + '\'' +
+                ", summary='" + summary + '\'' +
+                ", description='" + description + '\'' +
+                ", buildPackName='" + buildPackName + '\'' +
+                ", thumbImgName='" + thumbImgName + '\'' +
+                ", thumbImgPath='" + thumbImgPath + '\'' +
+                ", useYn='" + useYn + '\'' +
+                ", appSampleFileName='" + appSampleFileName + '\'' +
+                ", appSampleFilePath='" + appSampleFilePath + '\'' +
+                ", appSampleFileSize='" + appSampleFileSize + '\'' +
+                ", userId='" + userId + '\'' +
+                ", created=" + created +
+                ", lastmodified=" + lastmodified +
+                ", classificationValue='" + classificationValue + '\'' +
+                ", classificationSummary='" + classificationSummary + '\'' +
+                '}';
     }
 }

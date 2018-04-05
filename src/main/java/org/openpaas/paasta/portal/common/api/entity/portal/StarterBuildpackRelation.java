@@ -1,9 +1,6 @@
 package org.openpaas.paasta.portal.common.api.entity.portal;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by SEJI on 2018-03-27.
@@ -13,15 +10,15 @@ import javax.persistence.Table;
 public class StarterBuildpackRelation {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "no", nullable = false)
     private int no;
 
     @Column(name = "starter_category_no", nullable = false)
-    private int StarterCatalogNo;
+    private int starterCatalogNo;
 
     @Column(name = "buildpack_category_no", nullable = false)
-    private int BuildpackCategoryNo;
+    private int buildpackCategoryNo;
 
     public int getNo() {
         return no;
@@ -32,18 +29,27 @@ public class StarterBuildpackRelation {
     }
 
     public int getStarterCatalogNo() {
-        return StarterCatalogNo;
+        return starterCatalogNo;
     }
 
     public void setStarterCatalogNo(int starterCatalogNo) {
-        StarterCatalogNo = starterCatalogNo;
+        this.starterCatalogNo = starterCatalogNo;
     }
 
     public int getBuildpackCategoryNo() {
-        return BuildpackCategoryNo;
+        return buildpackCategoryNo;
     }
 
     public void setBuildpackCategoryNo(int buildpackCategoryNo) {
-        BuildpackCategoryNo = buildpackCategoryNo;
+        this.buildpackCategoryNo = buildpackCategoryNo;
+    }
+
+    @Override
+    public String toString() {
+        return "StarterBuildpackRelation{" +
+                "no=" + no +
+                ", starterCatalogNo=" + starterCatalogNo +
+                ", buildpackCategoryNo=" + buildpackCategoryNo +
+                '}';
     }
 }

@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class StarterServicepackRelation {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "no")
     private int no;
 
@@ -33,7 +33,7 @@ public class StarterServicepackRelation {
     }
 
     public void setStarterCatalogNo(int starterCatalogNo) {
-        starterCatalogNo = starterCatalogNo;
+        this.starterCatalogNo = starterCatalogNo;
     }
 
     public int getServicepackCategoryNo() {
@@ -41,7 +41,15 @@ public class StarterServicepackRelation {
     }
 
     public void setServicepackCategoryNo(int servicepackCategoryNo) {
-        servicepackCategoryNo = servicepackCategoryNo;
+        this.servicepackCategoryNo = servicepackCategoryNo;
     }
 
+    @Override
+    public String toString() {
+        return "StarterServicepackRelation{" +
+                "no=" + no +
+                ", starterCatalogNo=" + starterCatalogNo +
+                ", servicepackCategoryNo=" + servicepackCategoryNo +
+                '}';
+    }
 }

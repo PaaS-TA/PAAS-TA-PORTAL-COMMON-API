@@ -3,15 +3,9 @@ package org.openpaas.paasta.portal.common.api.domain.catalog;
 import org.jinq.orm.stream.JinqStream;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
-import org.openpaas.paasta.portal.common.api.entity.portal.BuildpackCategory;
-import org.openpaas.paasta.portal.common.api.entity.portal.Catalog;
-import org.openpaas.paasta.portal.common.api.entity.portal.StarterCategory;
-import org.openpaas.paasta.portal.common.api.entity.portal.ServicepackCategory;
-import org.openpaas.paasta.portal.common.api.entity.portal.StarterServicepackRelation;
-import org.openpaas.paasta.portal.common.api.repository.portal.BuildpackCategoryRepository;
-import org.openpaas.paasta.portal.common.api.repository.portal.ServicepackCategoryRepository;
-import org.openpaas.paasta.portal.common.api.repository.portal.StarterCategoryRepository;
-import org.openpaas.paasta.portal.common.api.repository.portal.StarterServicepackRelationRepository;
+import org.openpaas.paasta.portal.common.api.entity.portal.*;
+import org.openpaas.paasta.portal.common.api.model.Catalog;
+import org.openpaas.paasta.portal.common.api.repository.portal.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,7 +32,10 @@ public class CatalogService {
     ServicepackCategoryRepository servicepackCategoryRepository;
 
     @Autowired
-    StarterServicepackRelationRepository starterServicepackRelationRepository;
+    StarterServicepackRelationRepository starterServicePackRelationRepository;
+
+    @Autowired
+    StarterBuildPackRelationRepository starterBuildPackRelationRepository;
 
     @Autowired
     JinqSource jinqSource;
@@ -46,35 +43,44 @@ public class CatalogService {
     /**
      * 앱 템플릿 카탈로그 조회
      *
-     * @param param Catalog(모델클래스)
+     * @param no Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    public Map<String, Object> getOneStarterCatalog(Catalog param) {
-
-        JinqStream<StarterServicepackRelation> starterServicepackRelationStream = jinqSource.streamAllPortal(StarterServicepackRelation.class);
-        JinqStream<StarterCategory> starterCategoryStream = jinqSource.streamAllPortal(StarterCategory.class);
-
-        int no = param.getNo();
-
-        starterServicepackRelationStream = starterServicepackRelationStream.where(c -> c.getServicepackCategoryNo() == no);
-        starterServicepackRelationStream = starterServicepackRelationStream.sortedBy(c -> c.getServicepackCategoryNo());
-        List<StarterServicepackRelation> starterServicepackRelations = starterServicepackRelationStream.toList();
-
-        starterCategoryStream = starterCategoryStream.where(c -> c.getNo() == no);
-//       StarterCategory starterCategory = starterCategoryStream.findFirst().get();
-        Optional<StarterCategory> starterCategoryRelations = starterCategoryStream.findFirst();
-
-        Map<String, Object> resultMap = new HashMap<>();
-        Map<String, Object> resultMap2 = new HashMap<>();
-
-        resultMap.put("servicePackCategoryNoList", starterServicepackRelations);
-//        resultMap.put("StarterCategoryNo", starterCategory.getNo());
-        resultMap.put("StarterCategoryNo", starterCategoryRelations);
+    public Map<String, Object> getStarterCatalog(int no) {
 
 
-        resultMap2.put("info", resultMap);
-        resultMap2.put("RESULT", Constants.RESULT_STATUS_SUCCESS);
-        return resultMap2;
+        StarterCategory starterCategory = starterCategoryRepository.findOne(no);
+
+        try {
+            //기존 스타터 서비스 릴레이션 가져오기
+            List<Integer> ssrIntList = new ArrayList<>();
+            List<StarterServicepackRelation> ssrList = starterServicePackRelationRepository.findByStarterCatalogNo(no);
+            for (StarterServicepackRelation ssr : ssrList) {
+                ssrIntList.add(ssr.getServicepackCategoryNo());
+            }
+
+            starterCategory.setServicePackCategoryNoList(ssrIntList);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            /*
+             * 기존 스타터 빌드  릴레이션 가져오기
+             * -> List로 왜 뽑냐면...Buildpack relation 하나만 들어간다는 전제가 걸려야함
+             * -> JPA상에서 에러를 배출...Unique 값이 아닌데 하나만 나오게 했다고 그래서 List로 뽑음
+             */
+
+
+            List<StarterBuildpackRelation> sbr = starterBuildPackRelationRepository.findByStarterCatalogNo(no);
+            starterCategory.setBuildPackCategoryNo(sbr.get(0).getBuildpackCategoryNo());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new HashMap<String, Object>() {{
+            put("info", starterCategory);
+        }};
     }
 
     /**
@@ -84,6 +90,7 @@ public class CatalogService {
      * @return Map(자바클래스)
      */
     public Map<String, Object> getStarterNamesList(Catalog param) {
+        logger.info("getStarterNamesList :: " + param.toString());
         JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class);
 
         int no = param.getNo();
@@ -109,7 +116,7 @@ public class CatalogService {
      * @return Map(자바클래스)
      */
     public Map<String, Object> getBuildPackCatalogList(Catalog param) {
-
+        logger.info("getBuildPackCatalogList :: " + param.toString());
         JinqStream<BuildpackCategory> streams = jinqSource.streamAllPortal(BuildpackCategory.class);
 
         int no = param.getNo();
@@ -138,6 +145,7 @@ public class CatalogService {
      * @return Map(자바클래스)
      */
     public HashMap<String, Object> getServicePackCatalogList(Catalog param) {
+        logger.info("getServicePackCatalogList :: " + param.toString());
         JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class);
         int no = param.getNo();
         String searchKeyword = param.getSearchKeyword();
@@ -164,8 +172,7 @@ public class CatalogService {
      * @throws Exception Exception(자바클래스)
      */
     public int getStarterCatalogCount(Catalog param) {
-
-
+        logger.info("getStarterCatalogCount :: " + param.toString());
         JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class);
 
         int startPackCnt = 0;
@@ -187,7 +194,7 @@ public class CatalogService {
      * @throws Exception Exception(자바클래스)
      */
     public int getBuildPackCatalogCount(Catalog param) {
-
+        logger.info("getBuildPackCatalogCount :: " + param.toString());
         JinqStream<BuildpackCategory> streams = jinqSource.streamAllPortal(BuildpackCategory.class);
 
         int buildPackCnt = 0;
@@ -211,7 +218,7 @@ public class CatalogService {
      * @throws Exception Exception(자바클래스)
      */
     public int getServicePackCatalogCount(Catalog param) {
-
+        logger.info("getServicePackCatalogCount :: " + param.toString());
         JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class);
 
         int servicePackCnt = 0;
@@ -233,12 +240,50 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    public Map<String, Object> insertStarterCatalog(StarterCategory param) {
+    public Map<String, Object> insertStarterCatalog(Catalog param) {
+        logger.info("insertStarterCatalog :: " + param.toString());
+        StarterCategory starterCategory = convertStarterCategory(param);
+        starterCategoryRepository.save(starterCategory);
+        logger.info("insertStarterCatalog :: NO2 " + starterCategory.getNo());
+        try {
+            //스타터서비스 릴레이션 저장
+            for (int servicepackCategoryNo : param.getServicePackCategoryNoList()) {
+                StarterServicepackRelation ssr = new StarterServicepackRelation();
+                ssr.setStarterCatalogNo(starterCategory.getNo());
+                ssr.setServicepackCategoryNo(servicepackCategoryNo);
+                starterServicePackRelationRepository.save(ssr);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            //스타터 빌드팩 릴레이션 저장
+            StarterBuildpackRelation sbr = new StarterBuildpackRelation();
+            sbr.setBuildpackCategoryNo(param.getBuildPackCategoryNo());
+            sbr.setStarterCatalogNo(starterCategory.getNo());
 
-        starterCategoryRepository.save(param);
+            starterBuildPackRelationRepository.save(sbr);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
         }};
+    }
+
+    private StarterCategory convertStarterCategory(Catalog param) {
+        StarterCategory starterCategory = new StarterCategory();
+        starterCategory.setNo(param.getNo());
+        starterCategory.setName(param.getName());
+        starterCategory.setClassification(param.getClassification());
+        starterCategory.setSummary(param.getSummary());
+        starterCategory.setDescription(param.getDescription());
+        starterCategory.setThumbIimgName(param.getThumbImgName());
+        starterCategory.setThumbImgPath(param.getThumbImgPath());
+        starterCategory.setUseYn(param.getUseYn());
+        starterCategory.setUserId(param.getUserId());
+        starterCategory.setCreated(new Date());
+        return starterCategory;
     }
 
 
@@ -249,9 +294,8 @@ public class CatalogService {
      * @return Map(자바클래스)
      */
     public Map<String, Object> insertBuildPackCatalog(BuildpackCategory param) {
-        logger.info("insertBuildPackCatalog");
+        logger.info("insertBuildPackCatalog :: " + param.toString());
         buildpackCategoryRepository.save(param);
-
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
         }};
@@ -264,10 +308,10 @@ public class CatalogService {
      * @return Map(자바클래스)
      */
     public Map<String, Object> insertServicePackCatalog(ServicepackCategory param) {
+        logger.info("insertServicePackCatalog :: " + param.toString());
         if (param.getApp_bind_parameter() != null) {
             param.setAppBindParameter(param.getApp_bind_parameter());
         }
-        logger.info(param.toString());
         servicepackCategoryRepository.save(param);
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
@@ -280,14 +324,61 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    public Map<String, Object> updateStarterCatalog(StarterCategory param) {
-        logger.info("updateStarterCatalog");
-        StarterCategory update = starterCategoryRepository.findOne(param.getNo());
-        param.setCreated(update.getCreated());
-        param.setLastmodified(new Date());
-        logger.info(param.toString());
-        StarterCategory starterCategory = starterCategoryRepository.save(param);
+    public Map<String, Object> updateStarterCatalog(Catalog param) {
+        logger.info("updateStarterCatalog :: " + param.toString());
+        StarterCategory starterCategory = convertStarterCategory(param);
+        //Upate Starter Catalog
+        starterCategoryRepository.save(starterCategory);
 
+        try {
+            //기존 스타터서비스 릴레이션 삭제
+            logger.info("updateStarterCatalog before start service relation remove");
+            List<StarterServicepackRelation> ssrList = starterServicePackRelationRepository.findByStarterCatalogNo(starterCategory.getNo());
+            for (StarterServicepackRelation ssr : ssrList) {
+                logger.info("ssrList " + ssr.toString());
+                starterServicePackRelationRepository.delete(ssr.getNo());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            logger.info("updateStarterCatalog before start build relation remove");
+            //기존 스타터서비스 릴레이션 삭제
+            List<StarterBuildpackRelation> sbrList = starterBuildPackRelationRepository.findByStarterCatalogNo(starterCategory.getNo());
+            for (StarterBuildpackRelation sbr : sbrList) {
+                logger.info("sbrList " + sbr.toString());
+                starterBuildPackRelationRepository.delete(sbr.getNo());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            logger.info("updateStarterCatalog start service relation insert");
+            //스타터서비스 릴레이션 저장
+
+            for (int servicepackCategoryNo : param.getServicePackCategoryNoList()) {
+                StarterServicepackRelation ssrInsert = new StarterServicepackRelation();
+                ssrInsert.setStarterCatalogNo(starterCategory.getNo());
+                ssrInsert.setServicepackCategoryNo(servicepackCategoryNo);
+                logger.info(ssrInsert.toString());
+                starterServicePackRelationRepository.save(ssrInsert);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            logger.info("updateStarterCatalog start build relation insert");
+            //스타터 빌드팩 릴레이션 저장
+            StarterBuildpackRelation sbrInsert = new StarterBuildpackRelation();
+            sbrInsert.setBuildpackCategoryNo(param.getBuildPackCategoryNo());
+            sbrInsert.setStarterCatalogNo(param.getNo());
+
+            starterBuildPackRelationRepository.save(sbrInsert);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
         }};
@@ -300,7 +391,8 @@ public class CatalogService {
      * @return Map(자바클래스)
      */
     public Map<String, Object> updateBuildPackCatalog(BuildpackCategory param) {
-        logger.info("updateBuildPackCatalog");
+        logger.info("updateBuildPackCatalog :: " + param.toString());
+
         BuildpackCategory update = buildpackCategoryRepository.findOne(param.getNo());
         param.setCreated(update.getCreated());
         param.setLastmodified(new Date());
@@ -318,12 +410,12 @@ public class CatalogService {
      * @return Map(자바클래스)
      */
     public Map<String, Object> updateServicePackCatalog(ServicepackCategory param) {
-
-        param.setServiceName(param.getServicePackName());
+        logger.info("updateServicePackCatalog :: " + param.toString());
 
         if (param.getApp_bind_parameter() != null) {
             param.setAppBindParameter(param.getApp_bind_parameter());
         }
+
         ServicepackCategory update = servicepackCategoryRepository.findOne(param.getNo());
         param.setCreated(update.getCreated());
         param.setLastmodified(new Date());
@@ -341,6 +433,32 @@ public class CatalogService {
      * @return Map(자바클래스)
      */
     public Map<String, Object> deleteStarterCatalog(int no) {
+        logger.info("deleteStarterCatalog :: " + no);
+
+        try {
+            //기존 스타터서비스 릴레이션 삭제
+            logger.info("updateStarterCatalog before start service relation remove");
+            List<StarterServicepackRelation> ssrList = starterServicePackRelationRepository.findByStarterCatalogNo(no);
+            for (StarterServicepackRelation ssr : ssrList) {
+                logger.info("ssrList " + ssr.toString());
+                starterServicePackRelationRepository.delete(ssr.getNo());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            logger.info("updateStarterCatalog before start build relation remove");
+            //기존 스타터서비스 릴레이션 삭제
+            List<StarterBuildpackRelation> sbrList = starterBuildPackRelationRepository.findByStarterCatalogNo(no);
+            for (StarterBuildpackRelation sbr : sbrList) {
+                logger.info("sbrList " + sbr.toString());
+                starterBuildPackRelationRepository.delete(sbr.getNo());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         starterCategoryRepository.delete(no);
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
@@ -354,6 +472,7 @@ public class CatalogService {
      * @return Map(자바클래스)
      */
     public Map<String, Object> deleteBuildPackCatalog(int no) {
+        logger.info("deleteBuildPackCatalog :: " + no);
         buildpackCategoryRepository.delete(no);
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
@@ -367,6 +486,7 @@ public class CatalogService {
      * @return Map(자바클래스)
      */
     public Map<String, Object> deleteServicePackCatalog(int no) {
+        logger.info("deleteServicePackCatalog :: " + no);
         servicepackCategoryRepository.delete(no);
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
