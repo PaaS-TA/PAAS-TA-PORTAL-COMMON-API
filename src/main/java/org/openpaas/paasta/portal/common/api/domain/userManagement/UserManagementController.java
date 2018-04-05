@@ -30,12 +30,12 @@ public class UserManagementController {
      *
      * @return Map(자바클래스)
      */
-    @GetMapping(V2_URL + "/usermanagements")
+    @GetMapping(V2_URL + "/usermgnts")
     public Map<String, Object> getUserInfoList() {
         return userManagementService.getUserInfoList();
     }
 
-    @GetMapping(V2_URL + "/usermanagements/{userid}")
+    @GetMapping(V2_URL + "/usermgnts/{userid}")
     public Map<String, Object> getUserInfoList(@PathVariable String userid) {
         return userManagementService.getUserInfoList(userid);
     }
@@ -47,7 +47,7 @@ public class UserManagementController {
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
-    @PutMapping(V2_URL + "/usermanagements/{userid}/resetpassword")
+    @PutMapping(V2_URL + "/usermgnts/{userid}/resetpassword")
     public Map<String, Object> setResetPassword(@PathVariable String userid,  @RequestBody UserDetail userDetail) throws Exception {
         return userManagementService.setResetPassword(userDetail.getUserId());
     }
@@ -62,7 +62,7 @@ public class UserManagementController {
      * @param userid userId
      * @return Map(자바클래스)
      */
-    @PutMapping(V2_URL + "/usermanagements/{userid}/authority")
+    @PutMapping(V2_URL + "/usermgnts/{userid}/authority")
     public Map<String, Object> updateOperatingAuthority(@PathVariable String userid,  @RequestBody UserDetail userDetail) {
         return userManagementService.updateOperatingAuthority(userDetail.getUserId());
     }
@@ -75,7 +75,7 @@ public class UserManagementController {
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
-    @DeleteMapping(V2_URL + "/usermanagements/{userid}")
+    @DeleteMapping(V2_URL + "/usermgnts/{userid}")
     public Map<String, Object> deleteUserAccount(@PathVariable String userid, @RequestBody UserDetail userDetail) throws Exception {
         return userManagementService.deleteUserAccount(userDetail.getUserId());
     }
