@@ -193,7 +193,7 @@ public class CommonCodeService {
     public String updateCommonGroup(String id,CodeGroup codeGroup) {
         String resultStr = Constants.RESULT_STATUS_SUCCESS;
 
-        if(codeGroupRepository.findAllById(id) != null) {
+        if(codeGroupRepository.findById(id) != null) {
             codeGroup.setId(codeGroup.getId());
             codeGroup.setName(codeGroup.getName());
             codeGroup.setUserId(codeGroup.getUserId());
@@ -236,7 +236,15 @@ public class CommonCodeService {
      * * @return Map(자바클래스)
      */
     public Map<String,Object> deleteCommonGroup(String id) {
-        codeGroupRepository.deleteById(id);
+        List<CodeDetail> codeDetailList =  codeDetailRepository.findByGroupId(id);
+        for (CodeDetail codeDetail: codeDetailList) {
+            codeDetailRepository.delete(codeDetail.getNo());
+        }
+
+        CodeGroup codeGroup = new CodeGroup();
+        codeGroup.setId(id);
+        codeGroupRepository.delete(codeGroup);
+
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
         }};

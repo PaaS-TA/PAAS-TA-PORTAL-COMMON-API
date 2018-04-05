@@ -162,6 +162,4 @@ public class CommonCodeController {
     public Map<String, Object> deleteCommonDetail(@PathVariable int no) {
         return commonCodeService.deleteCommonDetail(no);
     }
-
-
 }
