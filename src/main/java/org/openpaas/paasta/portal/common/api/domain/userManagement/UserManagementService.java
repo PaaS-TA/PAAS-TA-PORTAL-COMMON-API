@@ -1,8 +1,11 @@
 package org.openpaas.paasta.portal.common.api.domain.userManagement;
 
+import org.jinq.orm.stream.JinqStream;
 import org.openpaas.paasta.portal.common.api.config.Constants;
+import org.openpaas.paasta.portal.common.api.config.JinqSource;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
 import org.openpaas.paasta.portal.common.api.domain.user.UserService;
+import org.openpaas.paasta.portal.common.api.entity.portal.StarterCategory;
 import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
 import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailRepository;
 import org.openpaas.paasta.portal.common.api.repository.uaa.UsersRepository;
@@ -41,6 +44,9 @@ public class UserManagementService {
     public UserManagementService(UserService userService) {
         this.userService = userService;
     }
+
+    @Autowired
+    JinqSource jinqSource;
     /**
      * 사용자 정보 목록을 조회한다.
      *
@@ -54,16 +60,13 @@ public class UserManagementService {
     }
 
     public Map<String, Object> getUserInfoList(String userid) {
-        List<UserDetail> userDetailsresult = new ArrayList<>();
-        for (UserDetail detail: userDetailRepository.findAll())
-        {
-            if(detail.getUserId().contains(userid))
-            {
-                userDetailsresult.add(detail);
-            }
+        JinqStream<UserDetail> streams = jinqSource.streamAllPortal(UserDetail.class);
+        if (null != userid && !"".equals(userid)) {
+            streams = streams.where(d -> d.getUserId().contains(userid));
         }
+        List<UserDetail> starterCategoryList = streams.toList();
         return new HashMap<String, Object>() {{
-            put("list", userDetailsresult);
+            put("list", starterCategoryList);
         }};
     }
     /**
