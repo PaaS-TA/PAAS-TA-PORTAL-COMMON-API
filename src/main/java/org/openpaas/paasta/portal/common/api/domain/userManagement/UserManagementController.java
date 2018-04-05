@@ -35,7 +35,10 @@ public class UserManagementController {
         return userManagementService.getUserInfoList();
     }
 
-
+    @GetMapping(V2_URL + "/usermgnts/{userid}")
+    public Map<String, Object> getUserInfoList(@PathVariable String userid) {
+        return userManagementService.getUserInfoList(userid);
+    }
     /**
      * 비밀번호를 초기화한다.
      *
@@ -72,7 +75,7 @@ public class UserManagementController {
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
-    @DeleteMapping(V2_URL + "/usermgnts/{userid}/authority")
+    @DeleteMapping(V2_URL + "/usermgnts/{userid}")
     public Map<String, Object> deleteUserAccount(@PathVariable String userid, @RequestBody UserDetail userDetail) throws Exception {
         return userManagementService.deleteUserAccount(userDetail.getUserId());
     }
