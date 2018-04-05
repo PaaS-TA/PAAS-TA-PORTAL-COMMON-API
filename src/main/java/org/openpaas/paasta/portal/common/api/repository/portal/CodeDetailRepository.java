@@ -16,4 +16,8 @@ public interface CodeDetailRepository extends JpaRepository<CodeDetail, Integer>
 
     List<CodeDetail> findAllByNo(int no);
 
+
+    List<CodeDetail> findByGroupId(String groudId);
+
+
 }

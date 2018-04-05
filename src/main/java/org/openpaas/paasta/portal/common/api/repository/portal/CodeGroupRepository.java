@@ -11,7 +11,6 @@ import java.util.List;
  */
 @Repository
 public interface CodeGroupRepository extends JpaRepository<CodeGroup, Integer> {
-    List<CodeGroup> findAllById(String id);
-
-    int deleteById(String id);
+    List<CodeGroup> findById(String id);
+    void deleteById(String id);
 }

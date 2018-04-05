@@ -187,4 +187,25 @@ public class CodeDetail {
     public void setOrgId(String orgId) {
         this.orgId = orgId;
     }
+
+    @Override
+    public String toString() {
+        return "CodeDetail{" +
+                "no=" + no +
+                ", key='" + key + '\'' +
+                ", value='" + value + '\'' +
+                ", summary='" + summary + '\'' +
+                ", groupId='" + groupId + '\'' +
+                ", useYn='" + useYn + '\'' +
+                ", order=" + order +
+                ", userId='" + userId + '\'' +
+                ", created=" + created +
+                ", lastmodified=" + lastmodified +
+                ", pageNo=" + pageNo +
+                ", pageSize=" + pageSize +
+                ", procType='" + procType + '\'' +
+                ", orgKey='" + orgKey + '\'' +
+                ", orgId='" + orgId + '\'' +
+                '}';
+    }
 }
