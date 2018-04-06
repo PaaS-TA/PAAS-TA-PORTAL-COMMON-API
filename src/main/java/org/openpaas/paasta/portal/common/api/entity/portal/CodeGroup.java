@@ -47,6 +47,9 @@ public class CodeGroup {
     @Transient
     private String orgId;
 
+    @Transient
+    private String searchKeyword;
+
     @Column(name = "user_id")
     private String userId;
 
@@ -130,5 +133,13 @@ public class CodeGroup {
 
     public void setOrgId(String orgId) {
         this.orgId = orgId;
+    }
+
+    public String getSearchKeyword() {
+        return searchKeyword;
+    }
+
+    public void setSearchKeyword(String searchKeyword) {
+        this.searchKeyword = searchKeyword;
     }
 }

@@ -128,9 +128,13 @@ public class CommonCodeService {
     public Map<String,Object> getGroupDetail(CodeGroup codeGroup) {
         JinqStream<CodeGroup> streams = jinqSource.streamAllPortal(CodeGroup.class);
         String id = codeGroup.getId();
+        String searchKeyword = codeGroup.getSearchKeyword();
 
         if (null != id && !"".equals(id) && !"null".equals(id.toLowerCase())) {
             streams = streams.where(c -> c.getId().equals(id));
+        }
+        if (null != searchKeyword && !"".equals(searchKeyword)) {
+            streams = streams.where(c -> c.getName().contains(searchKeyword) || c.getId().contains(searchKeyword));
         }
 
         streams = streams.sortedBy(c -> c.getCreated());
