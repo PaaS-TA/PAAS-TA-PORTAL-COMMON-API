@@ -43,8 +43,12 @@ public class CommonCodeService {
 
     public Map<String, Object> getCommonCodeDetail(CodeDetail codeDetail) {
         JinqStream<CodeDetail> streams = jinqSource.streamAllPortal(CodeDetail.class);
+        int no = codeDetail.getNo();
         String groudId = codeDetail.getGroupId();
         String key = codeDetail.getKey();
+        if (0 != no) {
+            streams = streams.where(c -> c.getNo() == no);
+        }
 
         if (null != key && !"".equals(key) && !"null".equals(key.toLowerCase())) {
             streams = streams.where(c -> c.getKey().equals(key));
@@ -56,6 +60,7 @@ public class CommonCodeService {
         streams = streams.sortedBy(c -> c.getOrder());
 
         List<Map<String, Object>> resultList = streams.map(x -> new HashMap<String, Object>() {{
+            put("no", x.getNo());
             put("key", x.getKey());
             put("value", x.getValue());
             put("summary", x.getSummary());

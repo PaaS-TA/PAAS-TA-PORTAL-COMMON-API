@@ -41,9 +41,9 @@ public class CommonCodeController {
      * @param codeDetail CodeDetail(아이디)
      * @return Map(자바클래스)
      */
-    @GetMapping(V2_URL + "/codedetail/{key}")
-    public Map<String, Object> getCodeDetail(@PathVariable("key") String key, @ModelAttribute CodeDetail codeDetail) {
-        codeDetail.setKey(key);
+    @GetMapping(V2_URL + "/codedetail/{no}")
+    public Map<String, Object> getCodeDetail(@PathVariable("no") int no, @ModelAttribute CodeDetail codeDetail) {
+        codeDetail.setNo(no);
         return commonCodeService.getCommonCodeDetail(codeDetail);
     }
 
