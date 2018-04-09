@@ -60,7 +60,7 @@ public class CommonCodeService {
             put("value", x.getValue());
             put("summary", x.getSummary());
             put("groupId", x.getGroupId());
-            put("useyn", x.getUseYn());
+            put("useYn", x.getUseYn());
             put("order", x.getOrder());
             put("userId", x.getUserId());
         }}).collect(Collectors.toList());
