@@ -219,23 +219,18 @@ public class CommonCodeService {
      * @param codeDetail CodeDetail (모델클래스)
      * @return Map(자바클래스)
      */
-    public String updateCommonDetail(int no, CodeDetail codeDetail) {
+    public Map<String,Object> updateCommonDetail(int no, CodeDetail codeDetail) {
         String resultStr = Constants.RESULT_STATUS_SUCCESS;
+        CodeDetail update=codeDetailRepository.findOne(no);
 
-        if(codeDetailRepository.findAllByNo(no) != null) {
-            codeDetail.setKey(codeDetail.getKey());
-            codeDetail.setValue(codeDetail.getValue());
-            codeDetail.setGroupId(codeDetail.getGroupId());
-            codeDetail.setUserId(codeDetail.getUserId());
-            codeDetail.setOrder(codeDetail.getOrder());
-            codeDetail.setUserId(codeDetail.getUserId());
-            codeDetail.setOrgId(codeDetail.getOrgId());
-            codeDetail.setOrgKey(codeDetail.getOrgKey());
-            codeDetailRepository.save(codeDetail);
-        }else {
-            resultStr = Constants.RESULT_STATUS_FAIL;
-        }
-        return resultStr;
+        codeDetail.setGroupId(update.getGroupId());
+        codeDetail.setCreated(update.getCreated());
+
+        codeDetailRepository.save(codeDetail);
+
+        return new HashMap<String, Object>() {{
+            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+        }};
     }
 
     /**

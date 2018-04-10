@@ -133,10 +133,7 @@ public class CommonCodeController {
      */
     @PutMapping(V2_URL +"/codedetail/{no}")
     public Map<String, Object> updateCommonDetail(@PathVariable int no, @RequestBody CodeDetail codeDetail) {
-        Map<String, Object> resultMap = new HashMap<>();
-        String resultStr = commonCodeService.updateCommonDetail(no, codeDetail);
-        resultMap.put("RESULT", resultStr);
-        return resultMap;
+        return commonCodeService.updateCommonDetail(no, codeDetail);
     }
 
 
