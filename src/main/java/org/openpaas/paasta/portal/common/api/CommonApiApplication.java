@@ -27,4 +27,5 @@ public class CommonApiApplication {
 		SpringApplication.run(CommonApiApplication.class, args);
 	}
 
+
 }
