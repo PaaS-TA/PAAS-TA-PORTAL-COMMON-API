@@ -1,5 +1,6 @@
 package org.openpaas.paasta.portal.common.api.domain.org;
 
+import org.openpaas.paasta.portal.common.api.config.JinqSource;
 import org.openpaas.paasta.portal.common.api.config.dataSource.CcConfig;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
 import org.openpaas.paasta.portal.common.api.entity.cc.OrganizationsCc;
@@ -17,6 +18,7 @@ import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.HashMap;
 import java.util.List;
@@ -52,6 +54,9 @@ public class OrgService {
     @Autowired
     CcConfig ccConfig;
 
+    @Autowired
+    JinqSource jinqSource;
+
     /*운영자 포털에서 조직목록을 요청했을때, 모든 조직목록을 응답한다.*/
     public List<Object> getOrgsForAdmin() throws Exception {
         EntityManager portalEm = ccConfig.ccEntityManager().getNativeEntityManagerFactory().createEntityManager();
@@ -83,6 +88,45 @@ public class OrgService {
         }}).collect(Collectors.toList());
 
         return OrgsForAdmintList;
+    }
+
+
+    public List<Object> getOrg(String guid) {
+
+        String orgs = OrgCcRepository.findByGuid(guid);
+
+        EntityManager portalEm = ccConfig.ccEntityManager().getNativeEntityManagerFactory().createEntityManager();
+
+        CriteriaBuilder cb = portalEm.getCriteriaBuilder();
+        CriteriaQuery<Tuple> cq = cb.createTupleQuery();
+        Root<OrganizationsCc> from = cq.from(OrganizationsCc.class);
+
+        Predicate predicate = cb.conjunction();
+        predicate = cb.and(predicate, cb.equal(from.get("guid"), orgs.toString()));
+        cq.where(predicate);
+
+        cq.multiselect(from.get("id").alias("id")
+                , from.get("name").alias("name")
+                , from.get("guid").alias("guid")
+                , from.get("createdAt").alias("createdAt")
+                , from.get("updatedAt").alias("updatedAt")
+                , from.get("billingEnabled").alias("billingEnabled")
+                , from.get("status").alias("status"));
+
+        TypedQuery<Tuple> tq = portalEm.createQuery(cq);
+        List<Tuple> resultList = tq.getResultList();
+
+        List<Object> OrgsList = resultList.stream().map(x -> new HashMap<String, Object>(){{
+            put("orgId", x.get("id"));
+            put("orgName", x.get("name"));
+            put("orgGuid", x.get("guid"));
+            put("created", x.get("createdAt"));
+            put("lastModified", x.get("updatedAt"));
+            put("billingEnabled", x.get("billingEnabled"));
+            put("status", x.get("status"));
+        }}).collect(Collectors.toList());
+
+        return OrgsList;
     }
 
 
@@ -125,6 +169,5 @@ public class OrgService {
         }}).collect(Collectors.toList());
         return selectInviteInfo;
     }
-
 
 }

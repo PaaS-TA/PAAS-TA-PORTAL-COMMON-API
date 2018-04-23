@@ -10,4 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrgCcRepository extends JpaRepository<OrganizationsTolCc, Integer> {
 
+    static String findByGuid(String guid) {
+        return guid;
+    }
 }
