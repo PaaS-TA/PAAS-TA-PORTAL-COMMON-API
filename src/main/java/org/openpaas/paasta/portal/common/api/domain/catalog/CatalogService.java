@@ -1,5 +1,6 @@
 package org.openpaas.paasta.portal.common.api.domain.catalog;
 
+import com.netflix.discovery.converters.Auto;
 import org.jinq.orm.stream.JinqStream;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
@@ -9,6 +10,7 @@ import org.openpaas.paasta.portal.common.api.repository.portal.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.rmi.runtime.Log;
 
 import java.util.*;
 
@@ -36,6 +38,9 @@ public class CatalogService {
 
     @Autowired
     StarterBuildPackRelationRepository starterBuildPackRelationRepository;
+
+    @Autowired
+    CatalogHistoryRepository catalogHistoryRepository;
 
     @Autowired
     JinqSource jinqSource;
@@ -132,11 +137,31 @@ public class CatalogService {
 
         streams = streams.sortedDescendingBy(c -> c.getNo());
         List<BuildpackCategory> buildpackCategoryList = streams.toList();
-
         return new HashMap<String, Object>() {{
             put("list", buildpackCategoryList);
         }};
     }
+
+    public Map<String, Object> getPacks(String searchKeyword) {
+
+        JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class);
+        logger.info("list : ", streams);
+        JinqStream<BuildpackCategory> streams2 = jinqSource.streamAllPortal(BuildpackCategory.class);
+        logger.info("list : ", streams2);
+        if (null != searchKeyword && !"".equals(searchKeyword)) {
+            streams = streams.where(c -> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
+            streams2 = streams2.where(c -> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
+        }
+        streams = streams.sortedDescendingBy(c -> c.getNo());
+        streams2 = streams2.sortedDescendingBy(c -> c.getNo());
+        List<StarterCategory> starterCategoryList = streams.toList();
+        List<BuildpackCategory> buildpackCategoryList = streams2.toList();
+        return new HashMap<String, Object>() {{
+            put("TemplateList", starterCategoryList);
+            put("BuildPackList", buildpackCategoryList);
+        }};
+    }
+
 
     /**
      * 서비스 카탈로그 목록을 조회한다.
@@ -493,4 +518,56 @@ public class CatalogService {
         }};
     }
 
+    /**
+     * 최신항목을 가져온다.
+     *
+     */
+    public Map<String,Object> getHistoty() {
+        List<Object> resultHistory = new ArrayList<>();
+        JinqStream<CatalogHistory> streams = jinqSource.streamAllPortal(CatalogHistory.class);
+        JinqStream<Integer> integerJinqStream = streams.where(c -> c.getUserId().contains("swmoon")).select(c -> c.getCatalogNo()).distinct();
+        List<Integer> catalogHistoryList = integerJinqStream.toList();
+        int size = catalogHistoryList.size();
+        int length = size < 4 ? catalogHistoryList.size() : 4;
+        for(int i = 1 ; i<= catalogHistoryList.size(); i++)
+        {
+            int index = catalogHistoryList.get(size-i);
+            String  type = streams.where(c -> c.getCatalogNo()==index).select(c-> c.getCatalogType()).toList().get(0);
+            if(type.equals("servicePack")) {
+                if(servicepackCategoryRepository.findByNo(index) !=null)
+                    resultHistory.add(servicepackCategoryRepository.findByNo(index));
+            }
+            else if(type.equals("buildPack")){
+                if(buildpackCategoryRepository.findByNo(index) != null)
+                resultHistory.add(buildpackCategoryRepository.findByNo(index));
+            }
+            else if(type.equals("starter")){
+                if(starterCategoryRepository.findByNo(index) != null)
+                    resultHistory.add(starterCategoryRepository.findByNo(index));
+            }
+        }
+        resultHistory.add(starterCategoryRepository.findByNo(9609));
+        return new HashMap<String, Object>() {{
+            put("list", resultHistory);
+        }};
+    }
 }
+/*
+    JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class);
+        int no = param.getNo();
+        String searchKeyword = param.getSearchKeyword();
+        if (null != searchKeyword && !"".equals(searchKeyword)) {
+            streams = streams.where(c -> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
+        }
+
+        if (no != 0) {
+            streams = streams.where(c -> c.getNo() == no);
+        }
+
+        streams = streams.sortedDescendingBy(c -> c.getNo());
+        List<ServicepackCategory> servicePackCatalogList = streams.toList();
+
+        return new HashMap<String, Object>() {{
+            put("list", servicePackCatalogList);
+        }};
+ */

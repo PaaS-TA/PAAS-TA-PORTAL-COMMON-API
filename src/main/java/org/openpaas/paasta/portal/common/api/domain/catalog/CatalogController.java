@@ -68,6 +68,11 @@ public class CatalogController {
         return catalogService.getBuildPackCatalogList(param);
     }
 
+    @GetMapping(V2_URL + "/packs")
+    public Map<String, Object> getPacks(@RequestParam String searchKeyword) {
+        System.out.print("ddd" + searchKeyword);
+        return catalogService.getPacks(searchKeyword);
+    }
 
     /**
      * 서비스 카탈로그 목록을 조회한다.
@@ -238,6 +243,11 @@ public class CatalogController {
     @DeleteMapping(value = {V2_URL + "/servicepacks/{no}"})
     public Map<String, Object> deleteServicePackCatalog(@PathVariable int no) {
         return catalogService.deleteServicePackCatalog(no);
+    }
+
+    @GetMapping(V2_URL + "/history")
+    public Map<String, Object> getHistoty() {
+        return catalogService.getHistoty();
     }
 
 }
