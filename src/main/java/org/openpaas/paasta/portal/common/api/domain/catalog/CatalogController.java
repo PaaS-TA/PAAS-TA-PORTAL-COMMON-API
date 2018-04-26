@@ -70,7 +70,6 @@ public class CatalogController {
 
     @GetMapping(V2_URL + "/packs")
     public Map<String, Object> getPacks(@RequestParam String searchKeyword) {
-        System.out.print("ddd" + searchKeyword);
         return catalogService.getPacks(searchKeyword);
     }
 
@@ -245,9 +244,9 @@ public class CatalogController {
         return catalogService.deleteServicePackCatalog(no);
     }
 
-    @GetMapping(V2_URL + "/history")
-    public Map<String, Object> getHistoty() {
-        return catalogService.getHistoty();
+    @GetMapping(V2_URL + "/history/{userid}")
+    public Map<String, Object> getHistoty(@PathVariable String userid, @RequestParam String searchKeyword) {
+        return catalogService.getHistoty(userid,searchKeyword);
     }
 
 }

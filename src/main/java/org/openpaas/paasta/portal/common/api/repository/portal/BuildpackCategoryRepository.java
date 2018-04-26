@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface BuildpackCategoryRepository extends JpaRepository<BuildpackCategory, Integer> {
     String findByBuildPackName(String buildpack_name);
-    BuildpackCategory findByNo(int no);
+    BuildpackCategory findFirstByNoAndNameContainingAndDescriptionContainingAndSummaryContaining(int no, String name, String description, String Summary);
 
 }

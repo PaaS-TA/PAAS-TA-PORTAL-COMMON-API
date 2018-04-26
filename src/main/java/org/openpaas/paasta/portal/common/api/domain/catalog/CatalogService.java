@@ -522,31 +522,60 @@ public class CatalogService {
      * 최신항목을 가져온다.
      *
      */
-    public Map<String,Object> getHistoty() {
+    public Map<String,Object> getHistoty(String userid, String searchKeyword) {
         List<Object> resultHistory = new ArrayList<>();
-        JinqStream<CatalogHistory> streams = jinqSource.streamAllPortal(CatalogHistory.class);
-        JinqStream<Integer> integerJinqStream = streams.where(c -> c.getUserId().contains("swmoon")).select(c -> c.getCatalogNo()).distinct();
-        List<Integer> catalogHistoryList = integerJinqStream.toList();
-        int size = catalogHistoryList.size();
-        int length = size < 4 ? catalogHistoryList.size() : 4;
-        for(int i = 1 ; i<= catalogHistoryList.size(); i++)
+        ServicepackCategory servicepackCategory;
+        BuildpackCategory buildpackCategory;
+        StarterCategory starterCategory;
+        List<CatalogHistory> catalogHistories = catalogHistoryRepository.findAllByUserIdOrderByLastmodifiedDesc(userid);
+        int limit = 0;
+        for(int i =0 ; i < catalogHistories.size() || limit > 3; i++)
         {
-            int index = catalogHistoryList.get(size-i);
-            String  type = streams.where(c -> c.getCatalogNo()==index).select(c-> c.getCatalogType()).toList().get(0);
-            if(type.equals("servicePack")) {
-                if(servicepackCategoryRepository.findByNo(index) !=null)
-                    resultHistory.add(servicepackCategoryRepository.findByNo(index));
+            int index = catalogHistories.get(i).getCatalogNo();
+            if(catalogHistories.get(i).getCatalogType().equals("servicePack")) {
+                servicepackCategory = servicepackCategoryRepository.findFirstByNoAndNameContainingAndDescriptionContainingAndSummaryContaining(index,searchKeyword,searchKeyword,searchKeyword);
+                if(servicepackCategory != null){
+                    resultHistory.add(servicepackCategory);limit++;
+                }
             }
-            else if(type.equals("buildPack")){
-                if(buildpackCategoryRepository.findByNo(index) != null)
-                resultHistory.add(buildpackCategoryRepository.findByNo(index));
+            else if(catalogHistories.get(i).getCatalogType().equals("buildPack")){
+                buildpackCategory = buildpackCategoryRepository.findFirstByNoAndNameContainingAndDescriptionContainingAndSummaryContaining(index, searchKeyword,searchKeyword,searchKeyword);
+                if(buildpackCategory != null){
+                    resultHistory.add(buildpackCategory);limit++;
+                }
             }
-            else if(type.equals("starter")){
-                if(starterCategoryRepository.findByNo(index) != null)
-                    resultHistory.add(starterCategoryRepository.findByNo(index));
+            else if(catalogHistories.get(i).getCatalogType().equals("starter")){
+                starterCategory = starterCategoryRepository.findFirstByNoAndNameContainingAndDescriptionContainingAndSummaryContaining(index, searchKeyword,searchKeyword,searchKeyword);
+                if(starterCategory != null){
+                    resultHistory.add(starterCategory);limit++;
+                }
             }
         }
-        resultHistory.add(starterCategoryRepository.findByNo(9609));
+//        JinqStream<CatalogHistory> streams = jinqSource.streamAllPortal(CatalogHistory.class);
+//        JinqStream<Integer> integerJinqStream = streams.where(c -> c.getUserId().contains("swmoon")).select(c -> c.getCatalogNo()).distinct();
+//        List<Integer> catalogHistoryList = integerJinqStream.toList();
+//        int size = catalogHistoryList.size();
+//        int length = size < 4 ? catalogHistoryList.size() : 4;
+//        String Search = "java";
+//        for(int i = 1 ; i<= catalogHistoryList.size(); i++)
+//        {
+//            int index = catalogHistoryList.get(size-i);
+//            String  type = streams.where(c -> c.getCatalogNo()==index).select(c-> c.getCatalogType()).toList().get(0);
+//            if(type.equals("servicePack")) {
+//                if(servicepackCategoryRepository.findFirstByNoAndNameContainingAndDescriptionContainingAndSummaryContaining(index,Search,Search,Search) !=null)
+//                {   resultHistory.add(servicepackCategoryRepository.findFirstByNoAndNameContainingAndDescriptionContainingAndSummaryContaining(index,Search,Search,Search));
+//                }
+//            }
+//            else if(type.equals("buildPack")){
+//                System.out.println(index);
+//                if(buildpackCategoryRepository.findFirstByNoAndNameContainingAndDescriptionContainingAndSummaryContaining(index, Search,Search,Search) != null)
+//                resultHistory.add(buildpackCategoryRepository.findFirstByNoAndNameContainingAndDescriptionContainingAndSummaryContaining(index, Search,Search,Search));
+//            }
+//            else if(type.equals("starter")){
+//                if(starterCategoryRepository.findFirstByNoAndNameContainingAndDescriptionContainingAndSummaryContaining(index, Search,Search,Search) != null)
+//                    resultHistory.add(starterCategoryRepository.findFirstByNoAndNameContainingAndDescriptionContainingAndSummaryContaining(index, Search,Search,Search));
+//            }
+//        }
         return new HashMap<String, Object>() {{
             put("list", resultHistory);
         }};
