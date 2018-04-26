@@ -551,7 +551,7 @@ public class CatalogService {
                     resultHistory.add(starterCategory);limit++;
                 }
             }
-            if(limit > 4) {
+            if(limit > 3) {
                 break;
             }
         }
