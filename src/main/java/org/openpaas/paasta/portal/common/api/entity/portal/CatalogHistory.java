@@ -22,7 +22,7 @@ public class CatalogHistory {
     private int catalogNo;
 
     @Column(name = "catalog_type", nullable = false)
-    private int catalogType;
+    private String catalogType;
 
     @Column(name = "user_id", nullable = false)
     private String userId;
@@ -69,11 +69,11 @@ public class CatalogHistory {
         this.catalogNo = catalogNo;
     }
 
-    public int getCatalogType() {
+    public String getCatalogType() {
         return catalogType;
     }
 
-    public void setCatalogType(int catalogType) {
+    public void setCatalogType(String catalogType) {
         this.catalogType = catalogType;
     }
 
