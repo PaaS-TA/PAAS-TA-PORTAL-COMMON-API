@@ -215,7 +215,7 @@ public class UserController  {
      * @return Map map
      * @throws Exception the exception
      */
-    @PostMapping(V2_URL + "/user/insertuser")
+    @PostMapping(V2_URL + "/user")
       public Map insertUser(@RequestBody UserDetail user, HttpServletResponse response) throws Exception {
 
         LOGGER.info("> into insertUser...");
@@ -223,16 +223,10 @@ public class UserController  {
         Map<String, Object> result = new HashMap<>();
 
         int createResult = 0;
-
-        System.out.println("Constants.adminUserName : "+Constants.adminUserName);
-        System.out.println("user.getUserId() : "+user.getUserId());
-
         if ( userService.getUser(user.getUserId()) != null && !Constants.adminUserName.equals(user.getUserId())) {
-            System.out.println("if");
+
             response.sendError(HttpServletResponse.SC_CONFLICT, "User already exists.");
         } else {
-            System.out.println("else");
-
             if(Constants.adminUserName.equals(user.getUserId())){
                 user.setAdminYn("Y");
             }
