@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StarterCategoryRepository extends JpaRepository<StarterCategory, Integer> {
     StarterCategory findByNo(int no);
-    StarterCategory findFirstByNoAndNameContainingAndDescriptionContainingAndSummaryContaining(int no, String name, String description, String summary);
+    StarterCategory findFirstByNoAndNameContainingOrNoAndDescriptionContainingOrNoAndSummaryContaining(int no, String name, int no1,String description, int no2, String Summary);
 }

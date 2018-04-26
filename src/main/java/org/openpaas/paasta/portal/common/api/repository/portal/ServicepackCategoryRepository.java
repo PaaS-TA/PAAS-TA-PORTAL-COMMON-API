@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface ServicepackCategoryRepository extends JpaRepository<ServicepackCategory, Integer> {
     ServicepackCategory findByNo(int no);
-    ServicepackCategory findFirstByNoAndNameContainingAndDescriptionContainingAndSummaryContaining(int no, String name, String description, String Summary);
+    ServicepackCategory findFirstByNoAndNameContainingOrNoAndDescriptionContainingOrNoAndSummaryContaining(int no, String name, int no1,String description, int no2, String Summary);
 
 }

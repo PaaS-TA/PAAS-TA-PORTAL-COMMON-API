@@ -528,27 +528,31 @@ public class CatalogService {
         BuildpackCategory buildpackCategory;
         StarterCategory starterCategory;
         List<CatalogHistory> catalogHistories = catalogHistoryRepository.findAllByUserIdOrderByLastmodifiedDesc(userid);
+        logger.info("user : " + userid);
         int limit = 0;
-        for(int i =0 ; i < catalogHistories.size() || limit > 3; i++)
+        for(int i =0 ; i < catalogHistories.size() ; i++)
         {
             int index = catalogHistories.get(i).getCatalogNo();
             if(catalogHistories.get(i).getCatalogType().equals("servicePack")) {
-                servicepackCategory = servicepackCategoryRepository.findFirstByNoAndNameContainingAndDescriptionContainingAndSummaryContaining(index,searchKeyword,searchKeyword,searchKeyword);
+                servicepackCategory = servicepackCategoryRepository.findFirstByNoAndNameContainingOrNoAndDescriptionContainingOrNoAndSummaryContaining(index,searchKeyword,index,searchKeyword,index,searchKeyword);
                 if(servicepackCategory != null){
                     resultHistory.add(servicepackCategory);limit++;
                 }
             }
             else if(catalogHistories.get(i).getCatalogType().equals("buildPack")){
-                buildpackCategory = buildpackCategoryRepository.findFirstByNoAndNameContainingAndDescriptionContainingAndSummaryContaining(index, searchKeyword,searchKeyword,searchKeyword);
+                buildpackCategory = buildpackCategoryRepository.findFirstByNoAndNameContainingOrNoAndDescriptionContainingOrNoAndSummaryContaining(index,searchKeyword,index,searchKeyword,index,searchKeyword);
                 if(buildpackCategory != null){
                     resultHistory.add(buildpackCategory);limit++;
                 }
             }
             else if(catalogHistories.get(i).getCatalogType().equals("starter")){
-                starterCategory = starterCategoryRepository.findFirstByNoAndNameContainingAndDescriptionContainingAndSummaryContaining(index, searchKeyword,searchKeyword,searchKeyword);
+                starterCategory = starterCategoryRepository.findFirstByNoAndNameContainingOrNoAndDescriptionContainingOrNoAndSummaryContaining(index,searchKeyword,index,searchKeyword,index,searchKeyword);
                 if(starterCategory != null){
                     resultHistory.add(starterCategory);limit++;
                 }
+            }
+            if(limit > 4) {
+                break;
             }
         }
 //        JinqStream<CatalogHistory> streams = jinqSource.streamAllPortal(CatalogHistory.class);
