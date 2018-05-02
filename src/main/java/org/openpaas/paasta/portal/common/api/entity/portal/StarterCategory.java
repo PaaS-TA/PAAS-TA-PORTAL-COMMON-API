@@ -34,7 +34,7 @@ public class StarterCategory {
     private String description;
 
     @Column(name = "thumb_img_name")
-    private String thumbIimgName;
+    private String thumbImgName;
 
     @Column(name = "thumb_img_path")
     private String thumbImgPath;
@@ -110,11 +110,11 @@ public class StarterCategory {
     }
 
     public String getThumbIimgName() {
-        return thumbIimgName;
+        return thumbImgName;
     }
 
     public void setThumbIimgName(String thumbIimgName) {
-        this.thumbIimgName = thumbIimgName;
+        this.thumbImgName = thumbIimgName;
     }
 
     public String getThumbImgPath() {
@@ -199,7 +199,7 @@ public class StarterCategory {
                 ", classification='" + classification + '\'' +
                 ", summary='" + summary + '\'' +
                 ", description='" + description + '\'' +
-                ", thumbIimgName='" + thumbIimgName + '\'' +
+                ", thumbIimgName='" + thumbImgName + '\'' +
                 ", thumbImgPath='" + thumbImgPath + '\'' +
                 ", useYn='" + useYn + '\'' +
                 ", userId='" + userId + '\'' +
