@@ -36,7 +36,7 @@ public class ServicepackCategory {
     private String servicePackName;
 
     @Column(name = "thumb_img_name")
-    private String thumbIimgName;
+    private String thumbImgName;
 
     @Column(name = "thumb_img_path")
     private String thumbImgPath;
@@ -129,11 +129,11 @@ public class ServicepackCategory {
     }
 
     public String getThumbIimgName() {
-        return thumbIimgName;
+        return thumbImgName;
     }
 
     public void setThumbIimgName(String thumbIimgName) {
-        this.thumbIimgName = thumbIimgName;
+        this.thumbImgName = thumbIimgName;
     }
 
     public String getThumbImgPath() {
@@ -244,7 +244,7 @@ public class ServicepackCategory {
                 ", summary='" + summary + '\'' +
                 ", description='" + description + '\'' +
                 ", servicePackName='" + servicePackName + '\'' +
-                ", thumbIimgName='" + thumbIimgName + '\'' +
+                ", thumbIimgName='" + thumbImgName + '\'' +
                 ", thumbImgPath='" + thumbImgPath + '\'' +
                 ", useYn='" + useYn + '\'' +
                 ", userId='" + userId + '\'' +
