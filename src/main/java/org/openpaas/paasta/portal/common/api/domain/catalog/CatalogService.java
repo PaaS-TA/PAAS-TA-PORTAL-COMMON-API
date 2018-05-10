@@ -557,7 +557,6 @@ public class CatalogService {
      *
      */
     public Map<String,Object> getStarterRelation(int no) {
-        logger.info("번호" + no);
         StarterCategory starterCategory = starterCategoryRepository.findByNo(no);
         List<StarterServicepackRelation> starterServicepackRelationRepository = starterServicePackRelationRepository.findByStarterCatalogNo(no);
         List<ServicepackCategory> servicepackCategories = new ArrayList<>();
