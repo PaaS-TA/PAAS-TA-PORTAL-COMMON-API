@@ -109,12 +109,12 @@ public class StarterCategory {
         this.description = description;
     }
 
-    public String getThumbIimgName() {
+    public String getThumbImgName() {
         return thumbImgName;
     }
 
-    public void setThumbIimgName(String thumbIimgName) {
-        this.thumbImgName = thumbIimgName;
+    public void setThumbImgName(String thumbImgName) {
+        this.thumbImgName = thumbImgName;
     }
 
     public String getThumbImgPath() {
@@ -199,7 +199,7 @@ public class StarterCategory {
                 ", classification='" + classification + '\'' +
                 ", summary='" + summary + '\'' +
                 ", description='" + description + '\'' +
-                ", thumbIimgName='" + thumbImgName + '\'' +
+                ", thumbImgName='" + thumbImgName + '\'' +
                 ", thumbImgPath='" + thumbImgPath + '\'' +
                 ", useYn='" + useYn + '\'' +
                 ", userId='" + userId + '\'' +

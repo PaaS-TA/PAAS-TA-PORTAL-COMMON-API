@@ -128,12 +128,12 @@ public class ServicepackCategory {
         this.servicePackName = servicePackName;
     }
 
-    public String getThumbIimgName() {
+    public String getThumbImgName() {
         return thumbImgName;
     }
 
-    public void setThumbIimgName(String thumbIimgName) {
-        this.thumbImgName = thumbIimgName;
+    public void setThumbImgName(String thumbImgName) {
+        this.thumbImgName = thumbImgName;
     }
 
     public String getThumbImgPath() {
@@ -244,7 +244,7 @@ public class ServicepackCategory {
                 ", summary='" + summary + '\'' +
                 ", description='" + description + '\'' +
                 ", servicePackName='" + servicePackName + '\'' +
-                ", thumbIimgName='" + thumbImgName + '\'' +
+                ", thumbImgName='" + thumbImgName + '\'' +
                 ", thumbImgPath='" + thumbImgPath + '\'' +
                 ", useYn='" + useYn + '\'' +
                 ", userId='" + userId + '\'' +

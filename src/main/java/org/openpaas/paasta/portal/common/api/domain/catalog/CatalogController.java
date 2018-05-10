@@ -244,9 +244,25 @@ public class CatalogController {
         return catalogService.deleteServicePackCatalog(no);
     }
 
+
+    /**
+     * 최신 이용 내역을 조회한다.
+     *
+     * @return Map(자바클래스)
+     */
     @GetMapping(V2_URL + "/history/{userid}")
     public Map<String, Object> getHistoty(@PathVariable String userid, @RequestParam String searchKeyword) {
         return catalogService.getHistoty(userid,searchKeyword);
+    }
+
+    /**
+     * 스타터팩에 속한 빌드팩, 서비스팩을 조회한다.
+     *
+     * @return Map(자바클래스)
+     */
+    @GetMapping(V2_URL + "/packrelation/{no}")
+    public Map<String,Object> getStarterRelation(@PathVariable int no){
+        return catalogService.getStarterRelation(no);
     }
 
 }

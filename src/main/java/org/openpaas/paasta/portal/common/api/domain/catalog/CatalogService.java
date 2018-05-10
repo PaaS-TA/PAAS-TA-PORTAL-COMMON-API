@@ -52,10 +52,8 @@ public class CatalogService {
      * @return Map(자바클래스)
      */
     public Map<String, Object> getStarterCatalog(int no) {
-
-
+        logger.info(""+no);
         StarterCategory starterCategory = starterCategoryRepository.findOne(no);
-
         try {
             //기존 스타터 서비스 릴레이션 가져오기
             List<Integer> ssrIntList = new ArrayList<>();
@@ -63,21 +61,17 @@ public class CatalogService {
             for (StarterServicepackRelation ssr : ssrList) {
                 ssrIntList.add(ssr.getServicepackCategoryNo());
             }
-
             starterCategory.setServicePackCategoryNoList(ssrIntList);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         try {
             /*
              * 기존 스타터 빌드  릴레이션 가져오기
              * -> List로 왜 뽑냐면...Buildpack relation 하나만 들어간다는 전제가 걸려야함
              * -> JPA상에서 에러를 배출...Unique 값이 아닌데 하나만 나오게 했다고 그래서 List로 뽑음
              */
-
-
             List<StarterBuildpackRelation> sbr = starterBuildPackRelationRepository.findByStarterCatalogNo(no);
             starterCategory.setBuildPackCategoryNo(sbr.get(0).getBuildpackCategoryNo());
         } catch (Exception e) {
@@ -145,9 +139,7 @@ public class CatalogService {
     public Map<String, Object> getPacks(String searchKeyword) {
 
         JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class);
-        logger.info("list : ", streams);
         JinqStream<BuildpackCategory> streams2 = jinqSource.streamAllPortal(BuildpackCategory.class);
-        logger.info("list : ", streams2);
         if (null != searchKeyword && !"".equals(searchKeyword)) {
             streams = streams.where(c -> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
             streams2 = streams2.where(c -> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
@@ -303,7 +295,7 @@ public class CatalogService {
         starterCategory.setClassification(param.getClassification());
         starterCategory.setSummary(param.getSummary());
         starterCategory.setDescription(param.getDescription());
-        starterCategory.setThumbIimgName(param.getThumbImgName());
+        starterCategory.setThumbImgName(param.getThumbImgName());
         starterCategory.setThumbImgPath(param.getThumbImgPath());
         starterCategory.setUseYn(param.getUseYn());
         starterCategory.setUserId(param.getUserId());
@@ -528,7 +520,6 @@ public class CatalogService {
         BuildpackCategory buildpackCategory;
         StarterCategory starterCategory;
         List<CatalogHistory> catalogHistories = catalogHistoryRepository.findAllByUserIdOrderByLastmodifiedDesc(userid);
-        logger.info("user : " + userid);
         int limit = 0;
         for(int i =0 ; i < catalogHistories.size() ; i++)
         {
@@ -555,52 +546,33 @@ public class CatalogService {
                 break;
             }
         }
-//        JinqStream<CatalogHistory> streams = jinqSource.streamAllPortal(CatalogHistory.class);
-//        JinqStream<Integer> integerJinqStream = streams.where(c -> c.getUserId().contains("swmoon")).select(c -> c.getCatalogNo()).distinct();
-//        List<Integer> catalogHistoryList = integerJinqStream.toList();
-//        int size = catalogHistoryList.size();
-//        int length = size < 4 ? catalogHistoryList.size() : 4;
-//        String Search = "java";
-//        for(int i = 1 ; i<= catalogHistoryList.size(); i++)
-//        {
-//            int index = catalogHistoryList.get(size-i);
-//            String  type = streams.where(c -> c.getCatalogNo()==index).select(c-> c.getCatalogType()).toList().get(0);
-//            if(type.equals("servicePack")) {
-//                if(servicepackCategoryRepository.findFirstByNoAndNameContainingAndDescriptionContainingAndSummaryContaining(index,Search,Search,Search) !=null)
-//                {   resultHistory.add(servicepackCategoryRepository.findFirstByNoAndNameContainingAndDescriptionContainingAndSummaryContaining(index,Search,Search,Search));
-//                }
-//            }
-//            else if(type.equals("buildPack")){
-//                System.out.println(index);
-//                if(buildpackCategoryRepository.findFirstByNoAndNameContainingAndDescriptionContainingAndSummaryContaining(index, Search,Search,Search) != null)
-//                resultHistory.add(buildpackCategoryRepository.findFirstByNoAndNameContainingAndDescriptionContainingAndSummaryContaining(index, Search,Search,Search));
-//            }
-//            else if(type.equals("starter")){
-//                if(starterCategoryRepository.findFirstByNoAndNameContainingAndDescriptionContainingAndSummaryContaining(index, Search,Search,Search) != null)
-//                    resultHistory.add(starterCategoryRepository.findFirstByNoAndNameContainingAndDescriptionContainingAndSummaryContaining(index, Search,Search,Search));
-//            }
-//        }
         return new HashMap<String, Object>() {{
             put("list", resultHistory);
         }};
     }
-}
-/*
-    JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class);
-        int no = param.getNo();
-        String searchKeyword = param.getSearchKeyword();
-        if (null != searchKeyword && !"".equals(searchKeyword)) {
-            streams = streams.where(c -> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
+
+
+    /**
+     * 릴레이션에 속한 목록을 가져온다.
+     *
+     */
+    public Map<String,Object> getStarterRelation(int no) {
+        logger.info("번호" + no);
+        StarterCategory starterCategory = starterCategoryRepository.findByNo(no);
+        List<StarterServicepackRelation> starterServicepackRelationRepository = starterServicePackRelationRepository.findByStarterCatalogNo(no);
+        List<ServicepackCategory> servicepackCategories = new ArrayList<>();
+        for (StarterServicepackRelation starter : starterServicepackRelationRepository ) {
+            ServicepackCategory servicepackCategory = servicepackCategoryRepository.findByNo(starter.getServicepackCategoryNo());
+            if(servicepackCategory != null){
+                servicepackCategories.add(servicepackCategory);
+            }
         }
-
-        if (no != 0) {
-            streams = streams.where(c -> c.getNo() == no);
-        }
-
-        streams = streams.sortedDescendingBy(c -> c.getNo());
-        List<ServicepackCategory> servicePackCatalogList = streams.toList();
-
+        StarterBuildpackRelation starterBuildpackRelation = starterBuildPackRelationRepository.findFirstByStarterCatalogNo(no);
+        BuildpackCategory buildpackCategory = buildpackCategoryRepository.findByNo(starterBuildpackRelation.getBuildpackCategoryNo());
         return new HashMap<String, Object>() {{
-            put("list", servicePackCatalogList);
+            put("Starter", starterCategory);
+            put("Servicepack", servicepackCategories);
+            put("Buildpack", buildpackCategory);
         }};
- */
+    }
+}
