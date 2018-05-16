@@ -12,4 +12,5 @@ import java.util.List;
 @Repository
 public interface StarterBuildPackRelationRepository extends JpaRepository<StarterBuildpackRelation, Integer> {
     List<StarterBuildpackRelation> findByStarterCatalogNo(int no);
+    StarterBuildpackRelation findFirstByStarterCatalogNo(int no);
 }

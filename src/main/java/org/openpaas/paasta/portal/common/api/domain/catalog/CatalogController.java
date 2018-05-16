@@ -67,6 +67,11 @@ public class CatalogController {
         return catalogService.getBuildPackCatalogList(param);
     }
 
+    @GetMapping(V2_URL + "/packs")
+    public Map<String, Object> getPacks(@RequestParam String searchKeyword) {
+        return catalogService.getPacks(searchKeyword);
+    }
+
     /**
      * [앱 서비스] 카탈로그 목록을 조회한다.
      *
@@ -274,6 +279,27 @@ public class CatalogController {
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("servicepackRelcount", servicePackRelCnt);
         return resultMap;
+    }
+
+
+    /**
+     * 최신 이용 내역을 조회한다.
+     *
+     * @return Map(자바클래스)
+     */
+    @GetMapping(V2_URL + "/history/{userid}")
+    public Map<String, Object> getHistoty(@PathVariable String userid, @RequestParam String searchKeyword) {
+        return catalogService.getHistoty(userid,searchKeyword);
+    }
+
+    /**
+     * 스타터팩에 속한 빌드팩, 서비스팩을 조회한다.
+     *
+     * @return Map(자바클래스)
+     */
+    @GetMapping(V2_URL + "/packrelation/{no}")
+    public Map<String,Object> getStarterRelation(@PathVariable int no){
+        return catalogService.getStarterRelation(no);
     }
 
 }
