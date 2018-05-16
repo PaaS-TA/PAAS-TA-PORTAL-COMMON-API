@@ -1,16 +1,13 @@
 package org.openpaas.paasta.portal.common.api.domain.catalog;
 
-import com.netflix.discovery.converters.Auto;
 import org.jinq.orm.stream.JinqStream;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
 import org.openpaas.paasta.portal.common.api.entity.portal.*;
-import org.openpaas.paasta.portal.common.api.model.Catalog;
 import org.openpaas.paasta.portal.common.api.repository.portal.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.rmi.runtime.Log;
 
 import java.util.*;
 
@@ -188,7 +185,7 @@ public class CatalogService {
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
-    public int getStarterCatalogCount(Catalog param) {
+    public int getStarterCatalogCount(StarterCategory param) {
         logger.info("getStarterCatalogCount :: " + param.toString());
         JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class);
 
