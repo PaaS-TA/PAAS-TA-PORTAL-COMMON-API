@@ -3,15 +3,11 @@ package org.openpaas.paasta.portal.common.api.domain.catalog;
 import org.openpaas.paasta.portal.common.api.entity.portal.BuildpackCategory;
 import org.openpaas.paasta.portal.common.api.entity.portal.ServicepackCategory;
 import org.openpaas.paasta.portal.common.api.entity.portal.StarterCategory;
-import org.openpaas.paasta.portal.common.api.model.Catalog;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Created by SEJI on 2018-03-06.
@@ -19,85 +15,90 @@ import static org.slf4j.LoggerFactory.getLogger;
 @RestController
 
 public class CatalogController {
-    private static final Logger logger = getLogger(CatalogController.class);
 
     @Autowired
     private CatalogService catalogService;
 
     private final String V2_URL = "/v2";
 
-
     /**
-     * 앱 템플릿 카탈로그를 조회한다.
+     * [앱 템플릿] 카탈로그 목록을 조회한다.
      *
-     * @param no int(모델클래스)
-     * @return Map(자바클래스)
-     */
-    @GetMapping(V2_URL + "/starterpacks/{no}")
-    public Map<String, Object> getStarterCatalog(@PathVariable int no) {
-        return catalogService.getStarterCatalog(no);
-    }
-
-
-    /**
-     * 앱 템플릿 목록을 조회한다.
-     *
-     * @param param Catalog(모델클래스)
-     * @return Map(자바클래스)
+     * @param param Catalog model
+     * @return Map
      */
     @GetMapping(V2_URL + "/starterpacks")
-    public Map<String, Object> getStarterNames(@ModelAttribute Catalog param) {
+    public Map<String, Object> getStarterNames(@ModelAttribute StarterCategory param) {
         return catalogService.getStarterNamesList(param);
     }
 
+    /**
+     * [앱 템플릿] 카탈로그를 조회한다.
+     *
+     * @param catalogNo int Catalog No
+     * @return Map
+     */
+    @GetMapping(V2_URL + "/starterpacks/{catalogNo}")
+    public Map<String, Object> getStarterCatalog(@PathVariable int catalogNo) {
+        return catalogService.getStarterCatalog(catalogNo);
+    }
 
     /**
-     * 앱 개발환경 카탈로그 목록을 조회한다.
+     * [앱 템플릿] 카탈로그 목록을 조회한다.
+     *
+     * @param param Catalog model
+     * @return Map
      */
     @GetMapping(V2_URL + "/developpacks")
-    public Map<String, Object> getBuildPackCatalogList(@ModelAttribute Catalog param) {
+    public Map<String, Object> getBuildPackCatalogList(@ModelAttribute BuildpackCategory param) {
         return catalogService.getBuildPackCatalogList(param);
     }
 
     /**
-     * 앱 개발환경 카탈로그 목록을 조회한다.
-     */
-    @GetMapping(V2_URL + "/developpacks/{no}")
-    public Map<String, Object> getBuildPackCatalogList(@PathVariable("no") int no, @ModelAttribute Catalog param) {
-        param.setNo(no);
-        return catalogService.getBuildPackCatalogList(param);
-    }
-
-
-    /**
-     * 서비스 카탈로그 목록을 조회한다.
+     * [앱 개발환경] 카탈로그를 조회한다.
      *
-     * @param param Catalog(모델클래스)
-     * @return Map(자바클래스)
+     * @param catalogNo int Catalog No
+     * @param param Catalog model
+     * @return Map
+     */
+    @GetMapping(V2_URL + "/developpacks/{catalogNo}")
+    public Map<String, Object> getBuildPackCatalogList(@PathVariable int catalogNo, @ModelAttribute BuildpackCategory param) {
+        param.setNo(catalogNo);
+        return catalogService.getBuildPackCatalogList(param);
+    }
+
+    /**
+     * [앱 서비스] 카탈로그 목록을 조회한다.
+     *
+     * @param param Catalog
+     * @return Map
      */
     @GetMapping(V2_URL + "/servicepacks")
-    public Map<String, Object> getServicePackCatalogList(@ModelAttribute Catalog param) {
+    public Map<String, Object> getServicePackCatalogList(@ModelAttribute ServicepackCategory param) {
         return catalogService.getServicePackCatalogList(param);
     }
 
-
     /**
-     * 서비스 카탈로그 목록을 조회한다.
+     * [앱 서비스] 카탈로그를 조회한다.
      *
-     * @param param Catalog(모델클래스)
-     * @return Map(자바클래스)
+     * @param catalogNo int Catalog No
+     * @param param Catalog
+     * @return Map
      */
-    @GetMapping(V2_URL + "/servicepacks/{no}")
-    public Map<String, Object> getServicePackCatalogList(@PathVariable("no") int no, @ModelAttribute Catalog param) {
-        param.setNo(no);
+    @GetMapping(V2_URL + "/servicepacks/{catalogNo}")
+    public Map<String, Object> getServicePackCatalogList(@PathVariable int catalogNo, @ModelAttribute ServicepackCategory param) {
+        param.setNo(catalogNo);
         return catalogService.getServicePackCatalogList(param);
     }
 
     /**
-     * 앱 템플릿 카탈로그 개수를 조회한다.
+     * [앱 템플릿] 해당 이름의 카탈로그 목록 개수를 조회한다.
+     *
+     * @param param Catalog model
+     * @return Map
      */
     @GetMapping(V2_URL + "/starterpacks/count")
-    public Map<String, Object> getStarterCatalogCount(@ModelAttribute Catalog param) throws Exception {
+    public Map<String, Object> getStarterCatalogCount(@ModelAttribute StarterCategory param) {
         int starterCatalogCount = catalogService.getStarterCatalogCount(param);
 
         Map<String, Object> resultMap = new HashMap<>();
@@ -106,12 +107,14 @@ public class CatalogController {
         return resultMap;
     }
 
-
     /**
-     * 앱 개발환경 목록 개수를 조회한다.
+     * [앱 개발환경] 해당 이름의 카탈로그 목록 개수를 조회한다.
+     *
+     * @param param Catalog model
+     * @return Map
      */
     @GetMapping(V2_URL + "/developpacks/count")
-    public Map<String, Object> getBuildPackCatalogCount(Catalog param) throws Exception {
+    public Map<String, Object> getBuildPackCatalogCount(@ModelAttribute BuildpackCategory param) {
         int buildPackCnt = catalogService.getBuildPackCatalogCount(param);
 
         Map<String, Object> resultMap = new HashMap<>();
@@ -120,12 +123,13 @@ public class CatalogController {
         return resultMap;
     }
 
-
     /**
-     * 서비스 목록 개수를 조회한다.
+     * [앱 서비스] 해당 이름의 카탈로그 목록 개수를 조회한다.
+     * @param param Catalog model
+     * @return Map
      */
     @GetMapping(V2_URL + "/servicepacks/count")
-    public Map<String, Object> getServicePackCatalogCount(@ModelAttribute Catalog param) throws Exception {
+    public Map<String, Object> getServicePackCatalogCount(@ModelAttribute ServicepackCategory param) {
         int servicePackCnt = catalogService.getServicePackCatalogCount(param);
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("servicepackcount", servicePackCnt);
@@ -133,111 +137,143 @@ public class CatalogController {
         return resultMap;
     }
 
-
     /**
-     * 스타터 개발환경 카탈로그를 생성한다.
+     * [앱 템플릿] 카탈로그를 생성한다.
      *
-     * @param param Catalog(모델클래스)
-     * @return Map(자바클래스)
+     * @param param Catalog model
+     * @return Map
      */
     @PostMapping(V2_URL + "/starterpacks")
-    public Map<String, Object> insertStarterPacks(@RequestBody Catalog param) {
+    public Map<String, Object> insertStarterPacks(@RequestBody StarterCategory param) {
         return catalogService.insertStarterCatalog(param);
     }
 
-
     /**
-     * 앱 개발환경 카탈로그를 생성한다.
+     * [앱 개발환경] 카탈로그를 생성한다.
      *
-     * @param param Catalog(모델클래스)
-     * @return Map(자바클래스)
+     * @param param BuildpackCategory model
+     * @return Map
      */
     @PostMapping(V2_URL + "/developpacks")
     public Map<String, Object> insertBuildPackCatalog(@RequestBody BuildpackCategory param) {
         return catalogService.insertBuildPackCatalog(param);
     }
 
-
     /**
-     * 서비스 카탈로그를 저장한다.
+     * [앱 서비스] 카탈로그를 생성한다.
      *
-     * @param param Catalog(모델클래스)
-     * @return Map(자바클래스)
+     * @param param ServicepackCategory model
+     * @return Map
      */
     @PostMapping(V2_URL + "/servicepacks")
     public Map<String, Object> insertServicePackCatalog(@RequestBody ServicepackCategory param) {
         return catalogService.insertServicePackCatalog(param);
     }
 
-
     /**
-     * 서비스 카탈로그를 수정한다.
+     * [앱 템플릿] 카탈로그를 수정한다.
      *
-     * @param param Catalog(모델클래스)
-     * @return Map(자바클래스)
+     * @param catalogNo int Catalog No
+     * @param param Catalog model
+     * @return Map
      */
-    @PutMapping(value = {V2_URL + "/starterpacks/{no}"})
-    public Map<String, Object> updatesStarterPackCatalog(@PathVariable int no, @RequestBody Catalog param) {
+    @PutMapping(value = {V2_URL + "/starterpacks/{catalogNo}"})
+    public Map<String, Object> updatesStarterPackCatalog(@PathVariable int catalogNo, @RequestBody StarterCategory param) {
 
-        param.setNo(no);
+        param.setNo(catalogNo);
         return catalogService.updateStarterCatalog(param);
     }
 
-
     /**
-     * 앱 개발환경 카탈로그를 수정한다.
+     * [앱 개발환경] 카탈로그를 수정한다.
      *
-     * @param param Catalog(모델클래스)
-     * @return Map(자바클래스)
+     * @param catalogNo int Catalog No
+     * @param param BuildpackCategory model
+     * @return Map
      */
-    @PutMapping(value = {V2_URL + "/developpacks/{no}"})
-    public Map<String, Object> updateBuildPackCatalog(@PathVariable int no, @RequestBody BuildpackCategory param) {
-        param.setNo(no);
+    @PutMapping(value = {V2_URL + "/developpacks/{catalogNo}"})
+    public Map<String, Object> updateBuildPackCatalog(@PathVariable int catalogNo, @RequestBody BuildpackCategory param) {
+        param.setNo(catalogNo);
         return catalogService.updateBuildPackCatalog(param);
     }
 
-
     /**
-     * 서비스 카탈로그를 수정한다.
+     * [앱 서비스] 카탈로그를 수정한다.
      *
-     * @param param Catalog(모델클래스)
-     * @return Map(자바클래스)
+     * @param catalogNo int Catalog No
+     * @param param ServicepackCategory model
+     * @return Map
      */
-    @PutMapping(value = {V2_URL + "/servicepacks/{no}"})
-    public Map<String, Object> updateServicePackCatalog(@PathVariable int no, @RequestBody ServicepackCategory param) {
-        param.setNo(no);
+    @PutMapping(value = {V2_URL + "/servicepacks/{catalogNo}"})
+    public Map<String, Object> updateServicePackCatalog(@PathVariable int catalogNo, @RequestBody ServicepackCategory param) {
+        param.setNo(catalogNo);
         return catalogService.updateServicePackCatalog(param);
     }
 
     /**
-     * 앱 템플릿 카탈로그를 삭제한다.
+     * [앱 템플릿] 카탈로그를 삭제한다.
      *
+     * @param catalogNo int Catalog No
      * @return Map(자바클래스)
      */
-    @DeleteMapping(value = {V2_URL + "/starterpacks/{no}"})
-    public Map<String, Object> deleteStarterCatalog(@PathVariable int no) {
-        return catalogService.deleteStarterCatalog(no);
-    }
-
-
-    /**
-     * 앱 개발환경 카탈로그를 삭제한다.
-     *
-     * @return Map(자바클래스)
-     */
-    @DeleteMapping(value = {V2_URL + "/developpacks/{no}"})
-    public Map<String, Object> deleteBuildPackCatalog(@PathVariable int no) {
-        return catalogService.deleteBuildPackCatalog(no);
+    @DeleteMapping(value = {V2_URL + "/starterpacks/{catalogNo}"})
+    public Map<String, Object> deleteStarterCatalog(@PathVariable int catalogNo) {
+        return catalogService.deleteStarterCatalog(catalogNo);
     }
 
     /**
-     * 서비스 카탈로그를 삭제한다.
+     * [앱 개발환경] 카탈로그를 삭제한다.
      *
+     * @param catalogNo int Catalog No
      * @return Map(자바클래스)
      */
-    @DeleteMapping(value = {V2_URL + "/servicepacks/{no}"})
-    public Map<String, Object> deleteServicePackCatalog(@PathVariable int no) {
-        return catalogService.deleteServicePackCatalog(no);
+    @DeleteMapping(value = {V2_URL + "/developpacks/{catalogNo}"})
+    public Map<String, Object> deleteBuildPackCatalog(@PathVariable int catalogNo) {
+        return catalogService.deleteBuildPackCatalog(catalogNo);
+    }
+
+    /**
+     * [앱 서비스] 카탈로그를 삭제한다.
+     *
+     * @param catalogNo int Catalog No
+     * @return Map(자바클래스)
+     */
+    @DeleteMapping(value = {V2_URL + "/servicepacks/{catalogNo}"})
+    public Map<String, Object> deleteServicePackCatalog(@PathVariable int catalogNo) {
+        return catalogService.deleteServicePackCatalog(catalogNo);
+    }
+
+    // To-Be 삭제시 아래 체크 사항 추가할 것 2018.05.16 CYS
+    // Delete Check : delete buildPack Catalog
+    // Delete Check : delete servicePack Catalog
+    /**
+     * [앱 개발환경]를 삭제시, 해당 카탈로그를 사용중인 [앱 템플릿] 개수를 조회한다.
+     *
+     * @param catalogNo int Catalog No
+     * @return Map
+     */
+    @GetMapping(V2_URL + "/developpacks/relationcount/{catalogNo}")
+    public Map<String, Object> getBuildPackCatalogRelCount(@PathVariable int catalogNo) {
+        int buildPackRelCnt = 0; // temp
+//                catalogService.getBuildPackCatalogRelCount(param);
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("buildpackRelcount", buildPackRelCnt);
+        return resultMap;
+    }
+
+    /**
+     * [앱 서비스]를 삭제시, 해당 카탈로그를 사용중인 [앱 템플릿] 개수를 조회한다.
+     *
+     * @param catalogNo int Catalog No
+     * @return Map
+     */
+    @GetMapping(V2_URL + "/servicepacks/relationcount/{catalogNo}")
+    public Map<String, Object> getServicePackCatalogRelCount(@PathVariable int catalogNo) {
+        int servicePackRelCnt = 0; // temp
+//                catalogService.getServicePackCatalogRelCount(param);
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("servicepackRelcount", servicePackRelCnt);
+        return resultMap;
     }
 
 }

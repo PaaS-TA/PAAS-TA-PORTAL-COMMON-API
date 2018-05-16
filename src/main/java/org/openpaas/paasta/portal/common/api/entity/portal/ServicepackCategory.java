@@ -48,7 +48,7 @@ public class ServicepackCategory {
     private String userId;
 
     @CreationTimestamp
-    @Column(name = "created", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date created;
 
@@ -79,6 +79,8 @@ public class ServicepackCategory {
     @Transient
     private String app_bind_parameter;
 
+    @Transient
+    private String searchKeyword;
 
     public int getNo() {
         return no;
@@ -234,6 +236,13 @@ public class ServicepackCategory {
         this.app_bind_parameter = app_bind_parameter;
     }
 
+    public String getSearchKeyword() {
+        return searchKeyword;
+    }
+
+    public void setSearchKeyword(String searchKeyword) {
+        this.searchKeyword = searchKeyword;
+    }
 
     @Override
     public String toString() {
@@ -257,6 +266,7 @@ public class ServicepackCategory {
                 ", classificationValue='" + classificationValue + '\'' +
                 ", classificationSummary='" + classificationSummary + '\'' +
                 ", app_bind_parameter='" + app_bind_parameter + '\'' +
+                ", searchKeyword='" + searchKeyword + '\'' +
                 '}';
     }
 }
