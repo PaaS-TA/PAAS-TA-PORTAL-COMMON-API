@@ -360,7 +360,7 @@ public class CatalogService {
 
             for (int servicepackCategoryNo : param.getServicePackCategoryNoList()) {
                 StarterServicepackRelation ssrInsert = new StarterServicepackRelation();
-                ssrInsert.setStarterCatalogNo(starterCategory.getNo());
+                ssrInsert.setStarterCatalogNo(param.getNo());
                 ssrInsert.setServicepackCategoryNo(servicepackCategoryNo);
                 logger.info(ssrInsert.toString());
                 starterServicePackRelationRepository.save(ssrInsert);
