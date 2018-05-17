@@ -1,6 +1,5 @@
 package org.openpaas.paasta.portal.common.api.domain.catalog;
 
-import com.netflix.discovery.converters.Auto;
 import org.jinq.orm.stream.JinqStream;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
@@ -12,7 +11,6 @@ import org.openpaas.paasta.portal.common.api.repository.portal.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.rmi.runtime.Log;
 
 import java.util.*;
 
@@ -93,7 +91,7 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    public Map<String, Object> getStarterNamesList(Catalog param) {
+    public Map<String, Object> getStarterNamesList(StarterCategory param) {
         logger.info("getStarterNamesList :: " + param.toString());
         JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class);
 
@@ -119,7 +117,7 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    public Map<String, Object> getBuildPackCatalogList(Catalog param) {
+    public Map<String, Object> getBuildPackCatalogList(BuildpackCategory param) {
         logger.info("getBuildPackCatalogList :: " + param.toString());
         JinqStream<BuildpackCategory> streams = jinqSource.streamAllPortal(BuildpackCategory.class);
 
@@ -166,7 +164,7 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    public HashMap<String, Object> getServicePackCatalogList(Catalog param) {
+    public HashMap<String, Object> getServicePackCatalogList(ServicepackCategory param) {
         logger.info("getServicePackCatalogList :: " + param.toString());
         JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class);
         int no = param.getNo();
@@ -193,7 +191,7 @@ public class CatalogService {
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
-    public int getStarterCatalogCount(Catalog param) {
+    public int getStarterCatalogCount(StarterCategory param) {
         logger.info("getStarterCatalogCount :: " + param.toString());
         JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class);
 
@@ -215,7 +213,7 @@ public class CatalogService {
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
-    public int getBuildPackCatalogCount(Catalog param) {
+    public int getBuildPackCatalogCount(BuildpackCategory param) {
         logger.info("getBuildPackCatalogCount :: " + param.toString());
         JinqStream<BuildpackCategory> streams = jinqSource.streamAllPortal(BuildpackCategory.class);
 
@@ -239,7 +237,7 @@ public class CatalogService {
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
-    public int getServicePackCatalogCount(Catalog param) {
+    public int getServicePackCatalogCount(ServicepackCategory param) {
         logger.info("getServicePackCatalogCount :: " + param.toString());
         JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class);
 
@@ -262,16 +260,15 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    public Map<String, Object> insertStarterCatalog(Catalog param) {
+    public Map<String, Object> insertStarterCatalog(StarterCategory param) {
         logger.info("insertStarterCatalog :: " + param.toString());
-        StarterCategory starterCategory = convertStarterCategory(param);
-        starterCategoryRepository.save(starterCategory);
-        logger.info("insertStarterCatalog :: NO2 " + starterCategory.getNo());
+        starterCategoryRepository.save(param);
+        logger.info("insertStarterCatalog :: NO2 " + param.getNo());
         try {
             //스타터서비스 릴레이션 저장
             for (int servicepackCategoryNo : param.getServicePackCategoryNoList()) {
                 StarterServicepackRelation ssr = new StarterServicepackRelation();
-                ssr.setStarterCatalogNo(starterCategory.getNo());
+                ssr.setStarterCatalogNo(param.getNo());
                 ssr.setServicepackCategoryNo(servicepackCategoryNo);
                 starterServicePackRelationRepository.save(ssr);
             }
@@ -282,7 +279,7 @@ public class CatalogService {
             //스타터 빌드팩 릴레이션 저장
             StarterBuildpackRelation sbr = new StarterBuildpackRelation();
             sbr.setBuildpackCategoryNo(param.getBuildPackCategoryNo());
-            sbr.setStarterCatalogNo(starterCategory.getNo());
+            sbr.setStarterCatalogNo(param.getNo());
 
             starterBuildPackRelationRepository.save(sbr);
         } catch (Exception e) {
@@ -292,22 +289,6 @@ public class CatalogService {
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
         }};
     }
-
-    private StarterCategory convertStarterCategory(Catalog param) {
-        StarterCategory starterCategory = new StarterCategory();
-        starterCategory.setNo(param.getNo());
-        starterCategory.setName(param.getName());
-        starterCategory.setClassification(param.getClassification());
-        starterCategory.setSummary(param.getSummary());
-        starterCategory.setDescription(param.getDescription());
-        starterCategory.setThumbImgName(param.getThumbImgName());
-        starterCategory.setThumbImgPath(param.getThumbImgPath());
-        starterCategory.setUseYn(param.getUseYn());
-        starterCategory.setUserId(param.getUserId());
-        starterCategory.setCreated(new Date());
-        return starterCategory;
-    }
-
 
     /**
      * 앱 개발환경 카탈로그를 저장한다.
@@ -346,16 +327,15 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    public Map<String, Object> updateStarterCatalog(Catalog param) {
+    public Map<String, Object> updateStarterCatalog(StarterCategory param) {
         logger.info("updateStarterCatalog :: " + param.toString());
-        StarterCategory starterCategory = convertStarterCategory(param);
         //Upate Starter Catalog
-        starterCategoryRepository.save(starterCategory);
+        starterCategoryRepository.save(param);
 
         try {
             //기존 스타터서비스 릴레이션 삭제
             logger.info("updateStarterCatalog before start service relation remove");
-            List<StarterServicepackRelation> ssrList = starterServicePackRelationRepository.findByStarterCatalogNo(starterCategory.getNo());
+            List<StarterServicepackRelation> ssrList = starterServicePackRelationRepository.findByStarterCatalogNo(param.getNo());
             for (StarterServicepackRelation ssr : ssrList) {
                 logger.info("ssrList " + ssr.toString());
                 starterServicePackRelationRepository.delete(ssr.getNo());
@@ -366,7 +346,7 @@ public class CatalogService {
         try {
             logger.info("updateStarterCatalog before start build relation remove");
             //기존 스타터서비스 릴레이션 삭제
-            List<StarterBuildpackRelation> sbrList = starterBuildPackRelationRepository.findByStarterCatalogNo(starterCategory.getNo());
+            List<StarterBuildpackRelation> sbrList = starterBuildPackRelationRepository.findByStarterCatalogNo(param.getNo());
             for (StarterBuildpackRelation sbr : sbrList) {
                 logger.info("sbrList " + sbr.toString());
                 starterBuildPackRelationRepository.delete(sbr.getNo());
@@ -544,33 +524,6 @@ public class CatalogService {
         }  catch (Exception e){
 
         }
-
-//        int limit = 0;
-//        for(int i =0 ; i < catalogHistories.size() ; i++)
-//        {
-//            int index = catalogHistories.get(i).getCatalogNo();
-//            if(catalogHistories.get(i).getCatalogType().equals("servicePack")) {
-//                servicepackCategory = servicepackCategoryRepository.findFirstByNoAndNameContainingOrNoAndDescriptionContainingOrNoAndSummaryContaining(index,searchKeyword,index,searchKeyword,index,searchKeyword);
-//                if(servicepackCategory != null){
-//                    resultHistory.add(servicepackCategory);limit++;
-//                }
-//            }
-//            else if(catalogHistories.get(i).getCatalogType().equals("buildPack")){
-//                buildpackCategory = buildpackCategoryRepository.findFirstByNoAndNameContainingOrNoAndDescriptionContainingOrNoAndSummaryContaining(index,searchKeyword,index,searchKeyword,index,searchKeyword);
-//                if(buildpackCategory != null){
-//                    resultHistory.add(buildpackCategory);limit++;
-//                }
-//            }
-//            else if(catalogHistories.get(i).getCatalogType().equals("starter")){
-//                starterCategory = starterCategoryRepository.findFirstByNoAndNameContainingOrNoAndDescriptionContainingOrNoAndSummaryContaining(index,searchKeyword,index,searchKeyword,index,searchKeyword);
-//                if(starterCategory != null){
-//                    resultHistory.add(starterCategory);limit++;
-//                }
-//            }
-//            if(limit > 3) {
-//                break;
-//            }
-//        }
         return new HashMap<String, Object>() {{
             put("list", resultHistory);
         }};

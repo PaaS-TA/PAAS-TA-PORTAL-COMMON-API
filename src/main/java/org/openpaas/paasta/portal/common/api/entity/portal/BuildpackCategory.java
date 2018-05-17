@@ -59,7 +59,7 @@ public class BuildpackCategory {
     private String userId;
 
     @CreationTimestamp
-    @Column(name = "created", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false)
+    @Column(name = "created", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date created;
 
@@ -73,6 +73,9 @@ public class BuildpackCategory {
 
     @Formula("(SELECT cd.summary FROM code_detail cd WHERE cd.key = classification AND cd.group_id = 'BUILD_PACK_CATALOG')")
     private String classificationSummary;
+
+    @Transient
+    private String searchKeyword;
 
 
     public int getNo() {
@@ -222,6 +225,14 @@ public class BuildpackCategory {
         this.buildPackName = buildPackName;
     }
 
+    public String getSearchKeyword() {
+        return searchKeyword;
+    }
+
+    public void setSearchKeyword(String searchKeyword) {
+        this.searchKeyword = searchKeyword;
+    }
+
     @Override
     public String toString() {
         return "BuildpackCategory{" +
@@ -242,6 +253,7 @@ public class BuildpackCategory {
                 ", lastmodified=" + lastmodified +
                 ", classificationValue='" + classificationValue + '\'' +
                 ", classificationSummary='" + classificationSummary + '\'' +
+                ", searchKeyword='" + searchKeyword + '\'' +
                 '}';
     }
 }

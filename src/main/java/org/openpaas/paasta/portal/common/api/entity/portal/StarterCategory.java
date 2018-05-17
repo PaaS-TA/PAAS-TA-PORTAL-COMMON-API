@@ -46,7 +46,7 @@ public class StarterCategory {
     private String userId;
 
     @CreationTimestamp
-    @Column(name = "created", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date created;
 
@@ -68,6 +68,8 @@ public class StarterCategory {
     @Transient
     private List<Integer> servicePackCategoryNoList;
 
+    @Transient
+    private String searchKeyword;
 
     public int getNo() {
         return no;
@@ -191,6 +193,14 @@ public class StarterCategory {
         this.servicePackCategoryNoList = servicePackCategoryNoList;
     }
 
+    public String getSearchKeyword() {
+        return searchKeyword;
+    }
+
+    public void setSearchKeyword(String searchKeyword) {
+        this.searchKeyword = searchKeyword;
+    }
+
     @Override
     public String toString() {
         return "StarterCategory{" +
@@ -209,6 +219,7 @@ public class StarterCategory {
                 ", classificationSummary='" + classificationSummary + '\'' +
                 ", buildPackCategoryNo=" + buildPackCategoryNo +
                 ", servicePackCategoryNoList=" + servicePackCategoryNoList +
+                ", searchKeyword=" + searchKeyword +
                 '}';
     }
 }
