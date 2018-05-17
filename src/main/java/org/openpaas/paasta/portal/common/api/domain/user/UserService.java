@@ -1,5 +1,6 @@
 package org.openpaas.paasta.portal.common.api.domain.user;
 
+import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 import org.apache.commons.lang.RandomStringUtils;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
@@ -10,6 +11,7 @@ import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailReposit
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.activation.DataHandler;
 import javax.persistence.EntityManager;
@@ -54,7 +56,6 @@ public class UserService {
     public int getUserCount() {
         //JpaRepository를 상속하는 인터페이스를 생성하는것 만으로 count기능을 바로 사용
         int userCnt = (int) userDetailRepository.count();
-        System.out.println(userCnt);
         return userCnt;
     }
 
@@ -66,37 +67,10 @@ public class UserService {
      */
     public UserDetail getUser(String userId) {
         UserDetail userDetail = userDetailRepository.findByUserId(userId);
-
         return userDetail;
     }
 
-    /**
-     * 비밀번호 인증 을 한다.
-     *z`
-     * @param userId userId
-     * @return 성공, 실패 여부
-     * @throws IOException        the io exception
-     */
-    public boolean resetPassword(String userId) throws IOException {
 
-        UserDetail userDetail = userDetailRepository.findByUserId(userId);
-        String randomId = RandomStringUtils.randomAlphanumeric(17).toUpperCase() + RandomStringUtils.randomAlphanumeric(2).toUpperCase();
-        userDetail.setRefreshToken(randomId);
-        userDetail.setAuthAccessCnt(0);
-        userDetail.setAuthAccessTime(new Date());
-        userDetailRepository.save(userDetail);
-        Boolean bRtn = false;
-        Map<String, Object> map = new HashMap<>();
-        int resultCreateUser = Integer.parseInt(userDetail.getStatus());
-        if (resultCreateUser >= 1) {
-            map.put("resetPassword", resultCreateUser);
-            map.put("sFile", "resetPassword.html");
-            map.put("contextUrl", "user/authPassword");
-            bRtn = true;
-            //bRtn = sendEmail(map);
-        }
-        return bRtn;
-    }
     /**
      * 사용자의 상세정보를 조회한다.
      *
@@ -289,6 +263,41 @@ public class UserService {
         }
         return createResult;
     }
+
+
+    /**
+     * 사용자 정보 인증
+     * potalDB에 사용자 정보를 등록한후 이메일을 보낸다.
+     *
+     * @param body the body
+     * @return boolean
+     * @throws IOException        the io exception
+     * @throws MessagingException the messaging exception
+     */
+//    @Transactional
+//    public boolean createRequestUser(HashMap body) throws IOException, MessagingException {
+//
+//        HashMap map = new HashMap();
+//        Boolean bRtn = false;
+//        map.put("userId", body.get("userId"));
+//
+//        String randomId = RandomStringUtils.randomAlphanumeric(17).toUpperCase() + RandomStringUtils.randomAlphanumeric(2).toUpperCase();
+//        map.put("refreshToken", randomId);
+//        map.put("authAccessTime", new Date());
+//
+//        UserDetail userDetail = new UserDetail();
+//        userDetail.setUserId(body.get("userId").toString());
+//
+//        createUser(userDetail);
+//
+//        Boolean resultSendEmail = sendEmail(map);
+//        if (resultSendEmail) {
+//            bRtn = true;
+//        }
+//        return bRtn;
+//
+//    }
+
 
     /**
      * DB에서 사용자 삭제
