@@ -1,6 +1,7 @@
 package org.openpaas.paasta.portal.common.api.domain.catalog;
 
 import org.openpaas.paasta.portal.common.api.entity.portal.BuildpackCategory;
+import org.openpaas.paasta.portal.common.api.entity.portal.CatalogHistory;
 import org.openpaas.paasta.portal.common.api.entity.portal.ServicepackCategory;
 import org.openpaas.paasta.portal.common.api.entity.portal.StarterCategory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -288,8 +289,8 @@ public class CatalogController {
      * @return Map(자바클래스)
      */
     @GetMapping(V2_URL + "/history/{userid}")
-    public Map<String, Object> getHistoty(@PathVariable String userid, @RequestParam String searchKeyword) {
-        return catalogService.getHistoty(userid,searchKeyword);
+    public Map<String, Object> getHistory(@PathVariable String userid) {
+        return catalogService.getHistory(userid);
     }
 
     /**
@@ -300,6 +301,21 @@ public class CatalogController {
     @GetMapping(V2_URL + "/packrelation/{no}")
     public Map<String,Object> getStarterRelation(@PathVariable int no){
         return catalogService.getStarterRelation(no);
+    }
+
+    /**
+     * 실행한 환경을 저장한다.
+     *
+     * @return Map(자바클래스)
+     */
+    @PostMapping(V2_URL + "/history")
+    public Map<String,Object> insertHistroy(@RequestBody CatalogHistory catalog){
+        return catalogService.insertHistroy(catalog);
+    }
+
+    @GetMapping(V2_URL + "/routes/{hostname}")
+    public Map<String,Object> checkRoute(@PathVariable String hostname){
+        return catalogService.checkRoute(hostname);
     }
 
 }
