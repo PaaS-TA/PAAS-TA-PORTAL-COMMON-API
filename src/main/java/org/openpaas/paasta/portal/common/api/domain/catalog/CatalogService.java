@@ -4,8 +4,10 @@ import com.netflix.discovery.converters.Auto;
 import org.jinq.orm.stream.JinqStream;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
+import org.openpaas.paasta.portal.common.api.entity.cc.CatalogCc;
 import org.openpaas.paasta.portal.common.api.entity.portal.*;
 import org.openpaas.paasta.portal.common.api.model.Catalog;
+import org.openpaas.paasta.portal.common.api.repository.cc.CatalogCcRepository;
 import org.openpaas.paasta.portal.common.api.repository.portal.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,9 @@ public class CatalogService {
 
     @Autowired
     JinqSource jinqSource;
+
+    @Autowired
+    CatalogCcRepository catalogCcRepository;
 
     /**
      * 앱 템플릿 카탈로그 조회
@@ -514,38 +519,58 @@ public class CatalogService {
      * 최신항목을 가져온다.
      *
      */
-    public Map<String,Object> getHistoty(String userid, String searchKeyword) {
-        List<Object> resultHistory = new ArrayList<>();
-        ServicepackCategory servicepackCategory;
-        BuildpackCategory buildpackCategory;
-        StarterCategory starterCategory;
+    public Map<String,Object> getHistory(String userid) {
         List<CatalogHistory> catalogHistories = catalogHistoryRepository.findAllByUserIdOrderByLastmodifiedDesc(userid);
-        int limit = 0;
-        for(int i =0 ; i < catalogHistories.size() ; i++)
-        {
-            int index = catalogHistories.get(i).getCatalogNo();
-            if(catalogHistories.get(i).getCatalogType().equals("servicePack")) {
-                servicepackCategory = servicepackCategoryRepository.findFirstByNoAndNameContainingOrNoAndDescriptionContainingOrNoAndSummaryContaining(index,searchKeyword,index,searchKeyword,index,searchKeyword);
-                if(servicepackCategory != null){
-                    resultHistory.add(servicepackCategory);limit++;
-                }
-            }
-            else if(catalogHistories.get(i).getCatalogType().equals("buildPack")){
-                buildpackCategory = buildpackCategoryRepository.findFirstByNoAndNameContainingOrNoAndDescriptionContainingOrNoAndSummaryContaining(index,searchKeyword,index,searchKeyword,index,searchKeyword);
-                if(buildpackCategory != null){
-                    resultHistory.add(buildpackCategory);limit++;
-                }
-            }
-            else if(catalogHistories.get(i).getCatalogType().equals("starter")){
-                starterCategory = starterCategoryRepository.findFirstByNoAndNameContainingOrNoAndDescriptionContainingOrNoAndSummaryContaining(index,searchKeyword,index,searchKeyword,index,searchKeyword);
-                if(starterCategory != null){
-                    resultHistory.add(starterCategory);limit++;
-                }
-            }
-            if(limit > 3) {
-                break;
-            }
+        List<Object> resultHistory = new ArrayList<>();
+
+        try {
+            final int starterpacknum = catalogHistories.stream().filter(a -> a.getCatalogType().equals("starter")).findFirst().get().getCatalogNo();
+            final StarterCategory starterCategory = starterCategoryRepository.findByNo(starterpacknum);
+            resultHistory.add(starterCategory);
+        } catch (Exception e){
         }
+
+        try {
+            final int buildpacknum = catalogHistories.stream().filter(a -> a.getCatalogType().equals("buildPack")).findFirst().get().getCatalogNo();
+            final BuildpackCategory buildpackCategory = buildpackCategoryRepository.findByNo(buildpacknum);
+            resultHistory.add(buildpackCategory);
+        } catch (Exception e){
+        }
+
+        try {
+            final int servicepacknum = catalogHistories.stream().filter(a -> a.getCatalogType().equals("servicePack")).findFirst().get().getCatalogNo();
+            final ServicepackCategory servicepackCategory = servicepackCategoryRepository.findByNo(servicepacknum);
+            resultHistory.add(servicepackCategory);
+        }  catch (Exception e){
+
+        }
+
+//        int limit = 0;
+//        for(int i =0 ; i < catalogHistories.size() ; i++)
+//        {
+//            int index = catalogHistories.get(i).getCatalogNo();
+//            if(catalogHistories.get(i).getCatalogType().equals("servicePack")) {
+//                servicepackCategory = servicepackCategoryRepository.findFirstByNoAndNameContainingOrNoAndDescriptionContainingOrNoAndSummaryContaining(index,searchKeyword,index,searchKeyword,index,searchKeyword);
+//                if(servicepackCategory != null){
+//                    resultHistory.add(servicepackCategory);limit++;
+//                }
+//            }
+//            else if(catalogHistories.get(i).getCatalogType().equals("buildPack")){
+//                buildpackCategory = buildpackCategoryRepository.findFirstByNoAndNameContainingOrNoAndDescriptionContainingOrNoAndSummaryContaining(index,searchKeyword,index,searchKeyword,index,searchKeyword);
+//                if(buildpackCategory != null){
+//                    resultHistory.add(buildpackCategory);limit++;
+//                }
+//            }
+//            else if(catalogHistories.get(i).getCatalogType().equals("starter")){
+//                starterCategory = starterCategoryRepository.findFirstByNoAndNameContainingOrNoAndDescriptionContainingOrNoAndSummaryContaining(index,searchKeyword,index,searchKeyword,index,searchKeyword);
+//                if(starterCategory != null){
+//                    resultHistory.add(starterCategory);limit++;
+//                }
+//            }
+//            if(limit > 3) {
+//                break;
+//            }
+//        }
         return new HashMap<String, Object>() {{
             put("list", resultHistory);
         }};
@@ -574,4 +599,24 @@ public class CatalogService {
             put("Buildpack", buildpackCategory);
         }};
     }
+
+    public Map<String,Object> insertHistroy(CatalogHistory catalog) {
+        catalogHistoryRepository.save(catalog);
+        return new HashMap<String, Object>() {{
+            put("Result", catalog);
+        }};
+    }
+
+    public Map<String,Object> checkRoute(String host){
+        CatalogCc cc = catalogCcRepository.findByHost(host);
+        if(cc == null){
+            return new HashMap<String, Object>() {{
+                put("Result", "노중복");
+            }};
+        }
+        return new HashMap<String, Object>() {{
+            put("Result", "중복");
+        }};
+    }
+
 }
