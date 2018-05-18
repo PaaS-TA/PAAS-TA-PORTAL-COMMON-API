@@ -1,6 +1,5 @@
 package org.openpaas.paasta.portal.common.api.domain.login;
 
-import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 import org.openpaas.paasta.portal.common.api.domain.user.UserController;
 import org.openpaas.paasta.portal.common.api.domain.user.UserService;
 import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
@@ -30,10 +29,9 @@ public class LoginController {
      * @param response   the response
      * @return the map
      * @throws IOException        the io exception
-     * @throws MessagingException the messaging exception
      */
     @RequestMapping(value = {"/requestEmailAuthentication"}, method = RequestMethod.POST)
-    public Map<String, Object> requestEmailAuthentication(@RequestBody UserDetail userDetail, HttpServletResponse response) throws IOException, MessagingException {
+    public Map<String, Object> requestEmailAuthentication(@RequestBody UserDetail userDetail, HttpServletResponse response) throws IOException {
         HashMap body = new HashMap();
         Map<String, Object> resultMap = new HashMap();
 

@@ -1,6 +1,5 @@
 package org.openpaas.paasta.portal.common.api.domain.user;
 
-import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 import org.apache.commons.lang.RandomStringUtils;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
@@ -11,19 +10,17 @@ import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailReposit
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.activation.DataHandler;
 import javax.persistence.EntityManager;
 import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
-import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-
-
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -69,7 +66,6 @@ public class UserService {
         UserDetail userDetail = userDetailRepository.findByUserId(userId);
         return userDetail;
     }
-
 
     /**
      * 사용자의 상세정보를 조회한다.
@@ -272,10 +268,9 @@ public class UserService {
      * @param body the body
      * @return boolean
      * @throws IOException        the io exception
-     * @throws MessagingException the messaging exception
      */
 //    @Transactional
-//    public boolean createRequestUser(HashMap body) throws IOException, MessagingException {
+//    public boolean createRequestUser(HashMap body) throws IOExceptio {
 //
 //        HashMap map = new HashMap();
 //        Boolean bRtn = false;

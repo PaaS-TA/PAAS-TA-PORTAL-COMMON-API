@@ -77,10 +77,14 @@ public class UserManagementService {
      * @throws Exception Exception(자바클래스)
      */
     public Map<String, Object> setResetPassword(String userId) throws Exception {
-        userService.resetPassword(userId);
+        //TODO 패스워드 초기화 메소드가 없습니다.
+        //TODO userService.resetPassword(userId);
+        throw new UnsupportedOperationException( "패스워드 초기화 메소드는 더 이상 쓰지 않습니다. expirePassword로..." );
+        /*
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
         }};
+        */
     }
 
 
