@@ -77,10 +77,7 @@ public class UserManagementService {
      * @throws Exception Exception(자바클래스)
      */
     public Map<String, Object> setResetPassword(String userId) throws Exception {
-        userService.resetPassword(userId);
-        return new HashMap<String, Object>() {{
-            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
-        }};
+        return null;
     }
 
 

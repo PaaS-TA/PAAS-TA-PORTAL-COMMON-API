@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,8 +33,6 @@ public class UserController {
     private UserService userService;
 
 
-
-
     /**
      * Gets user.
      *
@@ -48,8 +47,6 @@ public class UserController {
         result.put("User", user);
         return result;
     }
-
-
 
 
     /**
@@ -82,6 +79,9 @@ public class UserController {
             if (body.containsKey("tellPhone")) user.setTellPhone((String) body.get("tellPhone"));
             if (body.containsKey("zipCode")) user.setZipCode((String) body.get("zipCode"));
             if (body.containsKey("adminYn")) user.setAdminYn((String) body.get("adminYn"));
+            if (body.containsKey("refreshToken")) user.setRefreshToken((String) body.get("refreshToken"));
+//            if (body.containsKey("authAccessTime")) (user.setAuthAccessTime(new Date(Long.parseLong(body.get("refreshToken").toString()));
+            if (body.containsKey("authAccessCnt")) user.setAuthAccessCnt((int) body.get("authAccessCnt"));
             if (body.containsKey("imgPath")) {
 //                if (user.getImgPath() != null) glusterfsService.delete(user.getImgPath());
                 user.setImgPath((String) body.get("imgPath"));
@@ -148,7 +148,6 @@ public class UserController {
     }
 
 
-
     /**
      * 모든 Uaa 유저의 이름과 Guid를 목록으로 가져온다.
      *
@@ -156,13 +155,25 @@ public class UserController {
      * @throws Exception the exception
      */
     @GetMapping(V2_URL + "/users")
-    public Map<String, Object> getAllUserName() throws Exception {
-        List<Map<String, Object>> userInfo = userService.getUserInfo();
-        Map<String, Object> resultMap = new HashMap();
-        resultMap.put("userInfo", userInfo);
-        return resultMap;
+    public List<UserDetail> getAllUserName() throws Exception {
+        List<UserDetail> userInfos = userService.getUsers();
+        return userInfos;
     }
 
+
+    /**
+     * 사용자 정보를 토큰과 비교하여 가져온다.
+     *
+     * @return map all user name
+     * @throws Exception the exception
+     */
+
+    @GetMapping(V2_URL + "/users/{userid}/search/refreshtoken")
+    public UserDetail getUserRefreshToken(@PathVariable String userid, @ModelAttribute UserDetail body) throws Exception {
+        body.setUserId(userid);
+        UserDetail result = userService.getRefreshTokenUser(body);
+        return result;
+    }
 
 
     /**
@@ -172,12 +183,23 @@ public class UserController {
      * @throws Exception the exception
      */
 
-//    @PostMapping(V2_URL + "")
-//    public Map<String, Object> getAllUserName() throws Exception {
-//        List<Map<String, Object>> userInfo = userService.getUserInfo();
-//        Map<String, Object> resultMap = new HashMap();
-//        resultMap.put("userInfo", userInfo);
-//        return resultMap;
-//    }
+    @PostMapping(V2_URL + "/users/create/email")
+    public Map<String, Object> createUserEmail(@RequestBody Map body) throws Exception {
+        Map result = userService.createRequestUser(body);
+        return result;
+    }
+
+    /**
+     * 사용자를 생성하기 위해 인증 메일을 발송한다.
+     *
+     * @return map all user name
+     * @throws Exception the exception
+     */
+
+    @PutMapping(V2_URL + "/users/{userid}/password/email")
+    public Map<String, Object> expiredUserEmail(@PathVariable String userid, @RequestBody Map body) throws Exception {
+        Map result = userService.expiredPassRequestUser(userid, body);
+        return result;
+    }
 
 }
