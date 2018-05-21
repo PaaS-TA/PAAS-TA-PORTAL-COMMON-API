@@ -24,13 +24,13 @@ public class EmailService {
     @Autowired
     EmailConfig emailConfig;
 
-    public Map expiredEmail(String userId, String refreshToken) {
-        logger.info("expiredEmail ::: " + userId);
+    public Map resetEmail(String userId, String refreshToken) {
+        logger.info("resetEmail ::: " + userId);
         Map map = new HashMap();
         try {
             ClassLoader classLoader = getClass().getClassLoader();
             File file = new File(classLoader.getResource("loginpass.html").getFile());
-            logger.debug("expiredEmail ::: " + file.getAbsolutePath());
+            logger.debug("resetEmail ::: " + file.getAbsolutePath());
             Document doc = Jsoup.parse(file, "UTF-8");
             Elements elementAhref = doc.select("a[href]");
             Elements elementSpan = doc.select("span");

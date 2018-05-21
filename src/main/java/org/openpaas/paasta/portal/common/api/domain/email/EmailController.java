@@ -29,19 +29,21 @@ public class EmailController {
      *
      * @return the menu list
      */
-    @PostMapping(value = {"/v2/email/expired"})
+    @PostMapping(value = {"/v2/email/reset"})
     public Map<String, Object> expiredEmail(@RequestBody Map body) {
         String refreshToken = "";
         if (body.get("refreshToken") != null) {
             refreshToken = body.get("refreshToken").toString();
         }
-        Map<String, Object> resultMap = emailService.expiredEmail(body.get("userid").toString(), refreshToken);
+        Map<String, Object> resultMap = emailService.resetEmail(body.get("userid").toString(), refreshToken);
         return resultMap;
     }
 
 
+
+
     /**
-     * 사용자 패스워드를 만료하여, 초기화 하도록 메일을 발송한다.
+     * 사용자 계정을 생성하기 위하여, 이메일 발송
      *
      * @return the menu list
      */

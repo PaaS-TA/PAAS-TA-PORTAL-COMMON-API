@@ -306,7 +306,9 @@ public class UserService {
             /*
              * 여기서 에러나면 Exception으로 빠져버림
              */
+            logger.info("save UserInfo ::::::::::::::::::::::::::");
             createUser(userDetail);
+            logger.info("send Email :::::::::::::::::::::::::::: ");
             map = emailService.createEmail(userDetail.getUserId(), randomId);
         } catch (Exception e) {
             e.printStackTrace();
@@ -321,28 +323,29 @@ public class UserService {
      * 사용자 정보 인증
      * potalDB에 사용자 정보를 등록한후 이메일을 보낸다.
      *
-     * @param body the body
      * @return boolean
      * @throws IOException        the io exception
      * @throws MessagingException the messaging exception
      */
 
-    public Map expiredPassRequestUser(String userid, Map body) {
+    public Map resetRequestUser(Map body) {
         Map map = new HashMap();
         try {
             String randomId = RandomStringUtils.randomAlphanumeric(17).toUpperCase() + RandomStringUtils.randomAlphanumeric(2).toUpperCase();
-            UserDetail userDetail = new UserDetail();
-            userDetail.setUserId(userid);
+            UserDetail userDetail =  getUser(body.get("userid").toString());
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DATE, 1);
             userDetail.setAuthAccessTime(cal.getTime());
             userDetail.setAuthAccessCnt(0);
+            userDetail.setStatus("1");
+            userDetail.setRefreshToken(randomId);
             /*
              * 여기서 에러나면 Exception으로 빠져버림
              */
-            updateUser(userid, userDetail);
-
-            map = emailService.createEmail(userDetail.getUserId(), randomId);
+            logger.info("reset save UserInfo ::::::::::::::::::::::::::");
+            createUser(userDetail);
+            logger.info("reset send Email :::::::::::::::::::::::::::: ");
+            map = emailService.resetEmail(userDetail.getUserId(), randomId);
         } catch (Exception e) {
             e.printStackTrace();
             map.put("result", false);

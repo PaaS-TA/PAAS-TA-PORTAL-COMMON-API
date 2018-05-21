@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.POST;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
@@ -196,9 +197,9 @@ public class UserController {
      * @throws Exception the exception
      */
 
-    @PutMapping(V2_URL + "/users/{userid}/password/email")
-    public Map<String, Object> expiredUserEmail(@PathVariable String userid, @RequestBody Map body) throws Exception {
-        Map result = userService.expiredPassRequestUser(userid, body);
+    @PostMapping(V2_URL + "/users/password/email")
+    public Map<String, Object> expiredUserEmail(@RequestBody Map body) throws Exception {
+        Map result = userService.resetRequestUser(body);
         return result;
     }
 
