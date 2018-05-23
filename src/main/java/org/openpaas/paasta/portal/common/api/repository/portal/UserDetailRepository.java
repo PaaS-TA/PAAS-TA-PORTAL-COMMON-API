@@ -14,6 +14,8 @@ public interface UserDetailRepository extends JpaRepository<UserDetail, Integer>
 
     UserDetail findByUserId(String userId);
 
+    UserDetail findByUserIdAndRefreshToken(String userId, String refreshToken);
+
     int countByUserId(String userId);
 
     List<UserDetail> findAll();

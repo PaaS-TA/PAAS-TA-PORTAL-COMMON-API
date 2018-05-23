@@ -47,17 +47,17 @@ public class EmailConfig {
     @Value("${spring.mail.smtp.properties.maximumTotalQps}")
     String maximumTotalQps;
 
-    @Value("${spring.mail.smtp.properties.authUrl}")
-    String authUrl;
-
-    @Value("${spring.mail.smtp.properties.imgUrl}")
-    String imgUrl;
-
     @Value("${spring.mail.smtp.properties.subject}")
     String subject;
 
-    @Value("${spring.mail.smtp.properties.contextUrl}")
-    String contextUrl;
+    @Value("${spring.mail.smtp.properties.authUrl}")
+    String authUrl;
+
+    @Value("${spring.mail.smtp.properties.createUrl}")
+    String createUrl;
+
+    @Value("${spring.mail.smtp.properties.expiredUrl}")
+    String expiredUrl;
 
 
     public boolean sendEmail(String to, String contents) throws IOException, MessagingException {
@@ -128,7 +128,6 @@ public class EmailConfig {
         props.put("mail.smtp.subject", subject);
         props.put("mail.smtp.username", username);
         props.put("mail.smtp.userEmail", useremail);
-        props.put("mail.smtp.contextUrl", contextUrl);
         return props;
     }
 
@@ -226,12 +225,20 @@ public class EmailConfig {
         this.authUrl = authUrl;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public String getCreateUrl() {
+        return createUrl;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setCreateUrl(String createUrl) {
+        this.createUrl = createUrl;
+    }
+
+    public String getExpiredUrl() {
+        return expiredUrl;
+    }
+
+    public void setExpiredUrl(String expiredUrl) {
+        this.expiredUrl = expiredUrl;
     }
 
     public String getSubject() {
@@ -242,11 +249,4 @@ public class EmailConfig {
         this.subject = subject;
     }
 
-    public String getContextUrl() {
-        return contextUrl;
-    }
-
-    public void setContextUrl(String contextUrl) {
-        this.contextUrl = contextUrl;
-    }
 }

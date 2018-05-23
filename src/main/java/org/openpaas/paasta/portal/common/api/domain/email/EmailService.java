@@ -24,24 +24,60 @@ public class EmailService {
     @Autowired
     EmailConfig emailConfig;
 
-    public Map expiredEmail(String userId) {
-        logger.info("expiredEmail ::: " + userId);
+    public Map resetEmail(String userId, String refreshToken) {
+        logger.info("resetEmail ::: " + userId);
         Map map = new HashMap();
         try {
             ClassLoader classLoader = getClass().getClassLoader();
             File file = new File(classLoader.getResource("loginpass.html").getFile());
-            logger.debug("expiredEmail ::: " + file.getAbsolutePath());
+            logger.debug("resetEmail ::: " + file.getAbsolutePath());
             Document doc = Jsoup.parse(file, "UTF-8");
             Elements elementAhref = doc.select("a[href]");
             Elements elementSpan = doc.select("span");
             if (elementAhref.size() != 0) {
-                elementAhref.get(0).attr("href", emailConfig.getAuth() + "/" + emailConfig.getContextUrl() + "?userId=" + userId + "&refreshToken=");
+                String link = emailConfig.getAuthUrl() + "/" + emailConfig.getExpiredUrl() + "?userId=" + userId + "&refreshToken=" + refreshToken;
+                logger.debug("link : " + link);
+                elementAhref.get(0).attr("href", link);
             }
             if (elementSpan.size() != 0) {
                 elementSpan.get(0).childNode(0).attr("text", userId);
             }
 
-            if (emailConfig.sendEmail("swmoon@bluedigm.com", doc.outerHtml())) {
+            if (emailConfig.sendEmail(userId, doc.outerHtml())) {
+                map.put("result", true);
+                map.put("msg", "You have successfully completed the task.");
+            } else {
+                map.put("result", false);
+                map.put("msg", "System error.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("result", false);
+            map.put("msg", e.getMessage());
+        }
+        return map;
+
+    }
+
+
+    public Map createEmail(String userId, String refreshToken) {
+        logger.info("createEmail ::: " + userId);
+        Map map = new HashMap();
+        try {
+            ClassLoader classLoader = getClass().getClassLoader();
+            File file = new File(classLoader.getResource("loginemail.html").getFile());
+            logger.debug("createEmail ::: " + file.getAbsolutePath());
+            Document doc = Jsoup.parse(file, "UTF-8");
+            Elements elementAhref = doc.select("a[href]");
+
+            if (elementAhref.size() != 0) {
+                String link = emailConfig.getAuthUrl() + "/" + emailConfig.getCreateUrl() + "?userId=" + userId + "&refreshToken=" + refreshToken;
+                logger.debug("link : " + link);
+                elementAhref.get(0).attr("href", link);
+            }
+
+            if (emailConfig.sendEmail(userId, doc.outerHtml())) {
                 map.put("result", true);
                 map.put("msg", "You have successfully completed the task.");
             } else {

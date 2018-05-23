@@ -1,26 +1,31 @@
 package org.openpaas.paasta.portal.common.api.domain.user;
 
+import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 import org.apache.commons.lang.RandomStringUtils;
 import org.openpaas.paasta.portal.common.api.config.Constants;
+import org.openpaas.paasta.portal.common.api.config.JinqSource;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
 import org.openpaas.paasta.portal.common.api.config.dataSource.UaaConfig;
+import org.openpaas.paasta.portal.common.api.domain.email.EmailService;
+import org.openpaas.paasta.portal.common.api.entity.portal.BuildpackCategory;
 import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
 import org.openpaas.paasta.portal.common.api.entity.uaa.Users;
 import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.activation.DataHandler;
 import javax.persistence.EntityManager;
 import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
+import java.io.File;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
+
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -42,8 +47,10 @@ public class UserService {
     UserDetailRepository userDetailRepository;
 
     @Autowired
-    private UserService userService;
+    private EmailService emailService;
 
+    @Autowired
+    JinqSource jinqSource;
 
     /**
      * portal db에 등록된 UserDetail 수
@@ -66,6 +73,18 @@ public class UserService {
         UserDetail userDetail = userDetailRepository.findByUserId(userId);
         return userDetail;
     }
+
+
+    /**
+     * 사용자 상세 정보
+     *
+     * @return UserDetail user
+     */
+    public List<UserDetail> getUsers() {
+        List<UserDetail> userDetails = userDetailRepository.findAll();
+        return userDetails;
+    }
+
 
     /**
      * 사용자의 상세정보를 조회한다.
@@ -268,30 +287,73 @@ public class UserService {
      * @param body the body
      * @return boolean
      * @throws IOException        the io exception
+     * @throws MessagingException the messaging exception
      */
-//    @Transactional
-//    public boolean createRequestUser(HashMap body) throws IOExceptio {
-//
-//        HashMap map = new HashMap();
-//        Boolean bRtn = false;
-//        map.put("userId", body.get("userId"));
-//
-//        String randomId = RandomStringUtils.randomAlphanumeric(17).toUpperCase() + RandomStringUtils.randomAlphanumeric(2).toUpperCase();
-//        map.put("refreshToken", randomId);
-//        map.put("authAccessTime", new Date());
-//
-//        UserDetail userDetail = new UserDetail();
-//        userDetail.setUserId(body.get("userId").toString());
-//
-//        createUser(userDetail);
-//
-//        Boolean resultSendEmail = sendEmail(map);
-//        if (resultSendEmail) {
-//            bRtn = true;
-//        }
-//        return bRtn;
-//
-//    }
+
+    public Map createRequestUser(Map body) {
+        Map map = new HashMap();
+        try {
+            String randomId = RandomStringUtils.randomAlphanumeric(17).toUpperCase() + RandomStringUtils.randomAlphanumeric(2).toUpperCase();
+            UserDetail userDetail = new UserDetail();
+            userDetail.setUserId(body.get("userid").toString());
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DATE, 1);
+            userDetail.setAuthAccessTime(cal.getTime());
+            userDetail.setAuthAccessCnt(0);
+            userDetail.setAdminYn("N");
+            userDetail.setStatus("1");
+            userDetail.setRefreshToken(randomId);
+            /*
+             * 여기서 에러나면 Exception으로 빠져버림
+             */
+            logger.info("save UserInfo ::::::::::::::::::::::::::");
+            createUser(userDetail);
+            logger.info("send Email :::::::::::::::::::::::::::: ");
+            map = emailService.createEmail(userDetail.getUserId(), randomId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("result", false);
+            map.put("msg", e.getMessage());
+        }
+        return map;
+
+    }
+
+    /**
+     * 사용자 정보 인증
+     * potalDB에 사용자 정보를 등록한후 이메일을 보낸다.
+     *
+     * @return boolean
+     * @throws IOException        the io exception
+     * @throws MessagingException the messaging exception
+     */
+
+    public Map resetRequestUser(Map body) {
+        Map map = new HashMap();
+        try {
+            String randomId = RandomStringUtils.randomAlphanumeric(17).toUpperCase() + RandomStringUtils.randomAlphanumeric(2).toUpperCase();
+            UserDetail userDetail =  getUser(body.get("userid").toString());
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DATE, 1);
+            userDetail.setAuthAccessTime(cal.getTime());
+            userDetail.setAuthAccessCnt(0);
+            userDetail.setStatus("1");
+            userDetail.setRefreshToken(randomId);
+            /*
+             * 여기서 에러나면 Exception으로 빠져버림
+             */
+            logger.info("reset save UserInfo ::::::::::::::::::::::::::");
+            createUser(userDetail);
+            logger.info("reset send Email :::::::::::::::::::::::::::: ");
+            map = emailService.resetEmail(userDetail.getUserId(), randomId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("result", false);
+            map.put("msg", e.getMessage());
+        }
+        return map;
+
+    }
 
 
     /**
@@ -310,28 +372,10 @@ public class UserService {
      *
      * @return userInfo list
      */
-    public List<Map<String, Object>> getUserInfo(){
-        //List<Map<String,String>> userInfo = userMapper.getUserInfo();
-
-        EntityManager portalEm = uaaConfig.uaaEntityManager().getNativeEntityManagerFactory().createEntityManager();
-
-        CriteriaBuilder cb = portalEm.getCriteriaBuilder();
-        CriteriaQuery<Tuple> cq = cb.createTupleQuery();
-        Root<Users> from = cq.from(Users.class);
-
-        //SQL:Select
-        cq.multiselect(from.get("userName").alias("userName")
-                , from.get("id").alias("id"));
-
-        TypedQuery<Tuple> tq = portalEm.createQuery(cq);
-        List<Tuple> resultList = tq.getResultList();
-
-        List<Map<String, Object>> userInfo = resultList.stream().map(x -> new HashMap<String, Object>(){{
-            put("userName", x.get("userName"));
-            put("userGuid", x.get("id"));
-        }}).collect(Collectors.toList());
-
-        return userInfo;
+    public UserDetail getRefreshTokenUser(UserDetail userDetail) {
+        logger.info("getRefreshTokenUser :: " + userDetail.toString());
+        UserDetail data = userDetailRepository.findByUserIdAndRefreshToken(userDetail.getUserId(), userDetail.getRefreshToken());
+        return data;
     }
 
 }

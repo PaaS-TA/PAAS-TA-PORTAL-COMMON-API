@@ -59,9 +59,9 @@ dependencies {
     //EMAIL change javax.mail raw to spring-context-support javax.mail
     // https://mvnrepository.com/artifact/org.springframework/spring-context-support
     compile('org.springframework:spring-context-support')
-    compile('javax.mail:javax.mail-api:1.5.6')
+    compile('javax.mail:javax.mail-api')
     compile('javax.xml.bind:jaxb-api:2.2.12')
-
+    compile('javax.mail:mail:1.4.7')
     compile group: 'org.jsoup', name: 'jsoup', version: '1.9.2'
 
 
