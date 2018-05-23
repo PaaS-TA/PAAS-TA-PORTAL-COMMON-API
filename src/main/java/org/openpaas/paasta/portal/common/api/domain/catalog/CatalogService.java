@@ -560,16 +560,24 @@ public class CatalogService {
         }};
     }
 
-    public Map<String,Object> checkRoute(String host){
-        CatalogCc cc = catalogCcRepository.findByHost(host);
-        if(cc == null){
-            return new HashMap<String, Object>() {{
-                put("Result", "노중복");
-            }};
-        }
-        return new HashMap<String, Object>() {{
-            put("Result", "중복");
-        }};
+    public List<CatalogCc> getListRoutes() {
+        return catalogCcRepository.findAll();
     }
 
+
+
+    /**
+     *  앱 생성시 라우트 중복을 체크합니다.
+     *
+     */
+    public Map<String,Object> checkRoute(String host){
+        CatalogCc cc = catalogCcRepository.findByHost(host);
+        if(cc != null){
+            return new HashMap<String, Object>() {{
+                put("RESULT", Constants.RESULT_STATUS_FAIL);
+            }};}
+        return new HashMap<String, Object>() {{
+            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+        }};
+    }
 }

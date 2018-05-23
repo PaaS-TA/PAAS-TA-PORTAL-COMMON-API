@@ -1,5 +1,6 @@
 package org.openpaas.paasta.portal.common.api.domain.catalog;
 
+import org.openpaas.paasta.portal.common.api.entity.cc.CatalogCc;
 import org.openpaas.paasta.portal.common.api.entity.portal.BuildpackCategory;
 import org.openpaas.paasta.portal.common.api.entity.portal.CatalogHistory;
 import org.openpaas.paasta.portal.common.api.entity.portal.ServicepackCategory;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -313,9 +315,13 @@ public class CatalogController {
         return catalogService.insertHistroy(catalog);
     }
 
+    @GetMapping(V2_URL + "/routes")
+    public List<CatalogCc> getListRoutes(){
+        return catalogService.getListRoutes();
+    }
+
     @GetMapping(V2_URL + "/routes/{hostname}")
     public Map<String,Object> checkRoute(@PathVariable String hostname){
         return catalogService.checkRoute(hostname);
     }
-
 }
