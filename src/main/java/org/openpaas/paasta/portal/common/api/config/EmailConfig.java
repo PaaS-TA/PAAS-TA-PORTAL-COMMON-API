@@ -1,6 +1,8 @@
 package org.openpaas.paasta.portal.common.api.config;
 
 
+import org.openpaas.paasta.portal.common.api.domain.email.EmailController;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.context.annotation.Bean;
@@ -13,12 +15,19 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.Date;
 import java.util.Properties;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 @Configuration
 public class EmailConfig {
+
+
+    private static final Logger logger = getLogger(EmailController.class);
 
     @Value("${spring.mail.smtp.host}")
     String host;
@@ -60,20 +69,22 @@ public class EmailConfig {
     String expiredUrl;
 
 
-    public boolean sendEmail(String to, String contents) throws IOException, MessagingException {
+    public boolean sendEmail(String to, String contents) {
         Boolean bRtn = false;
         try {
-
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
             // 인증
             Authenticator auth = auth();
 
             // 메일 세션
             Session session = Session.getInstance(properties(), auth);
+            session.setDebug(true);
+
+
             MimeMessage msg = new MimeMessage(session);
             msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
             msg.addHeader("format", "flowed");
             msg.addHeader("Content-Transfer-Encoding", "8bit");
-
             msg.setDataHandler(new DataHandler(new ByteArrayDataSource(contents, "text/html")));
             msg.setSentDate(new Date());
             msg.setSubject(subject);
@@ -81,7 +92,10 @@ public class EmailConfig {
             msg.setFrom(new InternetAddress(to, username));
             msg.setReplyTo(InternetAddress.parse(to, false));
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to, false));
+
             Transport.send(msg);
+
+
             bRtn = true;
         } catch (IOException | MessagingException e) {
             e.printStackTrace();
@@ -94,11 +108,13 @@ public class EmailConfig {
     @Bean
     public MailProperties mailProperties() {
 
-        MailProperties mailProperties = new MailProperties();
-        mailProperties.setHost(host);
-        mailProperties.setPort(port);
-        mailProperties.setUsername(useremail);
-        mailProperties.setPassword(password);
+        MailProperties mailProperties = new MailProperties() {{
+            setHost(host);
+            setPort(port);
+            setUsername(useremail);
+            setPassword(password);
+        }};
+
         return mailProperties;
     }
 
@@ -117,17 +133,19 @@ public class EmailConfig {
     @Bean
     public Properties properties() {
         MailProperties mailProperties = mailProperties();
-        Properties props = new Properties();
-        // SSL 사용하는 경우
-        props.put("mail.smtp.host", mailProperties.getHost()); //SMTP Host
-        props.put("mail.smtp.socketFactory.port", mailProperties.getPort()); //SSL Port
-        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory"); //SSL Factory Class
-        props.put("mail.smtp.port", mailProperties.getPort());
-        props.put("mail.smtp.auth", auth); //Enabling SMTP Authentication
-        props.put("mail.smtp.maximumTotalQps", mailProperties);
-        props.put("mail.smtp.subject", subject);
-        props.put("mail.smtp.username", username);
-        props.put("mail.smtp.userEmail", useremail);
+        Properties props = new Properties() {{
+            // SSL 사용하는 경우
+            put("mail.smtp.host", mailProperties.getHost()); //SMTP Host
+            put("mail.smtp.socketFactory.port", mailProperties.getPort()); //SSL Port
+            put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory"); //SSL Factory Class
+            put("mail.smtp.port", mailProperties.getPort());
+            put("mail.smtp.auth", auth); //Enabling SMTP Authentication
+            put("mail.smtp.maximumTotalQps", mailProperties);
+            put("mail.smtp.subject", subject);
+            put("mail.smtp.username", username);
+            put("mail.smtp.userEmail", useremail);
+            put("mail.debug", "true");
+        }};
         return props;
     }
 
