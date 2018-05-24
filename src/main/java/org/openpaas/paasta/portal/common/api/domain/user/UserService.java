@@ -1,6 +1,6 @@
 package org.openpaas.paasta.portal.common.api.domain.user;
 
-import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
+
 import org.apache.commons.lang.RandomStringUtils;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
@@ -281,7 +281,6 @@ public class UserService {
      * @param body the body
      * @return boolean
      * @throws IOException        the io exception
-     * @throws MessagingException the messaging exception
      */
 
     public Map createRequestUser(Map body) {
@@ -319,7 +318,7 @@ public class UserService {
      *
      * @return boolean
      * @throws IOException        the io exception
-     * @throws MessagingException the messaging exception
+
      */
 
     public Map resetRequestUser(Map body) {
