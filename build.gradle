@@ -63,7 +63,7 @@ dependencies {
     compile('javax.xml.bind:jaxb-api:2.2.12')
     compile('javax.mail:mail:1.4.7')
     compile group: 'org.jsoup', name: 'jsoup', version: '1.9.2'
-
+    compile group: 'com.sun.xml.messaging.saaj', name: 'saaj-impl', version: '1.3'
 
 
     //DB
