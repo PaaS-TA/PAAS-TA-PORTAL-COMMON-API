@@ -17,7 +17,6 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.Date;
 import java.util.Properties;
 
@@ -80,7 +79,7 @@ public class EmailConfig {
             Session session = Session.getInstance(properties(), auth);
             session.setDebug(true);
 
-
+            logger.info("MimeMessage create :::: ");
             MimeMessage msg = new MimeMessage(session);
             msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
             msg.addHeader("format", "flowed");
@@ -92,14 +91,14 @@ public class EmailConfig {
             msg.setFrom(new InternetAddress(to, username));
             msg.setReplyTo(InternetAddress.parse(to, false));
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to, false));
-
+            logger.info("Sending :::: " + to);
             Transport.send(msg);
 
 
             bRtn = true;
         } catch (IOException | MessagingException e) {
             e.printStackTrace();
-
+            logger.info(e.getMessage());
         }
         return bRtn;
 
