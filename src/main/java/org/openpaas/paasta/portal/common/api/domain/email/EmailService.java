@@ -66,7 +66,7 @@ public class EmailService {
         Map map = new HashMap();
         try {
             logger.info("createEmail ::: ");
-            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            ClassLoader classLoader = getClass().getClassLoader();
             File file = new File(classLoader.getResource("loginemail.html").getFile());
             logger.info("createEmail ::: " + file.getAbsolutePath());
             Document doc = Jsoup.parse(file, "UTF-8");
