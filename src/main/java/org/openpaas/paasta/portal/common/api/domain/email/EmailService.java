@@ -67,10 +67,11 @@ public class EmailService {
         logger.info("createEmail ::: " + userId);
         Map map = new HashMap();
         try {
-            logger.info("createEmail ::: ");
             ClassLoader classLoader = getClass().getClassLoader();
-            File file = new File(classLoader.getResource("loginemail.html").getFile().replace("/etc/sv/monit/",""));
-            logger.info("createEmail ::: " + file.getAbsolutePath());
+            String path = classLoader.getResource("loginemail.html").getFile().replace("/etc/sv/monit/","");
+            logger.info("Path ::: " + path);
+            File file = new File(path);
+            logger.info("File  AbsolutePath ::: " + file.getCanonicalPath());
 
 
             Document doc = Jsoup.parse(file, "UTF-8");
