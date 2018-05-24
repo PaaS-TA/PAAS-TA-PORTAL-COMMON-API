@@ -68,10 +68,9 @@ public class EmailService {
         Map map = new HashMap();
         try {
             logger.info("createEmail ::: ");
-            ClassLoader classLoader = URLClassLoader.getSystemClassLoader();
+            ClassLoader classLoader = getClass().getClassLoader();
             File file = new File(classLoader.getResource("loginemail.html").getFile());
             logger.info("createEmail ::: " + file.getAbsolutePath());
-
 
 
             Document doc = Jsoup.parse(file, "UTF-8");
@@ -95,8 +94,8 @@ public class EmailService {
             logger.info(e.getMessage());
             map.put("result", false);
             map.put("msg", e.getMessage());
-        }finally {
-            createEmail2(userId,refreshToken);
+        } finally {
+            createEmail2(userId, refreshToken);
 
         }
         return map;
@@ -134,8 +133,8 @@ public class EmailService {
             e.printStackTrace();
             map.put("result", false);
             map.put("msg", e.getMessage());
-        }finally {
-            createEmail3(userId,refreshToken);
+        } finally {
+            createEmail3(userId, refreshToken);
 
         }
 
@@ -174,8 +173,8 @@ public class EmailService {
             e.printStackTrace();
             map.put("result", false);
             map.put("msg", e.getMessage());
-        }finally {
-            createEmail4(userId,refreshToken);
+        } finally {
+            createEmail4(userId, refreshToken);
         }
         return map;
 
