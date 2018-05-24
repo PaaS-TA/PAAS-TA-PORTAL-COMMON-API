@@ -65,15 +65,16 @@ public class EmailService {
         logger.info("createEmail ::: " + userId);
         Map map = new HashMap();
         try {
+            logger.info("createEmail ::: ");
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
             File file = new File(classLoader.getResource("loginemail.html").getFile());
-            logger.debug("createEmail ::: " + file.getAbsolutePath());
+            logger.info("createEmail ::: " + file.getAbsolutePath());
             Document doc = Jsoup.parse(file, "UTF-8");
             Elements elementAhref = doc.select("a[href]");
 
             if (elementAhref.size() != 0) {
                 String link = emailConfig.getAuthUrl() + "/" + emailConfig.getCreateUrl() + "?userId=" + userId + "&refreshToken=" + refreshToken;
-                logger.debug("link : " + link);
+                logger.info("link : " + link);
                 elementAhref.get(0).attr("href", link);
             }
 
