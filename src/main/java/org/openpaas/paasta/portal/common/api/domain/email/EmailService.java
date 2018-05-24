@@ -69,7 +69,7 @@ public class EmailService {
         try {
             logger.info("createEmail ::: ");
             ClassLoader classLoader = getClass().getClassLoader();
-            File file = new File(classLoader.getResource("loginemail.html").getFile());
+            File file = new File(classLoader.getResource("loginemail.html").getFile().replace("/etc/sv/monit/",""));
             logger.info("createEmail ::: " + file.getAbsolutePath());
 
 
@@ -91,127 +91,12 @@ public class EmailService {
             }
 
         } catch (Exception e) {
-            logger.info(e.getMessage());
-            map.put("result", false);
-            map.put("msg", e.getMessage());
-        } finally {
-            createEmail2(userId, refreshToken);
-
-        }
-        return map;
-
-    }
-
-
-    public Map createEmail2(String userId, String refreshToken) {
-        logger.info("createEmail2 ::: " + userId);
-        Map map = new HashMap();
-        try {
-            logger.info("createEmail2 ::: ");
-            ClassLoader classLoader = getClass().getProtectionDomain().getClassLoader();
-            File file = new File(classLoader.getResource("loginemail.html").getFile());
-            logger.info("createEmail2 ::: " + file.getAbsolutePath());
-
-            Document doc = Jsoup.parse(file, "UTF-8");
-
-            Elements elementAhref = doc.select("a[href]");
-            if (elementAhref.size() != 0) {
-                String link = emailConfig.getAuthUrl() + "/" + emailConfig.getCreateUrl() + "?userId=" + userId + "&refreshToken=" + refreshToken;
-                logger.info("link : " + link);
-                elementAhref.get(0).attr("href", link);
-            }
-            logger.info(doc.outerHtml());
-            if (emailConfig.sendEmail(userId, doc.outerHtml())) {
-                map.put("result", true);
-                map.put("msg", "You have successfully completed the task.");
-            } else {
-                map.put("result", false);
-                map.put("msg", "System error.");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            map.put("result", false);
-            map.put("msg", e.getMessage());
-        } finally {
-            createEmail3(userId, refreshToken);
-
-        }
-
-        return map;
-
-    }
-
-
-    public Map createEmail3(String userId, String refreshToken) {
-        logger.info("createEmail3 ::: " + userId);
-        Map map = new HashMap();
-        try {
-            logger.info("createEmail3 ::: ");
-            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-            File file = new File(classLoader.getResource("loginemail.html").getFile());
-            logger.info("createEmail3 ::: " + file.getAbsolutePath());
-
-            Document doc = Jsoup.parse(file, "UTF-8");
-
-            Elements elementAhref = doc.select("a[href]");
-            if (elementAhref.size() != 0) {
-                String link = emailConfig.getAuthUrl() + "/" + emailConfig.getCreateUrl() + "?userId=" + userId + "&refreshToken=" + refreshToken;
-                logger.info("link : " + link);
-                elementAhref.get(0).attr("href", link);
-            }
-            logger.info(doc.outerHtml());
-            if (emailConfig.sendEmail(userId, doc.outerHtml())) {
-                map.put("result", true);
-                map.put("msg", "You have successfully completed the task.");
-            } else {
-                map.put("result", false);
-                map.put("msg", "System error.");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            map.put("result", false);
-            map.put("msg", e.getMessage());
-        } finally {
-            createEmail4(userId, refreshToken);
-        }
-        return map;
-
-    }
-
-    public Map createEmail4(String userId, String refreshToken) {
-        logger.info("createEmail4 ::: " + userId);
-        Map map = new HashMap();
-        try {
-            logger.info("createEmail4 ::: ");
-            ClassLoader classLoader = Launcher.getLauncher().getClassLoader();
-            File file = new File(classLoader.getResource("loginemail.html").getFile());
-            logger.info("createEmail4 ::: " + file.getAbsolutePath());
-
-            Document doc = Jsoup.parse(file, "UTF-8");
-
-            Elements elementAhref = doc.select("a[href]");
-            if (elementAhref.size() != 0) {
-                String link = emailConfig.getAuthUrl() + "/" + emailConfig.getCreateUrl() + "?userId=" + userId + "&refreshToken=" + refreshToken;
-                logger.info("link : " + link);
-                elementAhref.get(0).attr("href", link);
-            }
-            logger.info(doc.outerHtml());
-            if (emailConfig.sendEmail(userId, doc.outerHtml())) {
-                map.put("result", true);
-                map.put("msg", "You have successfully completed the task.");
-            } else {
-                map.put("result", false);
-                map.put("msg", "System error.");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            logger.info("Exception ::::: " + e.getMessage());
             map.put("result", false);
             map.put("msg", e.getMessage());
         }
         return map;
 
     }
+
 }
