@@ -76,8 +76,8 @@ public class ServicepackCategory {
     private String classificationSummary;
 
 
-    @Transient
-    private String app_bind_parameter;
+//    @Transient
+//    private String app_bind_parameter;
 
     @Transient
     private String searchKeyword;
@@ -228,13 +228,13 @@ public class ServicepackCategory {
         this.classificationSummary = classificationSummary;
     }
 
-    public String getApp_bind_parameter() {
-        return app_bind_parameter;
-    }
-
-    public void setApp_bind_parameter(String app_bind_parameter) {
-        this.app_bind_parameter = app_bind_parameter;
-    }
+//    public String getApp_bind_parameter() {
+//        return app_bind_parameter;
+//    }
+//
+//    public void setApp_bind_parameter(String app_bind_parameter) {
+//        this.app_bind_parameter = app_bind_parameter;
+//    }
 
     public String getSearchKeyword() {
         return searchKeyword;
@@ -265,7 +265,7 @@ public class ServicepackCategory {
                 ", appBindYn='" + appBindYn + '\'' +
                 ", classificationValue='" + classificationValue + '\'' +
                 ", classificationSummary='" + classificationSummary + '\'' +
-                ", app_bind_parameter='" + app_bind_parameter + '\'' +
+//                ", app_bind_parameter='" + app_bind_parameter + '\'' +
                 ", searchKeyword='" + searchKeyword + '\'' +
                 '}';
     }

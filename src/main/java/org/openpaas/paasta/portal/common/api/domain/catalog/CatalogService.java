@@ -312,9 +312,9 @@ public class CatalogService {
      */
     public Map<String, Object> insertServicePackCatalog(ServicepackCategory param) {
         logger.info("insertServicePackCatalog :: " + param.toString());
-        if (param.getApp_bind_parameter() != null) {
-            param.setAppBindParameter(param.getApp_bind_parameter());
-        }
+//        if (param.getApp_bind_parameter() != null) {
+//            param.setAppBindParameter(param.getApp_bind_parameter());
+//        }
         servicepackCategoryRepository.save(param);
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
@@ -414,9 +414,9 @@ public class CatalogService {
     public Map<String, Object> updateServicePackCatalog(ServicepackCategory param) {
         logger.info("updateServicePackCatalog :: " + param.toString());
 
-        if (param.getApp_bind_parameter() != null) {
-            param.setAppBindParameter(param.getApp_bind_parameter());
-        }
+//        if (param.getApp_bind_parameter() != null) {
+//            param.setAppBindParameter(param.getApp_bind_parameter());
+//        }
 
         ServicepackCategory update = servicepackCategoryRepository.findOne(param.getNo());
         param.setCreated(update.getCreated());
