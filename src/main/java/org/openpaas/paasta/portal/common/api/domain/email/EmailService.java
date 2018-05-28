@@ -26,17 +26,12 @@ public class EmailService {
     @Autowired
     EmailConfig emailConfig;
 
-    @Value("classpath:loginpass.html")
-    private Resource res;
-
-
-
     public Map resetEmail(String userId, String refreshToken) {
         logger.info("resetEmail ::: " + userId);
         Map map = new HashMap();
         try {
             ClassLoader classLoader = getClass().getClassLoader();
-            File file = new File(classLoader.getResource("loginpass.html").getFile());
+            File file = new File(classLoader.getResource("template/loginpass.html").getFile());
             logger.debug("resetEmail ::: " + file.getAbsolutePath());
             Document doc = Jsoup.parse(file, "UTF-8");
             Elements elementAhref = doc.select("a[href]");
@@ -72,7 +67,12 @@ public class EmailService {
         logger.info("createEmail ::: " + userId);
         Map map = new HashMap();
         try {
-            Document doc = Jsoup.parse(res.getFile(), "UTF-8");
+
+            ClassLoader classLoader = getClass().getClassLoader();
+            File file = new File(classLoader.getResource("template/loginemail.html").getFile());
+            logger.debug("resetEmail ::: " + file.getAbsolutePath());
+
+            Document doc = Jsoup.parse(file, "UTF-8");
             logger.info("File  Contents :: " + doc.outerHtml());
 
             Elements elementAhref = doc.select("a[href]");

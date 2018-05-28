@@ -143,7 +143,7 @@ public class EmailConfig {
             put("mail.smtp.subject", subject);
             put("mail.smtp.username", username);
             put("mail.smtp.userEmail", useremail);
-            put("mail.debug", "true");
+//            put("mail.debug", "true");
         }};
         return props;
     }
