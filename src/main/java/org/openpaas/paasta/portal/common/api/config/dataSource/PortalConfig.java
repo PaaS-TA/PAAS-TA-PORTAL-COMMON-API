@@ -1,5 +1,6 @@
 package org.openpaas.paasta.portal.common.api.config.dataSource;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import javax.sql.DataSource;
 import java.util.HashMap;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
  * Created by indra on 2018-02-07.
  */
@@ -25,12 +28,32 @@ import java.util.HashMap;
 )
 public class PortalConfig {
 
+    private static final Logger logger = getLogger(PortalConfig.class);
+
     @Value("${spring.datasource.portal.driver-class-name}") String portalDriverClassName;
     @Value("${spring.datasource.portal.url}") String portalUrl;
     @Value("${spring.datasource.portal.username}") String portalUsername;
     @Value("${spring.datasource.portal.password}") String portalPassword;
     @Value("${spring.jpa.hibernate.ddl-auto}") String ddlAuto;
     @Value("${spring.jpa.hibernate.naming.strategy}") String dialect;
+
+
+    @Bean
+    public boolean loggerPrintConfig() {
+
+
+        logger.info("[PotalConfig]=====================================================================");
+        logger.info(portalDriverClassName+"portalDriverClassName");
+        logger.info(portalUrl+"portalUrl");
+        logger.info(portalUsername+"portalUsername");
+        logger.info(portalPassword+"portalPassword");
+        logger.info(ddlAuto+"PotalddlAuto");
+        logger.info(dialect+"Potaldialect");
+        logger.info("==================================================================================");
+
+
+        return true;
+    }
 
 
     @Bean

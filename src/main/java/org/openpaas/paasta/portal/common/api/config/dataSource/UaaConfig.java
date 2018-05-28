@@ -1,5 +1,6 @@
 package org.openpaas.paasta.portal.common.api.config.dataSource;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import javax.sql.DataSource;
 import java.util.HashMap;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
  * Created by indra on 2018-02-07.
  */
@@ -24,12 +27,30 @@ import java.util.HashMap;
 )
 public class UaaConfig {
 
+    private static final Logger logger = getLogger(UaaConfig.class);
+
     @Value("${spring.datasource.uaa.driver-class-name}") String uaaDriverClassName;
     @Value("${spring.datasource.uaa.url}") String uaaUrl;
     @Value("${spring.datasource.uaa.username}") String uaaUsername;
     @Value("${spring.datasource.uaa.password}") String uaaPassword;
     @Value("${spring.jpa.hibernate.ddl-auto}") String ddlAuto;
     @Value("${spring.jpa.hibernate.naming.strategy}") String dialect;
+
+
+    @Bean
+    public boolean loggerPrintConfig() {
+
+        logger.info("[UaaConfig]=======================================================================");
+        logger.info(uaaDriverClassName+"uaaDriverClassName");
+        logger.info(uaaUrl+"uaaUrl");
+        logger.info(uaaUsername+"uaaUsername");
+        logger.info(uaaPassword+"uaaPassword");
+        logger.info(ddlAuto+"UaaAuto");
+        logger.info(dialect+"Uaadialect");
+        logger.info("==================================================================================");
+
+        return true;
+    }
 
 
     @Bean

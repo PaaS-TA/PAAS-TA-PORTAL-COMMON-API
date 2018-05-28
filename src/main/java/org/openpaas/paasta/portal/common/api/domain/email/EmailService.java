@@ -7,11 +7,11 @@ import org.openpaas.paasta.portal.common.api.config.EmailConfig;
 import org.openpaas.paasta.portal.common.api.domain.service.ServiceService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import sun.misc.Launcher;
 
 import java.io.File;
-import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +25,11 @@ public class EmailService {
 
     @Autowired
     EmailConfig emailConfig;
+
+    @Value("classpath:loginpass.html")
+    private Resource res;
+
+
 
     public Map resetEmail(String userId, String refreshToken) {
         logger.info("resetEmail ::: " + userId);
@@ -67,14 +72,8 @@ public class EmailService {
         logger.info("createEmail ::: " + userId);
         Map map = new HashMap();
         try {
-            ClassLoader classLoader = getClass().getClassLoader();
-            String path = classLoader.getResource("loginemail.html").getFile().replace("/etc/sv/monit/","");
-            logger.info("Path ::: " + path);
-            File file = new File(path);
-            logger.info("File  AbsolutePath ::: " + file.getCanonicalPath());
-
-
-            Document doc = Jsoup.parse(file, "UTF-8");
+            Document doc = Jsoup.parse(res.getFile(), "UTF-8");
+            logger.info("File  Contents :: " + doc.outerHtml());
 
             Elements elementAhref = doc.select("a[href]");
             if (elementAhref.size() != 0) {

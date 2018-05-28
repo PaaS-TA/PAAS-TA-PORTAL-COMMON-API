@@ -1,5 +1,6 @@
 package org.openpaas.paasta.portal.common.api.config.dataSource;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import javax.sql.DataSource;
 import java.util.HashMap;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
  * Created by indra on 2018-02-07.
  */
@@ -24,12 +27,29 @@ import java.util.HashMap;
 )
 public class CcConfig {
 
+    private static final Logger logger = getLogger(CcConfig.class);
+
     @Value("${spring.datasource.cc.driver-class-name}") String ccDriverClassName;
     @Value("${spring.datasource.cc.url}") String ccUrl;
     @Value("${spring.datasource.cc.username}") String ccUsername;
     @Value("${spring.datasource.cc.password}") String ccPassword;
     @Value("${spring.jpa.hibernate.ddl-auto}") String ddlAuto;
     @Value("${spring.jpa.hibernate.naming.strategy}") String dialect;
+
+
+    @Bean
+    public boolean loggerPrintConfig() {
+
+        logger.info("[CcConfig]=======================================================================");
+        logger.info(ccDriverClassName+"ccDriverClassName");
+        logger.info(ccUrl+"ccUrl");
+        logger.info(ccUsername+"ccUsername");
+        logger.info(ccPassword+"ccPassword");
+        logger.info(ddlAuto+"CcddlAuto");
+        logger.info(dialect+"Ccdialect");
+        logger.info("==================================================================================");
+        return true;
+    }
 
 
     @Bean
