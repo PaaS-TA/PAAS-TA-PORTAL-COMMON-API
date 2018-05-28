@@ -156,9 +156,11 @@ public class UserController {
      * @throws Exception the exception
      */
     @GetMapping(V2_URL + "/users")
-    public List<UserDetail> getAllUserName() throws Exception {
-        List<UserDetail> userInfos = userService.getUsers();
-        return userInfos;
+    public Map<String, Object> getAllUserName() throws Exception {
+        List<Map<String, Object>> userInfo = userService.getUserInfo();
+        Map<String, Object> resultMap = new HashMap();
+        resultMap.put("userInfo", userInfo);
+        return resultMap;
     }
 
 
