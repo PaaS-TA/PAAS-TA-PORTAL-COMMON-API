@@ -1,5 +1,7 @@
 package org.openpaas.paasta.portal.common.api.domain.email;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -8,12 +10,21 @@ import org.openpaas.paasta.portal.common.api.domain.service.ServiceService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 
+import javax.validation.constraints.NotNull;
 import java.io.File;
+import java.net.JarURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -26,14 +37,20 @@ public class EmailService {
     @Autowired
     EmailConfig emailConfig;
 
+
+    @Value("classpath:bootstrap.yml")
+    Resource loginpass;
+
+
     public Map resetEmail(String userId, String refreshToken) {
         logger.info("resetEmail ::: " + userId);
         Map map = new HashMap();
+        ClassPathResource cpr = new ClassPathResource("template/loginpass.html");
+
         try {
-            ClassLoader classLoader = getClass().getClassLoader();
-            File file = new File(classLoader.getResource("template/loginpass.html").getFile());
-            logger.debug("resetEmail ::: " + file.getAbsolutePath());
-            Document doc = Jsoup.parse(file, "UTF-8");
+            byte[] bdata = FileCopyUtils.copyToByteArray(cpr.getInputStream());
+            String data = new String(bdata, StandardCharsets.UTF_8);
+            Document doc = Jsoup.parse(data);
             Elements elementAhref = doc.select("a[href]");
             Elements elementSpan = doc.select("span");
             if (elementAhref.size() != 0) {
@@ -57,23 +74,21 @@ public class EmailService {
             e.printStackTrace();
             map.put("result", false);
             map.put("msg", e.getMessage());
+        } finally {
+            IOUtils.closeQuietly();
         }
         return map;
 
     }
 
-
     public Map createEmail(String userId, String refreshToken) {
         logger.info("createEmail ::: " + userId);
         Map map = new HashMap();
         try {
-
-            ClassLoader classLoader = getClass().getClassLoader();
-            File file = new File(classLoader.getResource("template/loginemail.html").getFile());
-            logger.debug("resetEmail ::: " + file.getAbsolutePath());
-
-            Document doc = Jsoup.parse(file, "UTF-8");
-            logger.info("File  Contents :: " + doc.outerHtml());
+            ClassPathResource cpr = new ClassPathResource("template/loginemail.html");
+            byte[] bdata = FileCopyUtils.copyToByteArray(cpr.getInputStream());
+            String data = new String(bdata, StandardCharsets.UTF_8);
+            Document doc = Jsoup.parse(data);
 
             Elements elementAhref = doc.select("a[href]");
             if (elementAhref.size() != 0) {
@@ -91,6 +106,7 @@ public class EmailService {
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
             logger.info("Exception ::::: " + e.getMessage());
             map.put("result", false);
             map.put("msg", e.getMessage());
