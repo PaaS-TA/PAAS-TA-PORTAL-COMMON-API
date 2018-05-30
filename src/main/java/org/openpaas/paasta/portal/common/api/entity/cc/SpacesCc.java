@@ -33,32 +33,22 @@ import javax.persistence.*;
             resultClass = SpacesCc.class
     ),
     @NamedNativeQuery(name = "SpacesCc.allByOrganizationIdList",
-            query = "SELECT " +
-                    "    space_1.id, " +
-                    "    space_2.applicationCount, " +
-                    "    space_1.name " +
-                    "FROM " +
-                    "(SELECT * FROM spaces s1 WHERE 1=1 " +
-                    "AND s1.organization_id = ? " +
-                    ") space_1 " +
-                    "LEFT OUTER JOIN " +
-                    "(SELECT " +
-                    "    DISTINCT (space_all.space_id) AS spaceId, " +
-                    "    (SELECT COUNT(a.id) FROM apps a WHERE a.id = space_all.space_id) AS applicationCount, " +
-                    "    (SELECT s2.name FROM spaces s2 WHERE s2.id = space_all.space_id) AS spaceName " +
-                    "FROM " +
-                    "(SELECT * FROM spaces_auditors " +
-                    "    UNION ALL " +
-                    "SELECT * FROM spaces_developers " +
-                    "    UNION ALL " +
-                    "SELECT * FROM spaces_managers) space_all " +
-                    "WHERE 1=1 " +
-                    "   AND EXISTS " +
-                    "   (SELECT s.id FROM spaces s WHERE s.id = space_all.space_id AND s.organization_id = ?) " +
-                    "   GROUP BY space_all.space_id " +
-                    ") space_2 " +
-                    "ON space_1.id = space_2.spaceId " +
-                    "ORDER BY space_1.id ASC",
+            query = "SELECT MAX(spaceId) as id ,spaceNm as name ,SUM(appCnt) as applicationCount " +
+                    "FROM ( " +
+                    "   SELECT s.id spaceId, s.name spaceNm, CASE WHEN a.guid is NULL THEN 0 ELSE 1 END appCnt " +
+                    "   FROM spaces s full outer join apps a on s.guid = a.space_guid" +
+                    "   WHERE 1=1 " +
+                    "   AND s.organization_id = ? " +
+                    "   AND EXISTS (SELECT organization_id FROM " +
+                    "                   (SELECT organization_id FROM organizations_managers " +
+                    "                          UNION ALL " +
+                    "                      SELECT organization_id FROM organizations_billing_managers " +
+                    "                          UNION ALL " +
+                    "                      SELECT organization_id FROM organizations_auditors " +
+                    "                   ) org_role_all " +
+                    "                WHERE org_role_all.organization_id = ?) " +
+                    ") SPACE_INFO " +
+                    "GROUP BY spaceNm ",
             resultClass = SpacesCc.class
     )
 })
