@@ -12,7 +12,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "organizations")
-public class OrganizationsToCc {
+public class OrganizationsTolCc {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
