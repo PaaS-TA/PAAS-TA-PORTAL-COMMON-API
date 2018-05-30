@@ -144,8 +144,8 @@ public class AdminMainService {
         Query q = null;
         if(null != organizationId && !("").equals(organizationId)) {
             q = ccEm.createNamedQuery("SpacesCc.allByOrganizationIdList");
-            q.setParameter(1, organizationId);
-            q.setParameter(2, organizationId);
+            q.setParameter(1, Integer.parseInt(organizationId));
+            q.setParameter(2, Integer.parseInt(organizationId));
         } else {
             q = ccEm.createNamedQuery("SpacesCc.allList");
         }
