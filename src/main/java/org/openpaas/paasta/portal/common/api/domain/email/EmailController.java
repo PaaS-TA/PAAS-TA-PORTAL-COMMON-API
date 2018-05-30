@@ -57,4 +57,15 @@ public class EmailController {
         return resultMap;
     }
 
+    @PostMapping( "/v2" + "/email/inviteOrg" )
+    public Map<String, Object> inviteOrgEmail(@RequestBody Map<String, Object> body) {
+        String refreshToken = body.get( "refreshToken" ).toString();
+        if (refreshToken == null)
+            refreshToken = "";
+
+        final String userId = body.get( "userId" ).toString();
+        final String orgName = body.get( "orgName" ).toString();
+
+        return emailService.inviteOrgEmail( userId, orgName, refreshToken );
+    }
 }

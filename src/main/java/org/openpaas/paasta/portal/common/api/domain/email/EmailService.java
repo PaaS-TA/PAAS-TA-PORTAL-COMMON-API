@@ -49,7 +49,7 @@ public class EmailService {
 
         try {
             byte[] bdata = FileCopyUtils.copyToByteArray(cpr.getInputStream());
-            String data = new String(bdata, StandardCharsets.UTF_8);
+            String data = new String(bdata, emailConfig.getCharset());
             Document doc = Jsoup.parse(data);
             Elements elementAhref = doc.select("a[href]");
             Elements elementSpan = doc.select("span");
@@ -87,7 +87,7 @@ public class EmailService {
         try {
             ClassPathResource cpr = new ClassPathResource("template/loginemail.html");
             byte[] bdata = FileCopyUtils.copyToByteArray(cpr.getInputStream());
-            String data = new String(bdata, StandardCharsets.UTF_8);
+            String data = new String(bdata, emailConfig.getCharset());
             Document doc = Jsoup.parse(data);
 
             Elements elementAhref = doc.select("a[href]");
@@ -112,7 +112,52 @@ public class EmailService {
             map.put("msg", e.getMessage());
         }
         return map;
-
     }
 
+    public Map inviteOrgEmail(String userId, String orgName, String refreshToken) {
+        logger.info("createEmail ::: " + userId);
+        Map map = new HashMap();
+        try {
+            ClassPathResource cpr = new ClassPathResource("template/invitation.html");
+            byte[] bdata = FileCopyUtils.copyToByteArray(cpr.getInputStream());
+            String data = new String(bdata, emailConfig.getCharset());
+            Document doc = Jsoup.parse(data);
+
+            final Elements elementAhref = doc.select("a[href]");
+            if (elementAhref.size() != 0) {
+                final String link = String.format( "%s/%s?userId=%s&orgName=%s&refreshToken=%s",
+                    emailConfig.getAuthUrl(), emailConfig.getInviteUrl(), userId, orgName, refreshToken );
+                logger.info("link : {}", link);
+                elementAhref.get(0).attr("href", link);
+            }
+
+            final Elements elementSpanId = doc.select( "span[id=paasta_id]" );
+            if (elementSpanId.size() >= 0) {
+                logger.info("invite user id : {}", userId);
+                elementSpanId.get( 0 ).text( userId );
+            }
+
+            final Elements elementSpanOrg = doc.select( "span[id=paasta_org]" );
+            if (elementSpanOrg.size() >= 0) {
+                logger.info( "invite {} into org : {}", userId, orgName );
+                elementSpanOrg.get( 0 ).text( orgName );
+            }
+
+            logger.info(doc.outerHtml());
+            if (emailConfig.sendEmail(userId, doc.outerHtml())) {
+                map.put("result", true);
+                map.put("msg", "You have successfully completed the task.");
+            } else {
+                map.put("result", false);
+                map.put("msg", "System error.");
+            }
+        } catch (Exception e) {
+            logger.info("Exception (Simple) ::::: {}", e.getMessage());
+            logger.info("Exception (Stacktrace) ::::: ", e);
+            map.put("result", false);
+            map.put("msg", e.getMessage());
+        }
+
+        return map;
+    }
 }
