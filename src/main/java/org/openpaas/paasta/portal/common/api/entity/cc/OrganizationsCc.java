@@ -50,18 +50,22 @@ public class OrganizationsCc {
 
 //    @Formula("(SELECT COUNT(o.id) FROM organizations o)")
     @JsonIgnore
+    @Formula("COALESCE((SELECT COUNT(o.id) FROM organizations o),0)")
     private int organizationCount;
 
 //    @Formula("SUM(COALESCE((SELECT COUNT(s.organization_id) FROM spaces s WHERE s.organization_id = id GROUP BY s.organization_id), 0))")
     @JsonIgnore
+    @Formula("COALESCE((SELECT COUNT(*) FROM spaces s, organizations o WHERE s.organization_id IN (o.id)),0)")
     private int spaceCount;
 
 //    @Formula("SUM(COALESCE((SELECT COUNT(a.id) FROM apps a WHERE a.space_guid IN (SELECT s.guid FROM spaces s WHERE s.organization_id = id)), 0))")
     @JsonIgnore
+    @Formula("COALESCE((SELECT COUNT(*) FROM apps a WHERE a.space_guid IN (SELECT s.guid FROM spaces s, organizations o WHERE s.organization_id = o.id)),0)")
     private int applicationCount;
 
 //    @Formula("SUM(COALESCE((SELECT COUNT(*) FROM organizations_users ou WHERE ou.organization_id = id GROUP BY ou.organization_id), 0))")
     @JsonIgnore
+    @Formula("COALESCE((SELECT COUNT(*) FROM organizations_users ou, organizations o WHERE ou.organization_id IN (o.id)),0)")
     private int userCount;
 
 
