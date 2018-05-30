@@ -1,5 +1,6 @@
 package org.openpaas.paasta.portal.common.api.entity.cc;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -47,16 +48,20 @@ public class OrganizationsCc {
     @Column(name = "default_isolation_segment_guid")
     private String defaultIsolationSegmentGuid;
 
-    @Formula("(SELECT COUNT(o.id) FROM organizations o)")
+//    @Formula("(SELECT COUNT(o.id) FROM organizations o)")
+    @JsonIgnore
     private int organizationCount;
 
-    @Formula("SUM(COALESCE((SELECT COUNT(s.organization_id) FROM spaces s WHERE s.organization_id = id GROUP BY s.organization_id), 0))")
+//    @Formula("SUM(COALESCE((SELECT COUNT(s.organization_id) FROM spaces s WHERE s.organization_id = id GROUP BY s.organization_id), 0))")
+    @JsonIgnore
     private int spaceCount;
 
-    @Formula("SUM(COALESCE((SELECT COUNT(a.id) FROM apps a WHERE a.space_guid IN (SELECT s.guid FROM spaces s WHERE s.organization_id = id)), 0))")
+//    @Formula("SUM(COALESCE((SELECT COUNT(a.id) FROM apps a WHERE a.space_guid IN (SELECT s.guid FROM spaces s WHERE s.organization_id = id)), 0))")
+    @JsonIgnore
     private int applicationCount;
 
-    @Formula("SUM(COALESCE((SELECT COUNT(*) FROM organizations_users ou WHERE ou.organization_id = id GROUP BY ou.organization_id), 0))")
+//    @Formula("SUM(COALESCE((SELECT COUNT(*) FROM organizations_users ou WHERE ou.organization_id = id GROUP BY ou.organization_id), 0))")
+    @JsonIgnore
     private int userCount;
 
 
