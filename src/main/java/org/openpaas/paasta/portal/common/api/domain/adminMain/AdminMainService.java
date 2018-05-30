@@ -4,7 +4,7 @@ import org.jinq.orm.stream.JinqStream;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
 import org.openpaas.paasta.portal.common.api.config.dataSource.CcConfig;
 import org.openpaas.paasta.portal.common.api.entity.cc.OrganizationsCc;
-import org.openpaas.paasta.portal.common.api.entity.cc.OrganizationsTolCc;
+import org.openpaas.paasta.portal.common.api.entity.cc.OrganizationsToCc;
 import org.openpaas.paasta.portal.common.api.entity.cc.SpacesCc;
 import org.openpaas.paasta.portal.common.api.repository.cc.SpacesCcRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ public class AdminMainService {
     }
 
     public Map<String, Object>getTotalOrganizationList() {  //Map<String, Object> reqParam
-        JinqStream<OrganizationsTolCc> streams = jinqSource.streamAllCc(OrganizationsTolCc.class);
+        JinqStream<OrganizationsToCc> streams = jinqSource.streamAllCc(OrganizationsToCc.class);
 
 //        if(null != reqParam.get("organizationId")) {
 //            int id = Integer.parseInt(reqParam.get("organizationId").toString());
