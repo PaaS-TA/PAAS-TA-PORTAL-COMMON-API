@@ -52,6 +52,9 @@ public class BuildpackCategory {
     @Column(name = "app_sample_file_path")
     private String appSampleFilePath;
 
+    @Column(name = "doc_file_url")
+    private String docFileUrl;
+
     @Column(name = "app_sample_file_size")
     private String appSampleFileSize;
 
@@ -167,6 +170,14 @@ public class BuildpackCategory {
         this.appSampleFileSize = appSampleFileSize;
     }
 
+    public String getDocFileUrl() {
+        return docFileUrl;
+    }
+
+    public void setDocFileUrl(String docFileUrl) {
+        this.docFileUrl = docFileUrl;
+    }
+
     public String getUserId() {
         return userId;
     }
@@ -241,6 +252,7 @@ public class BuildpackCategory {
                 ", classification='" + classification + '\'' +
                 ", summary='" + summary + '\'' +
                 ", description='" + description + '\'' +
+                ", docFileUrl='" + docFileUrl + '\'' +
                 ", buildPackName='" + buildPackName + '\'' +
                 ", thumbImgName='" + thumbImgName + '\'' +
                 ", thumbImgPath='" + thumbImgPath + '\'' +

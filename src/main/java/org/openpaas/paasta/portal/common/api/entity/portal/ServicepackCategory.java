@@ -41,6 +41,10 @@ public class ServicepackCategory {
     @Column(name = "thumb_img_path")
     private String thumbImgPath;
 
+    @Column(name = "doc_file_url")
+    private String docFileUrl;
+
+
     @Column(name = "use_yn", nullable = false)
     private String useYn;
 
@@ -144,6 +148,14 @@ public class ServicepackCategory {
 
     public void setThumbImgPath(String thumbImgPath) {
         this.thumbImgPath = thumbImgPath;
+    }
+
+    public String getDocFileUrl() {
+        return docFileUrl;
+    }
+
+    public void setDocFileUrl(String docFileUrl) {
+        this.docFileUrl = docFileUrl;
     }
 
     public String getUseYn() {
@@ -255,6 +267,7 @@ public class ServicepackCategory {
                 ", servicePackName='" + servicePackName + '\'' +
                 ", thumbImgName='" + thumbImgName + '\'' +
                 ", thumbImgPath='" + thumbImgPath + '\'' +
+                ", docFileUrl='" + docFileUrl + '\'' +
                 ", useYn='" + useYn + '\'' +
                 ", userId='" + userId + '\'' +
                 ", created=" + created +
