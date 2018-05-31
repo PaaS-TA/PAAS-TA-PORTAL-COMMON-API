@@ -39,14 +39,14 @@ import javax.persistence.*;
                     "   FROM spaces s full outer join apps a on s.guid = a.space_guid" +
                     "   WHERE 1=1 " +
                     "   AND s.organization_id = ? " +
-                    "   AND EXISTS (SELECT organization_id FROM " +
-                    "                   (SELECT organization_id FROM organizations_managers " +
-                    "                          UNION ALL " +
-                    "                      SELECT organization_id FROM organizations_billing_managers " +
-                    "                          UNION ALL " +
-                    "                      SELECT organization_id FROM organizations_auditors " +
-                    "                   ) org_role_all " +
-                    "                WHERE org_role_all.organization_id = ?) " +
+//                    "   AND EXISTS (SELECT organization_id FROM " +
+//                    "                   (SELECT organization_id FROM organizations_managers " +
+//                    "                          UNION ALL " +
+//                    "                      SELECT organization_id FROM organizations_billing_managers " +
+//                    "                          UNION ALL " +
+//                    "                      SELECT organization_id FROM organizations_auditors " +
+//                    "                   ) org_role_all " +
+//                    "                WHERE org_role_all.organization_id = ?) " +
                     ") SPACE_INFO " +
                     "GROUP BY spaceNm ",
             resultClass = SpacesCc.class
