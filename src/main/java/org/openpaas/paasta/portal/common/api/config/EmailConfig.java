@@ -17,6 +17,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.Properties;
 
@@ -67,6 +68,12 @@ public class EmailConfig {
     @Value("${spring.mail.smtp.properties.expiredUrl}")
     String expiredUrl;
 
+    @Value("${spring.mail.smtp.properties.charset}")
+    String charset;
+
+    @Value("${spring.mail.smtp.properties.inviteUrl}")
+    String inviteUrl;
+
 
     public boolean sendEmail(String to, String contents) {
         Boolean bRtn = false;
@@ -81,13 +88,13 @@ public class EmailConfig {
 
             logger.info("MimeMessage create :::: ");
             MimeMessage msg = new MimeMessage(session);
-            msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
+            msg.addHeader("Content-type", "text/html; charset=" + charset);
             msg.addHeader("format", "flowed");
             msg.addHeader("Content-Transfer-Encoding", "8bit");
             msg.setDataHandler(new DataHandler(new ByteArrayDataSource(contents, "text/html")));
             msg.setSentDate(new Date());
             msg.setSubject(subject);
-            msg.setContent(contents, "text/html;charset=" + "EUC-KR");
+            msg.setContent(contents, "text/html; charset=" + charset);
             msg.setFrom(new InternetAddress(to, username));
             msg.setReplyTo(InternetAddress.parse(to, false));
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to, false));
@@ -112,6 +119,7 @@ public class EmailConfig {
             setPort(port);
             setUsername(useremail);
             setPassword(password);
+            setDefaultEncoding( Charset.forName(charset) );
         }};
 
         return mailProperties;
@@ -143,6 +151,7 @@ public class EmailConfig {
             put("mail.smtp.subject", subject);
             put("mail.smtp.username", username);
             put("mail.smtp.userEmail", useremail);
+            put("mail.smtp.charset", mailProperties.getDefaultEncoding());
 //            put("mail.debug", "true");
         }};
         return props;
@@ -266,4 +275,11 @@ public class EmailConfig {
         this.subject = subject;
     }
 
+    public String getCharset () { return charset; }
+
+    public void setCharset ( String charset ) { this.charset = charset; }
+
+    public String getInviteUrl () { return inviteUrl; }
+
+    public void setInviteUrl ( String inviteUrl ) { this.inviteUrl = inviteUrl; }
 }
