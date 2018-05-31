@@ -506,21 +506,25 @@ public class CatalogService {
         try {
             final int starterpacknum = catalogHistories.stream().filter(a -> a.getCatalogType().equals("starter")).findFirst().get().getCatalogNo();
             final StarterCategory starterCategory = starterCategoryRepository.findByNo(starterpacknum);
-            resultHistory.add(starterCategory);
+            if(starterCategory != null){
+            resultHistory.add(starterCategory);}
         } catch (Exception e){
         }
 
         try {
             final int buildpacknum = catalogHistories.stream().filter(a -> a.getCatalogType().equals("buildPack")).findFirst().get().getCatalogNo();
             final BuildpackCategory buildpackCategory = buildpackCategoryRepository.findByNo(buildpacknum);
-            resultHistory.add(buildpackCategory);
+            if(buildpackCategory != null)
+            {resultHistory.add(buildpackCategory);}
         } catch (Exception e){
         }
 
         try {
             final int servicepacknum = catalogHistories.stream().filter(a -> a.getCatalogType().equals("servicePack")).findFirst().get().getCatalogNo();
             final ServicepackCategory servicepackCategory = servicepackCategoryRepository.findByNo(servicepacknum);
-            resultHistory.add(servicepackCategory);
+            if(servicepackCategory != null){
+                resultHistory.add(servicepackCategory);
+            }
         }  catch (Exception e){
 
         }

@@ -80,13 +80,6 @@ public class BuildpackCategory {
     @Transient
     private String searchKeyword;
 
-    @Column(name = "doc_file_url")
-    private String docfileurl;
-
-    public String getDocfileurl() {return docfileurl; }
-
-    public void setDocfileurl(String docfileurl) {this.docfileurl = docfileurl; }
-
     public int getNo() {
         return no;
     }
@@ -272,7 +265,6 @@ public class BuildpackCategory {
                 ", classificationValue='" + classificationValue + '\'' +
                 ", classificationSummary='" + classificationSummary + '\'' +
                 ", searchKeyword='" + searchKeyword + '\'' +
-                ", docfileurl='" + docfileurl + '\'' +
                 '}';
     }
 
