@@ -9,6 +9,7 @@ import org.springframework.security.access.method.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
@@ -19,8 +20,10 @@ import java.util.Map;
  */
 @RestController
 public class UserManagementController {
-    /** 로그객체*/
-    private  static final Logger LOGGER = LoggerFactory.getLogger(UserManagementController.class);
+    /**
+     * 로그객체
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserManagementController.class);
     private final String V2_URL = "/v2";
     @Autowired
     private UserManagementService userManagementService;
@@ -31,39 +34,42 @@ public class UserManagementController {
      * @return Map(자바클래스)
      */
     @GetMapping(V2_URL + "/usermgnts")
-    public Map<String, Object> getUserInfoList() {
-        return userManagementService.getUserInfoList();
+    public Map<String, Object> getUserInfoList(@ModelAttribute UserDetail detail, HttpServletRequest request) {
+        LOGGER.info("detail ::: " + request.getParameter("searchKeyword"));
+        LOGGER.info("detail ::: " + detail.toString());
+
+        return userManagementService.getUserInfoList(detail);
     }
+
 
     @GetMapping(V2_URL + "/usermgnts/{userid}")
     public Map<String, Object> getUserInfoList(@PathVariable String userid) {
-        return userManagementService.getUserInfoList(userid);
+        return userManagementService.getUserInfo(userid);
     }
+
     /**
      * 비밀번호를 초기화한다.
      *
      * @param userDetail UserManagement(모델클래스)
-     * @param userid userId
+     * @param userid     userId
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
     @PutMapping(V2_URL + "/usermgnts/{userid}/resetpassword")
-    public Map<String, Object> setResetPassword(@PathVariable String userid,  @RequestBody UserDetail userDetail) throws Exception {
+    public Map<String, Object> setResetPassword(@PathVariable String userid, @RequestBody UserDetail userDetail) throws Exception {
         return userManagementService.setResetPassword(userDetail.getUserId());
     }
-
-
 
 
     /**
      * 운영권한을 부여한다.
      *
      * @param userDetail UserManagement(모델클래스)
-     * @param userid userId
+     * @param userid     userId
      * @return Map(자바클래스)
      */
     @PutMapping(V2_URL + "/usermgnts/{userid}/authority")
-    public Map<String, Object> updateOperatingAuthority(@PathVariable String userid,  @RequestBody UserDetail userDetail) {
+    public Map<String, Object> updateOperatingAuthority(@PathVariable String userid, @RequestBody UserDetail userDetail) {
         return userManagementService.updateOperatingAuthority(userDetail.getUserId());
     }
 
@@ -71,7 +77,7 @@ public class UserManagementController {
      * 사용자 계정을 삭제한다.
      *
      * @param userDetail UserManagement(모델클래스)
-     * @param userid userId
+     * @param userid     userId
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */

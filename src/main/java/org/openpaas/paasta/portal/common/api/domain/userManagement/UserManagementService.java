@@ -47,28 +47,38 @@ public class UserManagementService {
 
     @Autowired
     JinqSource jinqSource;
+
     /**
      * 사용자 정보 목록을 조회한다.
      *
      * @return Map(자바클래스)
      */
-    public Map<String, Object> getUserInfoList() {
+    public Map<String, Object> getUserInfoList(UserDetail detail) {
 
+        JinqStream<UserDetail> streams = jinqSource.streamAllPortal(UserDetail.class);
+        if (null != detail.getSearchKeyword() && !"".equals(detail.getSearchKeyword())) {
+            String keyword = detail.getSearchKeyword();
+            streams = streams.where(d -> d.getUserId().contains(keyword) || d.getUserName().contains(keyword));
+        }
+        streams = streams.sortedDescendingBy(c -> c.getUserId());
+        List<UserDetail> userDetailList = streams.toList();
         return new HashMap<String, Object>() {{
-            put("list",userDetailRepository.findAll());
+            put("list", userDetailList);
         }};
+
     }
 
-    public Map<String, Object> getUserInfoList(String userid) {
+    public Map<String, Object> getUserInfo(String userid) {
         JinqStream<UserDetail> streams = jinqSource.streamAllPortal(UserDetail.class);
         if (null != userid && !"".equals(userid)) {
-            streams = streams.where(d -> d.getUserId().contains(userid));
+            streams = streams.where(d -> d.getUserId().equals(userid));
         }
-        List<UserDetail> starterCategoryList = streams.toList();
+        List<UserDetail> userDetailList = streams.toList();
         return new HashMap<String, Object>() {{
-            put("list", starterCategoryList);
+            put("list", userDetailList);
         }};
     }
+
     /**
      * 사용자 패스워드 초기화를 한다.
      *
@@ -79,7 +89,7 @@ public class UserManagementService {
     public Map<String, Object> setResetPassword(String userId) throws Exception {
         //TODO 패스워드 초기화 메소드가 없습니다.
         //TODO userService.resetPassword(userId);
-        throw new UnsupportedOperationException( "패스워드 초기화 메소드는 더 이상 쓰지 않습니다. expirePassword로..." );
+        throw new UnsupportedOperationException("패스워드 초기화 메소드는 더 이상 쓰지 않습니다. expirePassword로...");
         /*
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
@@ -88,7 +98,9 @@ public class UserManagementService {
     }
 
 
-    /**사용자에게 운영자 권한을 부여한다.*/
+    /**
+     * 사용자에게 운영자 권한을 부여한다.
+     */
     public Map<String, Object> updateOperatingAuthority(String userId) {
         UserDetail userDetail = userDetailRepository.findByUserId(userId);
         userDetail.setAdminYn(!userDetail.getAdminYn().equals("Y") ? "Y" : "N");
@@ -98,8 +110,10 @@ public class UserManagementService {
         }};
     }
 
-    /**사용자를 삭제한다.*/
-    public Map<String, Object> deleteUserAccount(String userId)  {
+    /**
+     * 사용자를 삭제한다.
+     */
+    public Map<String, Object> deleteUserAccount(String userId) {
         userDetailRepository.deleteByUserId(userId);
 
         return new HashMap<String, Object>() {{

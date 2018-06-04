@@ -20,6 +20,8 @@ public interface UserDetailRepository extends JpaRepository<UserDetail, Integer>
 
     List<UserDetail> findAll();
 
+    List<UserDetail> findAllByOrderByUserIdAsc();
+
     int deleteByUserId(String userId);
 
 }
