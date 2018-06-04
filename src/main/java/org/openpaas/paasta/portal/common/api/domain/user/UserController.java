@@ -87,6 +87,7 @@ public class UserController {
 //                if (user.getImgPath() != null) glusterfsService.delete(user.getImgPath());
                 user.setImgPath((String) body.get("imgPath"));
             }
+            user.toString();
             int cnt = userService.updateUser(userId, user);
             result.put("result", cnt);
         }
@@ -200,7 +201,7 @@ public class UserController {
      */
 
     @PostMapping(V2_URL + "/users/password/email")
-    public Map<String, Object> expiredUserEmail(@RequestBody Map body) throws Exception {
+    public Map<String, Object> resetRequestUser(@RequestBody Map body) throws Exception {
         Map result = userService.resetRequestUser(body);
         return result;
     }

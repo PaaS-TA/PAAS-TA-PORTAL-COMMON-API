@@ -38,10 +38,6 @@ public class EmailService {
     EmailConfig emailConfig;
 
 
-    @Value("classpath:bootstrap.yml")
-    Resource loginpass;
-
-
     public Map resetEmail(String userId, String refreshToken) {
         logger.info("resetEmail ::: " + userId);
         Map map = new HashMap();

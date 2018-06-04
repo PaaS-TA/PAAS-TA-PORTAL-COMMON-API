@@ -61,6 +61,9 @@ public class BuildpackCategory {
     @Column(name = "user_id", nullable = false)
     private String userId;
 
+    @Column(name = "pay")
+    private String pay;
+
     @CreationTimestamp
     @Column(name = "created", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -243,29 +246,16 @@ public class BuildpackCategory {
         this.searchKeyword = searchKeyword;
     }
 
-    @Override
-    public String toString() {
-        return "BuildpackCategory{" +
-                "no=" + no +
-                ", name='" + name + '\'' +
-                ", classification='" + classification + '\'' +
-                ", summary='" + summary + '\'' +
-                ", description='" + description + '\'' +
-                ", docFileUrl='" + docFileUrl + '\'' +
-                ", buildPackName='" + buildPackName + '\'' +
-                ", thumbImgName='" + thumbImgName + '\'' +
-                ", thumbImgPath='" + thumbImgPath + '\'' +
-                ", useYn='" + useYn + '\'' +
-                ", appSampleFileName='" + appSampleFileName + '\'' +
-                ", appSampleFilePath='" + appSampleFilePath + '\'' +
-                ", appSampleFileSize='" + appSampleFileSize + '\'' +
-                ", userId='" + userId + '\'' +
-                ", created=" + created +
-                ", lastmodified=" + lastmodified +
-                ", classificationValue='" + classificationValue + '\'' +
-                ", classificationSummary='" + classificationSummary + '\'' +
-                ", searchKeyword='" + searchKeyword + '\'' +
-                '}';
+    public String getPay() {
+        return pay;
     }
 
+    public void setPay(String pay) {
+        this.pay = pay;
+    }
+
+    @Override
+    public String toString() {
+        return "BuildpackCategory{" + "no=" + no + ", name='" + name + '\'' + ", classification='" + classification + '\'' + ", summary='" + summary + '\'' + ", description='" + description + '\'' + ", buildPackName='" + buildPackName + '\'' + ", thumbImgName='" + thumbImgName + '\'' + ", thumbImgPath='" + thumbImgPath + '\'' + ", useYn='" + useYn + '\'' + ", appSampleFileName='" + appSampleFileName + '\'' + ", appSampleFilePath='" + appSampleFilePath + '\'' + ", docFileUrl='" + docFileUrl + '\'' + ", appSampleFileSize='" + appSampleFileSize + '\'' + ", userId='" + userId + '\'' + ", pay='" + pay + '\'' + ", created=" + created + ", lastmodified=" + lastmodified + ", classificationValue='" + classificationValue + '\'' + ", classificationSummary='" + classificationSummary + '\'' + ", searchKeyword='" + searchKeyword + '\'' + '}';
+    }
 }
