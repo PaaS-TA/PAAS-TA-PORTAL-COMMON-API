@@ -55,14 +55,16 @@ public class CommonService {
      * @return map map
      */
     public Map<String, Object> procCfApiRestTemplate(String reqUrl, HttpMethod httpMethod, Object obj, String reqToken) {
+
+        String cfRequestURL = cfApiUrl + "/v2/" ;
         restTemplate = new RestTemplate();
         HttpHeaders reqHeaders = new HttpHeaders();
         reqHeaders.add(AUTHORIZATION_HEADER_KEY, base64Authorization);
         if (null != reqToken && !"".equals(reqToken)) reqHeaders.add(CF_AUTHORIZATION_HEADER_KEY, reqToken);
 
         HttpEntity<Object> reqEntity = new HttpEntity<>(obj, reqHeaders);
-        LOGGER.info("cfApiUrl::" + cfApiUrl + reqUrl);
-        ResponseEntity<Map> resEntity = restTemplate.exchange(cfApiUrl + reqUrl, httpMethod, reqEntity, Map.class);
+        LOGGER.info("cfApiUrl::" + cfRequestURL + reqUrl);
+        ResponseEntity<Map> resEntity = restTemplate.exchange(cfRequestURL + reqUrl, httpMethod, reqEntity, Map.class);
         Map<String, Object> resultMap = resEntity.getBody();
 
         if(resultMap != null){

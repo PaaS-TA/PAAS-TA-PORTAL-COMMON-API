@@ -149,7 +149,7 @@ public class UserController {
      * @return the map
      * @throws Exception the exception
      */
-    @DeleteMapping(V2_URL + "/user/{guid}")
+    @DeleteMapping(V2_URL + "/user/{guid}/all")
     public Map deleteUserInfra(@PathVariable String guid, @RequestBody UserDetail user, @RequestHeader("Authorization") String token, HttpServletResponse response) throws Exception {
         LOGGER.info("> into deleteUser");
         Map<String, Object> result = userService.deleteUserInfra(guid, user, token);

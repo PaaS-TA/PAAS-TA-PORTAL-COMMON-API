@@ -294,10 +294,15 @@ public class UserService {
         Map map = new HashMap();
         try {
             Map result = commonService.procCfApiRestTemplate("/users/" + guid + "", HttpMethod.DELETE, null, token);
-            int deleteResult = userDetailRepository.deleteByUserId(userDetail.getUserId());
-            map.put("result", true);
-            map.put("msg", "You have successfully completed the task.");
+            if(result.get("result").equals("true")) {
+                int deleteResult = userDetailRepository.deleteByUserId(userDetail.getUserId());
 
+                map.put("result", true);
+                map.put("msg", "You have successfully completed the task.");
+            }else{
+                map.put("result", false);
+                map.put("msg", "");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             map.put("result", false);
