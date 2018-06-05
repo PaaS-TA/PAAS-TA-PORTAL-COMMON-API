@@ -18,7 +18,6 @@ import java.util.Date;
 public class Users {
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private String id;
 
@@ -51,7 +50,7 @@ public class Users {
     private String familyName;
 
     @Column(name = "active", nullable = false)
-    private int active;
+    private String active;
 
     @Column(name = "phonenumber", nullable = false)
     private String phoneNumber;
@@ -60,19 +59,19 @@ public class Users {
     private String authorities;
 
     @Column(name = "verified", nullable = false)
-    private int verified;
+    private String verified;
 
     @Column(name = "origin", nullable = false)
-    private  String origin;
+    private String origin;
 
     @Column(name = "external_id", nullable = false)
-    private  String externalId;
+    private String externalId;
 
     @Column(name = "identity_zone_id", nullable = false)
-    private  String identityZoneId;
+    private String identityZoneId;
 
     @Column(name = "salt", nullable = false)
-    private  String salt;
+    private String salt;
 
     @UpdateTimestamp
     @Column(name = "passwd_lastmodified", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -80,16 +79,16 @@ public class Users {
     private Date passwdLastmodified;
 
     @Column(name = "legacy_verification_behavior", nullable = false)
-    private  int legacyVerification_behavior;
+    private String legacyVerification_behavior;
 
     @Column(name = "passwd_change_required", nullable = false)
-    private  int passwdChange_required;
-//
+    private String passwdChange_required;
+    //
     @Column(name = "last_logon_success_time", nullable = false)
     private BigInteger lastLogonSuccessTime;
 
     @Column(name = "previous_logon_success_time", nullable = false)
-    private  BigInteger previousLogonSuccessTime;
+    private BigInteger previousLogonSuccessTime;
 
     public String getId() {
         return id;
@@ -99,7 +98,6 @@ public class Users {
         this.id = id;
     }
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
     public Date getCreated() {
         return created;
     }
@@ -108,7 +106,6 @@ public class Users {
         this.created = created;
     }
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
     public Date getLastmodified() {
         return lastmodified;
     }
@@ -165,11 +162,11 @@ public class Users {
         this.familyName = familyName;
     }
 
-    public int getActive() {
+    public String getActive() {
         return active;
     }
 
-    public void setActive(int active) {
+    public void setActive(String active) {
         this.active = active;
     }
 
@@ -189,11 +186,11 @@ public class Users {
         this.authorities = authorities;
     }
 
-    public int getVerified() {
+    public String getVerified() {
         return verified;
     }
 
-    public void setVerified(int verified) {
+    public void setVerified(String verified) {
         this.verified = verified;
     }
 
@@ -229,7 +226,6 @@ public class Users {
         this.salt = salt;
     }
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
     public Date getPasswdLastmodified() {
         return passwdLastmodified;
     }
@@ -238,19 +234,19 @@ public class Users {
         this.passwdLastmodified = passwdLastmodified;
     }
 
-    public int getLegacyVerification_behavior() {
+    public String getLegacyVerification_behavior() {
         return legacyVerification_behavior;
     }
 
-    public void setLegacyVerification_behavior(int legacyVerification_behavior) {
+    public void setLegacyVerification_behavior(String legacyVerification_behavior) {
         this.legacyVerification_behavior = legacyVerification_behavior;
     }
 
-    public int getPasswdChange_required() {
+    public String getPasswdChange_required() {
         return passwdChange_required;
     }
 
-    public void setPasswdChange_required(int passwdChange_required) {
+    public void setPasswdChange_required(String passwdChange_required) {
         this.passwdChange_required = passwdChange_required;
     }
 
@@ -270,5 +266,9 @@ public class Users {
         this.previousLogonSuccessTime = previousLogonSuccessTime;
     }
 
+    @Override
+    public String toString() {
+        return "Users{" + "id='" + id + '\'' + ", created=" + created + ", lastmodified=" + lastmodified + ", version=" + version + ", userName='" + userName + '\'' + ", password='" + password + '\'' + ", email='" + email + '\'' + ", givenName='" + givenName + '\'' + ", familyName='" + familyName + '\'' + ", active='" + active + '\'' + ", phoneNumber='" + phoneNumber + '\'' + ", authorities='" + authorities + '\'' + ", verified='" + verified + '\'' + ", origin='" + origin + '\'' + ", externalId='" + externalId + '\'' + ", identityZoneId='" + identityZoneId + '\'' + ", salt='" + salt + '\'' + ", passwdLastmodified=" + passwdLastmodified + ", legacyVerification_behavior='" + legacyVerification_behavior + '\'' + ", passwdChange_required='" + passwdChange_required + '\'' + ", lastLogonSuccessTime=" + lastLogonSuccessTime + ", previousLogonSuccessTime=" + previousLogonSuccessTime + '}';
+    }
 }
 

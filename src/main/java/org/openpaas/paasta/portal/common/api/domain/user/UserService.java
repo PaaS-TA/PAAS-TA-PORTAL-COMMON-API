@@ -11,6 +11,7 @@ import org.openpaas.paasta.portal.common.api.domain.email.EmailService;
 import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
 import org.openpaas.paasta.portal.common.api.entity.uaa.Users;
 import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailRepository;
+import org.openpaas.paasta.portal.common.api.repository.uaa.UsersRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -52,6 +53,9 @@ public class UserService {
 
     @Autowired
     CommonService commonService;
+
+    @Autowired
+    UsersRepository usersRepository;
 
     /**
      * portal db에 등록된 UserDetail 수
@@ -288,29 +292,20 @@ public class UserService {
      *
      * @return 삭제 정보
      */
-    public Map deleteUserInfra(String guid, UserDetail userDetail, String token) {
+    public Map deleteUserInfra(String guid, String token) {
 
-        logger.info("userId ::::: " +userDetail.getUserId());
+        logger.info("userId ::::: " + guid);
         Map map = new HashMap();
         try {
-            Map result;
-            result = commonService.procCfApiRestTemplate("/users/" + guid, HttpMethod.GET, null, token);
-            Map entity = (Map) result.get("entity");
+            Users user = usersRepository.findById(guid);
 
-            if (entity.get("username").equals(userDetail.getUserId())) {
-                result = commonService.procCfApiRestTemplate("/users/" + guid, HttpMethod.DELETE, null, token);
-                logger.info("result " + result.toString());
-                if (result.get("result").toString().equals("true")) {
-                    userDetailRepository.deleteByUserId(userDetail.getUserId());
-                    map.put("result", true);
-                    map.put("msg", "You have successfully completed the task.");
-                } else {
-                    map.put("result", false);
-                    map.put("msg", "");
-                }
-            }else{
-                map.put("result", false);
-                map.put("msg","Invalid parameter.");
+            Map result = commonService.procCfApiRestTemplate("/users/" + guid, HttpMethod.DELETE, null, token);
+            if (result.get("result").toString().equals("true")) {
+                userDetailRepository.deleteByUserId(user.getUserName());
+                map.put("result", true);
+                map.put("msg", "You have successfully completed the task.");
+            } else {
+                map = result;
             }
         } catch (Exception e) {
             e.printStackTrace();
