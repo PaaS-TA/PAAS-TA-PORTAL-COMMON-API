@@ -51,9 +51,6 @@ public class ServicepackCategory {
     @Column(name = "user_id", nullable = false)
     private String userId;
 
-    @Column(name = "pay")
-    private String pay;
-
     @CreationTimestamp
     @Column(name = "created", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -82,6 +79,9 @@ public class ServicepackCategory {
     @Formula("(SELECT cd.summary FROM code_detail cd WHERE cd.key = classification AND cd.group_id = 'SERVICE_PACK_CATALOG')")
     private String classificationSummary;
 
+
+    @Column(name = "tags_param")
+    private String tagsParam;
 
 //    @Transient
 //    private String app_bind_parameter;
@@ -243,13 +243,7 @@ public class ServicepackCategory {
         this.classificationSummary = classificationSummary;
     }
 
-    public String getPay() {
-        return pay;
-    }
 
-    public void setPay(String pay) {
-        this.pay = pay;
-    }
     //    public String getApp_bind_parameter() {
 //        return app_bind_parameter;
 //    }
@@ -266,8 +260,16 @@ public class ServicepackCategory {
         this.searchKeyword = searchKeyword;
     }
 
+    public String getTagsParam() {
+        return tagsParam;
+    }
+
+    public void setTagsParam(String tagsParam) {
+        this.tagsParam = tagsParam;
+    }
+
     @Override
     public String toString() {
-        return "ServicepackCategory{" + "no=" + no + ", name='" + name + '\'' + ", classification='" + classification + '\'' + ", summary='" + summary + '\'' + ", description='" + description + '\'' + ", servicePackName='" + servicePackName + '\'' + ", thumbImgName='" + thumbImgName + '\'' + ", thumbImgPath='" + thumbImgPath + '\'' + ", docFileUrl='" + docFileUrl + '\'' + ", useYn='" + useYn + '\'' + ", userId='" + userId + '\'' + ", pay='" + pay + '\'' + ", created=" + created + ", lastmodified=" + lastmodified + ", parameter='" + parameter + '\'' + ", appBindParameter='" + appBindParameter + '\'' + ", dashboardUseYn='" + dashboardUseYn + '\'' + ", appBindYn='" + appBindYn + '\'' + ", classificationValue='" + classificationValue + '\'' + ", classificationSummary='" + classificationSummary + '\'' + ", searchKeyword='" + searchKeyword + '\'' + '}';
+        return "ServicepackCategory{" + "no=" + no + ", name='" + name + '\'' + ", classification='" + classification + '\'' + ", summary='" + summary + '\'' + ", description='" + description + '\'' + ", servicePackName='" + servicePackName + '\'' + ", thumbImgName='" + thumbImgName + '\'' + ", thumbImgPath='" + thumbImgPath + '\'' + ", docFileUrl='" + docFileUrl + '\'' + ", useYn='" + useYn + '\'' + ", userId='" + userId + '\'' + ", created=" + created + ", lastmodified=" + lastmodified + ", parameter='" + parameter + '\'' + ", appBindParameter='" + appBindParameter + '\'' + ", dashboardUseYn='" + dashboardUseYn + '\'' + ", appBindYn='" + appBindYn + '\'' + ", classificationValue='" + classificationValue + '\'' + ", classificationSummary='" + classificationSummary + '\'' + ", tagsParam='" + tagsParam + '\'' + ", searchKeyword='" + searchKeyword + '\'' + '}';
     }
 }

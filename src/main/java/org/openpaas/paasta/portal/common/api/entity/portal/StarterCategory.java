@@ -45,8 +45,8 @@ public class StarterCategory {
     @Column(name = "user_id", nullable = false)
     private String userId;
 
-    @Column(name = "pay")
-    private String pay;
+    @Column(name = "tags_param")
+    private String tagsParam;
 
     @CreationTimestamp
     @Column(name = "created", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false)
@@ -204,16 +204,16 @@ public class StarterCategory {
         this.searchKeyword = searchKeyword;
     }
 
-    public String getPay() {
-        return pay;
+    public String getTagsParam() {
+        return tagsParam;
     }
 
-    public void setPay(String pay) {
-        this.pay = pay;
+    public void setTagsParam(String tagsParam) {
+        this.tagsParam = tagsParam;
     }
 
     @Override
     public String toString() {
-        return "StarterCategory{" + "no=" + no + ", name='" + name + '\'' + ", classification='" + classification + '\'' + ", summary='" + summary + '\'' + ", description='" + description + '\'' + ", thumbImgName='" + thumbImgName + '\'' + ", thumbImgPath='" + thumbImgPath + '\'' + ", useYn='" + useYn + '\'' + ", userId='" + userId + '\'' + ", pay='" + pay + '\'' + ", created=" + created + ", lastmodified=" + lastmodified + ", classificationValue='" + classificationValue + '\'' + ", classificationSummary='" + classificationSummary + '\'' + ", buildPackCategoryNo=" + buildPackCategoryNo + ", servicePackCategoryNoList=" + servicePackCategoryNoList + ", searchKeyword='" + searchKeyword + '\'' + '}';
+        return "StarterCategory{" + "no=" + no + ", name='" + name + '\'' + ", classification='" + classification + '\'' + ", summary='" + summary + '\'' + ", description='" + description + '\'' + ", thumbImgName='" + thumbImgName + '\'' + ", thumbImgPath='" + thumbImgPath + '\'' + ", useYn='" + useYn + '\'' + ", userId='" + userId + '\'' + ", tagsParam='" + tagsParam + '\'' + ", created=" + created + ", lastmodified=" + lastmodified + ", classificationValue='" + classificationValue + '\'' + ", classificationSummary='" + classificationSummary + '\'' + ", buildPackCategoryNo=" + buildPackCategoryNo + ", servicePackCategoryNoList=" + servicePackCategoryNoList + ", searchKeyword='" + searchKeyword + '\'' + '}';
     }
 }
