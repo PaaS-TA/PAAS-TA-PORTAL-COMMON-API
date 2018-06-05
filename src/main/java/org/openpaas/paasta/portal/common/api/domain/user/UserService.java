@@ -290,18 +290,27 @@ public class UserService {
      */
     public Map deleteUserInfra(String guid, UserDetail userDetail, String token) {
 
-
+        logger.info("userId ::::: " +userDetail.getUserId());
         Map map = new HashMap();
         try {
-            Map result = commonService.procCfApiRestTemplate("/users/" + guid + "", HttpMethod.DELETE, null, token);
-            if(result.get("result").equals("true")) {
-                int deleteResult = userDetailRepository.deleteByUserId(userDetail.getUserId());
+            Map result;
+            result = commonService.procCfApiRestTemplate("/users/" + guid, HttpMethod.GET, null, token);
+            Map entity = (Map) result.get("entity");
 
-                map.put("result", true);
-                map.put("msg", "You have successfully completed the task.");
+            if (entity.get("username").equals(userDetail.getUserId())) {
+                result = commonService.procCfApiRestTemplate("/users/" + guid, HttpMethod.DELETE, null, token);
+                logger.info("result " + result.toString());
+                if (result.get("result").toString().equals("true")) {
+                    userDetailRepository.deleteByUserId(userDetail.getUserId());
+                    map.put("result", true);
+                    map.put("msg", "You have successfully completed the task.");
+                } else {
+                    map.put("result", false);
+                    map.put("msg", "");
+                }
             }else{
                 map.put("result", false);
-                map.put("msg", "");
+                map.put("msg","Invalid parameter.");
             }
         } catch (Exception e) {
             e.printStackTrace();
