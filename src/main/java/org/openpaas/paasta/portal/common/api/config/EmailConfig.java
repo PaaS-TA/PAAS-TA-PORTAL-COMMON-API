@@ -29,49 +29,49 @@ public class EmailConfig {
 
     private static final Logger logger = getLogger(EmailController.class);
 
-    @Value("${spring.mail.smtp.host}")
+    @Value("${mail.smtp.host}")
     String host;
 
-    @Value("${spring.mail.smtp.port}")
+    @Value("${mail.smtp.port}")
     int port;
 
-    @Value("${spring.mail.smtp.username}")
+    @Value("${mail.smtp.username}")
     String username;
 
-    @Value("${spring.mail.smtp.password}")
+    @Value("${mail.smtp.password}")
     String password;
 
-    @Value("${spring.mail.smtp.useremail}")
+    @Value("${mail.smtp.useremail}")
     String useremail;
 
-    @Value("${spring.mail.smtp.properties.auth}")
+    @Value("${mail.smtp.properties.auth}")
     String auth;
 
-    @Value("${spring.mail.smtp.properties.starttls.enable}")
+    @Value("${mail.smtp.properties.starttls.enable}")
     String starttls_enable;
 
-    @Value("${spring.mail.smtp.properties.starttls.required}")
+    @Value("${mail.smtp.properties.starttls.required}")
     String starttls_required;
 
-    @Value("${spring.mail.smtp.properties.maximumTotalQps}")
+    @Value("${mail.smtp.properties.maximumTotalQps}")
     String maximumTotalQps;
 
-    @Value("${spring.mail.smtp.properties.subject}")
+    @Value("${mail.smtp.properties.subject}")
     String subject;
 
-    @Value("${spring.mail.smtp.properties.authUrl}")
+    @Value("${mail.smtp.properties.authUrl}")
     String authUrl;
 
-    @Value("${spring.mail.smtp.properties.createUrl}")
+    @Value("${mail.smtp.properties.createUrl}")
     String createUrl;
 
-    @Value("${spring.mail.smtp.properties.expiredUrl}")
+    @Value("${mail.smtp.properties.expiredUrl}")
     String expiredUrl;
 
-    @Value("${spring.mail.smtp.properties.charset}")
+    @Value("${mail.smtp.properties.charset}")
     String charset;
 
-    @Value("${spring.mail.smtp.properties.inviteUrl}")
+    @Value("${mail.smtp.properties.inviteUrl}")
     String inviteUrl;
 
 

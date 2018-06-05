@@ -6,12 +6,14 @@ import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
 import org.openpaas.paasta.portal.common.api.config.dataSource.UaaConfig;
+import org.openpaas.paasta.portal.common.api.domain.common.CommonService;
 import org.openpaas.paasta.portal.common.api.domain.email.EmailService;
 import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
 import org.openpaas.paasta.portal.common.api.entity.uaa.Users;
 import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -47,6 +49,9 @@ public class UserService {
 
     @Autowired
     JinqSource jinqSource;
+
+    @Autowired
+    CommonService commonService;
 
     /**
      * portal db에 등록된 UserDetail 수
@@ -172,91 +177,6 @@ public class UserService {
         return resultCnt;
     }
 
-    /**
-     * 이메일 인증된 사용자의 추가 정보를 저장한다.
-     *
-     * @param map (이름, 비밀번호)
-     * @return boolean
-     */
-    public boolean authAddUser(HashMap map) {
-        Boolean bRtn = false;
-        String resultStr = Constants.RESULT_STATUS_SUCCESS;
-
-        EntityManager portalEm = portalConfig.portalEntityManager().getNativeEntityManagerFactory().createEntityManager();
-        Date d = new Date();
-
-        try {
-            UserDetail updateUser = userDetailRepository.findByUserId(map.get("searchUserId").toString());
-            String status = updateUser.getStatus();
-
-            CriteriaBuilder cb = portalEm.getCriteriaBuilder();
-            CriteriaUpdate<UserDetail> update = cb.createCriteriaUpdate(UserDetail.class);
-            Root e = update.from(UserDetail.class);
-
-            update.set("updatedAt", d);
-
-            if (null != map.get("userId") && !("").equals(map.get("userId").toString())) {
-                update.set("userId", map.get("userId"));
-            }
-            if (null != map.get("username") && !("").equals(map.get("username").toString())) {
-                update.set("username", map.get("username"));
-            }
-            if (null != map.get("tellPhone") && !("").equals(map.get("tellPhone").toString())) {
-                update.set("tellPhone", map.get("tellPhone"));
-            }
-            if (null != map.get("zipCode") && !("").equals(map.get("zipCode").toString())) {
-                update.set("zipCode", map.get("zipCode"));
-            }
-            if (null != map.get("address") && !("").equals(map.get("address").toString())) {
-                update.set("address", map.get("address"));
-
-            }
-            if (null != map.get("addressDetail") && !("").equals(map.get("addressDetail").toString())) {
-                update.set("addressDetail", map.get("addressDetail"));
-
-            }
-            if (null != map.get("adminYn") && !("").equals(map.get("adminYn").toString())) {
-                update.set("adminYn", map.get("adminYn"));
-
-            }
-            if (null != map.get("refreshToken") && !("").equals(map.get("refreshToken").toString())) {
-                update.set("refreshToken", map.get("refreshToken"));
-
-            }
-            if (null != map.get("authAccessTime") && !("").equals(map.get("authAccessTime").toString())) {
-                update.set("authAccessTime", map.get("authAccessTime"));
-
-            }
-            if (null != map.get("authAccessCnt") && !("").equals(map.get("authAccessCnt").toString())) {
-                update.set("authAccessCnt", map.get("authAccessCnt"));
-            }
-
-            Predicate predicate = cb.conjunction();
-
-            //SQL:WHERE
-            if (null != map.get("searchUserId") && !("").equals(map.get("searchUserId").toString())) {
-                predicate = cb.and(predicate, cb.equal(e.get("searchUserId"), map.get("searchUserId").toString()));
-            }
-            update.where(predicate);
-
-            portalEm.getTransaction().begin();
-            int rtn = portalEm.createQuery(update).executeUpdate();
-            portalEm.getTransaction().commit();
-
-            if (rtn < 1) {
-                bRtn = true;
-            }
-            throw new NullPointerException();
-
-        } catch (NullPointerException nex) {
-            logger.error("Exception :: NullPointerException :: {}", nex.getCause().getMessage());
-            resultStr = Constants.RESULT_STATUS_FAIL;
-        } finally {
-            portalEm.close();
-        }
-        return bRtn;
-
-    }
 
     /**
      * 사용자 자동생성
@@ -298,9 +218,7 @@ public class UserService {
             /*
              * 여기서 에러나면 Exception으로 빠져버림
              */
-            logger.info("save UserInfo ::::::::::::::::::::::::::");
             createUser(userDetail);
-            logger.info("send Email :::::::::::::::::::::::::::: ");
             map = emailService.createEmail(userDetail.getUserId(), randomId);
         } catch (Exception e) {
             e.printStackTrace();
@@ -333,9 +251,7 @@ public class UserService {
             /*
              * 여기서 에러나면 Exception으로 빠져버림
              */
-            logger.info("reset save UserInfo ::::::::::::::::::::::::::");
             createUser(userDetail);
-            logger.info("reset send Email :::::::::::::::::::::::::::: ");
             map = emailService.resetEmail(userDetail.getUserId(), randomId);
         } catch (Exception e) {
             e.printStackTrace();
@@ -353,10 +269,45 @@ public class UserService {
      * @param userId the user id
      * @return 삭제 정보
      */
-    public int deleteUser(String userId) {
-        int deleteResult = userDetailRepository.deleteByUserId(userId);
-        return deleteResult;
+    public Map deleteUser(String userId) {
+        Map map = new HashMap();
+        try {
+            int deleteResult = userDetailRepository.deleteByUserId(userId);
+            map.put("result", true);
+            map.put("msg", "You have successfully completed the task.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("result", false);
+            map.put("msg", e.getMessage());
+        }
+        return map;
     }
+
+    /**
+     * DB에서 사용자 삭제 후 CF인프라에서도 사용자 삭제
+     *
+     * @return 삭제 정보
+     */
+    public Map deleteUserInfra(String guid, UserDetail userDetail, String token) {
+
+
+        Map map = new HashMap();
+        try {
+            Map result = commonService.procCfApiRestTemplate("/users/" + guid + "", HttpMethod.DELETE, null, token);
+            int deleteResult = userDetailRepository.deleteByUserId(userDetail.getUserId());
+            map.put("result", true);
+            map.put("msg", "You have successfully completed the task.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("result", false);
+            map.put("msg", e.getMessage());
+        }
+        return map;
+
+
+    }
+
 
     /**
      * 전체 UAA 유저의 userName과 userGuid를 가져온다.

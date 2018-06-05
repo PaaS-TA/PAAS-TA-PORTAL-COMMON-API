@@ -30,12 +30,12 @@ public class PortalConfig {
 
     private static final Logger logger = getLogger(PortalConfig.class);
 
-    @Value("${spring.datasource.portal.driver-class-name}") String portalDriverClassName;
-    @Value("${spring.datasource.portal.url}") String portalUrl;
-    @Value("${spring.datasource.portal.username}") String portalUsername;
-    @Value("${spring.datasource.portal.password}") String portalPassword;
-    @Value("${spring.jpa.hibernate.ddl-auto}") String ddlAuto;
-    @Value("${spring.jpa.hibernate.naming.strategy}") String dialect;
+    @Value("${datasource.portal.driver-class-name}") String portalDriverClassName;
+    @Value("${datasource.portal.url}") String portalUrl;
+    @Value("${datasource.portal.username}") String portalUsername;
+    @Value("${datasource.portal.password}") String portalPassword;
+    @Value("${jpa.hibernate.ddl-auto}") String ddlAuto;
+    @Value("${jpa.hibernate.naming.strategy}") String dialect;
 
 
     @Bean

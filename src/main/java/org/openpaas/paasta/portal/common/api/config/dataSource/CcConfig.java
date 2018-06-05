@@ -29,12 +29,12 @@ public class CcConfig {
 
     private static final Logger logger = getLogger(CcConfig.class);
 
-    @Value("${spring.datasource.cc.driver-class-name}") String ccDriverClassName;
-    @Value("${spring.datasource.cc.url}") String ccUrl;
-    @Value("${spring.datasource.cc.username}") String ccUsername;
-    @Value("${spring.datasource.cc.password}") String ccPassword;
-    @Value("${spring.jpa.hibernate.ddl-auto}") String ddlAuto;
-    @Value("${spring.jpa.hibernate.naming.strategy}") String dialect;
+    @Value("${datasource.cc.driver-class-name}") String ccDriverClassName;
+    @Value("${datasource.cc.url}") String ccUrl;
+    @Value("${datasource.cc.username}") String ccUsername;
+    @Value("${datasource.cc.password}") String ccPassword;
+    @Value("${jpa.hibernate.ddl-auto}") String ddlAuto;
+    @Value("${jpa.hibernate.naming.strategy}") String dialect;
 
 
     @Bean

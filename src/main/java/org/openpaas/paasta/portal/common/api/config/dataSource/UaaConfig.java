@@ -29,12 +29,12 @@ public class UaaConfig {
 
     private static final Logger logger = getLogger(UaaConfig.class);
 
-    @Value("${spring.datasource.uaa.driver-class-name}") String uaaDriverClassName;
-    @Value("${spring.datasource.uaa.url}") String uaaUrl;
-    @Value("${spring.datasource.uaa.username}") String uaaUsername;
-    @Value("${spring.datasource.uaa.password}") String uaaPassword;
-    @Value("${spring.jpa.hibernate.ddl-auto}") String ddlAuto;
-    @Value("${spring.jpa.hibernate.naming.strategy}") String dialect;
+    @Value("${datasource.uaa.driver-class-name}") String uaaDriverClassName;
+    @Value("${datasource.uaa.url}") String uaaUrl;
+    @Value("${datasource.uaa.username}") String uaaUsername;
+    @Value("${datasource.uaa.password}") String uaaPassword;
+    @Value("${jpa.hibernate.ddl-auto}") String ddlAuto;
+    @Value("${jpa.hibernate.naming.strategy}") String dialect;
 
 
     @Bean

@@ -70,7 +70,7 @@ public class UserManagementController {
      */
     @PutMapping(V2_URL + "/usermgnts/{userid}/authority")
     public Map<String, Object> updateOperatingAuthority(@PathVariable String userid, @RequestBody UserDetail userDetail) {
-        return userManagementService.updateOperatingAuthority(userDetail.getUserId());
+        return userManagementService.updateOperatingAuthority(userid);
     }
 
     /**

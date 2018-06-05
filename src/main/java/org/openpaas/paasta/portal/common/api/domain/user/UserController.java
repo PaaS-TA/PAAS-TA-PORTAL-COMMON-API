@@ -136,16 +136,23 @@ public class UserController {
     public Map deleteUser(@PathVariable String userId, @RequestBody UserDetail user, HttpServletResponse response) throws Exception {
         LOGGER.info("> into deleteUser");
 
-        Map<String, Object> result = new HashMap<>();
-        int deleteResult = -1;
+        Map<String, Object> result = userService.deleteUser(userId);
 
-        deleteResult = userService.deleteUser(userId);
+        return result;
+    }
 
-        if (deleteResult < 1) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "User does not exist.");
-        }
-
-        result.put("result", deleteResult);
+    /**
+     * Delete user map.
+     *
+     * @param user     the user
+     * @param response the response
+     * @return the map
+     * @throws Exception the exception
+     */
+    @DeleteMapping(V2_URL + "/user/{guid}")
+    public Map deleteUserInfra(@PathVariable String guid, @RequestBody UserDetail user, @RequestHeader("Authorization") String token, HttpServletResponse response) throws Exception {
+        LOGGER.info("> into deleteUser");
+        Map<String, Object> result = userService.deleteUserInfra(guid, user, token);
         return result;
     }
 

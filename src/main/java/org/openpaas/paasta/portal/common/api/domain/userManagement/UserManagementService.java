@@ -103,6 +103,7 @@ public class UserManagementService {
      */
     public Map<String, Object> updateOperatingAuthority(String userId) {
         UserDetail userDetail = userDetailRepository.findByUserId(userId);
+        logger.info(userDetail.toString());
         userDetail.setAdminYn(!userDetail.getAdminYn().equals("Y") ? "Y" : "N");
         userDetailRepository.save(userDetail);
         return new HashMap<String, Object>() {{
