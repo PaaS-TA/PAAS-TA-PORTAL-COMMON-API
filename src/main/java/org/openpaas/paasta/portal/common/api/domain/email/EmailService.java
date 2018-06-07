@@ -2,16 +2,24 @@ package org.openpaas.paasta.portal.common.api.domain.email;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.RandomStringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.openpaas.paasta.portal.common.api.config.EmailConfig;
+import org.openpaas.paasta.portal.common.api.domain.common.CommonService;
 import org.openpaas.paasta.portal.common.api.domain.service.ServiceService;
+import org.openpaas.paasta.portal.common.api.entity.portal.InviteOrgSpace;
+import org.openpaas.paasta.portal.common.api.entity.portal.InviteUser;
+import org.openpaas.paasta.portal.common.api.repository.portal.InviteOrgSpaceRepository;
+//import org.openpaas.paasta.portal.common.api.repository.portal.InviteUserRepository;
+import org.openpaas.paasta.portal.common.api.repository.portal.InviteUserRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
@@ -22,6 +30,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -36,6 +45,12 @@ public class EmailService {
 
     @Autowired
     EmailConfig emailConfig;
+
+    @Autowired
+    InviteUserRepository inviteUserRepository;
+
+    @Autowired
+    CommonService commonService;
 
 
     public Map resetEmail(String userId, String refreshToken) {
@@ -110,7 +125,51 @@ public class EmailService {
         return map;
     }
 
-    public Map inviteOrgEmail(String userId, String orgName, String refreshToken) {
+    public Boolean inviteOrgEmail(Map body) {
+        String[] userEmails;
+
+        if(body.get("userEmail").toString().equals(""))
+            return false;
+
+        userEmails = body.get("userEmail").toString().split(",");
+        for(String userEmail : userEmails) {
+            InviteUser inviteUser = new InviteUser();
+
+            List<InviteUser> user = inviteUserRepository.findByUserIdAndOrgGuid(userEmail, body.get("orgId").toString());
+
+            //TODO 하나 이상일 수 있나?
+            if(user.size() > 0) {
+                inviteUser.setId(user.get(0).getId());
+            }
+
+            inviteUser.setUserId(userEmail);
+            inviteUser.setGubun("send");
+            inviteUser.setRole(body.get("userRole").toString());
+            inviteUser.setOrgGuid(body.get("orgId").toString());
+
+            String randomId = RandomStringUtils.randomAlphanumeric(17).toUpperCase() + RandomStringUtils.randomAlphanumeric(2).toUpperCase();
+            inviteUser.setToken(randomId);
+
+            //TODO 성공한 사람만 email 날릴 것인지
+            inviteUserRepository.save(inviteUser);
+
+            inviteOrgEmailSend(userEmail, body.get("orgName").toString(), randomId);
+        }
+        return true;
+    }
+
+    public Map inviteAccept(Map body) {
+        Map map = new HashMap();
+
+        List<InviteUser> user = inviteUserRepository.findByToken(body.get("token").toString());
+        map.put("role", user.get(0).getRole());
+        map.put("orgGuid", user.get(0).getOrgGuid());
+        map.put("userId", user.get(0).getUserId());
+
+        return map;
+    }
+
+    public Map inviteOrgEmailSend(String userId, String orgName, String refreshToken) {
         logger.info("createEmail ::: " + userId);
         Map map = new HashMap();
         try {

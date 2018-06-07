@@ -1,5 +1,6 @@
 package org.openpaas.paasta.portal.common.api.domain.email;
 
+import org.openpaas.paasta.portal.common.api.entity.portal.InviteUser;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -58,14 +60,18 @@ public class EmailController {
     }
 
     @PostMapping( "/v2" + "/email/inviteOrg" )
-    public Map<String, Object> inviteOrgEmail(@RequestBody Map<String, Object> body) {
-        String refreshToken = body.get( "refreshToken" ).toString();
-        if (refreshToken == null)
-            refreshToken = "";
+    public boolean inviteOrgEmail(@RequestBody Map<String, Object> body) {
+        System.out.println("============= inviteOrgEmail in!! ===============");
+        System.out.printf(body.toString());
 
-        final String userId = body.get( "userId" ).toString();
-        final String orgName = body.get( "orgName" ).toString();
+        return emailService.inviteOrgEmail(body);
+    }
 
-        return emailService.inviteOrgEmail( userId, orgName, refreshToken );
+    @PostMapping( "/v2" + "/email/inviteAccept" )
+    public Map inviteAccept(@RequestBody Map<String, Object> body) {
+        System.out.println("============= inviteAccept in!! ===============");
+        System.out.println(body.toString());
+
+        return emailService.inviteAccept(body);
     }
 }
