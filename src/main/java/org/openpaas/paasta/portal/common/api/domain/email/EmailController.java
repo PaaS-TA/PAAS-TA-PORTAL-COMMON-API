@@ -61,17 +61,11 @@ public class EmailController {
 
     @PostMapping( "/v2" + "/email/inviteOrg" )
     public boolean inviteOrgEmail(@RequestBody Map<String, Object> body) {
-        System.out.println("============= inviteOrgEmail in!! ===============");
-        System.out.printf(body.toString());
-
         return emailService.inviteOrgEmail(body);
     }
 
     @PostMapping( "/v2" + "/email/inviteAccept" )
     public Map inviteAccept(@RequestBody Map<String, Object> body) {
-        System.out.println("============= inviteAccept in!! ===============");
-        System.out.println(body.toString());
-
         return emailService.inviteAccept(body);
     }
 }
