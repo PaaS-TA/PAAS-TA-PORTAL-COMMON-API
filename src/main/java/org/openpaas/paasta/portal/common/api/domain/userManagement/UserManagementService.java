@@ -4,13 +4,16 @@ import org.jinq.orm.stream.JinqStream;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
+import org.openpaas.paasta.portal.common.api.domain.common.CommonService;
 import org.openpaas.paasta.portal.common.api.domain.user.UserService;
 import org.openpaas.paasta.portal.common.api.entity.portal.StarterCategory;
 import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
+import org.openpaas.paasta.portal.common.api.entity.uaa.Users;
 import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailRepository;
 import org.openpaas.paasta.portal.common.api.repository.uaa.UsersRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +51,9 @@ public class UserManagementService {
     @Autowired
     JinqSource jinqSource;
 
+    @Autowired
+    CommonService commonService;
+
     /**
      * 사용자 정보 목록을 조회한다.
      *
@@ -62,8 +68,12 @@ public class UserManagementService {
         }
         streams = streams.sortedDescendingBy(c -> c.getUserId());
         List<UserDetail> userDetailList = streams.toList();
+
+
+
+
         return new HashMap<String, Object>() {{
-            put("list", userDetailList);
+            put("list", setUserGuid(userDetailList));
         }};
 
     }
@@ -74,10 +84,25 @@ public class UserManagementService {
             streams = streams.where(d -> d.getUserId().equals(userid));
         }
         List<UserDetail> userDetailList = streams.toList();
+
         return new HashMap<String, Object>() {{
-            put("list", userDetailList);
+            put("list", setUserGuid(userDetailList));
         }};
     }
+
+    private List<UserDetail> setUserGuid(List<UserDetail> details){
+        List<Users> users = usersRepository.findAll();
+        for (UserDetail userDetail : details) {
+            for (Users user:users) {
+                if(userDetail.getUserId().equals(user.getUserName())){
+                    userDetail.setUserGuid(user.getId());
+                }
+            }
+
+        }
+        return details;
+    }
+
 
     /**
      * 사용자 패스워드 초기화를 한다.

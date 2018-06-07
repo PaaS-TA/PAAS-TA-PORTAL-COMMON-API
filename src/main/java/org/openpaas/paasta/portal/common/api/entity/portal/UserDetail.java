@@ -56,6 +56,9 @@ public class UserDetail {
     @Transient
     private String searchKeyword;
 
+    @Transient
+    private String userGuid;
+
     public String getUserId() {
         return userId;
     }
@@ -160,9 +163,18 @@ public class UserDetail {
         this.searchKeyword = searchKeyword;
     }
 
+
+    public String getUserGuid() {
+        return userGuid;
+    }
+
+    public void setUserGuid(String userGuid) {
+        this.userGuid = userGuid;
+    }
+
     @Override
     public String toString() {
-        return "UserDetail{" + "userId='" + userId + '\'' + ", userName='" + userName + '\'' + ", status='" + status + '\'' + ", tellPhone='" + tellPhone + '\'' + ", zipCode='" + zipCode + '\'' + ", address='" + address + '\'' + ", addressDetail='" + addressDetail + '\'' + ", adminYn='" + adminYn + '\'' + ", imgPath='" + imgPath + '\'' + ", refreshToken='" + refreshToken + '\'' + ", authAccessTime=" + authAccessTime + ", authAccessCnt=" + authAccessCnt + ", searchKeyword='" + searchKeyword + '\'' + '}';
+        return "UserDetail{" + "userId='" + userId + '\'' + ", userName='" + userName + '\'' + ", status='" + status + '\'' + ", tellPhone='" + tellPhone + '\'' + ", zipCode='" + zipCode + '\'' + ", address='" + address + '\'' + ", addressDetail='" + addressDetail + '\'' + ", adminYn='" + adminYn + '\'' + ", imgPath='" + imgPath + '\'' + ", refreshToken='" + refreshToken + '\'' + ", authAccessTime=" + authAccessTime + ", authAccessCnt=" + authAccessCnt + ", searchKeyword='" + searchKeyword + '\'' + ", userGuid='" + userGuid + '\'' + '}';
     }
 }
 
