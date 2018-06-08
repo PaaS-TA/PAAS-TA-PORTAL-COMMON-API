@@ -131,42 +131,73 @@ public class EmailService {
         if(body.get("userEmail").toString().equals(""))
             return false;
 
-        userEmails = body.get("userEmail").toString().split(",");
-        for(String userEmail : userEmails) {
-            InviteUser inviteUser = new InviteUser();
+        try {
+            userEmails = body.get("userEmail").toString().split(",");
+            for(String userEmail : userEmails) {
+                InviteUser inviteUser = new InviteUser();
 
-            List<InviteUser> user = inviteUserRepository.findByUserIdAndOrgGuid(userEmail, body.get("orgId").toString());
+                List<InviteUser> user = inviteUserRepository.findByUserIdAndOrgGuid(userEmail, body.get("orgId").toString());
 
-            //TODO 하나 이상일 수 있나?
-            if(user.size() > 0) {
-                inviteUser.setId(user.get(0).getId());
+                //TODO 하나 이상일 수 있나?
+                if(user.size() > 0) {
+                    inviteUser.setId(user.get(0).getId());
+                }
+
+                inviteUser.setUserId(userEmail);
+                inviteUser.setGubun("send");
+                inviteUser.setRole(body.get("userRole").toString());
+                inviteUser.setOrgGuid(body.get("orgId").toString());
+
+                String randomId = RandomStringUtils.randomAlphanumeric(17).toUpperCase() + RandomStringUtils.randomAlphanumeric(2).toUpperCase();
+                inviteUser.setToken(randomId);
+
+                //TODO 성공한 사람만 email 날릴 것인지
+                inviteUserRepository.save(inviteUser);
+
+                inviteOrgEmailSend(userEmail, body.get("orgName").toString(), randomId);
             }
-
-            inviteUser.setUserId(userEmail);
-            inviteUser.setGubun("send");
-            inviteUser.setRole(body.get("userRole").toString());
-            inviteUser.setOrgGuid(body.get("orgId").toString());
-
-            String randomId = RandomStringUtils.randomAlphanumeric(17).toUpperCase() + RandomStringUtils.randomAlphanumeric(2).toUpperCase();
-            inviteUser.setToken(randomId);
-
-            //TODO 성공한 사람만 email 날릴 것인지
-            inviteUserRepository.save(inviteUser);
-
-            inviteOrgEmailSend(userEmail, body.get("orgName").toString(), randomId);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
         }
+
         return true;
     }
 
     public Map inviteAccept(Map body) {
         Map map = new HashMap();
 
-        List<InviteUser> user = inviteUserRepository.findByToken(body.get("token").toString());
-        map.put("role", user.get(0).getRole());
-        map.put("orgGuid", user.get(0).getOrgGuid());
-        map.put("userId", user.get(0).getUserId());
+        try {
+            List<InviteUser> user = inviteUserRepository.findByToken(body.get("token").toString());
+            map.put("id", user.get(0).getId());
+            map.put("role", user.get(0).getRole());
+            map.put("orgGuid", user.get(0).getOrgGuid());
+            map.put("userId", user.get(0).getUserId());
+            map.put("result", true);
+        } catch(Exception e) {
+            e.printStackTrace();
+            map.put("result", false);
+        }
 
         return map;
+    }
+
+    public Map inviteAcceptUpdate(Map body) {
+        try {
+            InviteUser inviteUser = new InviteUser();
+
+            InviteUser user = inviteUserRepository.findById(Integer.parseInt(body.get("id").toString()));
+
+            user.setGubun(body.get("gubun").toString());
+            inviteUserRepository.save(user);
+
+            body.put("result", true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            body.put("result", false);
+        }
+
+        return body;
     }
 
     public Map inviteOrgEmailSend(String userId, String orgName, String refreshToken) {
