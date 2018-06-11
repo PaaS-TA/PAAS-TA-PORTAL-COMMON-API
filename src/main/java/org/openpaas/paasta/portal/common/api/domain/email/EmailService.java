@@ -168,12 +168,16 @@ public class EmailService {
         Map map = new HashMap();
 
         try {
-            List<InviteUser> user = inviteUserRepository.findByToken(body.get("token").toString());
-            map.put("id", user.get(0).getId());
-            map.put("role", user.get(0).getRole());
-            map.put("orgGuid", user.get(0).getOrgGuid());
-            map.put("userId", user.get(0).getUserId());
-            map.put("result", true);
+            List<InviteUser> user = inviteUserRepository.findByTokenAndGubunNot(body.get("token").toString(), "success");
+            if(user.size() > 0) {
+                map.put("id", user.get(0).getId());
+                map.put("role", user.get(0).getRole());
+                map.put("orgGuid", user.get(0).getOrgGuid());
+                map.put("userId", user.get(0).getUserId());
+                map.put("result", true);
+            } else {
+                map.put("result", false);
+            }
         } catch(Exception e) {
             e.printStackTrace();
             map.put("result", false);
