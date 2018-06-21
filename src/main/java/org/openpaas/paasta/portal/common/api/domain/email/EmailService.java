@@ -8,11 +8,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.openpaas.paasta.portal.common.api.config.EmailConfig;
 import org.openpaas.paasta.portal.common.api.domain.common.CommonService;
-import org.openpaas.paasta.portal.common.api.domain.service.ServiceService;
-import org.openpaas.paasta.portal.common.api.entity.portal.InviteOrgSpace;
 import org.openpaas.paasta.portal.common.api.entity.portal.InviteUser;
-import org.openpaas.paasta.portal.common.api.repository.portal.InviteOrgSpaceRepository;
-//import org.openpaas.paasta.portal.common.api.repository.portal.InviteUserRepository;
 import org.openpaas.paasta.portal.common.api.repository.portal.InviteUserRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +37,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class EmailService {
 
 
-    private static final Logger logger = getLogger(ServiceService.class);
+    private final Logger logger = getLogger(this.getClass());
 
     @Autowired
     EmailConfig emailConfig;
