@@ -35,9 +35,6 @@ public class AppService {
 
         EntityManager portalEm = portalConfig.portalEntityManager().getNativeEntityManagerFactory().createEntityManager();
 
-//        String thumbImgPath = portalEm.createQuery("select max(bc.thumbImgPath) from BuildpackCategory bc where bc.buildpackName = :buildpackName")
-//        .setParameter("buildpackName", buildPack.getAdminBuildpackName()).getSingleResult().toString();
-
         CriteriaBuilder cb = portalEm.getCriteriaBuilder();
         CriteriaQuery<Tuple> cq = cb.createTupleQuery();
         Root<BuildpackCategory> from = cq.from(BuildpackCategory.class);

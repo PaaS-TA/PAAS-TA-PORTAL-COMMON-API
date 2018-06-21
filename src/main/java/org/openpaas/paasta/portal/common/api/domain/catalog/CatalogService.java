@@ -414,10 +414,6 @@ public class CatalogService {
     public Map<String, Object> updateServicePackCatalog(ServicepackCategory param) {
         logger.info("updateServicePackCatalog :: " + param.toString());
 
-//        if (param.getApp_bind_parameter() != null) {
-//            param.setAppBindParameter(param.getApp_bind_parameter());
-//        }
-
         ServicepackCategory update = servicepackCategoryRepository.findOne(param.getNo());
         param.setCreated(update.getCreated());
         param.setLastmodified(new Date());

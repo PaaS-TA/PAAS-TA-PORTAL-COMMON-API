@@ -49,19 +49,6 @@ public class ConfigInfoController {
     }
 
     /**
-     * 설정 정보 값을 생성한다..
-     *
-     * @param configInfo -
-     * @return map map
-     * @throws Exception the exception
-     */
-    @PostMapping()
-    public Map<String, Object> insertValue(@RequestBody ConfigInfo configInfo) {
-        return null;
-    }
-
-
-    /**
      * 설정 정보 값을 수정한다.
      * @param name - primary key
      * @param configInfo - configInfo the config info
@@ -75,18 +62,4 @@ public class ConfigInfoController {
         resultMap.put("RESULT", resultStr);
         return resultMap;
     }
-
-    /**
-     * 설정 정보 값을 삭제한다.
-     *
-     * @param name - primary key
-     * @return map map
-     * @throws Exception the exception
-     */
-    @DeleteMapping(value = {"/{name:.+}"})
-    public Map<String, Object> deleteValue(@PathVariable String name) {
-        return null;
-    }
-
-
 }
