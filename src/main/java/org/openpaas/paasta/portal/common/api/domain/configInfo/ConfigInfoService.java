@@ -1,5 +1,6 @@
 package org.openpaas.paasta.portal.common.api.domain.configInfo;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.entity.portal.ConfigInfo;
 import org.openpaas.paasta.portal.common.api.repository.portal.ConfigInfoRepository;
@@ -32,6 +33,7 @@ public class ConfigInfoService {
      * @return value value
      * @throws Exception the exception
      */
+    @HystrixCommand(fallbackMethod = "getValue")
     public HashMap<String, Object> getValue(String name) {
         HashMap<String, Object> resultMap = new HashMap<>();
         if (name == null) {
@@ -49,6 +51,7 @@ public class ConfigInfoService {
      * @return map
      * @throws Exception the exception
      */
+    @HystrixCommand(fallbackMethod = "updateValue")
     public String updateValue(String name, ConfigInfo configInfo) {
         String resultStr = Constants.RESULT_STATUS_SUCCESS;
         if(configInfoRepository.findAllByName(name) != null)

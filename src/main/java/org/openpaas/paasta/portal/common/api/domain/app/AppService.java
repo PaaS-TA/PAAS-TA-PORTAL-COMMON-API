@@ -1,6 +1,7 @@
 package org.openpaas.paasta.portal.common.api.domain.app;
 
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
 import org.openpaas.paasta.portal.common.api.entity.cc.BuildpackLifecyleDataCc;
 import org.openpaas.paasta.portal.common.api.entity.portal.BuildpackCategory;
@@ -30,6 +31,7 @@ public class AppService {
     @Autowired
     PortalConfig portalConfig;
 
+    @HystrixCommand(fallbackMethod = "getAppImageUrl")
     public String getAppImageUrl(String guid) {
         BuildpackLifecyleDataCc buildPack = buildpackLifecyleDataCcRepository.findDistinctTopByAppGuid(guid);
 

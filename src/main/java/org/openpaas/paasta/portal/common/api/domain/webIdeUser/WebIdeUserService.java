@@ -1,5 +1,6 @@
 package org.openpaas.paasta.portal.common.api.domain.webIdeUser;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
 import org.openpaas.paasta.portal.common.api.entity.portal.WebIdeUser;
@@ -37,6 +38,7 @@ public class WebIdeUserService {
      * @param webIdeUser the webIdeUser
      * @return ModelAndView model
      */
+    @HystrixCommand(fallbackMethod = "getUser")
     public WebIdeUser getUser(WebIdeUser webIdeUser) {
         return webIdeUserRepository.findAllByOrgName(webIdeUser.getOrgName());
     }
@@ -47,6 +49,7 @@ public class WebIdeUserService {
      * @param webIdeUser the webIdeUser
      * @return ModelAndView model
      */
+    @HystrixCommand(fallbackMethod = "getList")
     public HashMap<String, Object> getList(WebIdeUser webIdeUser) {
         HashMap<String, Object> resultMap = new HashMap<>();
 
@@ -92,6 +95,7 @@ public class WebIdeUserService {
      * @param webIdeUser the webIdeUser
      * @return ModelAndView model
      */
+    @HystrixCommand(fallbackMethod = "insertUser")
     public String insertUser(WebIdeUser webIdeUser) {
         String resultStr = Constants.RESULT_STATUS_SUCCESS;
 
@@ -119,6 +123,7 @@ public class WebIdeUserService {
      * @param webIdeUser the webIdeUser
      * @return ModelAndView model
      */
+    @HystrixCommand(fallbackMethod = "updateUser")
     public String updateUser(WebIdeUser webIdeUser) {
         String resultStr = Constants.RESULT_STATUS_SUCCESS;
 
@@ -178,6 +183,7 @@ public class WebIdeUserService {
      * @param webIdeUser the webIdeUser
      * @return ModelAndView model
      */
+    @HystrixCommand(fallbackMethod = "deleteUser")
     public String deleteUser(WebIdeUser webIdeUser) {
         String resultStr = Constants.RESULT_STATUS_SUCCESS;
 

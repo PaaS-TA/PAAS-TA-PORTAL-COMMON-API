@@ -1,5 +1,6 @@
 package org.openpaas.paasta.portal.common.api.domain.org;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
 import org.openpaas.paasta.portal.common.api.config.dataSource.CcConfig;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
@@ -58,6 +59,7 @@ public class OrgService {
     JinqSource jinqSource;
 
     /*운영자 포털에서 조직목록을 요청했을때, 모든 조직목록을 응답한다.*/
+    @HystrixCommand(fallbackMethod = "getOrgsForAdmin")
     public List<Object> getOrgsForAdmin() throws Exception {
         EntityManager portalEm = ccConfig.ccEntityManager().getNativeEntityManagerFactory().createEntityManager();
 
@@ -90,7 +92,7 @@ public class OrgService {
         return OrgsForAdmintList;
     }
 
-
+    @HystrixCommand(fallbackMethod = "getOrg")
     public List<Object> getOrg(String guid) {
 
         String orgs = OrgCcRepository.findByGuid(guid);
@@ -131,6 +133,7 @@ public class OrgService {
 
 
     /*공간에 초대한 이메일의 token을 가진 초대 정보를 가져온다.*/
+    @HystrixCommand(fallbackMethod = "selectInviteInfo")
     public List selectInviteInfo(String code){
 
         EntityManager portalEm = portalConfig.portalEntityManager().getNativeEntityManagerFactory().createEntityManager();

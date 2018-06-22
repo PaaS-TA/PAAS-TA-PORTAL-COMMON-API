@@ -1,6 +1,7 @@
 package org.openpaas.paasta.portal.common.api.domain.user;
 
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.apache.commons.lang.RandomStringUtils;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
@@ -63,6 +64,7 @@ public class UserService {
      * @param userId the user id
      * @return UserDetail user
      */
+    @HystrixCommand(fallbackMethod = "getUser")
     public UserDetail getUser(String userId) {
         UserDetail userDetail = userDetailRepository.findByUserId(userId);
         return userDetail;
@@ -76,6 +78,7 @@ public class UserService {
      * @param userDetail the user detail
      * @return Int updateCount
      */
+    @HystrixCommand(fallbackMethod = "updateUser")
     public int updateUser(String userId, UserDetail userDetail) {
 
         int resultCnt = userDetailRepository.countByUserId(userId);
@@ -92,6 +95,7 @@ public class UserService {
      * @param userDetail the user detail
      * @return int int
      */
+    @HystrixCommand(fallbackMethod = "createUser")
     public int createUser(UserDetail userDetail) {
         int createResult = 1;
         if (createResult > 0) {
@@ -109,7 +113,7 @@ public class UserService {
      * @return boolean
      * @throws IOException the io exception
      */
-
+    @HystrixCommand(fallbackMethod = "createRequestUser")
     public Map createRequestUser(Map body) {
         Map map = new HashMap();
         try {
@@ -144,7 +148,7 @@ public class UserService {
      * @return boolean
      * @throws IOException the io exception
      */
-
+    @HystrixCommand(fallbackMethod = "resetRequestUser")
     public Map resetRequestUser(Map body) {
         Map map = new HashMap();
         try {
@@ -177,6 +181,7 @@ public class UserService {
      * @param userId the user id
      * @return 삭제 정보
      */
+    @HystrixCommand(fallbackMethod = "deleteUser")
     public Map deleteUser(String userId) {
         Map map = new HashMap();
         try {
@@ -196,6 +201,7 @@ public class UserService {
      *
      * @return 삭제 정보
      */
+    @HystrixCommand(fallbackMethod = "deleteUserInfra")
     public Map deleteUserInfra(String guid, String token) {
 
         logger.info("userId ::::: " + guid);
@@ -227,6 +233,7 @@ public class UserService {
      *
      * @return userInfo list
      */
+    @HystrixCommand(fallbackMethod = "getRefreshTokenUser")
     public UserDetail getRefreshTokenUser(UserDetail userDetail) {
         logger.info("getRefreshTokenUser :: " + userDetail.toString());
         UserDetail data = userDetailRepository.findByUserIdAndRefreshToken(userDetail.getUserId(), userDetail.getRefreshToken());
@@ -238,6 +245,7 @@ public class UserService {
      *
      * @return All Users List( GUID, userName )
      */
+    @HystrixCommand(fallbackMethod = "getUserInfo")
     public List<Map<String, Object>> getUserInfo() {
 
         EntityManager portalEm = uaaConfig.uaaEntityManager().getNativeEntityManagerFactory().createEntityManager();
