@@ -290,7 +290,7 @@ public class CatalogController {
      *
      * @return Map(자바클래스)
      */
-    @GetMapping(V2_URL + "/history/{userid}")
+    @GetMapping(V2_URL + "/{userid}/history")
     public Map<String, Object> getHistory(@PathVariable String userid) {
         return catalogService.getHistory(userid);
     }
