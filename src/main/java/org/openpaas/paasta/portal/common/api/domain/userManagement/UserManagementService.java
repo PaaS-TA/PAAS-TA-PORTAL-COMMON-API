@@ -60,7 +60,7 @@ public class UserManagementService {
      *
      * @return Map(자바클래스)
      */
-    @HystrixCommand(fallbackMethod = "getUserInfoList")
+    @HystrixCommand(commandKey = "getUserInfoList")
     public Map<String, Object> getUserInfoList(UserDetail detail) {
 
         JinqStream<UserDetail> streams = jinqSource.streamAllPortal(UserDetail.class);
@@ -72,14 +72,13 @@ public class UserManagementService {
         List<UserDetail> userDetailList = streams.toList();
 
 
-
-
         return new HashMap<String, Object>() {{
             put("list", setUserGuid(userDetailList));
         }};
 
     }
-    @HystrixCommand(fallbackMethod = "getUserInfo")
+
+    @HystrixCommand(commandKey = "getUserInfo")
     public Map<String, Object> getUserInfo(String userid) {
         JinqStream<UserDetail> streams = jinqSource.streamAllPortal(UserDetail.class);
         if (null != userid && !"".equals(userid)) {
@@ -91,12 +90,13 @@ public class UserManagementService {
             put("list", setUserGuid(userDetailList));
         }};
     }
-    //@HystrixCommand(fallbackMethod = "setUserGuid")
-    private List<UserDetail> setUserGuid(List<UserDetail> details){
+
+    @HystrixCommand(commandKey = "setUserGuid")
+    private List<UserDetail> setUserGuid(List<UserDetail> details) {
         List<Users> users = usersRepository.findAll();
         for (UserDetail userDetail : details) {
-            for (Users user:users) {
-                if(userDetail.getUserId().equals(user.getUserName())){
+            for (Users user : users) {
+                if (userDetail.getUserId().equals(user.getUserName())) {
                     userDetail.setUserGuid(user.getId());
                 }
             }
@@ -113,7 +113,7 @@ public class UserManagementService {
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
-   // @HystrixCommand(fallbackMethod = "setResetPassword")
+    @HystrixCommand(commandKey = "setResetPassword")
     public Map<String, Object> setResetPassword(String userId) throws Exception {
         //TODO 패스워드 초기화 메소드가 없습니다.
         //TODO userService.resetPassword(userId);
@@ -129,7 +129,7 @@ public class UserManagementService {
     /**
      * 사용자에게 운영자 권한을 부여한다.
      */
-    //@HystrixCommand(fallbackMethod = "updateOperatingAuthority")
+    @HystrixCommand(commandKey = "updateOperatingAuthority")
     public Map<String, Object> updateOperatingAuthority(String userId) {
         UserDetail userDetail = userDetailRepository.findByUserId(userId);
         logger.info(userDetail.toString());
@@ -143,7 +143,7 @@ public class UserManagementService {
     /**
      * 사용자를 삭제한다.
      */
-   // @HystrixCommand(fallbackMethod = "deleteUserAccount")
+    @HystrixCommand(commandKey = "deleteUserAccount")
     public Map<String, Object> deleteUserAccount(String userId) {
         userDetailRepository.deleteByUserId(userId);
 

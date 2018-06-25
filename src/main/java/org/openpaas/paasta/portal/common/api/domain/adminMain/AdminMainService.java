@@ -33,7 +33,7 @@ public class AdminMainService {
     @Autowired
     JinqSource jinqSource;
 
-    @HystrixCommand(fallbackMethod = "getTotalCountList")
+    @HystrixCommand(commandKey = "getTotalCountList")
     public Map<String, Object>getTotalCountList() {
         JinqStream<OrganizationsCc> streams = jinqSource.streamAllCc(OrganizationsCc.class);
 
@@ -48,7 +48,7 @@ public class AdminMainService {
             put("list", resultList);
         }};
     }
-    @HystrixCommand(fallbackMethod = "getTotalOrganizationList")
+    @HystrixCommand(commandKey = "getTotalOrganizationList")
     public Map<String, Object>getTotalOrganizationList() {  //Map<String, Object> reqParam
         JinqStream<OrganizationsTolCc> streams = jinqSource.streamAllCc(OrganizationsTolCc.class);
         streams = streams.sortedBy(c -> c.getId());
@@ -65,7 +65,7 @@ public class AdminMainService {
         }};
     }
 
-    @HystrixCommand(fallbackMethod = "getTotalSpaceList")
+    @HystrixCommand(commandKey = "getTotalSpaceList")
     public Map<String, Object>getTotalSpaceList(String organizationId) {
         EntityManager ccEm = ccConfig.ccEntityManager().getNativeEntityManagerFactory().createEntityManager();
         Query q = null;
