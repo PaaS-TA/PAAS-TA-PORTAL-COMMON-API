@@ -51,7 +51,7 @@ public class ConfigInfoService {
      * @return map
      * @throws Exception the exception
      */
-    @HystrixCommand(fallbackMethod = "updateValue")
+   // @HystrixCommand(fallbackMethod = "updateValue")
     public String updateValue(String name, ConfigInfo configInfo) {
         String resultStr = Constants.RESULT_STATUS_SUCCESS;
         if(configInfoRepository.findAllByName(name) != null)

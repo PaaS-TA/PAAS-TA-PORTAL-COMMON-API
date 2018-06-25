@@ -95,7 +95,7 @@ public class UserService {
      * @param userDetail the user detail
      * @return int int
      */
-    @HystrixCommand(fallbackMethod = "createUser")
+    //@HystrixCommand(fallbackMethod = "createUser")
     public int createUser(UserDetail userDetail) {
         int createResult = 1;
         if (createResult > 0) {
@@ -113,7 +113,7 @@ public class UserService {
      * @return boolean
      * @throws IOException the io exception
      */
-    @HystrixCommand(fallbackMethod = "createRequestUser")
+   // @HystrixCommand(fallbackMethod = "createRequestUser")
     public Map createRequestUser(Map body) {
         Map map = new HashMap();
         try {
@@ -148,7 +148,7 @@ public class UserService {
      * @return boolean
      * @throws IOException the io exception
      */
-    @HystrixCommand(fallbackMethod = "resetRequestUser")
+    //@HystrixCommand(fallbackMethod = "resetRequestUser")
     public Map resetRequestUser(Map body) {
         Map map = new HashMap();
         try {
@@ -181,7 +181,7 @@ public class UserService {
      * @param userId the user id
      * @return 삭제 정보
      */
-    @HystrixCommand(fallbackMethod = "deleteUser")
+    //@HystrixCommand(fallbackMethod = "deleteUser")
     public Map deleteUser(String userId) {
         Map map = new HashMap();
         try {
@@ -201,7 +201,7 @@ public class UserService {
      *
      * @return 삭제 정보
      */
-    @HystrixCommand(fallbackMethod = "deleteUserInfra")
+    //@HystrixCommand(fallbackMethod = "deleteUserInfra")
     public Map deleteUserInfra(String guid, String token) {
 
         logger.info("userId ::::: " + guid);

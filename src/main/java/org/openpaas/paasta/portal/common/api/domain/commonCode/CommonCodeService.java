@@ -186,7 +186,7 @@ public class CommonCodeService {
      * @param codeDetail CodeDetail (모델클래스)
      * @return Map(자바클래스)
      */
-    @HystrixCommand(fallbackMethod = "insertDetail")
+    //@HystrixCommand(fallbackMethod = "insertDetail")
     public Map<String,Object> insertDetail(CodeDetail codeDetail) {
         int count = codeDetailRepository.countByGroupId(codeDetail.getGroupId());
         System.out.println(count);
@@ -204,7 +204,7 @@ public class CommonCodeService {
      * @param codeGroup CodeGroup (모델클래스)
      * @return Map(자바클래스)
      */
-    @HystrixCommand(fallbackMethod = "updateCommonGroup")
+    //@HystrixCommand(fallbackMethod = "updateCommonGroup")
     public String updateCommonGroup(String id,CodeGroup codeGroup) {
         String resultStr = Constants.RESULT_STATUS_SUCCESS;
 
@@ -225,7 +225,7 @@ public class CommonCodeService {
      * @param codeDetail CodeDetail (모델클래스)
      * @return Map(자바클래스)
      */
-    @HystrixCommand(fallbackMethod = "updateCommonDetail")
+   // @HystrixCommand(fallbackMethod = "updateCommonDetail")
     public Map<String,Object> updateCommonDetail(int no, CodeDetail codeDetail) {
         String resultStr = Constants.RESULT_STATUS_SUCCESS;
         CodeDetail update=codeDetailRepository.findOne(no);
@@ -246,7 +246,7 @@ public class CommonCodeService {
      * @param id
      * * @return Map(자바클래스)
      */
-    @HystrixCommand(fallbackMethod = "deleteCommonGroup")
+    //@HystrixCommand(fallbackMethod = "deleteCommonGroup")
     public Map<String,Object> deleteCommonGroup(String id) {
         List<CodeDetail> codeDetailList =  codeDetailRepository.findByGroupId(id);
         for (CodeDetail codeDetail: codeDetailList) {
@@ -268,7 +268,7 @@ public class CommonCodeService {
      * @param no
      * @return Map(자바클래스)
      */
-    @HystrixCommand(fallbackMethod = "deleteCommonDetail")
+    //@HystrixCommand(fallbackMethod = "deleteCommonDetail")
     public Map<String,Object> deleteCommonDetail(int no) {
         codeDetailRepository.delete(no);
         return new HashMap<String, Object>() {{

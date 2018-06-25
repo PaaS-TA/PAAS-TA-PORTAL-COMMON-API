@@ -49,7 +49,7 @@ public class EmailService {
     @Autowired
     CommonService commonService;
 
-    @HystrixCommand(fallbackMethod = "resetEmail")
+    //@HystrixCommand(fallbackMethod = "resetEmail")
     public Map resetEmail(String userId, String refreshToken) {
         logger.info("resetEmail ::: " + userId);
         Map map = new HashMap();
@@ -88,7 +88,7 @@ public class EmailService {
         return map;
 
     }
-    @HystrixCommand(fallbackMethod = "createEmail")
+    //@HystrixCommand(fallbackMethod = "createEmail")
     public Map createEmail(String userId, String refreshToken) {
         logger.info("createEmail ::: " + userId);
         Map map = new HashMap();
@@ -121,7 +121,7 @@ public class EmailService {
         }
         return map;
     }
-    @HystrixCommand(fallbackMethod = "inviteOrgEmail")
+    //@HystrixCommand(fallbackMethod = "inviteOrgEmail")
     public Boolean inviteOrgEmail(Map body) {
         String[] userEmails;
 
@@ -160,7 +160,7 @@ public class EmailService {
 
         return true;
     }
-    @HystrixCommand(fallbackMethod = "inviteAccept")
+    //@HystrixCommand(fallbackMethod = "inviteAccept")
     public Map inviteAccept(Map body) {
         Map map = new HashMap();
 
@@ -182,7 +182,7 @@ public class EmailService {
 
         return map;
     }
-    @HystrixCommand(fallbackMethod = "inviteAcceptUpdate")
+    //@HystrixCommand(fallbackMethod = "inviteAcceptUpdate")
     public Map inviteAcceptUpdate(Map body) {
         try {
             InviteUser inviteUser = new InviteUser();
@@ -200,7 +200,7 @@ public class EmailService {
 
         return body;
     }
-    @HystrixCommand(fallbackMethod = "inviteOrgEmailSend")
+   // @HystrixCommand(fallbackMethod = "inviteOrgEmailSend")
     public Map inviteOrgEmailSend(String userId, String orgName, String refreshToken) {
         logger.info("createEmail ::: " + userId);
         Map map = new HashMap();

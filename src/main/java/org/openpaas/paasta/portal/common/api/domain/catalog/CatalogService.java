@@ -268,7 +268,7 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @HystrixCommand(fallbackMethod = "insertStarterCatalog")
+    //@HystrixCommand(fallbackMethod = "insertStarterCatalog")
     public Map<String, Object> insertStarterCatalog(StarterCategory param) {
         logger.info("insertStarterCatalog :: " + param.toString());
         starterCategoryRepository.save(param);
@@ -305,7 +305,7 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @HystrixCommand(fallbackMethod = "insertBuildPackCatalog")
+    //@HystrixCommand(fallbackMethod = "insertBuildPackCatalog")
     public Map<String, Object> insertBuildPackCatalog(BuildpackCategory param) {
         logger.info("insertBuildPackCatalog :: " + param.toString());
         buildpackCategoryRepository.save(param);
@@ -320,7 +320,7 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @HystrixCommand(fallbackMethod = "insertServicePackCatalog")
+    //@HystrixCommand(fallbackMethod = "insertServicePackCatalog")
     public Map<String, Object> insertServicePackCatalog(ServicepackCategory param) {
         logger.info("insertServicePackCatalog :: " + param.toString());
 //        if (param.getApp_bind_parameter() != null) {
@@ -338,7 +338,7 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @HystrixCommand(fallbackMethod = "updateStarterCatalog")
+    //@HystrixCommand(fallbackMethod = "updateStarterCatalog")
     public Map<String, Object> updateStarterCatalog(StarterCategory param) {
         logger.info("updateStarterCatalog :: " + param.toString());
         //Upate Starter Catalog
@@ -404,7 +404,7 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @HystrixCommand(fallbackMethod = "updateBuildPackCatalog")
+    //@HystrixCommand(fallbackMethod = "updateBuildPackCatalog")
     public Map<String, Object> updateBuildPackCatalog(BuildpackCategory param) {
         logger.info("updateBuildPackCatalog :: " + param.toString());
 
@@ -424,7 +424,7 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @HystrixCommand(fallbackMethod = "updateServicePackCatalog")
+    //@HystrixCommand(fallbackMethod = "updateServicePackCatalog")
     public Map<String, Object> updateServicePackCatalog(ServicepackCategory param) {
         logger.info("updateServicePackCatalog :: " + param.toString());
 
@@ -444,7 +444,7 @@ public class CatalogService {
      * @param no
      * @return Map(자바클래스)
      */
-    @HystrixCommand(fallbackMethod = "deleteStarterCatalog")
+   // @HystrixCommand(fallbackMethod = "deleteStarterCatalog")
     public Map<String, Object> deleteStarterCatalog(int no) {
         logger.info("deleteStarterCatalog :: " + no);
 
@@ -484,7 +484,7 @@ public class CatalogService {
      * @param no
      * @return Map(자바클래스)
      */
-    @HystrixCommand(fallbackMethod = "deleteBuildPackCatalog")
+    //@HystrixCommand(fallbackMethod = "deleteBuildPackCatalog")
     public Map<String, Object> deleteBuildPackCatalog(int no) {
         logger.info("deleteBuildPackCatalog :: " + no);
         buildpackCategoryRepository.delete(no);
@@ -499,7 +499,7 @@ public class CatalogService {
      * @param no
      * @return Map(자바클래스)
      */
-    @HystrixCommand(fallbackMethod = "deleteServicePackCatalog")
+    //@HystrixCommand(fallbackMethod = "deleteServicePackCatalog")
     public Map<String, Object> deleteServicePackCatalog(int no) {
         logger.info("deleteServicePackCatalog :: " + no);
         servicepackCategoryRepository.delete(no);
@@ -571,7 +571,7 @@ public class CatalogService {
             put("Buildpack", buildpackCategory);
         }};
     }
-    @HystrixCommand(fallbackMethod = "insertHistroy")
+    //@HystrixCommand(fallbackMethod = "insertHistroy")
     public Map<String,Object> insertHistroy(CatalogHistory catalog) {
         catalogHistoryRepository.save(catalog);
         return new HashMap<String, Object>() {{
