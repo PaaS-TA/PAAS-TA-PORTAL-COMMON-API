@@ -31,7 +31,7 @@ public class AppService {
     @Autowired
     PortalConfig portalConfig;
 
-    @HystrixCommand(fallbackMethod = "getAppImageUrl")
+    @HystrixCommand(commandKey = "getAppImageUrl")
     public String getAppImageUrl(String guid) {
         BuildpackLifecyleDataCc buildPack = buildpackLifecyleDataCcRepository.findDistinctTopByAppGuid(guid);
 

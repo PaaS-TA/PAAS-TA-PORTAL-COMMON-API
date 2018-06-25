@@ -55,7 +55,7 @@ public class CommonService {
      * @param reqToken   the req token
      * @return map map
      */
-    //@HystrixCommand(fallbackMethod = "procCfApiRestTemplate")
+    @HystrixCommand(commandKey = "procCfApiRestTemplate")
     public Map<String, Object> procCfApiRestTemplate(String reqUrl, HttpMethod httpMethod, Object obj, String reqToken) {
 
         String cfRequestURL = cfApiUrl + "/v2/" ;
@@ -84,7 +84,7 @@ public class CommonService {
      * @param reqToken   the req token
      * @return map map
      */
-    //@HystrixCommand(fallbackMethod = "procStorageApiRestTemplate")
+    @HystrixCommand(commandKey = "procStorageApiRestTemplate")
     public <T> ResponseEntity<T> procStorageApiRestTemplate(String reqUrl, HttpMethod httpMethod, Object bodyObject, String reqToken, Class<T> resClazz) {
         restTemplate = new RestTemplate();
         
@@ -105,11 +105,11 @@ public class CommonService {
         LOGGER.info("procRestStorageApiTemplate response Http status code :: {}", resEntity.getStatusCode());
         return resEntity;
     }
-    //@HystrixCommand(fallbackMethod = "procStorageApiRestTemplateText")
+    @HystrixCommand(commandKey = "procStorageApiRestTemplateText")
     public ResponseEntity<String> procStorageApiRestTemplateText(String reqUrl, HttpMethod httpMethod, Object bodyObject, String reqToken) {
         return procStorageApiRestTemplate( reqUrl, httpMethod, bodyObject, reqToken, String.class );
     }
-    //@HystrixCommand(fallbackMethod = "procStorageApiRestTemplateBinary")
+    @HystrixCommand(commandKey = "procStorageApiRestTemplateBinary")
     public ResponseEntity<byte[]> procStorageApiRestTemplateBinary(String reqUrl, HttpMethod httpMethod, Object bodyObject, String reqToken) {
         return procStorageApiRestTemplate( reqUrl, httpMethod, bodyObject, reqToken, byte[].class );
     }
