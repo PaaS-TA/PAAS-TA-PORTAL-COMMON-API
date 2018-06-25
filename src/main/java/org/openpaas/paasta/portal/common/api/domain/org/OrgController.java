@@ -85,4 +85,11 @@ public class OrgController {
         return  result;
     }
 
+
+    @GetMapping(V2_URL+"/invitations/userInfo/{invitename}")
+    public Map<?,?> getInviteUserList(@PathVariable String invitename){
+        return orgService.getInviteUserList(invitename);
+    }
+
+
 }
