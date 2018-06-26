@@ -8,6 +8,7 @@ import org.openpaas.paasta.portal.common.api.entity.cc.OrganizationsCc;
 import org.openpaas.paasta.portal.common.api.entity.portal.InviteOrgSpace;
 import org.openpaas.paasta.portal.common.api.repository.cc.OrgCcRepository;
 import org.openpaas.paasta.portal.common.api.repository.portal.InviteOrgSpaceRepository;
+import org.openpaas.paasta.portal.common.api.repository.portal.InviteUserRepository;
 import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,9 @@ public class OrgService {
 
     @Autowired
     JinqSource jinqSource;
+
+    @Autowired
+    InviteUserRepository inviteUserRepository;
 
     /*운영자 포털에서 조직목록을 요청했을때, 모든 조직목록을 응답한다.*/
     @HystrixCommand(fallbackMethod = "getOrgsForAdmin")
@@ -173,4 +177,7 @@ public class OrgService {
         return selectInviteInfo;
     }
 
+    public Map<?,?> getInviteUserList(String invitename){
+        return new HashMap<String, Object>(){{put("result", inviteUserRepository.findByInvitename(invitename));}};
+    }
 }

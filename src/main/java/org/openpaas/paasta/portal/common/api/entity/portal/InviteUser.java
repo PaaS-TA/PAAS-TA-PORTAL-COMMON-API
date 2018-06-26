@@ -38,6 +38,8 @@ public class InviteUser {
     @Column(name = "token", nullable = false)
     private String token;
 
+    @Column(name = "invite_name", nullable = false)
+    private String invitename;
 
     public int getId() {
         return id;
@@ -87,11 +89,11 @@ public class InviteUser {
         this.created = created;
     }
 
-    public String getToken() {
-        return token;
-    }
+    public String getToken() { return token; }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
+    public void setToken(String token) { this.token = token; }
+
+    public String getInviteName(){ return this.invitename; }
+
+    public void setInvitename(String invitename){ this.invitename = invitename; }
 }
