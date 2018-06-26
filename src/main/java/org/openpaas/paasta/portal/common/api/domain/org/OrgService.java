@@ -6,6 +6,7 @@ import org.openpaas.paasta.portal.common.api.config.dataSource.CcConfig;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
 import org.openpaas.paasta.portal.common.api.entity.cc.OrganizationsCc;
 import org.openpaas.paasta.portal.common.api.entity.portal.InviteOrgSpace;
+import org.openpaas.paasta.portal.common.api.entity.portal.InviteUser;
 import org.openpaas.paasta.portal.common.api.repository.cc.OrgCcRepository;
 import org.openpaas.paasta.portal.common.api.repository.portal.InviteOrgSpaceRepository;
 import org.openpaas.paasta.portal.common.api.repository.portal.InviteUserRepository;
@@ -178,6 +179,17 @@ public class OrgService {
     }
 
     public Map<?,?> getInviteUserList(String invitename){
-        return new HashMap<String, Object>(){{put("result", inviteUserRepository.findByInvitename(invitename));}};
+        return new HashMap<String, Object>(){{put("result", inviteUserRepository.findByInvitenameAndGubun(invitename, "send"));}};
+    }
+
+    public boolean deleteInvateUser(String guid, String userId){
+        try {
+            InviteUser inviteUser = inviteUserRepository.findFirstByUserIdAndOrgGuid(userId, guid);
+            inviteUserRepository.delete(inviteUser);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
     }
 }

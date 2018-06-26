@@ -15,5 +15,7 @@ public interface InviteUserRepository extends JpaRepository<InviteUser, Integer>
 
     List<InviteUser> findByTokenAndGubunNot(String token, String gubun);
 
-    List<InviteUser> findByInvitename(String invitename);
+    List<InviteUser> findByInvitenameAndGubun (String invitename, String gubun);
+
+    InviteUser findFirstByUserIdAndOrgGuid(String userId, String orgId);
 }

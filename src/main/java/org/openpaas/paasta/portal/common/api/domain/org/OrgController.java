@@ -91,5 +91,9 @@ public class OrgController {
         return orgService.getInviteUserList(invitename);
     }
 
+    @DeleteMapping(V2_URL+"/orgs/{guid}/invite")
+    public boolean deleteInvateUser(@PathVariable String guid, @RequestParam String userId){
+        return orgService.deleteInvateUser(guid, userId);
+    }
 
 }
