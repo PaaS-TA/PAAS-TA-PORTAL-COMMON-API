@@ -2,6 +2,7 @@ package org.openpaas.portal.common.api.service;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.apache.commons.collections.map.HashedMap;
+import org.jinq.jpa.JinqJPAStreamProvider;
 import org.jinq.orm.stream.JinqStream;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -27,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -52,7 +54,7 @@ public class CatalogTest extends TestConfig {
     private static final Logger LOGGER = LoggerFactory.getLogger(AppTest.class);
 
 
-    @InjectMocks
+    @MockBean
     CatalogService catalogService;
 
 
@@ -60,7 +62,10 @@ public class CatalogTest extends TestConfig {
     ServicepackCategoryRepository servicepackCategoryRepository;
 
 
-    @Mock
+    @Autowired
+    PortalConfig portalConfig;
+
+    @Autowired
     JinqSource jinqSource;
 
     @Mock
@@ -91,6 +96,9 @@ public class CatalogTest extends TestConfig {
         LOGGER.info("##############################################################");
 
 
+
+
+
         servicepackCategory_streams = jinqSource.streamAllPortal(ServicepackCategory.class);
 
         servicepackCategory = new ServicepackCategory();
@@ -100,6 +108,7 @@ public class CatalogTest extends TestConfig {
         result = new HashedMap();
         result.put("RESULT", Constants.RESULT_STATUS_SUCCESS);
         testServicepackCategories = getServicepackCategories();
+
 
     }
 
@@ -127,11 +136,6 @@ public class CatalogTest extends TestConfig {
 
     @Test
     public void getServicePackCatalogCount_Test() {
-        String name = "";
-        when(jinqSource.streamAllPortal(ServicepackCategory.class)).thenReturn(servicepackCategory_streams);
-        when(servicepackCategory_streams.where(c -> c.getName().equals(name))).thenReturn(servicepackCategory_streams);
-        when(servicepackCategory_streams.sortedDescendingBy(c -> c.getNo())).thenReturn(servicepackCategory_streams);
-        when(servicepackCategory_streams.toList()).thenReturn(testServicepackCategories);
         when(catalogService.getServicePackCatalogCount(servicepackCategory)).thenReturn(1);
         int rs = catalogService.getServicePackCatalogCount(servicepackCategory);
         assertEquals(rs, 1);
