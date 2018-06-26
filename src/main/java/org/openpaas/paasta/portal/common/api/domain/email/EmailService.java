@@ -121,7 +121,7 @@ public class EmailService {
         }
         return map;
     }
-    @HystrixCommand(commandKey = "inviteOrgEmail")
+    //@HystrixCommand(commandKey = "inviteOrgEmail")
     public Boolean inviteOrgEmail(Map body) {
         String[] userEmails;
 
@@ -130,9 +130,10 @@ public class EmailService {
 
         try {
             userEmails = body.get("userEmail").toString().split(",");
-            for(String userEmail : userEmails) {
-                InviteUser inviteUser = new InviteUser();
 
+            for(String userEmail : userEmails) {
+                userEmail = userEmail.trim();
+                InviteUser inviteUser = new InviteUser();
                 List<InviteUser> user = inviteUserRepository.findByUserIdAndOrgGuid(userEmail, body.get("orgId").toString());
 
                 //TODO 하나 이상일 수 있나?
@@ -144,6 +145,7 @@ public class EmailService {
                 inviteUser.setGubun("send");
                 inviteUser.setRole(body.get("userRole").toString());
                 inviteUser.setOrgGuid(body.get("orgId").toString());
+                inviteUser.setInvitename(body.get("invitename").toString());
 
                 String randomId = RandomStringUtils.randomAlphanumeric(17).toUpperCase() + RandomStringUtils.randomAlphanumeric(2).toUpperCase();
                 inviteUser.setToken(randomId);
