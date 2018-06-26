@@ -81,10 +81,6 @@ public class PortalConfig {
         dataSource.setUrl(portalUrl);
         dataSource.setUsername(portalUsername);
         dataSource.setPassword(portalPassword);
-        System.out.println("========================");
-        System.out.println(portalDriverClassName);
-        System.out.println("========================");
-
         return dataSource;
     }
 
