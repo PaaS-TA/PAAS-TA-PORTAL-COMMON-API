@@ -44,7 +44,7 @@ public class CatalogService {
     CatalogHistoryRepository catalogHistoryRepository;
 
     @Autowired
-    JinqSource jinqSource;
+    public JinqSource jinqSource;
 
     @Autowired
     CatalogCcRepository catalogCcRepository;

@@ -7,6 +7,8 @@ import org.openpaas.paasta.portal.common.api.entity.cc.BuildpackLifecyleDataCc;
 import org.openpaas.paasta.portal.common.api.entity.portal.BuildpackCategory;
 import org.openpaas.paasta.portal.common.api.repository.cc.BuildpackLifecyleDataCcRepository;
 import org.openpaas.paasta.portal.common.api.repository.portal.BuildpackCategoryRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +23,7 @@ import javax.persistence.criteria.*;
 @Service
 public class AppService {
 
-
-    @Autowired
-    BuildpackCategoryRepository buildpackCategoryRepository;
+    private static final Logger LOGGER = LoggerFactory.getLogger(AppService.class);
 
     @Autowired
     BuildpackLifecyleDataCcRepository buildpackLifecyleDataCcRepository;
