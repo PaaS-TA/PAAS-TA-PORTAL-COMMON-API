@@ -121,7 +121,7 @@ public class EmailService {
         }
         return map;
     }
-    //@HystrixCommand(commandKey = "inviteOrgEmail")
+    @HystrixCommand(commandKey = "inviteOrgEmail")
     public Boolean inviteOrgEmail(Map body) {
         String[] userEmails;
 
