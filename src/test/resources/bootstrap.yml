@@ -3,7 +3,7 @@ spring:
       name: PortalCommonApi
   cloud:
     config:
-      uri: http://10.30.80.55:8004
+      uri: http://10.30.80.55:2225
 
 server:
   port: ${PORT:2223}
