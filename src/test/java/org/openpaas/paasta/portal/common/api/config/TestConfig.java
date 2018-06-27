@@ -16,7 +16,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.util.ReflectionTestUtils;
 
 
-@ActiveProfiles("def")
+@ActiveProfiles("dev")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 //@TestPropertySource(properties = {"eureka.client.enabled=false"}) //Local용
 @TestPropertySource(value = {"/bootstrap.yml"}, properties = {"eureka.client.enabled=false"}) // Push 용
