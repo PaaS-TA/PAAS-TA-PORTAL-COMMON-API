@@ -10,7 +10,8 @@ import org.springframework.test.context.TestPropertySource;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource( properties = {"eureka.client.enabled=false"})
+//@TestPropertySource( properties = {"eureka.client.enabled=false"}) //Local용
+@TestPropertySource(value = {"/bootstrap.yml"}, properties = {"eureka.client.enabled=false"}) // Push 용
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestConfig {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestConfig.class);
