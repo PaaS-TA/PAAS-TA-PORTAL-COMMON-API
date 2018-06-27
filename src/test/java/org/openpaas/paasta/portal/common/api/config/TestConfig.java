@@ -1,16 +1,24 @@
 package org.openpaas.paasta.portal.common.api.config;
 
+import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
+import org.openpaas.paasta.portal.common.api.config.dataSource.CcConfig;
+import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
+import org.openpaas.paasta.portal.common.api.config.dataSource.UaaConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.util.ReflectionTestUtils;
 
 
+@ActiveProfiles("def")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-//@TestPropertySource( properties = {"eureka.client.enabled=false"}) //Local용
+//@TestPropertySource(properties = {"eureka.client.enabled=false"}) //Local용
 @TestPropertySource(value = {"/bootstrap.yml"}, properties = {"eureka.client.enabled=false"}) // Push 용
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestConfig {
@@ -22,7 +30,7 @@ public class TestConfig {
     public final static String GUID = "42a50bfe-f186-48dc-8e5c-ad2a73bc4a8a";
     public final static String APPNAME = "test-app";
 
-//
+
 //    @Value("${datasource.cc.driver-class-name}")
 //    String ccDriverClassName;
 //    @Value("${datasource.cc.url}")
@@ -72,8 +80,13 @@ public class TestConfig {
 //    @Autowired
 //    CcConfig ccConfig;
 
-
-    public void reflectionTestUtils() throws Exception {
+//    @Before
+//    public void setUp() throws Exception {
+//        reflectionTestUtils();
+//    }
+//
+//
+//    public void reflectionTestUtils() throws Exception {
 //        ReflectionTestUtils.setField(ccConfig, "ccDriverClassName", ccDriverClassName);
 //        ReflectionTestUtils.setField(ccConfig, "ccUrl", ccUrl);
 //        ReflectionTestUtils.setField(ccConfig, "ccUsername", ccUsername);
@@ -94,9 +107,9 @@ public class TestConfig {
 //        ReflectionTestUtils.setField(portalConfig, "portalPassword", portalPassword);
 //        ReflectionTestUtils.setField(portalConfig, "ddlAuto", portalddlAuto);
 //        ReflectionTestUtils.setField(portalConfig, "dialect", portaldialect);
-
-
-    }
+//
+//
+//    }
 
 
 }

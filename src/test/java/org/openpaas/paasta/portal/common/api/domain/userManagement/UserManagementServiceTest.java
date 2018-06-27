@@ -34,7 +34,7 @@ import static org.mockito.Mockito.*;
  * Created by indra on 2018-06-26.
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = CommonApiApplication.class)
+@SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UserManagementServiceTest extends TestConfig {
     @Mock
