@@ -20,7 +20,7 @@ import org.openpaas.paasta.portal.common.api.domain.user.UserService;
 import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
 import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailRepository;
 import org.openpaas.paasta.portal.common.api.repository.uaa.UsersRepository;
-import org.openpaas.portal.common.api.config.TestConfig;
+import org.openpaas.paasta.portal.common.api.config.TestConfig;
 import org.slf4j.Logger;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -54,15 +54,19 @@ public class UserManagementServiceTest extends TestConfig {
     @MockBean
     UserManagementService userManagementService;
 
-//    @Mock
-    UserDetail userDetail;
-
     @Mock
     JinqJPAStreamProvider streams;
 
+    UserDetail getUserInfoListSetParam;
+    UserDetail updateOperatingAuthorityResult;
+    UserDetail userDetail;
+
     List<UserDetail> userDetailList;
 
+    Map<String, Object> getUserInfoListResult;
     Map<String, Object> getUserInfoResult;
+
+    Map resultMap;
 
     @Before
     public void setUp() {
@@ -70,6 +74,43 @@ public class UserManagementServiceTest extends TestConfig {
 
         Date d = new Date();
 
+        //testGetUserInfoList
+        getUserInfoListSetParam = new UserDetail();
+        getUserInfoListSetParam.setSearchKeyword("test");
+
+        getUserInfoListResult = new HashMap<String, Object>();
+        userDetailList = new ArrayList<UserDetail>();
+        userDetail = new UserDetail();
+        userDetail.setUserId("test@test.com");
+        userDetail.setStatus("1");
+        userDetail.setTellPhone("02-1111-2222");
+        userDetail.setZipCode("123456");
+        userDetail.setAddress("서울 마포구");
+        userDetail.setAddressDetail("빌딩");
+        userDetail.setUserName("테스터");
+        userDetail.setAdminYn("Y");
+        userDetail.setRefreshToken("UDMQHWNALKF69YTCHL0");
+        userDetail.setAuthAccessCnt(0);
+        userDetail.setAuthAccessTime(d);
+        userDetail.setImgPath("");
+        userDetailList.add(userDetail);
+        userDetail = new UserDetail();
+        userDetail.setUserId("test2@test.com");
+        userDetail.setStatus("1");
+        userDetail.setTellPhone("02-3333-4444");
+        userDetail.setZipCode("123456");
+        userDetail.setAddress("서울 마포구");
+        userDetail.setAddressDetail("빌딩");
+        userDetail.setUserName("테스터2");
+        userDetail.setAdminYn("Y");
+        userDetail.setRefreshToken("E5TIG6AJCLX7EFPZVRW");
+        userDetail.setAuthAccessCnt(0);
+        userDetail.setAuthAccessTime(d);
+        userDetail.setImgPath("");
+        userDetailList.add(userDetail);
+        getUserInfoListResult.put("list", userDetailList);
+
+        //testGetUserInfo
         getUserInfoResult = new HashMap<String, Object>();
         userDetailList = new ArrayList<UserDetail>();
         userDetail = new UserDetail();
@@ -87,27 +128,39 @@ public class UserManagementServiceTest extends TestConfig {
         userDetail.setImgPath("");
         userDetailList.add(userDetail);
         getUserInfoResult.put("list", userDetailList);
+
+        //testUpdateOperatingAuthority
+        resultMap = new HashedMap();
+        resultMap.put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+        updateOperatingAuthorityResult = new UserDetail();
+        updateOperatingAuthorityResult.setUserId("test@test.com");
+        updateOperatingAuthorityResult.setStatus("1");
+        updateOperatingAuthorityResult.setTellPhone("02-1111-2222");
+        updateOperatingAuthorityResult.setZipCode("123456");
+        updateOperatingAuthorityResult.setAddress("서울 마포구");
+        updateOperatingAuthorityResult.setAddressDetail("빌딩");
+        updateOperatingAuthorityResult.setUserName("테스터");
+        updateOperatingAuthorityResult.setAdminYn("Y");
+        updateOperatingAuthorityResult.setRefreshToken("UDMQHWNALKF69YTCHL0");
+        updateOperatingAuthorityResult.setAuthAccessCnt(0);
+        updateOperatingAuthorityResult.setAuthAccessTime(d);
+        updateOperatingAuthorityResult.setImgPath("");
     }
 
     @Test
     public void testGetUserInfoList() throws Exception {
-//        when(jinqSource.streamAllPortal(any())).thenReturn(null);
-        when(userManagementService.getUserInfo(anyString())).thenReturn(new HashMap<String, Object>() {{
-            put("String", null);
-        }});
-        Map<String, Object> result = userManagementService.getUserInfoList(new UserDetail());
-        Assert.assertEquals(new HashMap<String, Object>() {{
-            put("String", null);
-        }}, result);
+        when(userManagementService.getUserInfoList(getUserInfoListSetParam)).thenReturn(getUserInfoListResult);
+
+        Map<String, Object> result = userManagementService.getUserInfoList(getUserInfoListSetParam);
+        Assert.assertEquals(getUserInfoListResult, result);
     }
 
     @Test
     public void testGetUserInfo() throws Exception {
         when(userManagementService.getUserInfo("test@test.com")).thenReturn(getUserInfoResult);
+
         Map<String, Object> result = userManagementService.getUserInfo("test@test.com");
-        Assert.assertEquals(new HashMap<String, Object>() {{
-            put("list", userDetailList);
-        }}, result);
+        Assert.assertEquals(getUserInfoResult, result);
     }
 
     @Test
@@ -120,22 +173,20 @@ public class UserManagementServiceTest extends TestConfig {
 
     @Test
     public void testUpdateOperatingAuthority() throws Exception {
-        when(userDetailRepository.findByUserId(any())).thenReturn(new UserDetail());
+        when(userDetailRepository.findByUserId("test@test.com")).thenReturn(updateOperatingAuthorityResult);
+        when(userManagementService.updateOperatingAuthority("test@test.com")).thenReturn(resultMap);
 
-        Map<String, Object> result = userManagementService.updateOperatingAuthority("userId");
-        Assert.assertEquals(new HashMap<String, Object>() {{
-            put("String", null);
-        }}, result);
+        Map<String, Object> result = userManagementService.updateOperatingAuthority("test@test.com");
+        Assert.assertEquals(resultMap, result);
     }
 
     @Test
     public void testDeleteUserAccount() throws Exception {
-        when(userDetailRepository.deleteByUserId(any())).thenReturn(0);
+        when(userDetailRepository.deleteByUserId("test@test.com")).thenReturn(1);
+        when(userManagementService.deleteUserAccount("test@test.com")).thenReturn(resultMap);
 
-        Map<String, Object> result = userManagementService.deleteUserAccount("betterpoul@gmail.com");
-        Assert.assertEquals(new HashMap<String, Object>() {{
-            put("String", null);
-        }}, result);
+        Map<String, Object> result = userManagementService.deleteUserAccount("test@test.com");
+        Assert.assertEquals(resultMap, result);
     }
 }
 
