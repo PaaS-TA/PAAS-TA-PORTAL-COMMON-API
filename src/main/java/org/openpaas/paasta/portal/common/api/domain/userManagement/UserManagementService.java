@@ -105,27 +105,6 @@ public class UserManagementService {
         return details;
     }
 
-
-    /**
-     * 사용자 패스워드 초기화를 한다.
-     *
-     * @param userId userid
-     * @return Map(자바클래스)
-     * @throws Exception Exception(자바클래스)
-     */
-    @HystrixCommand(commandKey = "setResetPassword")
-    public Map<String, Object> setResetPassword(String userId) throws Exception {
-        //TODO 패스워드 초기화 메소드가 없습니다.
-        //TODO userService.resetPassword(userId);
-        throw new UnsupportedOperationException("패스워드 초기화 메소드는 더 이상 쓰지 않습니다. expirePassword로...");
-        /*
-        return new HashMap<String, Object>() {{
-            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
-        }};
-        */
-    }
-
-
     /**
      * 사용자에게 운영자 권한을 부여한다.
      */

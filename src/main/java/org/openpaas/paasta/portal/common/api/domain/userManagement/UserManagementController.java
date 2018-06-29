@@ -48,20 +48,6 @@ public class UserManagementController {
     }
 
     /**
-     * 비밀번호를 초기화한다.
-     *
-     * @param userDetail UserManagement(모델클래스)
-     * @param userid     userId
-     * @return Map(자바클래스)
-     * @throws Exception Exception(자바클래스)
-     */
-    @PutMapping(V2_URL + "/usermgnts/{userid}/resetpassword")
-    public Map<String, Object> setResetPassword(@PathVariable String userid, @RequestBody UserDetail userDetail) throws Exception {
-        return userManagementService.setResetPassword(userDetail.getUserId());
-    }
-
-
-    /**
      * 운영권한을 부여한다.
      *
      * @param userDetail UserManagement(모델클래스)

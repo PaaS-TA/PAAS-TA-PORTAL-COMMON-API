@@ -169,7 +169,7 @@ public class CatalogService {
      * @return Map(자바클래스)
      */
     @HystrixCommand(commandKey = "getServicePackCatalogList")
-    public HashMap<String, Object> getServicePackCatalogList(ServicepackCategory param) {
+    public Map<String, Object> getServicePackCatalogList(ServicepackCategory param) {
         logger.info("getServicePackCatalogList :: " + param.toString());
         JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class);
         int no = param.getNo();

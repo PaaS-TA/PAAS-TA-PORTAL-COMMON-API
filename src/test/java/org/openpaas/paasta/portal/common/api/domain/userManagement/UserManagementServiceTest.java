@@ -164,14 +164,6 @@ public class UserManagementServiceTest extends TestConfig {
     }
 
     @Test
-    public void testSetResetPassword() throws Exception {
-        Map<String, Object> result = userManagementService.setResetPassword("userId");
-        Assert.assertEquals(new HashMap<String, Object>() {{
-            put("String", null);
-        }}, result);
-    }
-
-    @Test
     public void testUpdateOperatingAuthority() throws Exception {
         when(userDetailRepository.findByUserId("test@test.com")).thenReturn(updateOperatingAuthorityResult);
         when(userManagementService.updateOperatingAuthority("test@test.com")).thenReturn(resultMap);
