@@ -571,6 +571,7 @@ public class CatalogService {
             put("Buildpack", buildpackCategory);
         }};
     }
+
     @HystrixCommand(commandKey = "insertHistroy")
     public Map<String,Object> insertHistroy(CatalogHistory catalog) {
         catalogHistoryRepository.save(catalog);
