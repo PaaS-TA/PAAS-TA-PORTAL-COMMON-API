@@ -30,12 +30,12 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AppServiceTest extends TestConfig {
-    @Mock
-    BuildpackCategoryRepository buildpackCategoryRepository;
-    @Mock
-    BuildpackLifecyleDataCcRepository buildpackLifecyleDataCcRepository;
-    @Mock
-    PortalConfig portalConfig;
+//    @Mock
+//    BuildpackCategoryRepository buildpackCategoryRepository;
+//    @Mock
+//    BuildpackLifecyleDataCcRepository buildpackLifecyleDataCcRepository;
+//    @Mock
+//    PortalConfig portalConfig;
     @MockBean
     AppService appService;
 

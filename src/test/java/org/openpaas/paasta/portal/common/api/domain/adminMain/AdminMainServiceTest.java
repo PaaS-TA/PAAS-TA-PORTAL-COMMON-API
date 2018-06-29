@@ -32,12 +32,12 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AdminMainServiceTest extends TestConfig {
-    @Mock
-    CcConfig ccConfig;
-    @Mock
-    SpacesCcRepository spacesCcRepository;
-    @Mock
-    JinqSource jinqSource;
+//    @Mock
+//    CcConfig ccConfig;
+//    @Mock
+//    SpacesCcRepository spacesCcRepository;
+//    @Mock
+//    JinqSource jinqSource;
     @MockBean
     AdminMainService adminMainService;
 

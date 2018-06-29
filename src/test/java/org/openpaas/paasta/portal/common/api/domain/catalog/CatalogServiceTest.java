@@ -34,24 +34,24 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CatalogServiceTest extends TestConfig {
-    @Mock
-    Logger logger;
-    @Mock
-    StarterCategoryRepository starterCategoryRepository;
-    @Mock
-    BuildpackCategoryRepository buildpackCategoryRepository;
-    @Mock
-    ServicepackCategoryRepository servicepackCategoryRepository;
-    @Mock
-    StarterServicepackRelationRepository starterServicePackRelationRepository;
-    @Mock
-    StarterBuildPackRelationRepository starterBuildPackRelationRepository;
-    @Mock
-    CatalogHistoryRepository catalogHistoryRepository;
-    @Mock
-    JinqSource jinqSource;
-    @Mock
-    CatalogCcRepository catalogCcRepository;
+//    @Mock
+//    Logger logger;
+//    @Mock
+//    StarterCategoryRepository starterCategoryRepository;
+//    @Mock
+//    BuildpackCategoryRepository buildpackCategoryRepository;
+//    @Mock
+//    ServicepackCategoryRepository servicepackCategoryRepository;
+//    @Mock
+//    StarterServicepackRelationRepository starterServicePackRelationRepository;
+//    @Mock
+//    StarterBuildPackRelationRepository starterBuildPackRelationRepository;
+//    @Mock
+//    CatalogHistoryRepository catalogHistoryRepository;
+//    @Mock
+//    JinqSource jinqSource;
+//    @Mock
+//    CatalogCcRepository catalogCcRepository;
     @MockBean
     CatalogService catalogService;
 

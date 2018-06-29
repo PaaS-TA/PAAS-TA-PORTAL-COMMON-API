@@ -31,10 +31,10 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ConfigInfoServiceTest extends TestConfig {
-    @Mock
-    Logger logger;
-    @Mock
-    ConfigInfoRepository configInfoRepository;
+//    @Mock
+//    Logger logger;
+//    @Mock
+//    ConfigInfoRepository configInfoRepository;
     @MockBean
     ConfigInfoService configInfoService;
 

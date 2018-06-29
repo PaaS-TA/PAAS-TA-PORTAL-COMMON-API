@@ -32,14 +32,14 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class EmailServiceTest extends TestConfig {
-    @Mock
-    Logger logger;
-    @Mock
-    EmailConfig emailConfig;
-    @Mock
-    InviteUserRepository inviteUserRepository;
-    @Mock
-    CommonService commonService;
+//    @Mock
+//    Logger logger;
+//    @Mock
+//    EmailConfig emailConfig;
+//    @Mock
+//    InviteUserRepository inviteUserRepository;
+//    @Mock
+//    CommonService commonService;
     @MockBean
     EmailService emailService;
 
