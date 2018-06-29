@@ -1,0 +1,10 @@
+spring:
+  application:
+      name: PortalCommonApi
+  cloud:
+    config:
+      uri: http://10.30.80.50:8004
+
+server:
+  port: ${PORT:2223}
+
