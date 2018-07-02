@@ -60,9 +60,6 @@ public class UserManagementServiceTest extends TestConfig {
     @Autowired
     UserManagementService userManagementService;
 
-    @MockBean
-    UserManagementService userManagementServiceBean;
-
     @MockBean(name = "userDetailJinqStream")
     JinqStream<UserDetail> userDetailJinqStream;
 
@@ -163,20 +160,20 @@ public class UserManagementServiceTest extends TestConfig {
 
     @Test
     public void testGetUserInfoList() throws Exception {
-//        JinqStream<UserDetail> streams = jinqSource.streamAllPortal(UserDetail.class);
-//        when(streams.where(d -> d.getUserId().contains("test") || d.getUserName().contains("test"))).thenReturn((JinqStream<UserDetail>) getUserInfoListResult);
+        JinqStream<UserDetail> streams = jinqSource.streamAllPortal(UserDetail.class);
+        when(streams.where(d -> d.getUserId().contains("test") || d.getUserName().contains("test"))).thenReturn((JinqStream<UserDetail>) getUserInfoListResult);
 
-        when(userManagementServiceBean.getUserInfoList(getUserInfoListSetParam)).thenReturn(getUserInfoListResult);
+//        when(jinqSource.streamAllPortal(UserDetail.class)).thenReturn(null);
 
-        Map<String, Object> result = userManagementServiceBean.getUserInfoList(getUserInfoListSetParam);
+        Map<String, Object> result = userManagementService.getUserInfoList(getUserInfoListSetParam);
         Assert.assertEquals(getUserInfoListResult, result);
     }
 
     @Test
     public void testGetUserInfo() throws Exception {
-        when(userManagementServiceBean.getUserInfo("test@test.com")).thenReturn(getUserInfoResult);
+        when(userManagementService.getUserInfo("test@test.com")).thenReturn(getUserInfoResult);
 
-        Map<String, Object> result = userManagementServiceBean.getUserInfo("test@test.com");
+        Map<String, Object> result = userManagementService.getUserInfo("test@test.com");
         Assert.assertEquals(getUserInfoResult, result);
     }
 
