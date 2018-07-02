@@ -22,6 +22,7 @@ import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailReposit
 import org.openpaas.paasta.portal.common.api.repository.uaa.UsersRepository;
 import org.openpaas.paasta.portal.common.api.config.TestConfig;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -44,7 +45,7 @@ public class UserManagementServiceTest extends TestConfig {
 //    UserService userService;
 //    @Mock
 //    PortalConfig portalConfig;
-    @Mock
+    @MockBean(name = "userDetailRepository")
     UserDetailRepository userDetailRepository;
 //    @Mock
 //    UsersRepository usersRepository;
@@ -54,7 +55,7 @@ public class UserManagementServiceTest extends TestConfig {
 //    CommonService commonService;
 //    @Mock
 //    JinqJPAStreamProvider streams;
-    @MockBean
+    @Autowired
     UserManagementService userManagementService;
 
 
@@ -176,9 +177,9 @@ public class UserManagementServiceTest extends TestConfig {
 
     @Test
     public void testDeleteUserAccount() throws Exception {
+//        when(userDetailRepository.deleteByUserId("test@test.com")).thenReturn(1);
         given(userDetailRepository.deleteByUserId("test@test.com")).willReturn(1);
 //        when(userManagementService.deleteUserAccount("test@test.com")).thenReturn(resultMap);
-        given(userManagementService.deleteUserAccount("test@test.com")).willReturn(resultMap);
 
         Map<String, Object> result = userManagementService.deleteUserAccount("test@test.com");
         Assert.assertEquals(resultMap, result);
