@@ -28,6 +28,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
 
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 /**
@@ -175,8 +176,9 @@ public class UserManagementServiceTest extends TestConfig {
 
     @Test
     public void testDeleteUserAccount() throws Exception {
-        when(userDetailRepository.deleteByUserId("test@test.com")).thenReturn(1);
-        when(userManagementService.deleteUserAccount("test@test.com")).thenReturn(resultMap);
+        given(userDetailRepository.deleteByUserId("test@test.com")).willReturn(1);
+//        when(userManagementService.deleteUserAccount("test@test.com")).thenReturn(resultMap);
+        given(userManagementService.deleteUserAccount("test@test.com")).willReturn(resultMap);
 
         Map<String, Object> result = userManagementService.deleteUserAccount("test@test.com");
         Assert.assertEquals(resultMap, result);
