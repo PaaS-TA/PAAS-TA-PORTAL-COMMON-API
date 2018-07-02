@@ -33,7 +33,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class UserManagementService {
     private final Logger logger = getLogger(this.getClass());
 
-    private final UserService userService;
+//    private final UserService userService;
 
     @Autowired
     PortalConfig portalConfig;
@@ -44,10 +44,10 @@ public class UserManagementService {
     @Autowired
     UsersRepository usersRepository;
 
-    @Autowired
-    public UserManagementService(UserService userService) {
-        this.userService = userService;
-    }
+//    @Autowired
+//    public UserManagementService(UserService userService) {
+//        this.userService = userService;
+//    }
 
     @Autowired
     JinqSource jinqSource;

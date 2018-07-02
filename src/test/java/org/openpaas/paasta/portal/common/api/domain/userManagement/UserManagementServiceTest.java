@@ -2,6 +2,7 @@ package org.openpaas.paasta.portal.common.api.domain.userManagement;
 
 import org.apache.commons.collections.map.HashedMap;
 import org.jinq.jpa.JinqJPAStreamProvider;
+import org.jinq.orm.stream.JinqStream;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -11,6 +12,7 @@ import org.junit.runners.MethodSorters;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.stubbing.OngoingStubbing;
 import org.openpaas.paasta.portal.common.api.CommonApiApplication;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
@@ -39,8 +41,8 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UserManagementServiceTest extends TestConfig {
-//    @Mock
-//    Logger logger;
+    @MockBean(name = "logger")
+    Logger logger;
 //    @Mock
 //    UserService userService;
 //    @Mock
@@ -49,14 +51,23 @@ public class UserManagementServiceTest extends TestConfig {
     UserDetailRepository userDetailRepository;
 //    @Mock
 //    UsersRepository usersRepository;
-//    @Mock
-//    JinqSource jinqSource;
+    @MockBean(name = "jinqSource")
+    JinqSource jinqSource;
 //    @Mock
 //    CommonService commonService;
-//    @Mock
-//    JinqJPAStreamProvider streams;
+    @MockBean(name = "streams")
+    JinqJPAStreamProvider streams;
     @Autowired
     UserManagementService userManagementService;
+
+    @MockBean
+    UserManagementService userManagementServiceBean;
+
+    @MockBean(name = "userDetailJinqStream")
+    JinqStream<UserDetail> userDetailJinqStream;
+
+    @MockBean(name = "jinqStream")
+    JinqStream jinqStream;
 
 
 
@@ -152,17 +163,20 @@ public class UserManagementServiceTest extends TestConfig {
 
     @Test
     public void testGetUserInfoList() throws Exception {
-        when(userManagementService.getUserInfoList(getUserInfoListSetParam)).thenReturn(getUserInfoListResult);
+//        JinqStream<UserDetail> streams = jinqSource.streamAllPortal(UserDetail.class);
+//        when(streams.where(d -> d.getUserId().contains("test") || d.getUserName().contains("test"))).thenReturn((JinqStream<UserDetail>) getUserInfoListResult);
 
-        Map<String, Object> result = userManagementService.getUserInfoList(getUserInfoListSetParam);
+        when(userManagementServiceBean.getUserInfoList(getUserInfoListSetParam)).thenReturn(getUserInfoListResult);
+
+        Map<String, Object> result = userManagementServiceBean.getUserInfoList(getUserInfoListSetParam);
         Assert.assertEquals(getUserInfoListResult, result);
     }
 
     @Test
     public void testGetUserInfo() throws Exception {
-        when(userManagementService.getUserInfo("test@test.com")).thenReturn(getUserInfoResult);
+        when(userManagementServiceBean.getUserInfo("test@test.com")).thenReturn(getUserInfoResult);
 
-        Map<String, Object> result = userManagementService.getUserInfo("test@test.com");
+        Map<String, Object> result = userManagementServiceBean.getUserInfo("test@test.com");
         Assert.assertEquals(getUserInfoResult, result);
     }
 
