@@ -169,7 +169,8 @@ public class UserManagementServiceTest extends TestConfig {
     @Test
     public void testUpdateOperatingAuthority() throws Exception {
 //        when(userDetailRepository.findByUserId("test@test.com")).thenReturn(updateOperatingAuthorityResult);
-        when(userManagementService.updateOperatingAuthority("test@test.com")).thenReturn(resultMap);
+//        when(userManagementService.updateOperatingAuthority("test@test.com")).thenReturn(resultMap);
+        when(userDetailRepository.findByUserId("test@test.com")).thenReturn(updateOperatingAuthorityResult);
 
         Map<String, Object> result = userManagementService.updateOperatingAuthority("test@test.com");
         Assert.assertEquals(resultMap, result);
