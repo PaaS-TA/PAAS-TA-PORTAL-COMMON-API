@@ -43,8 +43,8 @@ public class UserManagementServiceTest extends TestConfig {
 //    UserService userService;
 //    @Mock
 //    PortalConfig portalConfig;
-//    @Mock
-//    UserDetailRepository userDetailRepository;
+    @Mock
+    UserDetailRepository userDetailRepository;
 //    @Mock
 //    UsersRepository usersRepository;
 //    @Mock
@@ -175,7 +175,7 @@ public class UserManagementServiceTest extends TestConfig {
 
     @Test
     public void testDeleteUserAccount() throws Exception {
-//        when(userDetailRepository.deleteByUserId("test@test.com")).thenReturn(1);
+        when(userDetailRepository.deleteByUserId("test@test.com")).thenReturn(1);
         when(userManagementService.deleteUserAccount("test@test.com")).thenReturn(resultMap);
 
         Map<String, Object> result = userManagementService.deleteUserAccount("test@test.com");
