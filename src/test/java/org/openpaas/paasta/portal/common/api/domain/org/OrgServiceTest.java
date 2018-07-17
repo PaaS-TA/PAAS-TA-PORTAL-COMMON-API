@@ -55,6 +55,9 @@ public class OrgServiceTest extends TestConfig {
     @MockBean
     OrgService orgService;
 
+    @InjectMocks
+    OrgService orgServiceInject;
+
     List<Object> getOrgsForAdminResult;
     HashMap obejct1;
 
