@@ -1,38 +1,36 @@
 package org.openpaas.paasta.portal.common.api.domain.org;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.internal.handler.MockHandlerFactory;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
 import org.openpaas.paasta.portal.common.api.config.TestConfig;
 import org.openpaas.paasta.portal.common.api.config.dataSource.CcConfig;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
+import org.openpaas.paasta.portal.common.api.entity.cc.OrganizationsCc;
 import org.openpaas.paasta.portal.common.api.entity.portal.InviteUser;
 import org.openpaas.paasta.portal.common.api.repository.cc.OrgCcRepository;
 import org.openpaas.paasta.portal.common.api.repository.portal.InviteOrgSpaceRepository;
 import org.openpaas.paasta.portal.common.api.repository.portal.InviteUserRepository;
 import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailRepository;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.reflect.Whitebox;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.util.*;
 
 import static org.mockito.Mockito.*;
@@ -40,9 +38,8 @@ import static org.mockito.Mockito.*;
 /**
  * Created by indra on 2018-06-29.
  */
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
-@RunWith(PowerMockRunner.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OrgServiceTest extends TestConfig {
     @Mock
@@ -152,12 +149,10 @@ public class OrgServiceTest extends TestConfig {
 
     @Test
     public void testGetOrgsForAdmin() throws Exception {
-        OrgService service = PowerMockito.mock(OrgService.class);
-        when(service.getOrgsForAdmin()).thenReturn(getOrgsForAdminResult);
+        when(orgServiceAuto.getOrgsForAdmin()).thenReturn(getOrgsForAdminResult);
 
-        List<Object> result = service.getOrgsForAdmin();
+        List<Object> result = orgServiceAuto.getOrgsForAdmin();
         Assert.assertEquals(getOrgsForAdminResult, result);
-//        PowerMockito.verifyStatic();
     }
 
     @Test
