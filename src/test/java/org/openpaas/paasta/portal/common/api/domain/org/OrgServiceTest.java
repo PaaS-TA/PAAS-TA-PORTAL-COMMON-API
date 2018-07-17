@@ -8,7 +8,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
 import org.openpaas.paasta.portal.common.api.config.TestConfig;
 import org.openpaas.paasta.portal.common.api.config.dataSource.CcConfig;
@@ -18,11 +20,19 @@ import org.openpaas.paasta.portal.common.api.repository.cc.OrgCcRepository;
 import org.openpaas.paasta.portal.common.api.repository.portal.InviteOrgSpaceRepository;
 import org.openpaas.paasta.portal.common.api.repository.portal.InviteUserRepository;
 import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailRepository;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.persistence.EntityManager;
 import java.util.*;
 
 import static org.mockito.Mockito.*;
@@ -30,33 +40,42 @@ import static org.mockito.Mockito.*;
 /**
  * Created by indra on 2018-06-29.
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
+@RunWith(PowerMockRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OrgServiceTest extends TestConfig {
-//    @Mock
-//    Logger LOGGER;
-//    @Mock
-//    OrgService userService;
-//    @Mock
-//    UserDetailRepository userDetailRepository;
-//    @Mock
-//    OrgCcRepository orgCcRepository;
-//    @Mock
-//    InviteOrgSpaceRepository inviteOrgSpaceRepository;
-//    @Mock
-//    PortalConfig portalConfig;
-//    @Mock
-//    CcConfig ccConfig;
-//    @Mock
-//    JinqSource jinqSource;
-//    @Mock
-//    InviteUserRepository inviteUserRepository;
-    @MockBean
+    @Mock
+    Logger LOGGER;
+    @Mock
+    OrgService userService;
+    @Mock
+    UserDetailRepository userDetailRepository;
+    @Mock
+    OrgCcRepository orgCcRepository;
+    @Mock
+    InviteOrgSpaceRepository inviteOrgSpaceRepository;
+    @Mock
+    PortalConfig portalConfig;
+    @Mock
+    CcConfig ccConfig;
+    @Mock
+    JinqSource jinqSource;
+    @Mock
+    InviteUserRepository inviteUserRepository;
+
+
+    @Mock
     OrgService orgService;
+
+    @MockBean
+    OrgService orgServiceBean;
 
     @InjectMocks
     OrgService orgServiceInject;
+
+    @Autowired
+    OrgService orgServiceAuto;
 
     List<Object> getOrgsForAdminResult;
     HashMap obejct1;
@@ -133,10 +152,12 @@ public class OrgServiceTest extends TestConfig {
 
     @Test
     public void testGetOrgsForAdmin() throws Exception {
-        when(orgService.getOrgsForAdmin()).thenReturn(getOrgsForAdminResult);
+        OrgService service = PowerMockito.mock(OrgService.class);
+        when(service.getOrgsForAdmin()).thenReturn(getOrgsForAdminResult);
 
-        List<Object> result = orgService.getOrgsForAdmin();
+        List<Object> result = service.getOrgsForAdmin();
         Assert.assertEquals(getOrgsForAdminResult, result);
+//        PowerMockito.verifyStatic();
     }
 
     @Test
@@ -171,5 +192,3 @@ public class OrgServiceTest extends TestConfig {
         Assert.assertEquals(true, result);
     }
 }
-
-//Generated with love by TestMe :) Please report issues and submit feature requests at: http://weirddev.com/forum#!/testme
