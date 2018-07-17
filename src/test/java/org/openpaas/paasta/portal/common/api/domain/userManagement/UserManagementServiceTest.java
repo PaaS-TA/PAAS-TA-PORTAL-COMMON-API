@@ -186,9 +186,9 @@ public class UserManagementServiceTest extends TestConfig {
 //        JinqStream streams = mock(JinqStream.class, Mockito.RETURNS_DEEP_STUBS);
         JinqStream<UserDetail> streams = mock(JinqStream.class, Mockito.RETURNS_DEEP_STUBS);
         when(jinqSource.streamAllPortal(UserDetail.class)).thenReturn(streams);
-        when(userManagementServiceBean.getUserInfoList(getUserInfoListSetParam)).thenReturn(getUserInfoListResult);
+        when(userManagementService.getUserInfoList(getUserInfoListSetParam)).thenReturn(getUserInfoListResult);
 
-        Map<String, Object> result = userManagementServiceBean.getUserInfoList(getUserInfoListSetParam);
+        Map<String, Object> result = userManagementService.getUserInfoList(getUserInfoListSetParam);
         Assert.assertEquals(getUserInfoListResult, result);
     }
 
@@ -196,9 +196,9 @@ public class UserManagementServiceTest extends TestConfig {
     public void testGetUserInfo() throws Exception {
         JinqStream<UserDetail> streams = mock(JinqStream.class, Mockito.RETURNS_DEEP_STUBS);
         when(jinqSource.streamAllPortal(UserDetail.class)).thenReturn(streams);
-        when(userManagementServiceMock.getUserInfo("test@test.com")).thenReturn(getUserInfoResult);
+        when(userManagementService.getUserInfo("test@test.com")).thenReturn(getUserInfoResult);
 
-        Map<String, Object> result = userManagementServiceMock.getUserInfo("test@test.com");
+        Map<String, Object> result = userManagementService.getUserInfo("test@test.com");
         Assert.assertEquals(getUserInfoResult, result);
     }
 
