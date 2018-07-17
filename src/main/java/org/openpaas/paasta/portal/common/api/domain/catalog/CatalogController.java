@@ -47,7 +47,7 @@ public class CatalogController {
     }
 
     /**
-     * [앱 템플릿] 카탈로그 목록을 조회한다.
+     * [앱 개발환경] 카탈로그 목록을 조회한다.
      *
      * @param param Catalog model
      * @return Map
@@ -267,6 +267,7 @@ public class CatalogController {
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("buildpackRelcount", buildPackRelCnt);
         return resultMap;
+
     }
 
     /**
