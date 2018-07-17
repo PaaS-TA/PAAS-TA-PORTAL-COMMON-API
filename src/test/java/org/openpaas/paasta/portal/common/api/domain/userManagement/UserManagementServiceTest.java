@@ -182,26 +182,26 @@ public class UserManagementServiceTest extends TestConfig {
         updateOperatingAuthorityResult.setImgPath("");
     }
 
-    @Test
-    public void testGetUserInfoList() throws Exception {
-//        JinqStream streams = mock(JinqStream.class, Mockito.RETURNS_DEEP_STUBS);
-//        JinqStream<UserDetail> streams = mock(JinqStream.class, Mockito.RETURNS_DEEP_STUBS);
-//        when(jinqSource.streamAllPortal(UserDetail.class)).thenReturn(streams2);
-        when(userManagementService.getUserInfoList(getUserInfoListSetParam)).thenReturn(getUserInfoListResult);
-
-        Map<String, Object> result = userManagementService.getUserInfoList(getUserInfoListSetParam);
-        Assert.assertEquals(getUserInfoListResult, result);
-    }
-
-    @Test
-    public void testGetUserInfo() throws Exception {
-//        JinqStream<UserDetail> streams = mock(JinqStream.class, Mockito.RETURNS_DEEP_STUBS);
-//        when(jinqSource.streamAllPortal(UserDetail.class)).thenReturn(streams);
-        when(userManagementService.getUserInfo("test@test.com")).thenReturn(getUserInfoResult);
-
-        Map<String, Object> result = userManagementService.getUserInfo("test@test.com");
-        Assert.assertEquals(getUserInfoResult, result);
-    }
+//    @Test
+//    public void testGetUserInfoList() throws Exception {
+////        JinqStream streams = mock(JinqStream.class, Mockito.RETURNS_DEEP_STUBS);
+////        JinqStream<UserDetail> streams = mock(JinqStream.class, Mockito.RETURNS_DEEP_STUBS);
+////        when(jinqSource.streamAllPortal(UserDetail.class)).thenReturn(streams2);
+//        when(userManagementService.getUserInfoList(getUserInfoListSetParam)).thenReturn(getUserInfoListResult);
+//
+//        Map<String, Object> result = userManagementService.getUserInfoList(getUserInfoListSetParam);
+//        Assert.assertEquals(getUserInfoListResult, result);
+//    }
+//
+//    @Test
+//    public void testGetUserInfo() throws Exception {
+////        JinqStream<UserDetail> streams = mock(JinqStream.class, Mockito.RETURNS_DEEP_STUBS);
+////        when(jinqSource.streamAllPortal(UserDetail.class)).thenReturn(streams);
+//        when(userManagementService.getUserInfo("test@test.com")).thenReturn(getUserInfoResult);
+//
+//        Map<String, Object> result = userManagementService.getUserInfo("test@test.com");
+//        Assert.assertEquals(getUserInfoResult, result);
+//    }
 
     @Test
     public void testUpdateOperatingAuthority() throws Exception {
