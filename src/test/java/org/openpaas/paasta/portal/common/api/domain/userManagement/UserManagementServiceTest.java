@@ -198,6 +198,7 @@ public class UserManagementServiceTest extends TestConfig {
         when(jinqSource.streamAllPortal(UserDetail.class)).thenReturn(streams);
         when(userManagementService.getUserInfo("test@test.com")).thenReturn(getUserInfoResult);
 
+
         Map<String, Object> result = userManagementService.getUserInfo("test@test.com");
         Assert.assertEquals(getUserInfoResult, result);
     }
