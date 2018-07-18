@@ -6,8 +6,6 @@ import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
 import org.openpaas.paasta.portal.common.api.domain.common.CommonService;
-import org.openpaas.paasta.portal.common.api.domain.user.UserService;
-import org.openpaas.paasta.portal.common.api.entity.portal.StarterCategory;
 import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
 import org.openpaas.paasta.portal.common.api.entity.uaa.Users;
 import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailRepository;
@@ -130,6 +128,22 @@ public class UserManagementService {
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
         }};
     }
+
+    /**
+     * 사용자 포탈 접속 성공 유무 수정
+     */
+    @HystrixCommand(commandKey = "UpdateUserActive")
+    public Map<String, Object> UpdateUserActive(String userId) {
+        UserDetail userDetail = userDetailRepository.findByUserId(userId);
+        logger.info(userDetail.toString());
+        userDetail.setActive(!userDetail.getActive().equals("Y") ? "Y" : "N");
+        userDetailRepository.save(userDetail);
+        return new HashMap<String, Object>() {{
+            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+        }};
+    }
+
+
 
 }
 

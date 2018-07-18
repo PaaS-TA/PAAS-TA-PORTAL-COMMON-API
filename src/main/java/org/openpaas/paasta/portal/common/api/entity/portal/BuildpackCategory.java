@@ -156,12 +156,12 @@ public class BuildpackCategory {
         this.appSampleFileName = appSampleFileName;
     }
 
-    public String getAppSampleFilePaht() {
+    public String getAppSampleFilePath() {
         return appSampleFilePath;
     }
 
-    public void setAppSampleFilePaht(String appSampleFilePaht) {
-        this.appSampleFilePath = appSampleFilePaht;
+    public void setAppSampleFilePath(String appSampleFilePath) {
+        this.appSampleFilePath = appSampleFilePath;
     }
 
     public String getAppSampleFileSize() {
@@ -220,14 +220,6 @@ public class BuildpackCategory {
 
     public void setClassificationSummary(String classificationSummary) {
         this.classificationSummary = classificationSummary;
-    }
-
-    public String getAppSampleFilePath() {
-        return appSampleFilePath;
-    }
-
-    public void setAppSampleFilePath(String appSampleFilePath) {
-        this.appSampleFilePath = appSampleFilePath;
     }
 
     public String getBuildPackName() {

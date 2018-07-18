@@ -15,7 +15,4 @@ public interface ConfigInfoRepository extends JpaRepository<ConfigInfo, Integer>
 
     List<ConfigInfo> findAllByName(String name);
 
-    List<ConfigInfo> findAllByNameNotNull(String name);
-
-    int countByName(String name);
 }

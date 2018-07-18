@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Tuple;
@@ -20,6 +21,7 @@ import javax.persistence.criteria.*;
 /**
  * Created by indra on 2018-02-06.
  */
+@RequestMapping
 @Service
 public class AppService {
 

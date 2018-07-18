@@ -73,4 +73,16 @@ public class UserManagementController {
     }
 
 
+    /**
+     * 사용자 포탈 접속 가능 유무 수정
+     *
+     * @param userid     userId
+     * @return Map(자바클래스)
+     * @throws Exception Exception(자바클래스)
+     */
+    @PutMapping(V2_URL + "/usermgnts/{userid}/active")
+    public Map<String, Object> UpdateUserActive(@PathVariable String userid) throws Exception {
+        return userManagementService.UpdateUserActive(userid);
+    }
+
 }

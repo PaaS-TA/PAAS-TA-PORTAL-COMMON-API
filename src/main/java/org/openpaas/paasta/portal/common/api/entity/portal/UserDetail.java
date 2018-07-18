@@ -53,6 +53,10 @@ public class UserDetail {
     @Column(name = "auth_access_cnt", nullable = false)
     private int authAccessCnt;
 
+    @NotNull
+    @Column(name = "active", nullable = false)
+    private String active;
+
     @Transient
     private String searchKeyword;
 
@@ -172,9 +176,17 @@ public class UserDetail {
         this.userGuid = userGuid;
     }
 
+    public String getActive() {
+        return active;
+    }
+
+    public void setActive(String active) {
+        this.active = active;
+    }
+
     @Override
     public String toString() {
-        return "UserDetail{" + "userId='" + userId + '\'' + ", userName='" + userName + '\'' + ", status='" + status + '\'' + ", tellPhone='" + tellPhone + '\'' + ", zipCode='" + zipCode + '\'' + ", address='" + address + '\'' + ", addressDetail='" + addressDetail + '\'' + ", adminYn='" + adminYn + '\'' + ", imgPath='" + imgPath + '\'' + ", refreshToken='" + refreshToken + '\'' + ", authAccessTime=" + authAccessTime + ", authAccessCnt=" + authAccessCnt + ", searchKeyword='" + searchKeyword + '\'' + ", userGuid='" + userGuid + '\'' + '}';
+        return "UserDetail{" + "userId='" + userId + '\'' + ", userName='" + userName + '\'' + ", status='" + status + '\'' + ", tellPhone='" + tellPhone + '\'' + ", zipCode='" + zipCode + '\'' + ", address='" + address + '\'' + ", addressDetail='" + addressDetail + '\'' + ", adminYn='" + adminYn + '\'' + ", imgPath='" + imgPath + '\'' + ", refreshToken='" + refreshToken + '\'' + ", authAccessTime=" + authAccessTime + ", authAccessCnt=" + authAccessCnt + ", searchKeyword='" + searchKeyword + '\'' + ", userGuid='" + userGuid + '\'' + ", active='" + active +'}';
     }
 }
 

@@ -179,7 +179,7 @@ public class UserController {
      */
 
     @GetMapping(V2_URL + "/users/{userid}/search/refreshtoken")
-    public UserDetail getUserRefreshToken(@PathVariable String userid, @ModelAttribute UserDetail body) throws Exception {
+    public UserDetail c(@PathVariable String userid, @ModelAttribute UserDetail body) throws Exception {
         body.setUserId(userid);
         UserDetail result = userService.getRefreshTokenUser(body);
         return result;
