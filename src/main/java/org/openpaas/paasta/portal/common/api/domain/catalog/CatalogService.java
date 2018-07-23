@@ -115,6 +115,25 @@ public class CatalogService {
     }
 
     /**
+     * 앱 템플릿 목록을 조회한다.
+     *
+     * @param use String
+     * @return Map(자바클래스)
+     */
+    @HystrixCommand(commandKey = "getStarterList")
+    public Map<String, Object> getStarterList(String use) {
+        JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class);
+        if (null != use && !"".equals(use)) {
+            streams = streams.where(c -> c.getUseYn().equals(use));
+        }
+        streams = streams.sortedDescendingBy(c -> c.getNo());
+        List<StarterCategory> starterCategoryList = streams.toList();
+        return new HashMap<String, Object>() {{
+            put("list", starterCategoryList);
+        }};
+    }
+
+    /**
      * 앱 개발환경 카탈로그 목록을 조회한다.
      *
      * @param param Catalog(모델클래스)
@@ -142,6 +161,26 @@ public class CatalogService {
             put("list", buildpackCategoryList);
         }};
     }
+
+    /**
+     * 앱 개발환경 카탈로그 목록을 조회한다.
+     *
+     * @param use String
+     * @return Map(자바클래스)
+     */
+    @HystrixCommand(commandKey = "getBuildPackList")
+    public Map<String, Object> getBuildPackList(String use) {
+        JinqStream<BuildpackCategory> streams = jinqSource.streamAllPortal(BuildpackCategory.class);
+        if (null != use && !"".equals(use)) {
+            streams = streams.where(c -> c.getUseYn().equals(use));
+        }
+        streams = streams.sortedDescendingBy(c -> c.getNo());
+        List<BuildpackCategory> starterCategoryList = streams.toList();
+        return new HashMap<String, Object>() {{
+            put("list", starterCategoryList);
+        }};
+    }
+
     @HystrixCommand(commandKey = "getPacks")
     public Map<String, Object> getPacks(String searchKeyword) {
 
@@ -151,6 +190,7 @@ public class CatalogService {
             streams = streams.where(c -> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
             streams2 = streams2.where(c -> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
         }
+
         streams = streams.sortedDescendingBy(c -> c.getNo());
         streams2 = streams2.sortedDescendingBy(c -> c.getNo());
         List<StarterCategory> starterCategoryList = streams.toList();
@@ -158,6 +198,26 @@ public class CatalogService {
         return new HashMap<String, Object>() {{
             put("TemplateList", starterCategoryList);
             put("BuildPackList", buildpackCategoryList);
+        }};
+    }
+
+    /**
+     * 서비스 카탈로그 목록을 조회한다.
+     *
+     * @param use String
+     * @return Map(자바클래스)
+     */
+    @HystrixCommand(commandKey = "getServicePackList")
+    public Map<String, Object> getServicePackList(String use) {
+        JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class);
+        logger.info(use);
+        if (null != use && !"".equals(use)) {
+            streams = streams.where(c -> c.getUseYn().equals(use));
+        }
+        streams = streams.sortedDescendingBy(c -> c.getNo());
+        List<ServicepackCategory> starterCategoryList = streams.toList();
+        return new HashMap<String, Object>() {{
+            put("list", starterCategoryList);
         }};
     }
 
@@ -555,10 +615,12 @@ public class CatalogService {
     @HystrixCommand(commandKey = "getStarterRelation")
     public Map<String,Object> getStarterRelation(int no) {
         StarterCategory starterCategory = starterCategoryRepository.findByNo(no);
-        List<StarterServicepackRelation> starterServicepackRelationRepository = starterServicePackRelationRepository.findByStarterCatalogNo(no);
         List<ServicepackCategory> servicepackCategories = new ArrayList<>();
-        for (StarterServicepackRelation starter : starterServicepackRelationRepository ) {
-            ServicepackCategory servicepackCategory = servicepackCategoryRepository.findByNo(starter.getServicepackCategoryNo());
+        JinqStream<StarterServicepackRelation> streams = jinqSource.streamAllPortal(StarterServicepackRelation.class);
+        streams = streams.where(c -> c.getStarterCatalogNo() == no);
+        List<Integer> integerlist = streams.select(c -> c.getServicepackCategoryNo()).distinct().toList();
+        for (Integer number : integerlist ) {
+            ServicepackCategory servicepackCategory = servicepackCategoryRepository.findByNo(number);
             if(servicepackCategory != null){
                 servicepackCategories.add(servicepackCategory);
             }

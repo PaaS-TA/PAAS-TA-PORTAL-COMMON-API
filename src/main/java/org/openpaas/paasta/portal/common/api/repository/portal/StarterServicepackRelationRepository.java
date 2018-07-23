@@ -1,5 +1,6 @@
 package org.openpaas.paasta.portal.common.api.repository.portal;
 
+import org.hibernate.criterion.Distinct;
 import org.openpaas.paasta.portal.common.api.entity.portal.StarterServicepackRelation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -12,4 +13,5 @@ import java.util.List;
 @Repository
 public interface StarterServicepackRelationRepository extends JpaRepository<StarterServicepackRelation, Integer> {
     List<StarterServicepackRelation> findByStarterCatalogNo(int startCatalogNo);
+    List<StarterServicepackRelation> findDistinctByStarterCatalogNo(int startCatalogNo);
 }

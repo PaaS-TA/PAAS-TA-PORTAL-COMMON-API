@@ -81,8 +81,8 @@ public class UserManagementController {
      * @throws Exception Exception(자바클래스)
      */
     @PutMapping(V2_URL + "/usermgnts/{userid}/active")
-    public Map<String, Object> UpdateUserActive(@PathVariable String userid) throws Exception {
-        return userManagementService.UpdateUserActive(userid);
+    public Map<String, Object> UpdateUserActive(@PathVariable String userid, @RequestBody UserDetail userDetail) throws Exception {
+        return userManagementService.UpdateUserActive(userid, userDetail);
     }
 
 }

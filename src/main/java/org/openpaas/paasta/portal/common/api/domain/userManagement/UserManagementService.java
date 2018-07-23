@@ -133,10 +133,9 @@ public class UserManagementService {
      * 사용자 포탈 접속 성공 유무 수정
      */
     @HystrixCommand(commandKey = "UpdateUserActive")
-    public Map<String, Object> UpdateUserActive(String userId) {
+    public Map<String, Object> UpdateUserActive(String userId, UserDetail _userDetail) {
         UserDetail userDetail = userDetailRepository.findByUserId(userId);
-        logger.info(userDetail.toString());
-        userDetail.setActive(!userDetail.getActive().equals("Y") ? "Y" : "N");
+        userDetail.setActive(_userDetail.getActive());
         userDetailRepository.save(userDetail);
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);

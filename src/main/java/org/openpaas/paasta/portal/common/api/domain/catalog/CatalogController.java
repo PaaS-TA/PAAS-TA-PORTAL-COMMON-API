@@ -36,6 +36,17 @@ public class CatalogController {
     }
 
     /**
+     * [앱 템플릿] 카탈로그 목록을 조회한다.
+     *
+     * @param use String use_yn
+     * @return Map
+     */
+    @GetMapping(V2_URL + "/{use}/starterpacks")
+    public Map<String, Object> getStarterList(@PathVariable String use) {
+        return catalogService.getStarterList(use);
+    }
+
+    /**
      * [앱 템플릿] 카탈로그를 조회한다.
      *
      * @param catalogNo int Catalog No
@@ -70,6 +81,19 @@ public class CatalogController {
         return catalogService.getBuildPackCatalogList(param);
     }
 
+    /**
+     * [앱 개발환경] 카탈로그를 조회한다.
+     *
+     * @param use String use_yn
+     * @return Map
+     */
+    @GetMapping(V2_URL + "/{use}/developpacks")
+    public Map<String, Object> getBuildPackList(@PathVariable String use) {
+        return catalogService.getBuildPackList(use);
+    }
+
+
+
     @GetMapping(V2_URL + "/packs")
     public Map<String, Object> getPacks(@RequestParam String searchKeyword) {
         return catalogService.getPacks(searchKeyword);
@@ -84,6 +108,17 @@ public class CatalogController {
     @GetMapping(V2_URL + "/servicepacks")
     public Map<String, Object> getServicePackCatalogList(@ModelAttribute ServicepackCategory param) {
         return catalogService.getServicePackCatalogList(param);
+    }
+
+    /**
+     * [앱 서비스] 카탈로그 목록을 조회한다.
+     *
+     * @param use String use_yn
+     * @return Map
+     */
+    @GetMapping(V2_URL + "/{use}/servicepacks")
+    public Map<String, Object> getServicePackList(@PathVariable String use) {
+        return catalogService.getServicePackList(use);
     }
 
     /**
