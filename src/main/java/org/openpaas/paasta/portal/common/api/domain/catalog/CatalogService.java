@@ -57,7 +57,7 @@ public class CatalogService {
      */
     @HystrixCommand(commandKey = "getStarterCatalog")
     public Map<String, Object> getStarterCatalog(int no) {
-        logger.info(""+no);
+        logger.info("" + no);
         StarterCategory starterCategory = starterCategoryRepository.findOne(no);
         try {
             //기존 스타터 서비스 릴레이션 가져오기
@@ -383,13 +383,29 @@ public class CatalogService {
     @HystrixCommand(commandKey = "insertServicePackCatalog")
     public Map<String, Object> insertServicePackCatalog(ServicepackCategory param) {
         logger.info("insertServicePackCatalog :: " + param.toString());
-//        if (param.getApp_bind_parameter() != null) {
-//            param.setAppBindParameter(param.getApp_bind_parameter());
-//        }
+        param.setParameter(jsonCheck(param.getParameter()));
+        param.setAppBindParameter(jsonCheck(param.getAppBindParameter()));
         servicepackCategoryRepository.save(param);
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
         }};
+    }
+
+
+    private String jsonCheck(String str) {
+        String original = str;
+        str = str.replace("{", "").replace("}", "");
+        String[] params1 = str.split(",");
+
+        if (params1.length == 0) {
+            return "";
+        } else {
+            if (str.indexOf(":") <= 0) {
+                return "";
+            } else {
+                return original;
+            }
+        }
     }
 
     /**
@@ -491,6 +507,10 @@ public class CatalogService {
         ServicepackCategory update = servicepackCategoryRepository.findOne(param.getNo());
         param.setCreated(update.getCreated());
         param.setLastmodified(new Date());
+        param.setParameter(jsonCheck(param.getParameter()));
+        param.setAppBindParameter(jsonCheck(param.getAppBindParameter()));
+        logger.info("updateServicePackCatalog2 :: " + param.toString());
+
         ServicepackCategory servicepackCategory = servicepackCategoryRepository.save(param);
 
         return new HashMap<String, Object>() {{
@@ -504,7 +524,7 @@ public class CatalogService {
      * @param no
      * @return Map(자바클래스)
      */
-   // @HystrixCommand(commandKey = "deleteStarterCatalog")
+    // @HystrixCommand(commandKey = "deleteStarterCatalog")
     public Map<String, Object> deleteStarterCatalog(int no) {
         logger.info("deleteStarterCatalog :: " + no);
 
@@ -570,36 +590,37 @@ public class CatalogService {
 
     /**
      * 최신항목을 가져온다.
-     *
      */
     @HystrixCommand(commandKey = "getHistory")
-    public Map<String,Object> getHistory(String userid) {
+    public Map<String, Object> getHistory(String userid) {
         List<CatalogHistory> catalogHistories = catalogHistoryRepository.findAllByUserIdOrderByLastmodifiedDesc(userid);
         List<Object> resultHistory = new ArrayList<>();
 
         try {
             final int starterpacknum = catalogHistories.stream().filter(a -> a.getCatalogType().equals("starter")).findFirst().get().getCatalogNo();
             final StarterCategory starterCategory = starterCategoryRepository.findByNo(starterpacknum);
-            if(starterCategory != null){
-            resultHistory.add(starterCategory);}
-        } catch (Exception e){
+            if (starterCategory != null) {
+                resultHistory.add(starterCategory);
+            }
+        } catch (Exception e) {
         }
 
         try {
             final int buildpacknum = catalogHistories.stream().filter(a -> a.getCatalogType().equals("buildPack")).findFirst().get().getCatalogNo();
             final BuildpackCategory buildpackCategory = buildpackCategoryRepository.findByNo(buildpacknum);
-            if(buildpackCategory != null)
-            {resultHistory.add(buildpackCategory);}
-        } catch (Exception e){
+            if (buildpackCategory != null) {
+                resultHistory.add(buildpackCategory);
+            }
+        } catch (Exception e) {
         }
 
         try {
             final int servicepacknum = catalogHistories.stream().filter(a -> a.getCatalogType().equals("servicePack")).findFirst().get().getCatalogNo();
             final ServicepackCategory servicepackCategory = servicepackCategoryRepository.findByNo(servicepacknum);
-            if(servicepackCategory != null){
+            if (servicepackCategory != null) {
                 resultHistory.add(servicepackCategory);
             }
-        }  catch (Exception e){
+        } catch (Exception e) {
 
         }
         return new HashMap<String, Object>() {{
@@ -610,18 +631,17 @@ public class CatalogService {
 
     /**
      * 릴레이션에 속한 목록을 가져온다.
-     *
      */
     @HystrixCommand(commandKey = "getStarterRelation")
-    public Map<String,Object> getStarterRelation(int no) {
+    public Map<String, Object> getStarterRelation(int no) {
         StarterCategory starterCategory = starterCategoryRepository.findByNo(no);
         List<ServicepackCategory> servicepackCategories = new ArrayList<>();
         JinqStream<StarterServicepackRelation> streams = jinqSource.streamAllPortal(StarterServicepackRelation.class);
         streams = streams.where(c -> c.getStarterCatalogNo() == no);
         List<Integer> integerlist = streams.select(c -> c.getServicepackCategoryNo()).distinct().toList();
-        for (Integer number : integerlist ) {
+        for (Integer number : integerlist) {
             ServicepackCategory servicepackCategory = servicepackCategoryRepository.findByNo(number);
-            if(servicepackCategory != null){
+            if (servicepackCategory != null) {
                 servicepackCategories.add(servicepackCategory);
             }
         }
@@ -635,7 +655,7 @@ public class CatalogService {
     }
 
     @HystrixCommand(commandKey = "insertHistroy")
-    public Map<String,Object> insertHistroy(CatalogHistory catalog) {
+    public Map<String, Object> insertHistroy(CatalogHistory catalog) {
         catalogHistoryRepository.save(catalog);
         return new HashMap<String, Object>() {{
             put("Result", catalog);
@@ -648,18 +668,17 @@ public class CatalogService {
     }
 
 
-
     /**
-     *  앱 생성시 라우트 중복을 체크합니다.
-     *
+     * 앱 생성시 라우트 중복을 체크합니다.
      */
     @HystrixCommand(commandKey = "checkRoute")
-    public Map<String,Object> checkRoute(String host){
+    public Map<String, Object> checkRoute(String host) {
         CatalogCc cc = catalogCcRepository.findByHost(host);
-        if(cc != null){
+        if (cc != null) {
             return new HashMap<String, Object>() {{
                 put("RESULT", Constants.RESULT_STATUS_FAIL);
-            }};}
+            }};
+        }
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
         }};

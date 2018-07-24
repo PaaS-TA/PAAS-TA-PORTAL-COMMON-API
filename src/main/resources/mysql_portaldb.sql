@@ -1,18 +1,3 @@
-/*
- Navicat Premium Data Transfer
-
- Source Server         : Common_Dev_MariaDB
- Source Server Type    : MySQL
- Source Server Version : 100122
- Source Host           : 115.68.46.219:3306
- Source Schema         : portaldb
-
- Target Server Type    : MySQL
- Target Server Version : 100122
- File Encoding         : 65001
-
- Date: 11/07/2018 14:59:48
-*/
 CREATE DATABASE /*!32312 IF NOT EXISTS*/`portaldb` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
 USE `portaldb`;
