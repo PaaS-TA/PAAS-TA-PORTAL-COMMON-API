@@ -6,7 +6,6 @@ import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
 import org.openpaas.paasta.portal.common.api.entity.cc.CatalogCc;
 import org.openpaas.paasta.portal.common.api.entity.portal.*;
-import org.openpaas.paasta.portal.common.api.model.Catalog;
 import org.openpaas.paasta.portal.common.api.repository.cc.CatalogCcRepository;
 import org.openpaas.paasta.portal.common.api.repository.portal.*;
 import org.slf4j.Logger;
@@ -503,12 +502,11 @@ public class CatalogService {
     @HystrixCommand(commandKey = "updateServicePackCatalog")
     public Map<String, Object> updateServicePackCatalog(ServicepackCategory param) {
         logger.info("updateServicePackCatalog :: " + param.toString());
-
-        ServicepackCategory update = servicepackCategoryRepository.findOne(param.getNo());
+        int no = param.getNo();
+        ServicepackCategory update = servicepackCategoryRepository.findOne(no);
         param.setCreated(update.getCreated());
         param.setLastmodified(new Date());
         param.setParameter(jsonCheck(param.getParameter()));
-        param.setAppBindParameter(jsonCheck(param.getAppBindParameter()));
         logger.info("updateServicePackCatalog2 :: " + param.toString());
 
         ServicepackCategory servicepackCategory = servicepackCategoryRepository.save(param);
