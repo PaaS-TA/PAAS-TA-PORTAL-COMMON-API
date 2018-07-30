@@ -41,10 +41,10 @@ dependencies {
     compile ('org.springframework.boot:spring-boot-starter-security')
 
     //Admin Server Setting
-    compile ('de.codecentric:spring-boot-admin-starter-client:1.5.7')
+//    compile ('de.codecentric:spring-boot-admin-starter-client:1.5.7')
 
     //Config Server Setting
-    compile('org.springframework.cloud:spring-cloud-starter-config')
+//    compile('org.springframework.cloud:spring-cloud-starter-config')
 
     //Eureka
     compile ('org.springframework.cloud:spring-cloud-starter-eureka')
@@ -78,8 +78,8 @@ dependencies {
     compile("commons-io:commons-io:2.6")
 
     //hystrix
-    compile('org.springframework.cloud:spring-cloud-starter-hystrix:1.4.4.RELEASE')
-    compile('org.springframework.boot:spring-boot-starter-actuator')
+//    compile('org.springframework.cloud:spring-cloud-starter-hystrix:1.4.4.RELEASE')
+//    compile('org.springframework.boot:spring-boot-starter-actuator')
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('com.jayway.jsonpath:json-path')

@@ -1,6 +1,6 @@
 package org.openpaas.paasta.portal.common.api.domain.userManagement;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+
 import org.jinq.orm.stream.JinqStream;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
@@ -12,11 +12,9 @@ import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailReposit
 import org.openpaas.paasta.portal.common.api.repository.uaa.UsersRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +56,7 @@ public class UserManagementService {
      *
      * @return Map(자바클래스)
      */
-    @HystrixCommand(commandKey = "getUserInfoList")
+    //@HystrixCommand(commandKey = "getUserInfoList")
     public Map<String, Object> getUserInfoList(UserDetail detail) {
 
         JinqStream<UserDetail> streams = jinqSource.streamAllPortal(UserDetail.class);
@@ -76,7 +74,7 @@ public class UserManagementService {
 
     }
 
-    @HystrixCommand(commandKey = "getUserInfo")
+    //@HystrixCommand(commandKey = "getUserInfo")
     public Map<String, Object> getUserInfo(String userid) {
         JinqStream<UserDetail> streams = jinqSource.streamAllPortal(UserDetail.class);
         if (null != userid && !"".equals(userid)) {
@@ -89,7 +87,7 @@ public class UserManagementService {
         }};
     }
 
-    @HystrixCommand(commandKey = "setUserGuid")
+    //@HystrixCommand(commandKey = "setUserGuid")
     private List<UserDetail> setUserGuid(List<UserDetail> details) {
         List<Users> users = usersRepository.findAll();
         for (UserDetail userDetail : details) {
@@ -106,7 +104,7 @@ public class UserManagementService {
     /**
      * 사용자에게 운영자 권한을 부여한다.
      */
-    @HystrixCommand(commandKey = "updateOperatingAuthority")
+    //@HystrixCommand(commandKey = "updateOperatingAuthority")
     public Map<String, Object> updateOperatingAuthority(String userId) {
         UserDetail userDetail = userDetailRepository.findByUserId(userId);
         logger.info(userDetail.toString());
@@ -120,7 +118,7 @@ public class UserManagementService {
     /**
      * 사용자를 삭제한다.
      */
-    @HystrixCommand(commandKey = "deleteUserAccount")
+    //@HystrixCommand(commandKey = "deleteUserAccount")
     public Map<String, Object> deleteUserAccount(String userId) {
         userDetailRepository.deleteByUserId(userId);
 
@@ -132,7 +130,7 @@ public class UserManagementService {
     /**
      * 사용자 포탈 접속 성공 유무 수정
      */
-    @HystrixCommand(commandKey = "UpdateUserActive")
+    //@HystrixCommand(commandKey = "UpdateUserActive")
     public Map<String, Object> UpdateUserActive(String userId, UserDetail _userDetail) {
         UserDetail userDetail = userDetailRepository.findByUserId(userId);
         userDetail.setActive(_userDetail.getActive());

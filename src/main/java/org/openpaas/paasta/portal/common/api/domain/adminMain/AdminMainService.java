@@ -1,6 +1,6 @@
 package org.openpaas.paasta.portal.common.api.domain.adminMain;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+
 import org.jinq.orm.stream.JinqStream;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
 import org.openpaas.paasta.portal.common.api.config.dataSource.CcConfig;
@@ -33,7 +33,7 @@ public class AdminMainService {
     @Autowired
     JinqSource jinqSource;
 
-    @HystrixCommand(commandKey = "getTotalCountList")
+    //@HystrixCommand(commandKey = "getTotalCountList")
     public Map<String, Object>getTotalCountList() {
         JinqStream<OrganizationsCc> streams = jinqSource.streamAllCc(OrganizationsCc.class);
 
@@ -48,7 +48,7 @@ public class AdminMainService {
             put("list", resultList);
         }};
     }
-    @HystrixCommand(commandKey = "getTotalOrganizationList")
+    //@HystrixCommand(commandKey = "getTotalOrganizationList")
     public Map<String, Object>getTotalOrganizationList() {  //Map<String, Object> reqParam
         JinqStream<OrganizationsTolCc> streams = jinqSource.streamAllCc(OrganizationsTolCc.class);
         streams = streams.sortedBy(c -> c.getId());
@@ -65,7 +65,7 @@ public class AdminMainService {
         }};
     }
 
-    @HystrixCommand(commandKey = "getTotalSpaceList")
+    //@HystrixCommand(commandKey = "getTotalSpaceList")
     public Map<String, Object>getTotalSpaceList(String organizationId) {
         EntityManager ccEm = ccConfig.ccEntityManager().getNativeEntityManagerFactory().createEntityManager();
         Query q = null;

@@ -1,9 +1,8 @@
 package org.openpaas.paasta.portal.common.api.domain.user;
 
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+
 import org.apache.commons.lang.RandomStringUtils;
-import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
 import org.openpaas.paasta.portal.common.api.config.dataSource.UaaConfig;
@@ -19,12 +18,16 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
-import javax.persistence.OrderBy;
 import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.io.IOException;
-import java.util.*;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -64,7 +67,7 @@ public class UserService {
      * @param userId the user id
      * @return UserDetail user
      */
-    @HystrixCommand(commandKey = "getUser")
+    //@HystrixCommand(commandKey = "getUser")
     public UserDetail getUser(String userId) {
         UserDetail userDetail = userDetailRepository.findByUserId(userId);
         return userDetail;
@@ -78,7 +81,7 @@ public class UserService {
      * @param userDetail the user detail
      * @return Int updateCount
      */
-    @HystrixCommand(commandKey = "updateUser")
+    //@HystrixCommand(commandKey = "updateUser")
     public int updateUser(String userId, UserDetail userDetail) {
 
         int resultCnt = userDetailRepository.countByUserId(userId);
@@ -95,7 +98,7 @@ public class UserService {
      * @param userDetail the user detail
      * @return int int
      */
-    @HystrixCommand(commandKey = "createUser")
+    //@HystrixCommand(commandKey = "createUser")
     public int createUser(UserDetail userDetail) {
         int createResult = 1;
         if (createResult > 0) {
@@ -113,7 +116,7 @@ public class UserService {
      * @return boolean
      * @throws IOException the io exception
      */
-   // @HystrixCommand(commandKey = "createRequestUser")
+   // //@HystrixCommand(commandKey = "createRequestUser")
     public Map createRequestUser(Map body) {
         Map map = new HashMap();
         try {
@@ -148,7 +151,7 @@ public class UserService {
      * @return boolean
      * @throws IOException the io exception
      */
-    @HystrixCommand(commandKey = "resetRequestUser")
+    //@HystrixCommand(commandKey = "resetRequestUser")
     public Map resetRequestUser(Map body) {
         Map map = new HashMap();
         try {
@@ -181,7 +184,7 @@ public class UserService {
      * @param userId the user id
      * @return 삭제 정보
      */
-    @HystrixCommand(commandKey = "deleteUser")
+    //@HystrixCommand(commandKey = "deleteUser")
     public Map deleteUser(String userId) {
         Map map = new HashMap();
         try {
@@ -201,7 +204,7 @@ public class UserService {
      *
      * @return 삭제 정보
      */
-    @HystrixCommand(commandKey = "deleteUserInfra")
+    //@HystrixCommand(commandKey = "deleteUserInfra")
     public Map deleteUserInfra(String guid, String token) {
 
         logger.info("userId ::::: " + guid);
@@ -233,7 +236,7 @@ public class UserService {
      *
      * @return userInfo list
      */
-    @HystrixCommand(commandKey = "getRefreshTokenUser")
+    //@HystrixCommand(commandKey = "getRefreshTokenUser")
     public UserDetail getRefreshTokenUser(UserDetail userDetail) {
         logger.info("getRefreshTokenUser :: " + userDetail.toString());
         UserDetail data = userDetailRepository.findByUserIdAndRefreshToken(userDetail.getUserId(), userDetail.getRefreshToken());
@@ -245,7 +248,7 @@ public class UserService {
      *
      * @return All Users List( GUID, userName )
      */
-    @HystrixCommand(commandKey = "getUserInfo")
+    //@HystrixCommand(commandKey = "getUserInfo")
     public List<Map<String, Object>> getUserInfo() {
 
         EntityManager portalEm = uaaConfig.uaaEntityManager().getNativeEntityManagerFactory().createEntityManager();

@@ -1,7 +1,7 @@
 package org.openpaas.paasta.portal.common.api.domain.common;
 
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,7 +55,7 @@ public class CommonService {
      * @param reqToken   the req token
      * @return map map
      */
-    @HystrixCommand(commandKey = "procCfApiRestTemplate")
+    //@HystrixCommand(commandKey = "procCfApiRestTemplate")
     public Map<String, Object> procCfApiRestTemplate(String reqUrl, HttpMethod httpMethod, Object obj, String reqToken) {
 
         String cfRequestURL = cfApiUrl + "/v2/" ;
@@ -84,7 +84,7 @@ public class CommonService {
      * @param reqToken   the req token
      * @return map map
      */
-    @HystrixCommand(commandKey = "procStorageApiRestTemplate")
+    //@HystrixCommand(commandKey = "procStorageApiRestTemplate")
     public <T> ResponseEntity<T> procStorageApiRestTemplate(String reqUrl, HttpMethod httpMethod, Object bodyObject, String reqToken, Class<T> resClazz) {
         restTemplate = new RestTemplate();
         
@@ -105,11 +105,11 @@ public class CommonService {
         LOGGER.info("procRestStorageApiTemplate response Http status code :: {}", resEntity.getStatusCode());
         return resEntity;
     }
-    @HystrixCommand(commandKey = "procStorageApiRestTemplateText")
+    //@HystrixCommand(commandKey = "procStorageApiRestTemplateText")
     public ResponseEntity<String> procStorageApiRestTemplateText(String reqUrl, HttpMethod httpMethod, Object bodyObject, String reqToken) {
         return procStorageApiRestTemplate( reqUrl, httpMethod, bodyObject, reqToken, String.class );
     }
-    @HystrixCommand(commandKey = "procStorageApiRestTemplateBinary")
+    //@HystrixCommand(commandKey = "procStorageApiRestTemplateBinary")
     public ResponseEntity<byte[]> procStorageApiRestTemplateBinary(String reqUrl, HttpMethod httpMethod, Object bodyObject, String reqToken) {
         return procStorageApiRestTemplate( reqUrl, httpMethod, bodyObject, reqToken, byte[].class );
     }

@@ -1,7 +1,6 @@
 package org.openpaas.paasta.portal.common.api.domain.email;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import org.apache.commons.io.FileUtils;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.jsoup.Jsoup;
@@ -13,24 +12,13 @@ import org.openpaas.paasta.portal.common.api.entity.portal.InviteUser;
 import org.openpaas.paasta.portal.common.api.repository.portal.InviteUserRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
-import javax.validation.constraints.NotNull;
-import java.io.File;
-import java.net.JarURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -49,7 +37,7 @@ public class EmailService {
     @Autowired
     CommonService commonService;
 
-    @HystrixCommand(commandKey = "resetEmail")
+    //@HystrixCommand(commandKey = "resetEmail")
     public Map resetEmail(String userId, String refreshToken) {
         logger.info("resetEmail ::: " + userId);
         Map map = new HashMap();
@@ -88,7 +76,7 @@ public class EmailService {
         return map;
 
     }
-    @HystrixCommand(commandKey = "createEmail")
+    //@HystrixCommand(commandKey = "createEmail")
     public Map createEmail(String userId, String refreshToken) {
         logger.info("createEmail ::: " + userId);
         Map map = new HashMap();
@@ -121,7 +109,7 @@ public class EmailService {
         }
         return map;
     }
-    @HystrixCommand(commandKey = "inviteOrgEmail")
+    //@HystrixCommand(commandKey = "inviteOrgEmail")
     public Boolean inviteOrgEmail(Map body) {
         String[] userEmails;
 
@@ -162,7 +150,7 @@ public class EmailService {
 
         return true;
     }
-    @HystrixCommand(commandKey = "inviteAccept")
+    //@HystrixCommand(commandKey = "inviteAccept")
     public Map inviteAccept(Map body) {
         Map map = new HashMap();
 
@@ -184,7 +172,7 @@ public class EmailService {
 
         return map;
     }
-    @HystrixCommand(commandKey = "inviteAcceptUpdate")
+    //@HystrixCommand(commandKey = "inviteAcceptUpdate")
     public Map inviteAcceptUpdate(Map body) {
         try {
             InviteUser inviteUser = new InviteUser();
@@ -202,7 +190,7 @@ public class EmailService {
 
         return body;
     }
-    @HystrixCommand(commandKey = "inviteOrgEmailSend")
+    //@HystrixCommand(commandKey = "inviteOrgEmailSend")
     public Map inviteOrgEmailSend(String userId, String orgName, String refreshToken) {
         logger.info("createEmail ::: " + userId);
         Map map = new HashMap();
@@ -250,7 +238,7 @@ public class EmailService {
         return map;
     }
 
-    @HystrixCommand(commandKey = "inviteOrgEmailSend")
+    //@HystrixCommand(commandKey = "inviteOrgEmailSend")
     public Map Sginin(String userId, String orgName, String refreshToken) {
         logger.info("createEmail ::: " + userId);
         Map map = new HashMap();

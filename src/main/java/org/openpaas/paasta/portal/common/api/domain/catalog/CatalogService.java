@@ -1,6 +1,6 @@
 package org.openpaas.paasta.portal.common.api.domain.catalog;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+
 import org.jinq.orm.stream.JinqStream;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
@@ -54,7 +54,7 @@ public class CatalogService {
      * @param no Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @HystrixCommand(commandKey = "getStarterCatalog")
+    //@HystrixCommand(commandKey = "getStarterCatalog")
     public Map<String, Object> getStarterCatalog(int no) {
         logger.info("" + no);
         StarterCategory starterCategory = starterCategoryRepository.findOne(no);
@@ -92,7 +92,7 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @HystrixCommand(commandKey = "getStarterNamesList")
+    //@HystrixCommand(commandKey = "getStarterNamesList")
     public Map<String, Object> getStarterNamesList(StarterCategory param) {
         logger.info("getStarterNamesList :: " + param.toString());
         JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class);
@@ -119,7 +119,7 @@ public class CatalogService {
      * @param use String
      * @return Map(자바클래스)
      */
-    @HystrixCommand(commandKey = "getStarterList")
+    //@HystrixCommand(commandKey = "getStarterList")
     public Map<String, Object> getStarterList(String use) {
         JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class);
         if (null != use && !"".equals(use)) {
@@ -138,7 +138,7 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @HystrixCommand(commandKey = "getBuildPackCatalogList")
+    //@HystrixCommand(commandKey = "getBuildPackCatalogList")
     public Map<String, Object> getBuildPackCatalogList(BuildpackCategory param) {
         logger.info("getBuildPackCatalogList :: " + param.toString());
         JinqStream<BuildpackCategory> streams = jinqSource.streamAllPortal(BuildpackCategory.class);
@@ -167,7 +167,7 @@ public class CatalogService {
      * @param use String
      * @return Map(자바클래스)
      */
-    @HystrixCommand(commandKey = "getBuildPackList")
+    //@HystrixCommand(commandKey = "getBuildPackList")
     public Map<String, Object> getBuildPackList(String use) {
         JinqStream<BuildpackCategory> streams = jinqSource.streamAllPortal(BuildpackCategory.class);
         if (null != use && !"".equals(use)) {
@@ -180,7 +180,7 @@ public class CatalogService {
         }};
     }
 
-    @HystrixCommand(commandKey = "getPacks")
+    //@HystrixCommand(commandKey = "getPacks")
     public Map<String, Object> getPacks(String searchKeyword) {
 
         JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class);
@@ -206,7 +206,7 @@ public class CatalogService {
      * @param use String
      * @return Map(자바클래스)
      */
-    @HystrixCommand(commandKey = "getServicePackList")
+    //@HystrixCommand(commandKey = "getServicePackList")
     public Map<String, Object> getServicePackList(String use) {
         JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class);
         logger.info(use);
@@ -227,7 +227,7 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @HystrixCommand(commandKey = "getServicePackCatalogList")
+    //@HystrixCommand(commandKey = "getServicePackCatalogList")
     public Map<String, Object> getServicePackCatalogList(ServicepackCategory param) {
         logger.info("getServicePackCatalogList :: " + param.toString());
         JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class);
@@ -255,7 +255,7 @@ public class CatalogService {
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
-    @HystrixCommand(commandKey = "getStarterCatalogCount")
+    //@HystrixCommand(commandKey = "getStarterCatalogCount")
     public int getStarterCatalogCount(StarterCategory param) {
         logger.info("getStarterCatalogCount :: " + param.toString());
         JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class);
@@ -278,7 +278,7 @@ public class CatalogService {
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
-    @HystrixCommand(commandKey = "getBuildPackCatalogCount")
+    //@HystrixCommand(commandKey = "getBuildPackCatalogCount")
     public int getBuildPackCatalogCount(BuildpackCategory param) {
         logger.info("getBuildPackCatalogCount :: " + param.toString());
         JinqStream<BuildpackCategory> streams = jinqSource.streamAllPortal(BuildpackCategory.class);
@@ -303,7 +303,7 @@ public class CatalogService {
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
-    @HystrixCommand(commandKey = "getServicePackCatalogCount")
+    //@HystrixCommand(commandKey = "getServicePackCatalogCount")
     public int getServicePackCatalogCount(ServicepackCategory param) {
         logger.info("getServicePackCatalogCount :: " + param.toString());
         JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class);
@@ -327,7 +327,7 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @HystrixCommand(commandKey = "insertStarterCatalog")
+    //@HystrixCommand(commandKey = "insertStarterCatalog")
     public Map<String, Object> insertStarterCatalog(StarterCategory param) {
         logger.info("insertStarterCatalog :: " + param.toString());
         starterCategoryRepository.save(param);
@@ -364,7 +364,7 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @HystrixCommand(commandKey = "insertBuildPackCatalog")
+    //@HystrixCommand(commandKey = "insertBuildPackCatalog")
     public Map<String, Object> insertBuildPackCatalog(BuildpackCategory param) {
         logger.info("insertBuildPackCatalog :: " + param.toString());
         buildpackCategoryRepository.save(param);
@@ -379,7 +379,7 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @HystrixCommand(commandKey = "insertServicePackCatalog")
+    //@HystrixCommand(commandKey = "insertServicePackCatalog")
     public Map<String, Object> insertServicePackCatalog(ServicepackCategory param) {
         logger.info("insertServicePackCatalog :: " + param.toString());
         param.setParameter(jsonCheck(param.getParameter()));
@@ -413,7 +413,7 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @HystrixCommand(commandKey = "updateStarterCatalog")
+    //@HystrixCommand(commandKey = "updateStarterCatalog")
     public Map<String, Object> updateStarterCatalog(StarterCategory param) {
         logger.info("updateStarterCatalog :: " + param.toString());
         //Upate Starter Catalog
@@ -479,7 +479,7 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @HystrixCommand(commandKey = "updateBuildPackCatalog")
+    //@HystrixCommand(commandKey = "updateBuildPackCatalog")
     public Map<String, Object> updateBuildPackCatalog(BuildpackCategory param) {
         logger.info("updateBuildPackCatalog :: " + param.toString());
 
@@ -499,7 +499,7 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    @HystrixCommand(commandKey = "updateServicePackCatalog")
+    //@HystrixCommand(commandKey = "updateServicePackCatalog")
     public Map<String, Object> updateServicePackCatalog(ServicepackCategory param) {
         logger.info("updateServicePackCatalog :: " + param.toString());
         int no = param.getNo();
@@ -522,7 +522,7 @@ public class CatalogService {
      * @param no
      * @return Map(자바클래스)
      */
-    // @HystrixCommand(commandKey = "deleteStarterCatalog")
+    // //@HystrixCommand(commandKey = "deleteStarterCatalog")
     public Map<String, Object> deleteStarterCatalog(int no) {
         logger.info("deleteStarterCatalog :: " + no);
 
@@ -562,7 +562,7 @@ public class CatalogService {
      * @param no
      * @return Map(자바클래스)
      */
-    @HystrixCommand(commandKey = "deleteBuildPackCatalog")
+    //@HystrixCommand(commandKey = "deleteBuildPackCatalog")
     public Map<String, Object> deleteBuildPackCatalog(int no) {
         logger.info("deleteBuildPackCatalog :: " + no);
         buildpackCategoryRepository.delete(no);
@@ -577,7 +577,7 @@ public class CatalogService {
      * @param no
      * @return Map(자바클래스)
      */
-    @HystrixCommand(commandKey = "deleteServicePackCatalog")
+    //@HystrixCommand(commandKey = "deleteServicePackCatalog")
     public Map<String, Object> deleteServicePackCatalog(int no) {
         logger.info("deleteServicePackCatalog :: " + no);
         servicepackCategoryRepository.delete(no);
@@ -589,7 +589,7 @@ public class CatalogService {
     /**
      * 최신항목을 가져온다.
      */
-    @HystrixCommand(commandKey = "getHistory")
+    //@HystrixCommand(commandKey = "getHistory")
     public Map<String, Object> getHistory(String userid) {
         List<CatalogHistory> catalogHistories = catalogHistoryRepository.findAllByUserIdOrderByLastmodifiedDesc(userid);
         List<Object> resultHistory = new ArrayList<>();
@@ -630,7 +630,7 @@ public class CatalogService {
     /**
      * 릴레이션에 속한 목록을 가져온다.
      */
-    @HystrixCommand(commandKey = "getStarterRelation")
+    //@HystrixCommand(commandKey = "getStarterRelation")
     public Map<String, Object> getStarterRelation(int no) {
         StarterCategory starterCategory = starterCategoryRepository.findByNo(no);
         List<ServicepackCategory> servicepackCategories = new ArrayList<>();
@@ -652,7 +652,7 @@ public class CatalogService {
         }};
     }
 
-    @HystrixCommand(commandKey = "insertHistroy")
+    //@HystrixCommand(commandKey = "insertHistroy")
     public Map<String, Object> insertHistroy(CatalogHistory catalog) {
         catalogHistoryRepository.save(catalog);
         return new HashMap<String, Object>() {{
@@ -660,7 +660,7 @@ public class CatalogService {
         }};
     }
 
-    @HystrixCommand(commandKey = "getListRoutes")
+    //@HystrixCommand(commandKey = "getListRoutes")
     public List<CatalogCc> getListRoutes() {
         return catalogCcRepository.findAll();
     }
@@ -669,7 +669,7 @@ public class CatalogService {
     /**
      * 앱 생성시 라우트 중복을 체크합니다.
      */
-    @HystrixCommand(commandKey = "checkRoute")
+    //@HystrixCommand(commandKey = "checkRoute")
     public Map<String, Object> checkRoute(String host) {
         CatalogCc cc = catalogCcRepository.findByHost(host);
         if (cc != null) {
