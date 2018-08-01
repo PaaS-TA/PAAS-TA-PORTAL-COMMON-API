@@ -14,6 +14,7 @@ import javax.activation.DataHandler;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeUtility;
 import javax.mail.util.ByteArrayDataSource;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -93,7 +94,7 @@ public class EmailConfig {
             msg.addHeader("Content-Transfer-Encoding", "8bit");
             msg.setDataHandler(new DataHandler(new ByteArrayDataSource(contents, "text/html")));
             msg.setSentDate(new Date());
-            msg.setSubject(subject);
+            msg.setSubject(MimeUtility.encodeText(subject));
             msg.setContent(contents, "text/html; charset=" + charset);
             msg.setFrom(new InternetAddress(to, username));
             msg.setReplyTo(InternetAddress.parse(to, false));

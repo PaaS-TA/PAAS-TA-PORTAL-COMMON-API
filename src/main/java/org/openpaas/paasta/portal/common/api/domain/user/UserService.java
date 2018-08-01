@@ -130,6 +130,7 @@ public class UserService {
             userDetail.setAdminYn("N");
             userDetail.setStatus("1");
             userDetail.setRefreshToken(randomId);
+            userDetail.setActive("N");
             /*
              * 여기서 에러나면 Exception으로 빠져버림
              */
