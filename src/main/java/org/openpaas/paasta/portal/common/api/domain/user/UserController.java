@@ -127,14 +127,13 @@ public class UserController {
      * Delete user map.
      *
      * @param userId   the user id
-     * @param user     the user
      * @param response the response
      * @return the map
      * @throws Exception the exception
      */
     @DeleteMapping(V2_URL + "/user/{userId:.+}")
-    public Map deleteUser(@PathVariable String userId, @RequestBody UserDetail user, HttpServletResponse response) throws Exception {
-        LOGGER.info("> into deleteUser");
+    public Map deleteUser(@PathVariable String userId,HttpServletResponse response) throws Exception {
+        LOGGER.info("> into deleteUser :: " + userId);
 
         Map<String, Object> result = userService.deleteUser(userId);
 

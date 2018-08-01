@@ -106,7 +106,8 @@ public class EmailConfig {
             bRtn = true;
         } catch (IOException | MessagingException e) {
             e.printStackTrace();
-            logger.info(e.getMessage());
+            logger.info("ERROR " + e.getMessage());
+            bRtn = false;
         }
         return bRtn;
 
