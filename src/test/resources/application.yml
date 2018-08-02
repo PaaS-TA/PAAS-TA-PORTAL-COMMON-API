@@ -1,10 +1,180 @@
+# Spring properties
 spring:
   application:
-      name: PortalCommonApi
-  cloud:
-    config:
-      uri: http://10.30.80.50:8004
+    name: PortalCommonApi  # Service registers under this name
+  security:
+    username: admin
+    password: openpaasta
 
+# HTTP Server
 server:
-  port: ${PORT:2223}
+  port: ${PORT:2223}   # HTTP (Tomcat) port
 
+eureka:
+  instance:
+    hostname: ${spring.cloud.client.hostname}.${spring.cloud.client.ipAddress}.xip.io
+
+management:  # If you set off security...
+  security:
+    enabled: false
+
+#Hystrix Setting(current version not used)
+#hystrix:
+#  threadpool:
+#    default:
+#      # Maximum number of concurrent requests when using thread pools (Default: 10)
+#      coreSize: 100
+#      # Maximum LinkedBlockingQueue size - -1 for using SynchronousQueue (Default: -1)
+#      maxQueueSize: -1
+#      # Queue size rejection threshold (Default: 5)
+#      queueSizeRejectionThreshold: 5
+#  command:
+#    default:
+#      circuitBreaker:
+#        sleepWindowInMilliseconds: 60000
+#        requestVolumeThreshold: 3
+#      execution:
+#        isolation:
+#          #strategy: SEMAPHORE, no thread pool but timeout handling stops to work
+#          strategy: THREAD
+#          thread:
+#            timeoutInMilliseconds: 60000
+
+---
+spring:
+  profiles: local
+datasource:
+  cc:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://XXX.XXX.XXX.XXX:5524/ccdb
+    username: ccadmin # YOUR CC DB STORAGE ACCOUT
+    password: 'PASSWORD' # YOUR CC DB PASSWORD
+  portal:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://XXX.XXX.XXX.XXX:3306/portaldb
+    username: root # YOUR UAA PORTAL DB ACCOUT
+    password: 'PASSWORD' # YOUR PORTAL DB PASSWORD
+  uaa:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://XXX.XXX.XXX.XXX:5524/uaadb
+    username: uaaadmin # YOUR UAA DB ACCOUT
+    password: 'PASSWORD' # YOUR UAA DB PASSWORD
+jpa:
+  database: postgresql
+  show-sql: true
+  hibernate:
+    ddl-auto: none
+    naming:
+      strategy: org.hibernate.dialect.MySQL5Dialect
+  generate-ddl: false
+mail:
+  smtp:
+    host: smtp.gmail.com
+    port: 465
+    username: PaaS-TA
+    password: 'PASSWORD' # YOUR UAA SMTP PASSWORD
+    useremail: openpasta@gmail.com
+    properties:
+      auth: true
+      starttls:
+        enable: true
+        required: true
+      maximumTotalQps: 90
+      authUrl: http://localhost  # YOUR AUTH URL
+
+      imgUrl: http://localhost:8080/v1/KEY_84586dfdc15e4f8b9c2a8e8090ed9810/portal-container/65bdc7f43e11433b8f17683f96c7e626.png  # YOUR IMG URL
+      charset: UTF-8
+      subject: 'PaaS-TA User Potal 인증메일'
+      createUrl: authcreate
+      expiredUrl: authreset
+      inviteUrl: inviteorg
+paasta:
+  portal:
+    api:
+      authorization:
+        base64: Basic YWRtaW46b3BlbnBhYXN0YQ==
+      zuulUrl:
+        cfapi: http://localhost:2225/portalapi # YOUR LOCAL TEST SETTING
+        commonapi: http://localhost:2225/commonapi # YOUR LOCAL TEST SETTING
+        storageapi: http://localhost:2225/storageapi # YOUR LOCAL TEST SETTING
+    storageapi:
+      type: swift
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:2221/eureka/ #YOUR LOCAL TEST SETTING
+      registry-fetch-interval-seconds: 5
+  instance:
+    hostname: ${spring.cloud.client.hostname}
+    lease-expiration-duration-in-seconds: 5
+    lease-renewal-interval-in-seconds: 10
+
+
+---
+spring:
+  profiles: dev
+datasource:
+  cc:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://XXX.XXX.XXX.XXX:5524/ccdb
+    username: ccadmin # YOUR CC DB ACCOUT
+    password: 'PASSWORD' # YOUR CC DB PASSWORD
+  portal:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://XXX.XXX.XXX.XXX:3306/portaldb
+    username: root # YOUR PORTAL DB ACCOUT
+    password: 'PASSWORD' # YOUR PORTAL DB PASSWORD
+  uaa:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://XXX.XXX.XXX.XXX:5524/uaadb
+    username: uaaadmin # YOUR UAA DB  ACCOUT
+    password: 'PASSWORD' # YOUR UAA DB PASSWORD
+jpa:
+  database: postgresql
+  show-sql: true
+  hibernate:
+    ddl-auto: none
+    naming:
+      strategy: org.hibernate.dialect.MySQL5Dialect
+  generate-ddl: false
+mail:
+  smtp:
+    host: smtp.gmail.com
+    port: 465
+    username: PaaS-TA # YOUR CCOUT
+    password: 'PASSWORD' # YOUR PAAS-TA PASSWORD
+    useremail: openpasta@gmail.com
+    properties:
+      auth: true
+      starttls:
+        enable: true
+        required: true
+      maximumTotalQps: 90
+      authUrl: http://XXX.XXX.XXX.XXX  # YOUR AUTH URL
+      imgUrl: http://XXX.XXX.XXX.XXX:8080/v1/KEY_84586dfdc15e4f8b9c2a8e8090ed9810/portal-container/65bdc7f43e11433b8f17683f96c7e626.png # YOUR IMG URL
+      charset: UTF-8
+      subject: 'PaaS-TA User Potal 인증메일'
+      createUrl: authcreate
+      expiredUrl: authreset
+      inviteUrl: inviteorg
+paasta:
+  portal:
+    api:
+      authorization:
+        base64: Basic YWRtaW46b3BlbnBhYXN0YQ==
+      zuulUrl:
+        cfapi: http://XXX.XXX.XXX.XXX:2225/portalapi #YOUR GATEWAY SERVICE DEV SETTING(ACTIVE INFORMATION)
+        commonapi: http://XXX.XXX.XXX.XXX:2225/commonapi #YOUR GATEWAY SERVICE DEV SETTING(ACTIVE INFORMATION)
+        storageapi: http://XXX.XXX.XXX.XXX:2225/storageapi #YOUR GATEWAY SERVICE DEV SETTING(ACTIVE INFORMATION)
+    storageapi:
+      type: swift
+
+eureka:
+  client:
+    serviceUrl:
+       defaultZone: http://XXX.XXX.XXX.XXX:2221/eureka/ #YOUR EUREKA SERVICE DEV SETTING(ACTIVE INFORMATION)
+      registry-fetch-interval-seconds: 5
+  instance:
+    hostname: ${spring.cloud.client.hostname}
+    lease-expiration-duration-in-seconds: 5
+    lease-renewal-interval-in-seconds: 10
