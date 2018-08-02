@@ -47,17 +47,17 @@ datasource:
   cc:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://XXX.XXX.XXX.XXX:5524/ccdb
-    username: ccadmin # YOUR CC DB STORAGE ACCOUT
+    username: ccadmin # YOUR CC DB STORAGE ACCOUNT
     password: 'PASSWORD' # YOUR CC DB PASSWORD
   portal:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://XXX.XXX.XXX.XXX:3306/portaldb
-    username: root # YOUR UAA PORTAL DB ACCOUT
+    username: root # YOUR UAA PORTAL DB ACCOUNT
     password: 'PASSWORD' # YOUR PORTAL DB PASSWORD
   uaa:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://XXX.XXX.XXX.XXX:5524/uaadb
-    username: uaaadmin # YOUR UAA DB ACCOUT
+    username: uaaadmin # YOUR UAA DB ACCOUNT
     password: 'PASSWORD' # YOUR UAA DB PASSWORD
 jpa:
   database: postgresql
@@ -71,8 +71,8 @@ mail:
   smtp:
     host: smtp.gmail.com
     port: 465
-    username: PaaS-TA
-    password: 'PASSWORD' # YOUR UAA SMTP PASSWORD
+    username: PaaS-TA  # YOUR MAIL ACCOUNT
+    password: 'PASSWORD' # YOUR MAIL PASSWORD
     useremail: openpasta@gmail.com
     properties:
       auth: true
@@ -117,17 +117,17 @@ datasource:
   cc:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://XXX.XXX.XXX.XXX:5524/ccdb
-    username: ccadmin # YOUR CC DB ACCOUT
+    username: ccadmin # YOUR CC DB ACCOUNT
     password: 'PASSWORD' # YOUR CC DB PASSWORD
   portal:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://XXX.XXX.XXX.XXX:3306/portaldb
-    username: root # YOUR PORTAL DB ACCOUT
+    username: root # YOUR PORTAL DB ACCOUNT
     password: 'PASSWORD' # YOUR PORTAL DB PASSWORD
   uaa:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://XXX.XXX.XXX.XXX:5524/uaadb
-    username: uaaadmin # YOUR UAA DB  ACCOUT
+    username: uaaadmin # YOUR UAA DB  ACCOUNT
     password: 'PASSWORD' # YOUR UAA DB PASSWORD
 jpa:
   database: postgresql
@@ -141,7 +141,7 @@ mail:
   smtp:
     host: smtp.gmail.com
     port: 465
-    username: PaaS-TA # YOUR CCOUT
+    username: PaaS-TA # YOUR ACCOUNT
     password: 'PASSWORD' # YOUR PAAS-TA PASSWORD
     useremail: openpasta@gmail.com
     properties:
