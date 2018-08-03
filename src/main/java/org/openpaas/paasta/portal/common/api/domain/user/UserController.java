@@ -80,7 +80,7 @@ public class UserController {
             if (body.containsKey("tellPhone")) user.setTellPhone((String) body.get("tellPhone"));
             if (body.containsKey("zipCode")) user.setZipCode((String) body.get("zipCode"));
             if (body.containsKey("adminYn")) user.setAdminYn((String) body.get("adminYn"));
-            if (body.containsKey("active")) user.setRefreshToken((String) body.get("active"));
+            if (body.containsKey("active")) user.setActive((String)body.get("active"));
             if (body.containsKey("refreshToken")) user.setRefreshToken((String) body.get("refreshToken"));
 //            if (body.containsKey("authAccessTime")) (user.setAuthAccessTime(new Date(Long.parseLong(body.get("refreshToken").toString()));
             if (body.containsKey("authAccessCnt")) user.setAuthAccessCnt((int) body.get("authAccessCnt"));
@@ -107,7 +107,7 @@ public class UserController {
     public Map insertUser(@RequestBody UserDetail user, HttpServletResponse response) throws Exception {
 
         LOGGER.info("> into insertUser...");
-
+        LOGGER.info(user.toString());
         Map<String, Object> result = new HashMap<>();
 
         int createResult = 0;
