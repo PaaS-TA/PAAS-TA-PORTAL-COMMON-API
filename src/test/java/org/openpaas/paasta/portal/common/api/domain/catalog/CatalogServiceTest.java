@@ -5,54 +5,32 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.openpaas.paasta.portal.common.api.CommonApiApplication;
 import org.openpaas.paasta.portal.common.api.config.Constants;
-import org.openpaas.paasta.portal.common.api.config.JinqSource;
-import org.openpaas.paasta.portal.common.api.config.TestConfig;
 import org.openpaas.paasta.portal.common.api.entity.cc.CatalogCc;
-import org.openpaas.paasta.portal.common.api.entity.portal.*;
-import org.openpaas.paasta.portal.common.api.repository.cc.CatalogCcRepository;
-import org.openpaas.paasta.portal.common.api.repository.portal.*;
-import org.slf4j.Logger;
+import org.openpaas.paasta.portal.common.api.entity.portal.BuildpackCategory;
+import org.openpaas.paasta.portal.common.api.entity.portal.CatalogHistory;
+import org.openpaas.paasta.portal.common.api.entity.portal.ServicepackCategory;
+import org.openpaas.paasta.portal.common.api.entity.portal.StarterCategory;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by indra on 2018-06-27.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class CatalogServiceTest extends TestConfig {
-//    @Mock
-//    Logger logger;
-//    @Mock
-//    StarterCategoryRepository starterCategoryRepository;
-//    @Mock
-//    BuildpackCategoryRepository buildpackCategoryRepository;
-//    @Mock
-//    ServicepackCategoryRepository servicepackCategoryRepository;
-//    @Mock
-//    StarterServicepackRelationRepository starterServicePackRelationRepository;
-//    @Mock
-//    StarterBuildPackRelationRepository starterBuildPackRelationRepository;
-//    @Mock
-//    CatalogHistoryRepository catalogHistoryRepository;
-//    @Mock
-//    JinqSource jinqSource;
-//    @Mock
-//    CatalogCcRepository catalogCcRepository;
-    @MockBean
+public class CatalogServiceTest {
+
+    @Mock
     CatalogService catalogService;
 
     Map getStarterCatalogResultMap;
@@ -135,7 +113,10 @@ public class CatalogServiceTest extends TestConfig {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        setTestData();
+    }
 
+    private void setTestData() {
         //testGetStarterCatalog
         List<Integer> ssrIntList = new ArrayList<>();
 
@@ -754,5 +735,3 @@ public class CatalogServiceTest extends TestConfig {
         Assert.assertEquals(checkRouteResultMap, result);
     }
 }
-
-//Generated with love by TestMe :) Please report issues and submit feature requests at: http://weirddev.com/forum#!/testme
