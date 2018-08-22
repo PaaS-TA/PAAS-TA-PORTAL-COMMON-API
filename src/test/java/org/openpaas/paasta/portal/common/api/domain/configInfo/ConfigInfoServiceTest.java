@@ -4,38 +4,25 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.openpaas.paasta.portal.common.api.config.Constants;
-import org.openpaas.paasta.portal.common.api.config.TestConfig;
 import org.openpaas.paasta.portal.common.api.entity.portal.ConfigInfo;
-import org.openpaas.paasta.portal.common.api.repository.portal.ConfigInfoRepository;
-import org.slf4j.Logger;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by indra on 2018-06-29.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class ConfigInfoServiceTest extends TestConfig {
-//    @Mock
-//    Logger logger;
-//    @Mock
-//    ConfigInfoRepository configInfoRepository;
-    @MockBean
+public class ConfigInfoServiceTest {
+
+    @Mock
     ConfigInfoService configInfoService;
 
     HashMap getValueResultMap;
@@ -45,6 +32,10 @@ public class ConfigInfoServiceTest extends TestConfig {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        setTestData();
+    }
+
+    private void setTestData() {
 
         //testGetValue
         getValueResultMap = new HashMap();
@@ -75,4 +66,3 @@ public class ConfigInfoServiceTest extends TestConfig {
     }
 }
 
-//Generated with love by TestMe :) Please report issues and submit feature requests at: http://weirddev.com/forum#!/testme

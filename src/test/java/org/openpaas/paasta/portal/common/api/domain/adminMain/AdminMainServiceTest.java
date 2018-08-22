@@ -1,44 +1,47 @@
 package org.openpaas.paasta.portal.common.api.domain.adminMain;
 
 import org.apache.commons.collections.map.HashedMap;
+import org.jinq.jpa.JinqJPAStreamProvider;
+import org.jinq.orm.stream.JinqStream;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.openpaas.paasta.portal.common.api.CommonApiApplication;
+import org.mockito.Spy;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
-import org.openpaas.paasta.portal.common.api.config.TestConfig;
 import org.openpaas.paasta.portal.common.api.config.dataSource.CcConfig;
 import org.openpaas.paasta.portal.common.api.entity.cc.OrganizationsCc;
 import org.openpaas.paasta.portal.common.api.entity.cc.SpacesCc;
 import org.openpaas.paasta.portal.common.api.repository.cc.SpacesCcRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.util.*;
+import java.util.stream.Collectors;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
+
 
 /**
  * Created by indra on 2018-06-27.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class AdminMainServiceTest extends TestConfig {
-//    @Mock
-//    CcConfig ccConfig;
-//    @Mock
-//    SpacesCcRepository spacesCcRepository;
-//    @Mock
-//    JinqSource jinqSource;
-    @MockBean
+public class AdminMainServiceTest {
+
+
+    @Mock
     AdminMainService adminMainService;
 
     OrganizationsCc organizationsCc;
@@ -52,10 +55,18 @@ public class AdminMainServiceTest extends TestConfig {
     Map resultMap;
     Map getTotalSpaceListResultMap;
 
+    private static EntityManagerFactory entityManagerFactory;
+    private static JinqJPAStreamProvider streams;
+    private static EntityManager ccEm;
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        setTestData();
 
+    }
+
+    private void setTestData() {
         Date d = new Date();
 
         resultMap = new HashedMap();
@@ -81,7 +92,6 @@ public class AdminMainServiceTest extends TestConfig {
         spacesCc = new SpacesCc();
         spacesCcList.add(spacesCc);
         getTotalSpaceListResultMap.put("list", spacesCcList);
-
     }
 
     @Test
@@ -108,5 +118,3 @@ public class AdminMainServiceTest extends TestConfig {
         Assert.assertEquals(getTotalSpaceListResultMap, result);
     }
 }
-
-//Generated with love by TestMe :) Please report issues and submit feature requests at: http://weirddev.com/forum#!/testme

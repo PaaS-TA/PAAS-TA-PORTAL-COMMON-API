@@ -1,78 +1,33 @@
 package org.openpaas.paasta.portal.common.api.domain.org;
 
-import org.junit.*;
-import org.junit.runner.RunWith;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.internal.handler.MockHandlerFactory;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.openpaas.paasta.portal.common.api.config.JinqSource;
-import org.openpaas.paasta.portal.common.api.config.TestConfig;
-import org.openpaas.paasta.portal.common.api.config.dataSource.CcConfig;
-import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
-import org.openpaas.paasta.portal.common.api.entity.cc.OrganizationsCc;
 import org.openpaas.paasta.portal.common.api.entity.portal.InviteUser;
-import org.openpaas.paasta.portal.common.api.repository.cc.OrgCcRepository;
-import org.openpaas.paasta.portal.common.api.repository.portal.InviteOrgSpaceRepository;
-import org.openpaas.paasta.portal.common.api.repository.portal.InviteUserRepository;
-import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailRepository;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by indra on 2018-06-29.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class OrgServiceTest extends TestConfig {
-    @Mock
-    Logger LOGGER;
-    @Mock
-    OrgService userService;
-    @Mock
-    UserDetailRepository userDetailRepository;
-    @Mock
-    OrgCcRepository orgCcRepository;
-    @Mock
-    InviteOrgSpaceRepository inviteOrgSpaceRepository;
-    @Mock
-    PortalConfig portalConfig;
-    @Mock
-    CcConfig ccConfig;
-    @Mock
-    JinqSource jinqSource;
-    @Mock
-    InviteUserRepository inviteUserRepository;
+public class OrgServiceTest {
 
 
     @Mock
     OrgService orgService;
 
-    @MockBean
-    OrgService orgServiceBean;
-
-    @InjectMocks
-    OrgService orgServiceInject;
-
-    @Autowired
-    OrgService orgServiceAuto;
 
     List<Object> getOrgsForAdminResult;
     HashMap obejct1;
@@ -90,7 +45,10 @@ public class OrgServiceTest extends TestConfig {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        setTestData();
+    }
 
+    private void setTestData() {
         //testGetOrgsForAdmin
         getOrgsForAdminResult = new ArrayList<Object>();
         obejct1 = new HashMap<String, Object>();
@@ -149,9 +107,9 @@ public class OrgServiceTest extends TestConfig {
 
     @Test
     public void testGetOrgsForAdmin() throws Exception {
-        when(orgServiceAuto.getOrgsForAdmin()).thenReturn(getOrgsForAdminResult);
+        when(orgService.getOrgsForAdmin()).thenReturn(getOrgsForAdminResult);
 
-        List<Object> result = orgServiceAuto.getOrgsForAdmin();
+        List<Object> result = orgService.getOrgsForAdmin();
         Assert.assertEquals(getOrgsForAdminResult, result);
     }
 
