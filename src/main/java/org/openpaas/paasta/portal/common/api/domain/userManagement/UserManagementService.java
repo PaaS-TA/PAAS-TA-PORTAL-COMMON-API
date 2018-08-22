@@ -6,8 +6,10 @@ import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
 import org.openpaas.paasta.portal.common.api.domain.common.CommonService;
+import org.openpaas.paasta.portal.common.api.entity.cc.UsersCc;
 import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
 import org.openpaas.paasta.portal.common.api.entity.uaa.Users;
+import org.openpaas.paasta.portal.common.api.repository.cc.UsersCcRepository;
 import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailRepository;
 import org.openpaas.paasta.portal.common.api.repository.uaa.UsersRepository;
 import org.slf4j.Logger;
@@ -15,9 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -40,6 +41,9 @@ public class UserManagementService {
     @Autowired
     UsersRepository usersRepository;
 
+    @Autowired
+    UsersCcRepository usersCcRepository;
+
 //    @Autowired
 //    public UserManagementService(UserService userService) {
 //        this.userService = userService;
@@ -59,17 +63,42 @@ public class UserManagementService {
     //@HystrixCommand(commandKey = "getUserInfoList")
     public Map<String, Object> getUserInfoList(UserDetail detail) {
 
+        JinqStream<Users> userStream = jinqSource.streamAllUAA(Users.class);
         JinqStream<UserDetail> streams = jinqSource.streamAllPortal(UserDetail.class);
+        streams = streams.sortedDescendingBy(c -> c.getUserName());
+        List<UserDetail> userDetailList = streams.toList();
+        userStream = userStream.sortedBy(user -> user.getUserName());
+        userStream = userStream.sortedBy(user -> user.getActive());
+        List<UserDetail> userDetailLists = new ArrayList<UserDetail>();
+        userStream.forEach(user -> {
+            try {
+                Optional<UserDetail> result = userDetailList.stream().filter(user_detail -> user_detail.getUserId().equals(user.getUserName())).findFirst();
+                if(result.equals(Optional.empty())){
+                    UserDetail newUser = new UserDetail();
+                    newUser.setUserId(user.getUserName());
+                    newUser.setActive(user.getActive().equals("t") ? "Y" : "N");
+                    newUser.setUserName("-");
+                    newUser.setStatus("1");
+                    newUser.setTellPhone("-");
+                    newUser.setAdminYn("N");
+                    userDetailLists.add(newUser);
+                }else {
+                    userDetailLists.add(result.get());
+                }
+            }catch (Exception e){
+
+            }
+        });
         if (null != detail.getSearchKeyword() && !"".equals(detail.getSearchKeyword())) {
             String keyword = detail.getSearchKeyword();
-            streams = streams.where(d -> d.getUserId().contains(keyword) || d.getUserName().contains(keyword));
+            List<UserDetail> filterLists = userDetailLists.stream().filter(d -> d.getUserId().contains(keyword) || d.getUserName().contains(keyword)).collect(Collectors.toList());
+            return new HashMap<String, Object>() {{
+                put("list", filterLists);
+            }};
         }
-        streams = streams.sortedDescendingBy(c -> c.getUserId());
-        List<UserDetail> userDetailList = streams.toList();
-
 
         return new HashMap<String, Object>() {{
-            put("list", setUserGuid(userDetailList));
+            put("list", userDetailLists);
         }};
 
     }
@@ -133,6 +162,11 @@ public class UserManagementService {
     //@HystrixCommand(commandKey = "UpdateUserActive")
     public Map<String, Object> UpdateUserActive(String userId, UserDetail _userDetail) {
         UserDetail userDetail = userDetailRepository.findByUserId(userId);
+        if(userDetail == null){
+            return new HashMap<String, Object>() {{
+                put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+            }};
+        }
         userDetail.setActive(_userDetail.getActive());
         userDetailRepository.save(userDetail);
         return new HashMap<String, Object>() {{

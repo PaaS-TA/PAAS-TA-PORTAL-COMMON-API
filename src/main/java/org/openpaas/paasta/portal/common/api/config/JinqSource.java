@@ -4,6 +4,7 @@ import org.jinq.jpa.JinqJPAStreamProvider;
 import org.jinq.orm.stream.JinqStream;
 import org.openpaas.paasta.portal.common.api.config.dataSource.CcConfig;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
+import org.openpaas.paasta.portal.common.api.config.dataSource.UaaConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +23,9 @@ public class JinqSource {
     @Autowired
     CcConfig ccConfig;
 
+    @Autowired
+    UaaConfig uaaConfig;
+
 
     public <U> JinqStream<U> streamAll(EntityManager em, Class<U> entity) {
         return streams.streamAll(em, entity);
@@ -37,6 +41,12 @@ public class JinqSource {
         streams = new JinqJPAStreamProvider(ccConfig.ccEntityManager().getNativeEntityManagerFactory());
         EntityManager ccEm = ccConfig.ccEntityManager().getNativeEntityManagerFactory().createEntityManager();
         return streams.streamAll(ccEm, entity);
+    }
+
+    public <U> JinqStream<U> streamAllUAA(Class<U> entity) {
+        streams = new JinqJPAStreamProvider(uaaConfig.uaaEntityManager().getNativeEntityManagerFactory());
+        EntityManager uaaEm = uaaConfig.uaaEntityManager().getNativeEntityManagerFactory().createEntityManager();
+        return streams.streamAll(uaaEm, entity);
     }
 
     public JinqJPAStreamProvider streamCc() {

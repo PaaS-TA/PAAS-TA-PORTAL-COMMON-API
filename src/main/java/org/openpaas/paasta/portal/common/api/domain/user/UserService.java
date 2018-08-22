@@ -128,7 +128,7 @@ public class UserService {
             userDetail.setAuthAccessTime(cal.getTime());
             userDetail.setAuthAccessCnt(0);
             userDetail.setAdminYn("N");
-            userDetail.setStatus("1");
+            userDetail.setStatus("0");
             userDetail.setRefreshToken(randomId);
             userDetail.setActive("N");
             /*
