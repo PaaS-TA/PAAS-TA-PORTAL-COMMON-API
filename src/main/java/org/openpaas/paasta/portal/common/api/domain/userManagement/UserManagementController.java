@@ -33,12 +33,10 @@ public class UserManagementController {
      *
      * @return Map(자바클래스)
      */
-    @GetMapping(V2_URL + "/usermgnts")
-    public Map<String, Object> getUserInfoList(@ModelAttribute UserDetail detail, HttpServletRequest request) {
-        LOGGER.info("detail ::: " + request.getParameter("searchKeyword"));
+    @GetMapping(V2_URL + "/usermgnts/{filter}/user")
+    public Map<String, Object> getUserInfoList(@PathVariable String filter, @ModelAttribute UserDetail detail ,HttpServletRequest request) {
         LOGGER.info("detail ::: " + detail.toString());
-
-        return userManagementService.getUserInfoList(detail);
+        return userManagementService.getUserInfoList(filter,detail);
     }
 
 

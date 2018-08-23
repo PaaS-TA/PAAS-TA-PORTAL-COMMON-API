@@ -61,29 +61,55 @@ public class UserManagementService {
      * @return Map(자바클래스)
      */
     //@HystrixCommand(commandKey = "getUserInfoList")
-    public Map<String, Object> getUserInfoList(UserDetail detail) {
+    public Map<String, Object> getUserInfoList(String filter, UserDetail detail) {
 
         JinqStream<Users> userStream = jinqSource.streamAllUAA(Users.class);
         JinqStream<UserDetail> streams = jinqSource.streamAllPortal(UserDetail.class);
+        if(filter.equals("All"))
         streams = streams.sortedDescendingBy(c -> c.getUserName());
+
         List<UserDetail> userDetailList = streams.toList();
         userStream = userStream.sortedBy(user -> user.getUserName());
         userStream = userStream.sortedBy(user -> user.getActive());
         List<UserDetail> userDetailLists = new ArrayList<UserDetail>();
+        String searchKeyword = detail.getSearchKeyword();
         userStream.forEach(user -> {
             try {
+                if(!(filter.equals("All") || user.getActive().equals(filter))){
+                    return;
+                }
                 Optional<UserDetail> result = userDetailList.stream().filter(user_detail -> user_detail.getUserId().equals(user.getUserName())).findFirst();
+
                 if(result.equals(Optional.empty())){
                     UserDetail newUser = new UserDetail();
-                    newUser.setUserId(user.getUserName());
+                    newUser.setUserId(user.getEmail());
                     newUser.setActive(user.getActive().equals("t") ? "Y" : "N");
-                    newUser.setUserName("-");
+                    newUser.setUserName(user.getUserName());
                     newUser.setStatus("1");
                     newUser.setTellPhone("-");
                     newUser.setAdminYn("N");
-                    userDetailLists.add(newUser);
+                    newUser.setUserGuid(user.getId());
+                    if (null != detail.getSearchKeyword() && !"".equals(detail.getSearchKeyword())) {
+                        if(newUser.getUserName().contains(searchKeyword)||newUser.getUserId().contains(searchKeyword)){
+                            userDetailLists.add(newUser);
+                        }
+                    }else {
+                        userDetailLists.add(newUser);
+                    }
+
                 }else {
-                    userDetailLists.add(result.get());
+                    result.get().setUserGuid(user.getId());
+                    if(result.get().getUserName() == null){
+                        result.get().setUserName(user.getUserName());
+                    }
+                    if (null != detail.getSearchKeyword() && !"".equals(detail.getSearchKeyword())) {
+                        if(result.get().getUserName().contains(searchKeyword)||result.get().getUserId().contains(searchKeyword)){
+                            userDetailLists.add(result.get());
+                        }
+                    }else {
+                        userDetailLists.add(result.get());
+                    }
+
                 }
             }catch (Exception e){
 
