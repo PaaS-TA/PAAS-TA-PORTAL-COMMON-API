@@ -188,9 +188,9 @@ public class UserManagementService {
     //@HystrixCommand(commandKey = "UpdateUserActive")
     public Map<String, Object> UpdateUserActive(String userId, UserDetail _userDetail) {
         UserDetail userDetail = userDetailRepository.findByUserId(userId);
-        if(userDetail == null){
+        if(userDetail == null || userDetail.getUserId().equals("admin")){
             return new HashMap<String, Object>() {{
-                put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+                put("RESULT", Constants.RESULT_STATUS_FAIL);
             }};
         }
         userDetail.setActive(_userDetail.getActive());
