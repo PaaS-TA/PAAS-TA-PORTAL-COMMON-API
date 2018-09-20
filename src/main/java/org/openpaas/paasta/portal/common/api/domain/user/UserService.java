@@ -69,8 +69,11 @@ public class UserService {
      */
     //@HystrixCommand(commandKey = "getUser")
     public UserDetail getUser(String userId) {
-        UserDetail userDetail = userDetailRepository.findByUserId(userId);
-        return userDetail;
+        return  userDetailRepository.findByUserId(userId);
+    }
+
+    public Users getUaaUser(String username) {
+        return usersRepository.findByUserName(username);
     }
 
     /**

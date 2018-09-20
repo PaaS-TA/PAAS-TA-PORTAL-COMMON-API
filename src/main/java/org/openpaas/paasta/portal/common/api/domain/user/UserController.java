@@ -3,6 +3,7 @@ package org.openpaas.paasta.portal.common.api.domain.user;
 
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
+import org.openpaas.paasta.portal.common.api.entity.uaa.Users;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,12 @@ public class UserController {
     public Map getUser(@PathVariable String userId) {
         LOGGER.info("> into getUser...");
         UserDetail user = userService.getUser(userId);
+        if(user != null){
+            if(user.getUserName() == null)
+            {
+                user = null;
+            }
+        }
         Map<String, Object> result = new HashMap<>();
         result.put("User", user);
         return result;
@@ -123,6 +130,24 @@ public class UserController {
         }
         return result;
     }
+
+    /**
+     * Login Insert user
+     *
+     * @param username     the username
+     * @param response the response
+     * @return boolean boolean
+     * @throws Exception the exception
+     */
+    @GetMapping(V2_URL + "/user/{username:.+}/uaa")
+    public Users isExistUser(@PathVariable String username, HttpServletResponse response) throws Exception {
+        return userService.getUaaUser(username);
+    }
+
+
+
+
+
 
     /**
      * Delete user map.
