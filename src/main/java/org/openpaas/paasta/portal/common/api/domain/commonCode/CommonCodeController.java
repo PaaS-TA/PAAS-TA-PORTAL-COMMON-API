@@ -47,6 +47,19 @@ public class CommonCodeController {
         return commonCodeService.getCommonCodeDetail(codeDetail);
     }
 
+    /**
+     * 공통코드 목록을 조회한다.
+     *
+     * @param groupid (그룹 아이디)
+     * @return Map(자바클래스)
+     */
+    @GetMapping(V2_URL +"/{groupid}/codedetail")
+    public Map<String, Object> getCodeDetail(@PathVariable String groupid) {
+        CodeDetail codeDetail = new CodeDetail();
+        codeDetail.setGroupId(groupid);
+        return commonCodeService.getCommonCodeDetail(codeDetail);
+    }
+
 
     /**
      * 공통그룹 목록을 조회한다.
@@ -71,6 +84,10 @@ public class CommonCodeController {
         codeGroup.setId(id);
         return commonCodeService.getGroupDetail(codeGroup);
     }
+
+
+
+
 
 
     /**
