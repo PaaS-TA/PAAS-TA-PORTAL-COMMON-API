@@ -96,4 +96,18 @@ public class InviteUser {
     public String getInviteName(){ return this.invitename; }
 
     public void setInvitename(String invitename){ this.invitename = invitename; }
+
+    @Override
+    public String toString() {
+        return "InviteUser{" +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
+                ", gubun='" + gubun + '\'' +
+                ", role='" + role + '\'' +
+                ", orgGuid='" + orgGuid + '\'' +
+                ", created=" + created +
+                ", token='" + token + '\'' +
+                ", invitename='" + invitename + '\'' +
+                '}';
+    }
 }
