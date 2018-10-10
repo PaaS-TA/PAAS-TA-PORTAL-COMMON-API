@@ -182,6 +182,10 @@ public class OrgService {
         return new HashMap<String, Object>(){{put("result", inviteUserRepository.findByInvitenameAndGubun(invitename, "send"));}};
     }
 
+    public Map<?,?> getInviteList(String userid){
+        return new HashMap<String, Object>(){{put("result", inviteUserRepository.findByUserIdAndGubun(userid, "send"));}};
+    }
+
     public boolean deleteInvateUser(String guid, String userId){
         try {
             InviteUser inviteUser = inviteUserRepository.findFirstByUserIdAndOrgGuid(userId, guid);

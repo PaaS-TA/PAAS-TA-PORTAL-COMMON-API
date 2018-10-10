@@ -17,5 +17,7 @@ public interface InviteUserRepository extends JpaRepository<InviteUser, Integer>
 
     List<InviteUser> findByInvitenameAndGubun (String invitename, String gubun);
 
+    List<InviteUser> findByUserIdAndGubun(String userId, String gubun);
+
     InviteUser findFirstByUserIdAndOrgGuid(String userId, String orgId);
 }
