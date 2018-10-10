@@ -39,9 +39,9 @@ public class UserManagementServiceTest {
 
     @Test
     public void testGetUserInfoList() throws Exception {
-        when(userManagementService.getUserInfoList(any())).thenReturn(thenReturnMap);
+        when(userManagementService.getUserInfoList(anyString(), any())).thenReturn(thenReturnMap);
 
-        Map<String, Object> result = userManagementService.getUserInfoList(new UserDetail());
+        Map<String, Object> result = userManagementService.getUserInfoList("filter", new UserDetail());
         Assert.assertEquals(thenReturnMap, result);
     }
 
