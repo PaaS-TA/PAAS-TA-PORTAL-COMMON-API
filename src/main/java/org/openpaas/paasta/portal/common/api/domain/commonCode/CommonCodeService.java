@@ -10,11 +10,11 @@ import org.openpaas.paasta.portal.common.api.repository.portal.CodeDetailReposit
 import org.openpaas.paasta.portal.common.api.repository.portal.CodeGroupRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -125,7 +125,6 @@ public class CommonCodeService {
         return (Map<String, Object>) resultList;
     }
 
-
     /**
      * 공통그룹 목록을 조회한다.
      *
@@ -163,6 +162,23 @@ public class CommonCodeService {
             put("list", resultList);
         }};
     }
+
+    /**
+     * 공통코드 목록을 조회한다.
+     *
+     * @param groupid groupid(아이디)
+     * @return Map(자바클래스)
+     */
+    //@HystrixCommand(commandKey = "getGroupDetail")
+    public Map<String,Object> getCodeDetail(String groupid) {
+        List<CodeDetail> list = codeDetailRepository.findAllByGroupId(groupid);
+        list.sort(Comparator.comparingInt(CodeDetail::getValue2));
+        return new HashMap<String, Object>() {{
+            put("list", list);
+        }};
+    }
+
+
 
 
     /**

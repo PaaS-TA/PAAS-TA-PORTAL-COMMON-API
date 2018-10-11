@@ -2,6 +2,7 @@ package org.openpaas.paasta.portal.common.api.entity.portal;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -64,6 +65,10 @@ public class CodeDetail {
 
     @Transient
     private String orgId;
+
+    public int getValue2() {
+        return Integer.parseInt(value);
+    }
 
 
     public int getNo() {
@@ -206,6 +211,7 @@ public class CodeDetail {
                 ", procType='" + procType + '\'' +
                 ", orgKey='" + orgKey + '\'' +
                 ", orgId='" + orgId + '\'' +
+                ", value2=" + getValue2() +
                 '}';
     }
 }

@@ -85,9 +85,16 @@ public class CommonCodeController {
         return commonCodeService.getGroupDetail(codeGroup);
     }
 
-
-
-
+    /**
+     * 공통그룹 목록을 조회한다.
+     *
+     * @param groupid groupid(아이디)
+     * @return Map(자바클래스)
+     */
+    @GetMapping(V2_URL +"/{groupid}/codegroup")
+    public Map<String, Object> getGroupDetail(@PathVariable String  groupid) {
+        return commonCodeService.getCodeDetail(groupid);
+    }
 
 
     /**
