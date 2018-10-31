@@ -66,8 +66,13 @@ public class CodeDetail {
     @Transient
     private String orgId;
 
+    @Transient
     public int getValue2() {
-        return Integer.parseInt(value);
+        try {
+            return Integer.parseInt(value);
+        }catch (Exception e){
+            return 0;
+        }
     }
 
 
@@ -211,7 +216,7 @@ public class CodeDetail {
                 ", procType='" + procType + '\'' +
                 ", orgKey='" + orgKey + '\'' +
                 ", orgId='" + orgId + '\'' +
-                ", value2=" + getValue2() +
+                ", value2='" + getValue2() + '\'' +
                 '}';
     }
 }
