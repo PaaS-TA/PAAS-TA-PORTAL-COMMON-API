@@ -24,7 +24,7 @@ public class CommonCodeController {
     private final String V2_URL = "/v2";
 
     /**
-     * 공통코드 목록을 조회한다.
+     * Detail Table 전체목록 조회한다.
      *
      * @param codeDetail CodeDetail(아이디)
      * @return Map(자바클래스)
@@ -36,7 +36,7 @@ public class CommonCodeController {
 
 
     /**
-     * 공통코드 목록을 조회한다.
+     * Detail Table 상세목록을 조회한다.
      *
      * @param codeDetail CodeDetail(아이디)
      * @return Map(자바클래스)
@@ -62,7 +62,7 @@ public class CommonCodeController {
 
 
     /**
-     * 공통그룹 목록을 조회한다.
+     *Group Table을 조회한다.
      *
      * @param codeGroup CodeGroup(아이디)
      * @return Map(자바클래스)
@@ -74,7 +74,7 @@ public class CommonCodeController {
 
 
     /**
-     * 공통그룹 목록을 조회한다.
+     * Group Table 상세 조회한다.
      *
      * @param codeGroup CodeGroup(아이디)
      * @return Map(자바클래스)
@@ -86,7 +86,7 @@ public class CommonCodeController {
     }
 
     /**
-     * 공통그룹 목록을 조회한다.
+     *  Detail Table 전체목록 조회한다.
      *
      * @param groupid groupid(아이디)
      * @return Map(자바클래스)
@@ -110,7 +110,7 @@ public class CommonCodeController {
 
 
     /**
-     * 공통 코드 그룹을 등록한다.
+     * Group Table을 등록한다.
      *
      * @param codeGroup CodeGroup (모델클래스)
      * @return Map(자바클래스)
@@ -122,7 +122,7 @@ public class CommonCodeController {
 
 
     /**
-     * 공통 코드을 등록한다.
+     * Detail Table을 등록한다.
      *
      * @param codeDetail CodeDetail (모델클래스)
      * @return Map(자바클래스)
@@ -135,7 +135,7 @@ public class CommonCodeController {
 
 
     /**
-     * 공통 코드 그룹을 수정한다.
+     * Group Table을 수정한다.
      *
      * @param codeGroup CodeGroup (모델클래스)
      * @return Map(자바클래스)
@@ -150,7 +150,7 @@ public class CommonCodeController {
 
 
     /**
-     * 공통 코드을 수정한다.
+     * Detail Table을 수정한다.
      *
      * @param codeDetail CodeDetail (모델클래스)
      * @return Map(자바클래스)
@@ -162,7 +162,7 @@ public class CommonCodeController {
 
 
     /**
-     * 공통 코드 그룹을 삭제한다.
+     * Group Table을 삭제한다.
      *
      * @param id
      * * @return Map(자바클래스)
@@ -174,7 +174,7 @@ public class CommonCodeController {
 
 
     /**
-     * 공통 코드을 삭제한다.
+     * Detail Table을 삭제한다.
      *
      * @param no
      * @return Map(자바클래스)
