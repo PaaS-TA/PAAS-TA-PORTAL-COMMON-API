@@ -62,7 +62,7 @@ public class CommonCodeController {
 
 
     /**
-     *Group Table을 조회한다.
+     * Group Table 목록을 조회한다.
      *
      * @param codeGroup CodeGroup(아이디)
      * @return Map(자바클래스)
@@ -110,7 +110,7 @@ public class CommonCodeController {
 
 
     /**
-     * Group Table을 등록한다.
+     * Group Table을 생성(등록)한다.
      *
      * @param codeGroup CodeGroup (모델클래스)
      * @return Map(자바클래스)
@@ -122,7 +122,7 @@ public class CommonCodeController {
 
 
     /**
-     * Detail Table을 등록한다.
+     * Detail Table을 생성(등록)한다.
      *
      * @param codeDetail CodeDetail (모델클래스)
      * @return Map(자바클래스)
