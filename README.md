@@ -1,7 +1,8 @@
 # PAAS-TA-PORTAL-COMMON-API
-v2.0 - Sprint1
+PAAS-TA-PORTAL-COMMON-API는 DB API를 제공하는 서비스이다.
 
 ## 유의사항
+개발정보 - (V2.0 - SP5)
 - java 1.8 버전
 - SpringCloud Edgware.RELEASE 
 - TomcatEmded 8.5.14
