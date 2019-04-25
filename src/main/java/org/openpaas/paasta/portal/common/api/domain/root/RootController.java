@@ -64,7 +64,7 @@ public class RootController {
         map.put("uaa", uaa);
         map.put("portal", portal);
         map.put("cc", cc);
-
+        map.put("version", "v3");
         map.put("name", "PaaS-TA Common API");
         return map;
     }
