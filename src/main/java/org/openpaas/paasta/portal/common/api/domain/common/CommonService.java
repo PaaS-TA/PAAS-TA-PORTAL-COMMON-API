@@ -58,7 +58,7 @@ public class CommonService {
     //@HystrixCommand(commandKey = "procCfApiRestTemplate")
     public Map<String, Object> procCfApiRestTemplate(String reqUrl, HttpMethod httpMethod, Object obj, String reqToken) {
 
-        String cfRequestURL = cfApiUrl + "/v2/" ;
+        String cfRequestURL = cfApiUrl + "/v3/" ;
         restTemplate = new RestTemplate();
         HttpHeaders reqHeaders = new HttpHeaders();
         reqHeaders.add(AUTHORIZATION_HEADER_KEY, base64Authorization);
