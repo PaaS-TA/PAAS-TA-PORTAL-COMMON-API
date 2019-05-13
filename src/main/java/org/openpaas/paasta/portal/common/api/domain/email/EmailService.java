@@ -37,7 +37,6 @@ public class EmailService {
     @Autowired
     CommonService commonService;
 
-    //@HystrixCommand(commandKey = "resetEmail")
     public Map resetEmail(String userId, String refreshToken) {
         logger.info("resetEmail ::: " + userId);
         Map map = new HashMap();
@@ -76,7 +75,6 @@ public class EmailService {
         return map;
 
     }
-    //@HystrixCommand(commandKey = "createEmail")
     public Map createEmail(String userId, String refreshToken) {
         logger.info("createEmail ::: " + userId);
         Map map = new HashMap();
@@ -109,7 +107,6 @@ public class EmailService {
         }
         return map;
     }
-    //@HystrixCommand(commandKey = "inviteOrgEmail")
     public Boolean inviteOrgEmail(Map body) {
         String[] userEmails;
 
@@ -150,7 +147,6 @@ public class EmailService {
 
         return true;
     }
-    //@HystrixCommand(commandKey = "inviteAccept")
     public Map inviteAccept(Map body) {
         Map map = new HashMap();
 
@@ -172,7 +168,6 @@ public class EmailService {
 
         return map;
     }
-    //@HystrixCommand(commandKey = "inviteAcceptUpdate")
     public Map inviteAcceptUpdate(Map body) {
         try {
             InviteUser inviteUser = new InviteUser();
@@ -190,7 +185,6 @@ public class EmailService {
 
         return body;
     }
-    //@HystrixCommand(commandKey = "inviteOrgEmailSend")
     public Map inviteOrgEmailSend(String userId, String orgName, String refreshToken) {
         logger.info("createEmail ::: " + userId);
         Map map = new HashMap();
@@ -238,7 +232,6 @@ public class EmailService {
         return map;
     }
 
-    //@HystrixCommand(commandKey = "inviteOrgEmailSend")
     public Map Sginin(String userId, String orgName, String refreshToken) {
         logger.info("createEmail ::: " + userId);
         Map map = new HashMap();

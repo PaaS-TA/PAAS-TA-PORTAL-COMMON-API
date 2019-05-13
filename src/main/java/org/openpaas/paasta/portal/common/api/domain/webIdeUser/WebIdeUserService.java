@@ -38,7 +38,6 @@ public class WebIdeUserService {
      * @param webIdeUser the webIdeUser
      * @return ModelAndView model
      */
-    //@HystrixCommand(commandKey = "getUser")
     public WebIdeUser getUser(WebIdeUser webIdeUser) {
         return webIdeUserRepository.findAllByOrgName(webIdeUser.getOrgName());
     }
@@ -49,7 +48,6 @@ public class WebIdeUserService {
      * @param webIdeUser the webIdeUser
      * @return ModelAndView model
      */
-    //@HystrixCommand(commandKey = "getList")
     public HashMap<String, Object> getList(WebIdeUser webIdeUser) {
         HashMap<String, Object> resultMap = new HashMap<>();
 
@@ -95,7 +93,6 @@ public class WebIdeUserService {
      * @param webIdeUser the webIdeUser
      * @return ModelAndView model
      */
-    //@HystrixCommand(commandKey = "insertUser")
     public String insertUser(WebIdeUser webIdeUser) {
         String resultStr = Constants.RESULT_STATUS_SUCCESS;
 
@@ -123,7 +120,6 @@ public class WebIdeUserService {
      * @param webIdeUser the webIdeUser
      * @return ModelAndView model
      */
-    //@HystrixCommand(commandKey = "updateUser")
     public String updateUser(WebIdeUser webIdeUser) {
         String resultStr = Constants.RESULT_STATUS_SUCCESS;
 
@@ -183,7 +179,6 @@ public class WebIdeUserService {
      * @param webIdeUser the webIdeUser
      * @return ModelAndView model
      */
-    //@HystrixCommand(commandKey = "deleteUser")
     public String deleteUser(WebIdeUser webIdeUser) {
         String resultStr = Constants.RESULT_STATUS_SUCCESS;
 
