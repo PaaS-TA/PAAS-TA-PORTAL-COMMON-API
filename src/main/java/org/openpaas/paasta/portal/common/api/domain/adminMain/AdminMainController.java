@@ -2,6 +2,7 @@ package org.openpaas.paasta.portal.common.api.domain.adminMain;
 
 import org.openpaas.paasta.portal.common.api.entity.cc.OrganizationsCc;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -24,8 +25,11 @@ public class AdminMainController {
 //     * @param reqParam OrganizationsCc
      * @return Map(자바클래스)
      */
-    @GetMapping(value = {V2_URL + "/statistics"})
-    public Map<String, Object> getTotalCountList() {
+    @GetMapping(value = {V2_URL + "/statistics/{key}"})
+    public Map<String, Object> getTotalCountList(@PathVariable int key) {
+
+
+
         return adminMainService.getTotalCountList();
     }
 
@@ -35,7 +39,7 @@ public class AdminMainController {
 //     * @param reqParam OrganizationsCc
      * @return Map(자바클래스)
      */
-    @GetMapping(value = {V2_URL + "/statistics/organizations"})
+    @GetMapping(value = {V2_URL + "/statistics/organizations/{key}"})
     public Map<String, Object> getTotalOrganizationList() {
         return adminMainService.getTotalOrganizationList();
     }
@@ -45,7 +49,7 @@ public class AdminMainController {
      *
      * @return Map(자바클래스)
      */
-    @GetMapping(value = {V2_URL + "/statistics/organizations/{organizationId}/spaces"})
+    @GetMapping(value = {V2_URL + "/statistics/organizations/{organizationId}/spaces/{key}"})
     public Map<String, Object> getTotalSpaceList(@PathVariable String organizationId) {
         return adminMainService.getTotalSpaceList(organizationId);
     }
