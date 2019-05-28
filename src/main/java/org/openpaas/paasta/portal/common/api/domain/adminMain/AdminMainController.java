@@ -22,24 +22,21 @@ public class AdminMainController {
     /**
      * 전체 조직 수, 영역 수, APPLICATION 수, 사용자 수 목록을 조회한다.
      *
-//     * @param reqParam OrganizationsCc
+     //     * @param reqParam OrganizationsCc
      * @return Map(자바클래스)
      */
-    @GetMapping(value = {V2_URL + "/statistics/{key}"})
-    public Map<String, Object> getTotalCountList(@PathVariable int key) {
-
-
-
+    @GetMapping(value = {V2_URL + "/statistics"})
+    public Map<String, Object> getTotalCountList() {
         return adminMainService.getTotalCountList();
     }
 
     /**
      * 전체 조직 통계 목록을 조회한다.
      *
-//     * @param reqParam OrganizationsCc
+     //     * @param reqParam OrganizationsCc
      * @return Map(자바클래스)
      */
-    @GetMapping(value = {V2_URL + "/statistics/organizations/{key}"})
+    @GetMapping(value = {V2_URL + "/statistics/organizations"})
     public Map<String, Object> getTotalOrganizationList() {
         return adminMainService.getTotalOrganizationList();
     }
@@ -49,7 +46,7 @@ public class AdminMainController {
      *
      * @return Map(자바클래스)
      */
-    @GetMapping(value = {V2_URL + "/statistics/organizations/{organizationId}/spaces/{key}"})
+    @GetMapping(value = {V2_URL + "/statistics/organizations/{organizationId}/spaces"})
     public Map<String, Object> getTotalSpaceList(@PathVariable String organizationId) {
         return adminMainService.getTotalSpaceList(organizationId);
     }
