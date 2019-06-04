@@ -70,6 +70,9 @@ public class ServicepackCategory {
     @Column(name = "dashboard_use_yn", nullable = false)
     private String dashboardUseYn;
 
+    @Column(name = "on_demand_yn", nullable = false)
+    private String OnDemandYn;
+
     @Column(name = "app_bind_yn")
     private String appBindYn;
 
@@ -218,6 +221,10 @@ public class ServicepackCategory {
     public void setDashboardUseYn(String dashboardUseYn) {
         this.dashboardUseYn = dashboardUseYn;
     }
+
+    public String getOnDemandYn() { return OnDemandYn; }
+
+    public void setOnDemandYn(String onDemandYn) {  OnDemandYn = onDemandYn; }
 
     public String getAppBindYn() {
         return appBindYn;
