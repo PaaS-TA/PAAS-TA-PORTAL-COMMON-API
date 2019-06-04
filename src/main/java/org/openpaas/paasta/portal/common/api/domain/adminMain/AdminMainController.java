@@ -2,6 +2,7 @@ package org.openpaas.paasta.portal.common.api.domain.adminMain;
 
 import org.openpaas.paasta.portal.common.api.entity.cc.OrganizationsCc;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -21,7 +22,7 @@ public class AdminMainController {
     /**
      * 전체 조직 수, 영역 수, APPLICATION 수, 사용자 수 목록을 조회한다.
      *
-//     * @param reqParam OrganizationsCc
+     //     * @param reqParam OrganizationsCc
      * @return Map(자바클래스)
      */
     @GetMapping(value = {V2_URL + "/statistics"})
@@ -32,7 +33,7 @@ public class AdminMainController {
     /**
      * 전체 조직 통계 목록을 조회한다.
      *
-//     * @param reqParam OrganizationsCc
+     //     * @param reqParam OrganizationsCc
      * @return Map(자바클래스)
      */
     @GetMapping(value = {V2_URL + "/statistics/organizations"})
