@@ -75,7 +75,8 @@ public class EmailService {
         return map;
 
     }
-    public Map createEmail(String userId, String refreshToken) {
+
+    public Map createEmail(String userId, String refreshToken, String seq) {
         logger.info("createEmail ::: " + userId);
         Map map = new HashMap();
         try {
@@ -86,7 +87,7 @@ public class EmailService {
 
             Elements elementAhref = doc.select("a[href]");
             if (elementAhref.size() != 0) {
-                String link = emailConfig.getAuthUrl() + "/" + emailConfig.getCreateUrl() + "?userId=" + userId + "&refreshToken=" + refreshToken;
+                String link = emailConfig.getAuthUrl() + "/" + emailConfig.getCreateUrl() + "?userId=" + userId + "&refreshToken=" + refreshToken + "&seq=" + seq;
                 logger.info("link : " + link);
                 elementAhref.get(0).attr("href", link);
             }
@@ -107,22 +108,23 @@ public class EmailService {
         }
         return map;
     }
+
     public Boolean inviteOrgEmail(Map body) {
         String[] userEmails;
 
-        if(body.get("userEmail").toString().equals(""))
+        if (body.get("userEmail").toString().equals(""))
             return false;
 
         try {
             userEmails = body.get("userEmail").toString().split(",");
 
-            for(String userEmail : userEmails) {
+            for (String userEmail : userEmails) {
                 userEmail = userEmail.trim();
                 InviteUser inviteUser = new InviteUser();
                 List<InviteUser> user = inviteUserRepository.findByUserIdAndOrgGuid(userEmail, body.get("orgId").toString());
 
                 //TODO 하나 이상일 수 있나?
-                if(user.size() > 0) {
+                if (user.size() > 0) {
                     inviteUser.setId(user.get(0).getId());
                 }
 
@@ -140,19 +142,20 @@ public class EmailService {
 
                 inviteOrgEmailSend(userEmail, body.get("orgName").toString(), randomId);
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
 
         return true;
     }
+
     public Map inviteAccept(Map body) {
         Map map = new HashMap();
 
         try {
             List<InviteUser> user = inviteUserRepository.findByTokenAndGubunNot(body.get("token").toString(), "success");
-            if(user.size() > 0) {
+            if (user.size() > 0) {
                 map.put("id", user.get(0).getId());
                 map.put("role", user.get(0).getRole());
                 map.put("orgGuid", user.get(0).getOrgGuid());
@@ -161,13 +164,14 @@ public class EmailService {
             } else {
                 map.put("result", false);
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             map.put("result", false);
         }
 
         return map;
     }
+
     public Map inviteAcceptUpdate(Map body) {
         try {
             InviteUser inviteUser = new InviteUser();
@@ -185,6 +189,7 @@ public class EmailService {
 
         return body;
     }
+
     public Map inviteOrgEmailSend(String userId, String orgName, String refreshToken) {
         logger.info("createEmail ::: " + userId);
         Map map = new HashMap();
@@ -196,22 +201,22 @@ public class EmailService {
 
             final Elements elementAhref = doc.select("a[href]");
             if (elementAhref.size() != 0) {
-                final String link = String.format( "%s/%s?userId=%s&orgName=%s&refreshToken=%s",
-                    emailConfig.getAuthUrl(), emailConfig.getInviteUrl(), userId, orgName, refreshToken );
+                final String link = String.format("%s/%s?userId=%s&orgName=%s&refreshToken=%s",
+                        emailConfig.getAuthUrl(), emailConfig.getInviteUrl(), userId, orgName, refreshToken);
                 logger.info("link : {}", link);
                 elementAhref.get(0).attr("href", link);
             }
 
-            final Elements elementSpanId = doc.select( "span[id=paasta_id]" );
+            final Elements elementSpanId = doc.select("span[id=paasta_id]");
             if (elementSpanId.size() >= 0) {
                 logger.info("invite user id : {}", userId);
-                elementSpanId.get( 0 ).text( userId );
+                elementSpanId.get(0).text(userId);
             }
 
-            final Elements elementSpanOrg = doc.select( "span[id=paasta_org]" );
+            final Elements elementSpanOrg = doc.select("span[id=paasta_org]");
             if (elementSpanOrg.size() >= 0) {
-                logger.info( "invite {} into org : {}", userId, orgName );
-                elementSpanOrg.get( 0 ).text( orgName );
+                logger.info("invite {} into org : {}", userId, orgName);
+                elementSpanOrg.get(0).text(orgName);
             }
 
             logger.info(doc.outerHtml());
@@ -243,22 +248,22 @@ public class EmailService {
 
             final Elements elementAhref = doc.select("a[href]");
             if (elementAhref.size() != 0) {
-                final String link = String.format( "%s/%s?userId=%s&orgName=%s&refreshToken=%s",
-                        emailConfig.getAuthUrl(), emailConfig.getInviteUrl(), userId, orgName, refreshToken );
+                final String link = String.format("%s/%s?userId=%s&orgName=%s&refreshToken=%s",
+                        emailConfig.getAuthUrl(), emailConfig.getInviteUrl(), userId, orgName, refreshToken);
                 logger.info("link : {}", link);
                 elementAhref.get(0).attr("href", link);
             }
 
-            final Elements elementSpanId = doc.select( "span[id=paasta_id]" );
+            final Elements elementSpanId = doc.select("span[id=paasta_id]");
             if (elementSpanId.size() >= 0) {
                 logger.info("invite user id : {}", userId);
-                elementSpanId.get( 0 ).text( userId );
+                elementSpanId.get(0).text(userId);
             }
 
-            final Elements elementSpanOrg = doc.select( "span[id=paasta_org]" );
+            final Elements elementSpanOrg = doc.select("span[id=paasta_org]");
             if (elementSpanOrg.size() >= 0) {
-                logger.info( "invite {} into org : {}", userId, orgName );
-                elementSpanOrg.get( 0 ).text( orgName );
+                logger.info("invite {} into org : {}", userId, orgName);
+                elementSpanOrg.get(0).text(orgName);
             }
 
             logger.info(doc.outerHtml());

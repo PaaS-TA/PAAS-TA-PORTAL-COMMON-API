@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.POST;
 import java.io.IOException;
@@ -219,7 +220,9 @@ public class UserController {
      */
 
     @PostMapping(V2_URL + "/users/create/email")
-    public Map<String, Object> createUserEmail(@RequestBody Map body) throws Exception {
+    public Map<String, Object> createUserEmail(HttpServletRequest request, @RequestBody Map body) throws Exception {
+        String seq =  request.getParameter("seq");
+        body.put("seq",seq);
         Map result = userService.createRequestUser(body);
         return result;
     }

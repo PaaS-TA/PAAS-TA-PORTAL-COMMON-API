@@ -134,7 +134,7 @@ public class UserService {
              * 여기서 에러나면 Exception으로 빠져버림
              */
             createUser(userDetail);
-            map = emailService.createEmail(userDetail.getUserId(), randomId);
+            map = emailService.createEmail(userDetail.getUserId(), randomId,body.get("seq").toString());
         } catch (Exception e) {
             e.printStackTrace();
             map.put("result", false);
