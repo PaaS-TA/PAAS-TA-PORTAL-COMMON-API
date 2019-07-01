@@ -122,6 +122,7 @@ public class UserService {
             String randomId = RandomStringUtils.randomAlphanumeric(17).toUpperCase() + RandomStringUtils.randomAlphanumeric(2).toUpperCase();
             UserDetail userDetail = new UserDetail();
             userDetail.setUserId(body.get("userid").toString());
+            userDetail.setUserName(body.get("username").toString());
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DATE, 1);
             userDetail.setAuthAccessTime(cal.getTime());
@@ -134,7 +135,7 @@ public class UserService {
              * 여기서 에러나면 Exception으로 빠져버림
              */
             createUser(userDetail);
-            map = emailService.createEmail(userDetail.getUserId(), randomId,body.get("seq").toString());
+            map = emailService.createEmail(userDetail.getUserId(), randomId, body.get("seq").toString());
         } catch (Exception e) {
             e.printStackTrace();
             map.put("result", false);

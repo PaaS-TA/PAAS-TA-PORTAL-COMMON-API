@@ -235,7 +235,10 @@ public class UserController {
      */
 
     @PostMapping(V2_URL + "/users/password/email")
-    public Map<String, Object> resetRequestUser(@RequestBody Map body) throws Exception {
+    public Map<String, Object> resetRequestUser(HttpServletRequest request, @RequestBody Map body) throws Exception {
+        String seq =  request.getParameter("seq");
+        LOGGER.info("SEQ : "+ seq);
+        body.put("seq",seq);
         Map result = userService.resetRequestUser(body);
         return result;
     }
