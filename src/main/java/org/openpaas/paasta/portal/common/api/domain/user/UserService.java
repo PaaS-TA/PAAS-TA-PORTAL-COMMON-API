@@ -24,6 +24,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.io.IOException;
+import java.security.acl.LastOwnerException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -152,10 +153,12 @@ public class UserService {
      * @return boolean
      * @throws IOException the io exception
      */
-    public Map resetRequestUser(Map body) {
+    public Map  resetRequestUser(Map body) {
         Map map = new HashMap();
         try {
+
             String randomId = RandomStringUtils.randomAlphanumeric(17).toUpperCase() + RandomStringUtils.randomAlphanumeric(2).toUpperCase();
+            logger.info("user id : " + body.get("userid").toString() + " 1");
             UserDetail userDetail = getUser(body.get("userid").toString());
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DATE, 1);
@@ -166,7 +169,9 @@ public class UserService {
             /*
              * 여기서 에러나면 Exception으로 빠져버림
              */
+            logger.info("user id : " + body.get("userid").toString() + " 2");
             createUser(userDetail);
+            logger.info("user id : " + body.get("userid").toString() + " 3");
             map = emailService.resetEmail(userDetail.getUserId(), randomId, body.get("seq").toString());
         } catch (Exception e) {
             e.printStackTrace();
