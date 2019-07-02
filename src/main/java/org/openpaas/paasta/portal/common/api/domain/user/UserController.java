@@ -218,11 +218,8 @@ public class UserController {
      * @return map all user name
      * @throws Exception the exception
      */
-
     @PostMapping(V2_URL + "/users/create/email")
-    public Map<String, Object> createUserEmail(HttpServletRequest request, @RequestBody Map body) throws Exception {
-        String seq =  request.getParameter("seq");
-        body.put("seq",seq);
+    public Map<String, Object> createUserEmail(@RequestBody Map body) throws Exception {
         Map result = userService.createRequestUser(body);
         return result;
     }
@@ -235,10 +232,7 @@ public class UserController {
      */
 
     @PostMapping(V2_URL + "/users/password/email")
-    public Map<String, Object> resetRequestUser(HttpServletRequest request, @RequestBody Map body) throws Exception {
-        String seq =  request.getParameter("seq");
-        LOGGER.info("SEQ : "+ seq);
-        body.put("seq",seq);
+    public Map<String, Object> resetRequestUser(@RequestBody Map body) throws Exception {
         Map result = userService.resetRequestUser(body);
         return result;
     }
