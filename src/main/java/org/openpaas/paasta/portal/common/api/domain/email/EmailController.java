@@ -44,9 +44,6 @@ public class EmailController {
         return resultMap;
     }
 
-
-
-
     /**
      * 사용자 계정을 생성하기 위하여, 이메일 발송
      *
@@ -74,8 +71,9 @@ public class EmailController {
         return emailService.inviteAccept(body);
     }
 
-    @PostMapping( "/v2" + "/email/inviteAcceptUpdate" )
+    @PostMapping(value = {"/v2/email/create"})
     public Map inviteAcceptUpdate(@RequestBody Map<String, Object> body) {
         return emailService.inviteAcceptUpdate(body);
     }
+
 }

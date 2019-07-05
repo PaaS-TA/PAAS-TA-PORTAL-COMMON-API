@@ -140,7 +140,7 @@ public class EmailService {
                 //TODO 성공한 사람만 email 날릴 것인지
                 inviteUserRepository.save(inviteUser);
 
-                inviteOrgEmailSend(userEmail, body.get("orgName").toString(), randomId);
+                inviteOrgEmailSend(userEmail, body.get("orgName").toString(), randomId, body.get("seq").toString());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -173,11 +173,10 @@ public class EmailService {
     }
 
     public Map inviteAcceptUpdate(Map body) {
+
         try {
             InviteUser inviteUser = new InviteUser();
-
             InviteUser user = inviteUserRepository.findById(Integer.parseInt(body.get("id").toString()));
-
             user.setGubun(body.get("gubun").toString());
             inviteUserRepository.save(user);
 
@@ -190,8 +189,8 @@ public class EmailService {
         return body;
     }
 
-    public Map inviteOrgEmailSend(String userId, String orgName, String refreshToken) {
-        logger.info("createEmail ::: " + userId);
+    public Map inviteOrgEmailSend(String userId, String orgName, String refreshToken, String seq) {
+        logger.info("inviteOrgEmailSend >> userId : " + userId + "seq : " + seq);
         Map map = new HashMap();
         try {
             ClassPathResource cpr = new ClassPathResource("template/invitation.html");
@@ -201,9 +200,10 @@ public class EmailService {
 
             final Elements elementAhref = doc.select("a[href]");
             if (elementAhref.size() != 0) {
-                final String link = String.format("%s/%s?userId=%s&orgName=%s&refreshToken=%s",
-                        emailConfig.getAuthUrl(), emailConfig.getInviteUrl(), userId, orgName, refreshToken);
+                String link = String.format("%s/%s?userId=%s&orgName=%s&refreshToken=%s",
+                        emailConfig.getAuthUrl(), emailConfig.getInviteUrl(), userId, orgName, refreshToken, seq);
                 logger.info("link : {}", link);
+                link += "&seq="+seq;
                 elementAhref.get(0).attr("href", link);
             }
 
@@ -237,7 +237,7 @@ public class EmailService {
         return map;
     }
 
-    public Map Sginin(String userId, String orgName, String refreshToken) {
+    public Map Sginin(String userId, String orgName, String refreshToken, String seq) {
         logger.info("createEmail ::: " + userId);
         Map map = new HashMap();
         try {
@@ -248,9 +248,10 @@ public class EmailService {
 
             final Elements elementAhref = doc.select("a[href]");
             if (elementAhref.size() != 0) {
-                final String link = String.format("%s/%s?userId=%s&orgName=%s&refreshToken=%s",
+                String link = String.format("%s/%s?userId=%s&orgName=%s&refreshToken=%s",
                         emailConfig.getAuthUrl(), emailConfig.getInviteUrl(), userId, orgName, refreshToken);
                 logger.info("link : {}", link);
+                link += "&seq="+seq;
                 elementAhref.get(0).attr("href", link);
             }
 
