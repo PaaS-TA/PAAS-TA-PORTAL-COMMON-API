@@ -71,7 +71,7 @@ public class EmailController {
         return emailService.inviteAccept(body);
     }
 
-    @PostMapping(value = {"/v2/email/create"})
+    @PostMapping( "/v2" + "/email/inviteAcceptUpdate" )
     public Map inviteAcceptUpdate(@RequestBody Map<String, Object> body) {
         return emailService.inviteAcceptUpdate(body);
     }
