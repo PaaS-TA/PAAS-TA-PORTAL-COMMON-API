@@ -32,7 +32,7 @@ public class EmailController {
      *
      * @return the menu list
      */
-    @PostMapping(value = {"/v2/email/reset"})
+    @PostMapping(value = {"/v3/email/reset"})
     public Map<String, Object> expiredEmail(HttpServletRequest request, @RequestBody Map body) {
         String seq =  request.getParameter("seq");
         body.put("seq",seq);
@@ -49,7 +49,7 @@ public class EmailController {
      *
      * @return the menu list
      */
-    @PostMapping(value = {"/v2/email/create"})
+    @PostMapping(value = {"/v3/email/create"})
     public Map<String, Object> createEmail(HttpServletRequest request, @RequestBody Map body) {
         String seq =  request.getParameter("seq");
         body.put("seq",seq);

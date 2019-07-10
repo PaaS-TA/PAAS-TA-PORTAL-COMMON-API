@@ -38,7 +38,7 @@ public class EmailService {
     CommonService commonService;
 
     public Map resetEmail(String userId, String refreshToken, String seq) {
-        logger.info("resetEmail >> userId : " + userId + "seq : " + seq);
+        logger.info("createEmail >> userId : " + userId + " " + "seq : " + seq);
         Map map = new HashMap();
         ClassPathResource cpr = new ClassPathResource("template/loginpass.html");
 
@@ -77,7 +77,7 @@ public class EmailService {
     }
 
     public Map createEmail(String userId, String refreshToken, String seq) {
-        logger.info("createEmail >> userId : " + userId + "seq : " + seq);
+        logger.info("createEmail >> userId : " + userId + " " + "seq : " + seq);
         Map map = new HashMap();
         try {
             ClassPathResource cpr = new ClassPathResource("template/loginemail.html");

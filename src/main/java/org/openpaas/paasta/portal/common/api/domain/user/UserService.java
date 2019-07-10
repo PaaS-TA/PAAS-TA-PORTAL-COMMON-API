@@ -135,7 +135,9 @@ public class UserService {
             /*
              * 여기서 에러나면 Exception으로 빠져버림
              */
+            logger.info("user id : " + body.get("userid").toString() + " 2");
             createUser(userDetail);
+            logger.info("user id : " + body.get("userid").toString() + " 3");
             map = emailService.createEmail(userDetail.getUserId(), randomId, body.get("seq").toString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -156,7 +158,6 @@ public class UserService {
     public Map  resetRequestUser(Map body) {
         Map map = new HashMap();
         try {
-
             String randomId = RandomStringUtils.randomAlphanumeric(17).toUpperCase() + RandomStringUtils.randomAlphanumeric(2).toUpperCase();
             logger.info("user id : " + body.get("userid").toString() + " 1");
             UserDetail userDetail = getUser(body.get("userid").toString());
