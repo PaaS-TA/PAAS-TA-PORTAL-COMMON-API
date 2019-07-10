@@ -32,7 +32,6 @@ public class UserController {
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     private final String V2_URL = "/v2";
-    private final String V3_URL = "/v3";
     @Autowired
     private UserService userService;
 
@@ -219,7 +218,7 @@ public class UserController {
      * @return map all user name
      * @throws Exception the exception
      */
-    @PostMapping(V3_URL + "/users/create/email")
+    @PostMapping(V2_URL + "/users/create/email")
     public Map<String, Object> createUserEmail(@RequestBody Map body) throws Exception {
         Map result = userService.createRequestUser(body);
         return result;
@@ -232,7 +231,7 @@ public class UserController {
      * @throws Exception the exception
      */
 
-    @PostMapping(V3_URL + "/users/password/email")
+    @PostMapping(V2_URL + "/users/password/email")
     public Map<String, Object> resetRequestUser(@RequestBody Map body) throws Exception {
         Map result = userService.resetRequestUser(body);
         return result;
