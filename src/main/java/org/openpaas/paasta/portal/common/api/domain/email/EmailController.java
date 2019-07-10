@@ -32,15 +32,13 @@ public class EmailController {
      *
      * @return the menu list
      */
-    @PostMapping(value = {"/v2/email/reset"})
-    public Map<String, Object> expiredEmail(HttpServletRequest request, @RequestBody Map body) {
-        String seq =  request.getParameter("seq");
-        body.put("seq",seq);
+    @PostMapping(value = {"/v3/email/reset"})
+    public Map<String, Object> expiredEmail( @RequestBody Map body) {
         String refreshToken = "";
         if (body.get("refreshToken") != null) {
             refreshToken = body.get("refreshToken").toString();
         }
-        Map<String, Object> resultMap = emailService.resetEmail(body.get("userid").toString(), refreshToken, body.get("seq").toString());
+        Map<String, Object> resultMap = emailService.resetEmail(body.get("userid").toString(), refreshToken);
         return resultMap;
     }
 
@@ -49,15 +47,13 @@ public class EmailController {
      *
      * @return the menu list
      */
-    @PostMapping(value = {"/v2/email/create"})
-    public Map<String, Object> createEmail(HttpServletRequest request, @RequestBody Map body) {
-        String seq =  request.getParameter("seq");
-        body.put("seq",seq);
+    @PostMapping(value = {"/v3/email/create"})
+    public Map<String, Object> createEmail(@RequestBody Map body) {
         String refreshToken = "";
         if (body.get("refreshToken") != null) {
             refreshToken = body.get("refreshToken").toString();
         }
-        Map<String, Object> resultMap = emailService.createEmail(body.get("userid").toString(), refreshToken, body.get("seq").toString());
+        Map<String, Object> resultMap = emailService.createEmail(body.get("userid").toString(), refreshToken);
         return resultMap;
     }
 

@@ -37,8 +37,8 @@ public class EmailService {
     @Autowired
     CommonService commonService;
 
-    public Map resetEmail(String userId, String refreshToken, String seq) {
-        logger.info("resetEmail >> userId : " + userId + "seq : " + seq);
+    public Map resetEmail(String userId, String refreshToken) {
+        logger.info("resetEmail >> userId : " + userId);
         Map map = new HashMap();
         ClassPathResource cpr = new ClassPathResource("template/loginpass.html");
 
@@ -49,7 +49,7 @@ public class EmailService {
             Elements elementAhref = doc.select("a[href]");
             Elements elementSpan = doc.select("span");
             if (elementAhref.size() != 0) {
-                String link = emailConfig.getAuthUrl() + "/" + emailConfig.getExpiredUrl() + "?userId=" + userId + "&refreshToken=" + refreshToken + "&seq=" + seq;
+                String link = emailConfig.getAuthUrl() + "/" + emailConfig.getExpiredUrl() + "?userId=" + userId + "&refreshToken=" + refreshToken;
                 logger.debug("link : " + link);
                 elementAhref.get(0).attr("href", link);
             }
@@ -76,8 +76,8 @@ public class EmailService {
 
     }
 
-    public Map createEmail(String userId, String refreshToken, String seq) {
-        logger.info("createEmail >> userId : " + userId + "seq : " + seq);
+    public Map createEmail(String userId, String refreshToken) {
+        logger.info("createEmail >> userId : " + userId);
         Map map = new HashMap();
         try {
             ClassPathResource cpr = new ClassPathResource("template/loginemail.html");
@@ -87,7 +87,7 @@ public class EmailService {
 
             Elements elementAhref = doc.select("a[href]");
             if (elementAhref.size() != 0) {
-                String link = emailConfig.getAuthUrl() + "/" + emailConfig.getCreateUrl() + "?userId=" + userId + "&refreshToken=" + refreshToken + "&seq=" + seq;
+                String link = emailConfig.getAuthUrl() + "/" + emailConfig.getCreateUrl() + "?userId=" + userId + "&refreshToken=" + refreshToken;
                 logger.info("link : " + link);
                 elementAhref.get(0).attr("href", link);
             }
