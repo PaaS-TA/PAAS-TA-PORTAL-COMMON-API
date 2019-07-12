@@ -172,10 +172,10 @@ public class UserServiceTest {
         Assert.assertEquals(userDetail, result);
     }
 
-    @Test
-    public void testGetUserInfo() throws Exception {
-        List<Map<String, Object>> result = userService.getUserInfo();
-        Assert.assertEquals(null, result);
-    }
+//    @Test
+//    public void testGetUserInfo() throws Exception {
+//        List<Map<String, Object>> result = userService.getUserInfo();
+//        Assert.assertEquals(null, result);
+//    }
 }
 
