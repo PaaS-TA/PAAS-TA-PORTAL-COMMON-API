@@ -157,6 +157,34 @@ public class EmailServiceTest {
         Assert.assertEquals(Boolean.TRUE, result);
     }
 
+
+
+    @Test
+    public void testResetEmail_false() throws Exception {
+        when(emailConfig.getCharset()).thenReturn("UTF-8");
+        when(emailConfig.sendEmail(any(), any())).thenReturn(false);
+        Map result = emailService.resetEmail("userId", "refreshToken");
+        Assert.assertEquals(resetEmailResultMap, result);
+    }
+
+    @Test
+    public void testCreateEmail_false() throws Exception {
+        when(emailConfig.getCharset()).thenReturn("UTF-8");
+        when(emailConfig.sendEmail(any(), any())).thenReturn(false);
+        Map result = emailService.createEmail("userId", "refreshToken");
+        Map thenReturn = new HashMap();
+        thenReturn.put("result","false");
+        Assert.assertEquals(thenReturn, result);
+    }
+
+    @Test
+    public void testInviteOrgEmail_false() throws Exception {
+        when(emailConfig.getCharset()).thenReturn("UTF-8");
+        when(emailConfig.sendEmail(any(), any())).thenReturn(false);
+        Boolean result = emailService.inviteOrgEmail(param3);
+        Assert.assertEquals(Boolean.TRUE, result);
+    }
+
     @Test
     public void testInviteAccept() throws Exception {
         when(inviteUserRepository.findByTokenAndGubunNot(any(), any())).thenReturn(inviteUsers);
