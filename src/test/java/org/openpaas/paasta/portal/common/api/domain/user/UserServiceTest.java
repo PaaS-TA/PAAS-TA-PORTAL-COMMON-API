@@ -2,7 +2,9 @@ package org.openpaas.paasta.portal.common.api.domain.user;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -31,6 +33,9 @@ import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class UserServiceTest {
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @Mock
     UaaConfig uaaConfig;
@@ -110,7 +115,6 @@ public class UserServiceTest {
     @Test
     public void testGetUser() throws Exception {
         when(userDetailRepository.findByUserId(any())).thenReturn(userDetail);
-        when(userService.getUser(anyString())).thenReturn(userDetail);
         UserDetail result = userService.getUser("userId");
         Assert.assertEquals(userDetail, result);
     }
@@ -172,10 +176,15 @@ public class UserServiceTest {
         Assert.assertEquals(userDetail, result);
     }
 
-//    @Test
-//    public void testGetUserInfo() throws Exception {
-//        List<Map<String, Object>> result = userService.getUserInfo();
-//        Assert.assertEquals(null, result);
-//    }
+    @Test
+    public void testGetUserInfo() throws Exception {
+        thrown.expect(NullPointerException.class);
+
+        EntityManager portalEm = uaaConfig.uaaEntityManager().getNativeEntityManagerFactory().createEntityManager();
+        when(uaaConfig.uaaEntityManager().getNativeEntityManagerFactory().createEntityManager()).thenReturn(portalEm);
+
+        List<Map<String, Object>> result = userService.getUserInfo();
+        Assert.assertEquals(null, result);
+    }
 }
 
