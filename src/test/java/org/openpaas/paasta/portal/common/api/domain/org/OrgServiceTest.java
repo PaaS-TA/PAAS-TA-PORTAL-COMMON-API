@@ -1,33 +1,39 @@
 package org.openpaas.paasta.portal.common.api.domain.org;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.openpaas.paasta.portal.common.api.entity.portal.InviteUser;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.openpaas.paasta.portal.common.api.repository.portal.InviteUserRepository;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 /**
  * Created by indra on 2018-06-29.
  */
-@SpringBootTest
+@RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OrgServiceTest {
 
 
-    @Mock
+    @InjectMocks
     OrgService orgService;
 
+    @Mock
+    InviteUserRepository inviteUserRepository;
+
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     List<Object> getOrgsForAdminResult;
     HashMap obejct1;
@@ -107,7 +113,7 @@ public class OrgServiceTest {
 
     @Test
     public void testGetOrgsForAdmin() throws Exception {
-        when(orgService.getOrgsForAdmin()).thenReturn(getOrgsForAdminResult);
+        thrown.expect(NullPointerException.class);
 
         List<Object> result = orgService.getOrgsForAdmin();
         Assert.assertEquals(getOrgsForAdminResult, result);
@@ -115,7 +121,7 @@ public class OrgServiceTest {
 
     @Test
     public void testGetOrg() throws Exception {
-        when(orgService.getOrg("f89b1ef6-7416-4d12-b492-c10fdaaff632")).thenReturn(getOrgsForAdminResult);
+        thrown.expect(NullPointerException.class);
 
         List<Object> result = orgService.getOrg("f89b1ef6-7416-4d12-b492-c10fdaaff632");
         Assert.assertEquals(getOrgsForAdminResult, result);
@@ -123,7 +129,7 @@ public class OrgServiceTest {
 
     @Test
     public void testSelectInviteInfo() throws Exception {
-        when(orgService.selectInviteInfo("")).thenReturn(selectInviteInfoResult);
+        thrown.expect(NullPointerException.class);
 
         List result = orgService.selectInviteInfo("");
         Assert.assertEquals(selectInviteInfoResult, result);
@@ -131,7 +137,7 @@ public class OrgServiceTest {
 
     @Test
     public void testGetInviteUserList() throws Exception {
-        when(orgService.getInviteUserList("admin")).thenReturn(getInviteUserListResultMap);
+        when(inviteUserRepository.findByInvitenameAndGubun(anyString(),anyString())).thenReturn(inviteUserList4);
 
         Map<?, ?> result = orgService.getInviteUserList("admin");
         Assert.assertEquals(getInviteUserListResultMap, result);
@@ -139,9 +145,22 @@ public class OrgServiceTest {
 
     @Test
     public void testDeleteInvateUser() throws Exception {
-        when(orgService.deleteInvateUser("b17a1072-6eec-4556-a8a5-34af7d676e3f", "test@test.com")).thenReturn(true);
+
+        InviteUser inviteUser = new InviteUser();
+        inviteUser.setId(1);
+        inviteUser.setUserId("userid");
+        inviteUser.setOrgGuid("orgguid");
+        inviteUser.setRole("role");
+        inviteUser.setToken("token");
+        inviteUser.setInvitename("invitename");
+        inviteUser.setGubun("gubun");
+        inviteUser.setCreated(new Date());
+
+        when(inviteUserRepository.findFirstByUserIdAndOrgGuid(anyString(), anyString())).thenReturn(inviteUser);
+        doNothing().when(inviteUserRepository).delete(inviteUser);
 
         boolean result = orgService.deleteInvateUser("b17a1072-6eec-4556-a8a5-34af7d676e3f", "test@test.com");
+
         Assert.assertEquals(true, result);
     }
 }
