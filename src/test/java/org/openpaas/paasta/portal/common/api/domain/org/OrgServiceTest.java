@@ -7,6 +7,7 @@ import org.junit.runners.MethodSorters;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.openpaas.paasta.portal.common.api.entity.cc.OrganizationsCc;
 import org.openpaas.paasta.portal.common.api.entity.portal.InviteUser;
 import org.openpaas.paasta.portal.common.api.repository.portal.InviteUserRepository;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -47,6 +48,9 @@ public class OrgServiceTest {
     Map getInviteUserListResultMap;
     List<InviteUser> inviteUserList4;
     InviteUser inviteUser4;
+
+
+    OrganizationsCc organizationsCc;
 
     @Before
     public void setUp() {
@@ -121,6 +125,41 @@ public class OrgServiceTest {
         inviteUser4.toString();
 
         inviteUserList4.add(inviteUser4);
+
+        organizationsCc = new OrganizationsCc();
+        organizationsCc.setApplicationCount(1);
+        organizationsCc.setBillingEnabled(true);
+        organizationsCc.setCreatedAt(new Date());
+        organizationsCc.setDefaultIsolationSegmentGuid("isolation");
+        organizationsCc.setGuid("guid");
+        organizationsCc.setId(1);
+        organizationsCc.setName("name");
+        organizationsCc.setSpaceCount(1);
+        organizationsCc.setOrganizationCount(1);
+        organizationsCc.setStatus("status");
+        organizationsCc.setUpdatedAt(new Date());
+        organizationsCc.setQuotaDefinitionId("guid");
+        organizationsCc.setUserCount(1);
+
+
+        organizationsCc.getApplicationCount();
+        organizationsCc.getBillingEnabled();
+        organizationsCc.getCreatedAt();
+        organizationsCc.getDefaultIsolationSegmentGuid();
+        organizationsCc.getGuid();
+        organizationsCc.getId();
+        organizationsCc.getName();
+        organizationsCc.getOrganizationCount();
+        organizationsCc.getQuotaDefinitionId();
+        organizationsCc.getSpaceCount();
+        organizationsCc.getStatus();
+        organizationsCc.getUpdatedAt();
+        organizationsCc.getUserCount();
+
+
+        organizationsCc.toString();
+
+
         getInviteUserListResultMap.put("result", inviteUserList4);
     }
 

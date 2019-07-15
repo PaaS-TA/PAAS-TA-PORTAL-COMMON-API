@@ -1,17 +1,28 @@
 package org.openpaas.paasta.portal.common.api.domain.email;
 
+import javafx.scene.effect.Reflection;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.openpaas.paasta.portal.common.api.config.EmailConfig;
+import org.openpaas.paasta.portal.common.api.entity.portal.InviteUser;
+import org.openpaas.paasta.portal.common.api.repository.portal.InviteUserRepository;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.util.ReflectionTestUtils;
 
 
+import javax.sql.rowset.CachedRowSet;
+import java.util.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 /**
@@ -22,7 +33,16 @@ import static org.mockito.Mockito.when;
 public class EmailServiceTest {
 
     @Mock
+    EmailConfig emailConfig;
+
+    @Mock
+    InviteUserRepository inviteUserRepository;
+
+    @InjectMocks
     EmailService emailService;
+
+
+    String charset;
 
     Map resetEmailResultMap;
 
@@ -38,6 +58,11 @@ public class EmailServiceTest {
 
     Map inviteOrgEmailSendResultMap;
 
+
+    InviteUser inviteUser;
+    List<InviteUser> inviteUsers;
+
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -45,6 +70,12 @@ public class EmailServiceTest {
     }
 
     private void setTestData() {
+
+        ReflectionTestUtils.setField(emailConfig, "charset", "UTF-8");
+        ReflectionTestUtils.setField(emailConfig, "auth", "auth");
+        ReflectionTestUtils.setField(emailConfig, "inviteUrl", "invite");
+
+
         //testResetEmail
         resetEmailResultMap = new HashMap();
         resetEmailResultMap.put("result", true);
@@ -84,53 +115,72 @@ public class EmailServiceTest {
         inviteOrgEmailSendResultMap = new HashMap();
         inviteOrgEmailSendResultMap.put("result", true);
         inviteOrgEmailSendResultMap.put("msg", "You have successfully completed the task.");
+
+        inviteUsers = new ArrayList<>();
+        inviteUser = new InviteUser();
+
+        inviteUser.setUserId("userid");
+        inviteUser.setToken("token");
+        inviteUser.setRole("role");
+        inviteUser.setOrgGuid("guid");
+        inviteUser.setInvitename("invitename");
+        inviteUser.setGubun("gubun");
+        inviteUser.setCreated(new Date());
+
+
+        inviteUsers.add(inviteUser);
+
+
     }
 
     @Test
     public void testResetEmail() throws Exception {
-//        when(emailService.resetEmail("userId", "refreshToken")).thenReturn(resetEmailResultMap);
-//
-//        Map result = emailService.resetEmail("userId", "refreshToken");
-//        Assert.assertEquals(resetEmailResultMap, result);
+        when(emailConfig.getCharset()).thenReturn("UTF-8");
+        when(emailConfig.sendEmail(any(), any())).thenReturn(true);
+        Map result = emailService.resetEmail("userId", "refreshToken");
+        Assert.assertEquals(resetEmailResultMap, result);
     }
 
     @Test
     public void testCreateEmail() throws Exception {
-//        when(emailService.createEmail("userId", "refreshToken")).thenReturn(createEmailResultMap);
-//
-//        Map result = emailService.createEmail("userId", "refreshToken");
-//        Assert.assertEquals(createEmailResultMap, result);
+        when(emailConfig.getCharset()).thenReturn("UTF-8");
+        when(emailConfig.sendEmail(any(), any())).thenReturn(true);
+        Map result = emailService.createEmail("userId", "refreshToken");
+        Assert.assertEquals(createEmailResultMap, result);
     }
 
     @Test
     public void testInviteOrgEmail() throws Exception {
-        when(emailService.inviteOrgEmail(param3)).thenReturn(Boolean.TRUE);
-
+        when(emailConfig.getCharset()).thenReturn("UTF-8");
+        when(emailConfig.sendEmail(any(), any())).thenReturn(true);
         Boolean result = emailService.inviteOrgEmail(param3);
         Assert.assertEquals(Boolean.TRUE, result);
     }
 
     @Test
     public void testInviteAccept() throws Exception {
-        when(emailService.inviteAccept(param4)).thenReturn(inviteAcceptResultMap);
+        when(inviteUserRepository.findByTokenAndGubunNot(any(), any())).thenReturn(inviteUsers);
 
         Map result = emailService.inviteAccept(param4);
-        Assert.assertEquals(inviteAcceptResultMap, result);
+        Assert.assertNotNull(result);
     }
 
     @Test
     public void testInviteAcceptUpdate() throws Exception {
-        when(emailService.inviteAcceptUpdate(param5)).thenReturn(inviteAcceptUpdateResultMap);
-
         Map result = emailService.inviteAcceptUpdate(param5);
-        Assert.assertEquals(inviteAcceptUpdateResultMap, result);
+        Assert.assertNotNull(result);
     }
 
     @Test
     public void testInviteOrgEmailSend() throws Exception {
-//        when(emailService.inviteOrgEmailSend("1", "test", "UDBVZRVZJ8NB1RRWTFV")).thenReturn(inviteOrgEmailSendResultMap);
-//
-//        Map result = emailService.inviteOrgEmailSend("1", "test", "UDBVZRVZJ8NB1RRWTFV");
-//        Assert.assertEquals(inviteOrgEmailSendResultMap, result);
+        when(emailConfig.getCharset()).thenReturn("UTF-8");
+        when(emailConfig.getAuth()).thenReturn("auth");
+        when(emailConfig.getInviteUrl()).thenReturn("invite");
+
+        when(emailConfig.sendEmail(any(), any())).thenReturn(true);
+        Map result = emailService.inviteOrgEmailSend("1", "test", "UDBVZRVZJ8NB1RRWTFV");
+        Assert.assertEquals(inviteOrgEmailSendResultMap, result);
     }
+
+
 }
