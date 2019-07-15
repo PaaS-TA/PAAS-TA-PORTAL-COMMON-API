@@ -89,6 +89,8 @@ public class UserManagementServiceTest {
         userDetail.setZipCode("zipcode");
         userDetail.setUserId("userid");
 
+
+        userDetail.toString();
         setUserDetails();
     }
 
@@ -114,6 +116,26 @@ public class UserManagementServiceTest {
             detail.setUserName("username");
             detail.setZipCode("zipcode");
             detail.setUserId("userid");
+
+
+            detail.getActive();
+            detail.getAddress();
+            detail.getAddressDetail();
+            detail.getAdminYn();
+            detail.getAuthAccessCnt();
+            detail.getAuthAccessTime();
+            detail.getImgPath();
+            detail.getRefreshToken();
+            detail.getSearchKeyword();
+            detail.getStatus();
+            detail.getTellPhone();
+            detail.getUserGuid();
+            detail.getUserId();
+            detail.getUserName();
+            detail.getZipCode();
+
+
+
             userDetails.add(detail);
         }
 

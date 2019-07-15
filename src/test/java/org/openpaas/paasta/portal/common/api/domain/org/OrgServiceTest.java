@@ -107,6 +107,19 @@ public class OrgServiceTest {
         inviteUser4.setRole("{\"org\":[{\"om\":false,\"bm\":true,\"oa\":true}],\"space\":[{\"a14e4ffe-2cfb-4357-9000-e50572345b9c\":[{\"sm\":false,\"sd\":true,\"sa\":true}],\"190a1b87-fd61-4ac8-94b1-34bd8f5a54a2\":[{\"sm\":false,\"sd\":true,\"sa\":true}],\"c5edb50e-17d6-42e3-b393-8d5507d0527d\":[{\"sm\":false,\"sd\":true,\"sa\":true}],\"9e7d1e1d-2382-4b97-aef0-f1d2011adbf4\":[{\"sm\":false,\"sd\":false,\"sa\":false}]}]}");
         inviteUser4.setOrgGuid("b17a1072-6eec-4556-a8a5-34af7d676e3f");
         inviteUser4.setInvitename("admin");
+
+        inviteUser4.getCreated();
+        inviteUser4.getGubun();
+        inviteUser4.getId();
+        inviteUser4.getInviteName();
+        inviteUser4.getOrgGuid();
+        inviteUser4.getToken();
+        inviteUser4.getRole();
+        inviteUser4.getUserId();
+
+
+        inviteUser4.toString();
+
         inviteUserList4.add(inviteUser4);
         getInviteUserListResultMap.put("result", inviteUserList4);
     }

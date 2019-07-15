@@ -124,7 +124,22 @@ public class UserServiceTest {
     public void testGetUser() throws Exception {
         when(userDetailRepository.findByUserId(any())).thenReturn(userDetail);
         UserDetail result = userService.getUser("userId");
-        Assert.assertEquals(userDetail, result);
+
+        Assert.assertEquals(userDetail.getActive(), result.getActive());
+        Assert.assertEquals(userDetail.getAddress(), result.getAddress());
+        Assert.assertEquals(userDetail.getAddressDetail(), result.getAddressDetail());
+        Assert.assertEquals(userDetail.getAuthAccessCnt(), result.getAuthAccessCnt());
+        Assert.assertEquals(userDetail.getAdminYn(), result.getAdminYn());
+        Assert.assertEquals(userDetail.getAuthAccessTime(), result.getAuthAccessTime());
+        Assert.assertEquals(userDetail.getImgPath(), result.getImgPath());
+        Assert.assertEquals(userDetail.getRefreshToken(), result.getRefreshToken());
+        Assert.assertEquals(userDetail.getSearchKeyword(), result.getSearchKeyword());
+        Assert.assertEquals(userDetail.getStatus(), result.getStatus());
+        Assert.assertEquals(userDetail.getTellPhone(), result.getTellPhone());
+        Assert.assertEquals(userDetail.getUserGuid(), result.getUserGuid());
+        Assert.assertEquals(userDetail.getUserId(), result.getUserId());
+        Assert.assertEquals(userDetail.getZipCode(), result.getZipCode());
+
     }
 
     @Test
