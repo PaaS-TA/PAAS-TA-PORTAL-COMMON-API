@@ -25,6 +25,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.EntityManager;
+import javax.persistence.Tuple;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.xml.crypto.Data;
 import java.util.*;
 
@@ -152,7 +160,6 @@ public class UserServiceTest {
         Assert.assertEquals(thenReturnMap, result);
     }
 
-
     @Test
     public void testDeleteUser() throws Exception {
         Map result = userService.deleteUser("userId");
@@ -162,7 +169,7 @@ public class UserServiceTest {
     @Test
     public void testDeleteUserInfra() throws Exception {
 
-        when(commonService.procCfApiRestTemplate(any(),any(),any(),any())).thenReturn(thenReturnMap);
+        when(commonService.procCfApiRestTemplate(any(), any(), any(), any())).thenReturn(thenReturnMap);
         when(usersRepository.findById(any())).thenReturn(new Users());
         Map result = userService.deleteUserInfra("guid", "token");
         Assert.assertEquals(thenReturnMap, result);
@@ -175,14 +182,19 @@ public class UserServiceTest {
         Assert.assertEquals(userDetail, result);
     }
 
-    @Test
+    @Test(expected = NullPointerException.class)
     public void testGetUserInfo() throws Exception {
-        thrown.expect(NullPointerException.class);
 
         EntityManager portalEm = uaaConfig.uaaEntityManager().getNativeEntityManagerFactory().createEntityManager();
+        CriteriaBuilder cb = portalEm.getCriteriaBuilder();
+        CriteriaQuery<Tuple> cq = cb.createTupleQuery();
         when(uaaConfig.uaaEntityManager().getNativeEntityManagerFactory().createEntityManager()).thenReturn(portalEm);
+        when(portalEm.getCriteriaBuilder()).thenReturn(cb);
+        when(cb.createTupleQuery()).thenReturn(cq);
 
         List<Map<String, Object>> result = userService.getUserInfo();
+
+
         Assert.assertEquals(null, result);
     }
 }

@@ -72,18 +72,12 @@ public class OrgService {
         Root<OrganizationsCc> from = cq.from(OrganizationsCc.class);
 
         //SQL:Select
-        cq.multiselect(from.get("id").alias("id")
-                , from.get("name").alias("name")
-                , from.get("guid").alias("guid")
-                , from.get("createdAt").alias("createdAt")
-                , from.get("updatedAt").alias("updatedAt")
-                , from.get("billingEnabled").alias("billingEnabled")
-                , from.get("status").alias("status"));
+        cq.multiselect(from.get("id").alias("id"), from.get("name").alias("name"), from.get("guid").alias("guid"), from.get("createdAt").alias("createdAt"), from.get("updatedAt").alias("updatedAt"), from.get("billingEnabled").alias("billingEnabled"), from.get("status").alias("status"));
 
         TypedQuery<Tuple> tq = portalEm.createQuery(cq);
         List<Tuple> resultList = tq.getResultList();
 
-        List<Object> OrgsForAdmintList = resultList.stream().map(x -> new HashMap<String, Object>(){{
+        List<Object> OrgsForAdmintList = resultList.stream().map(x -> new HashMap<String, Object>() {{
             put("orgId", x.get("id"));
             put("orgName", x.get("name"));
             put("orgGuid", x.get("guid"));
@@ -110,18 +104,12 @@ public class OrgService {
         predicate = cb.and(predicate, cb.equal(from.get("guid"), orgs.toString()));
         cq.where(predicate);
 
-        cq.multiselect(from.get("id").alias("id")
-                , from.get("name").alias("name")
-                , from.get("guid").alias("guid")
-                , from.get("createdAt").alias("createdAt")
-                , from.get("updatedAt").alias("updatedAt")
-                , from.get("billingEnabled").alias("billingEnabled")
-                , from.get("status").alias("status"));
+        cq.multiselect(from.get("id").alias("id"), from.get("name").alias("name"), from.get("guid").alias("guid"), from.get("createdAt").alias("createdAt"), from.get("updatedAt").alias("updatedAt"), from.get("billingEnabled").alias("billingEnabled"), from.get("status").alias("status"));
 
         TypedQuery<Tuple> tq = portalEm.createQuery(cq);
         List<Tuple> resultList = tq.getResultList();
 
-        List<Object> OrgsList = resultList.stream().map(x -> new HashMap<String, Object>(){{
+        List<Object> OrgsList = resultList.stream().map(x -> new HashMap<String, Object>() {{
             put("orgId", x.get("id"));
             put("orgName", x.get("name"));
             put("orgGuid", x.get("guid"));
@@ -136,7 +124,7 @@ public class OrgService {
 
 
     /*공간에 초대한 이메일의 token을 가진 초대 정보를 가져온다.*/
-    public List selectInviteInfo(String code){
+    public List selectInviteInfo(String code) {
 
         EntityManager portalEm = portalConfig.portalEntityManager().getNativeEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = portalEm.getCriteriaBuilder();
@@ -144,22 +132,12 @@ public class OrgService {
         Root<InviteOrgSpace> from = cq.from(InviteOrgSpace.class);
 
         //SQL:Select
-        cq.multiselect(from.get("id").alias("id")
-                , from.get("token").alias("token")
-                , from.get("gubun").alias("gubun")
-                , from.get("inviteId").alias("inviteId")
-                , from.get("roleName").alias("roleName")
-                , from.get("inviteUserId").alias("inviteUserId")
-                , from.get("userId").alias("userId")
-                , from.get("createTime").alias("createTime")
-                , from.get("accessCnt").alias("accessCnt")
-                , from.get("inviteName").alias("inviteName")
-                , from.get("setyn").alias("setyn"));
+        cq.multiselect(from.get("id").alias("id"), from.get("token").alias("token"), from.get("gubun").alias("gubun"), from.get("inviteId").alias("inviteId"), from.get("roleName").alias("roleName"), from.get("inviteUserId").alias("inviteUserId"), from.get("userId").alias("userId"), from.get("createTime").alias("createTime"), from.get("accessCnt").alias("accessCnt"), from.get("inviteName").alias("inviteName"), from.get("setyn").alias("setyn"));
 
         TypedQuery<Tuple> tq = portalEm.createQuery(cq);
         List<Tuple> resultList = tq.getResultList();
 
-        List<Map<String, Object>> selectInviteInfo = resultList.stream().map(x -> new HashMap<String, Object>(){{
+        List<Map<String, Object>> selectInviteInfo = resultList.stream().map(x -> new HashMap<String, Object>() {{
             put("id", x.get("id"));
             put("token", x.get("token"));
             put("gubun", x.get("gubun"));
@@ -175,21 +153,24 @@ public class OrgService {
         return selectInviteInfo;
     }
 
-    public Map<?,?> getInviteUserList(String invitename){
-        return new HashMap<String, Object>(){{put("result", inviteUserRepository.findByInvitenameAndGubun(invitename, "send"));}};
+    public Map<?, ?> getInviteUserList(String invitename) {
+        return new HashMap<String, Object>() {{
+            put("result", inviteUserRepository.findByInvitenameAndGubun(invitename, "send"));
+        }};
     }
 
-    public Map<?,?> getInviteList(String userid){
-        return new HashMap<String, Object>(){{put("result", inviteUserRepository.findByUserIdAndGubun(userid, "send"));}};
+    public Map<?, ?> getInviteList(String userid) {
+        return new HashMap<String, Object>() {{
+            put("result", inviteUserRepository.findByUserIdAndGubun(userid, "send"));
+        }};
     }
 
-    public boolean deleteInvateUser(String guid, String userId){
+    public boolean deleteInvateUser(String guid, String userId) {
         try {
             InviteUser inviteUser = inviteUserRepository.findFirstByUserIdAndOrgGuid(userId, guid);
             inviteUserRepository.delete(inviteUser);
             return true;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
