@@ -170,7 +170,6 @@ public class UserServiceTest {
 
     @Test
     public void testGetRefreshTokenUser() throws Exception {
-//        when(userDetailRepository.findByUserIdAndRefreshToken(any(), any())).thenReturn(new UserDetail());
         when(userService.getRefreshTokenUser(userDetail)).thenReturn(userDetail);
         UserDetail result = userService.getRefreshTokenUser(userDetail);
         Assert.assertEquals(userDetail, result);
