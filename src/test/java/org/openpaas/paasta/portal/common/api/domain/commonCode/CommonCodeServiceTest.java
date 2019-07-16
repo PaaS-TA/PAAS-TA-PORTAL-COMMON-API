@@ -26,6 +26,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 
@@ -70,8 +71,9 @@ public class CommonCodeServiceTest {
     EntityManager portalEm;
 
     CodeDetail codeDetail;
-
+    List<CodeDetail> codeDetails;
     CodeGroup codeGroup;
+    List<CodeGroup> codeGroups;
 
     @Before
     public void setUp() {
@@ -98,6 +100,10 @@ public class CommonCodeServiceTest {
         codeDetail.setUserId("userid");
         codeDetail.toString();
 
+        codeDetails = new ArrayList<>();
+        codeDetails.add(codeDetail);
+
+
         codeGroup = new CodeGroup();
         codeGroup.setCreated(new Date());
         codeGroup.setLastmodified(new Date());
@@ -110,6 +116,8 @@ public class CommonCodeServiceTest {
         codeGroup.setSearchKeyword("search");
         codeGroup.toString();
 
+        codeGroups = new ArrayList<>();
+        codeGroups.add(codeGroup);
 
         ReflectionTestUtils.setField(portalConfig, "portalDriverClassName", portalDriverClassName);
         ReflectionTestUtils.setField(portalConfig, "portalUrl", portalUrl);
@@ -165,160 +173,80 @@ public class CommonCodeServiceTest {
 
     }
 
-    /**
-     * 공통그룹 목록을 조회한다.
-     *
-     * @param codeGroup CodeGroup(아이디)
-     * @return Map(자바클래스)
-     */
-    public Map<String, Object> testGetGroupDetail(CodeGroup codeGroup) {
+    @Test
+    public void testGetGroupDetail() throws Exception {
+        thrown.expect(NullPointerException.class);
+
         JinqStream<CodeGroup> streams = jinqSource.streamAllPortal(CodeGroup.class);
         String id = codeGroup.getId();
         String searchKeyword = codeGroup.getSearchKeyword();
+        when(streams.where(c -> c.getId().equals(id))).thenReturn(streams);
+        when(streams.where(c -> c.getName().contains(searchKeyword) || c.getId().contains(searchKeyword))).thenReturn(streams);
+        when(streams.sortedBy(c -> c.getCreated())).thenReturn(streams);
 
-        if (null != id && !"".equals(id) && !"null".equals(id.toLowerCase())) {
-            streams = streams.where(c -> c.getId().equals(id));
-        }
-        if (null != searchKeyword && !"".equals(searchKeyword)) {
-            streams = streams.where(c -> c.getName().contains(searchKeyword) || c.getId().contains(searchKeyword));
-        }
+        Map<String, Object> result = commonCodeService.getGroupDetail(codeGroup);
 
-        streams = streams.sortedBy(c -> c.getCreated());
-
-        List<Map<String, Object>> resultList = streams.map(x -> new HashMap<String, Object>() {{
-            put("id", x.getId());
-            put("orgId", x.getOrgId());
-            put("name", x.getName());
-            put("created", x.getCreated());
-            put("lastModified", x.getLastmodified());
-            put("userId", x.getUserId());
-            put("pageNo", x.getPageNo());
-            put("pageSize", x.getPageSize());
-            put("procType", x.getProcType());
-        }}).collect(Collectors.toList());
-
-        return new HashMap<String, Object>() {{
-            put("list", resultList);
-        }};
-    }
-
-    /**
-     * 공통코드 목록을 조회한다.
-     *
-     * @param groupid groupid(아이디)
-     * @return Map(자바클래스)
-     */
-    public Map<String, Object> getCodeDetail(String groupid) {
-        List<CodeDetail> list = codeDetailRepository.findAllByGroupId(groupid);
-        list.sort(Comparator.comparingInt(CodeDetail::getValue2));
-        return new HashMap<String, Object>() {{
-            put("list", list);
-        }};
+        Assert.assertNotNull(result);
     }
 
 
-    /**
-     * 공통 코드 그룹을 등록한다.
-     *
-     * @param codeGroup CodeGroup (모델클래스)
-     * @return Map(자바클래스)
-     */
-    public Map<String, Object> insertDetailGroup(CodeGroup codeGroup) {
-        codeGroupRepository.save(codeGroup);
-        return new HashMap<String, Object>() {{
-            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
-        }};
+    @Test
+    public void testGetCodeDetail() throws Exception {
+        when(codeDetailRepository.findAllByGroupId(anyString())).thenReturn(codeDetails);
+        Map<String, Object> result = commonCodeService.getCodeDetail("groupid");
+        Assert.assertNotNull(result);
     }
 
 
-    /**
-     * 공통 코드을 등록한다.
-     *
-     * @param codeDetail CodeDetail (모델클래스)
-     * @return Map(자바클래스)
-     */
-    public Map<String, Object> insertDetail(CodeDetail codeDetail) {
-        int count = codeDetailRepository.countByGroupId(codeDetail.getGroupId());
-        System.out.println(count);
-        codeDetail.setOrder(count + 1);
-        codeDetailRepository.save(codeDetail);
-
-        return new HashMap<String, Object>() {{
-            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
-        }};
+    @Test
+    public void testInsertDetailGroup() throws Exception {
+        when(codeGroupRepository.save(codeGroup)).thenReturn(codeGroup);
+        Map<String, Object> result = commonCodeService.insertDetailGroup(codeGroup);
+        Assert.assertNotNull(result);
     }
 
-    /**
-     * 공통 코드 그룹을 수정한다.
-     *
-     * @param codeGroup CodeGroup (모델클래스)
-     * @return Map(자바클래스)
-     */
-    public String updateCommonGroup(String id, CodeGroup codeGroup) {
-        String resultStr = Constants.RESULT_STATUS_SUCCESS;
 
-        if (codeGroupRepository.findById(id) != null) {
-            codeGroup.setId(codeGroup.getId());
-            codeGroup.setName(codeGroup.getName());
-            codeGroup.setUserId(codeGroup.getUserId());
-            codeGroupRepository.save(codeGroup);
-        } else {
-            resultStr = Constants.RESULT_STATUS_FAIL;
-        }
-        return resultStr;
+    @Test
+    public void insertDetail() throws Exception {
+        when(codeDetailRepository.countByGroupId(any())).thenReturn(1);
+        when(codeDetailRepository.save(codeDetail)).thenReturn(codeDetail);
+        Map<String, Object> result = commonCodeService.insertDetail(codeDetail);
+        Assert.assertNotNull(result);
     }
 
-    /**
-     * 공통 코드을 수정한다.
-     *
-     * @param codeDetail CodeDetail (모델클래스)
-     * @return Map(자바클래스)
-     */
-    public Map<String, Object> updateCommonDetail(int no, CodeDetail codeDetail) {
-        String resultStr = Constants.RESULT_STATUS_SUCCESS;
-        CodeDetail update = codeDetailRepository.findOne(no);
 
-        codeDetail.setGroupId(update.getGroupId());
-        codeDetail.setCreated(update.getCreated());
+    @Test
+    public void testUpdateCommonGroup() throws Exception {
 
-        codeDetailRepository.save(codeDetail);
+        when(codeGroupRepository.findById(anyString())).thenReturn(codeGroups);
+        when(codeGroupRepository.save(codeGroup)).thenReturn(codeGroup);
+        String result = commonCodeService.updateCommonGroup("id", codeGroup);
+        Assert.assertNotNull(result);
 
-        return new HashMap<String, Object>() {{
-            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
-        }};
     }
 
-    /**
-     * 공통 코드 그룹을 삭제한다.
-     *
-     * @param id * @return Map(자바클래스)
-     */
-    public Map<String, Object> deleteCommonGroup(String id) {
-        List<CodeDetail> codeDetailList = codeDetailRepository.findByGroupId(id);
-        for (CodeDetail codeDetail : codeDetailList) {
-            codeDetailRepository.delete(codeDetail.getNo());
-        }
-
-        CodeGroup codeGroup = new CodeGroup();
-        codeGroup.setId(id);
-        codeGroupRepository.delete(codeGroup);
-
-        return new HashMap<String, Object>() {{
-            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
-        }};
+    @Test
+    public void testUpdateCommonDetail() throws Exception {
+        when(codeDetailRepository.findOne(anyInt())).thenReturn(codeDetail);
+        when(codeDetailRepository.save(codeDetail)).thenReturn(codeDetail);
+        Map result = commonCodeService.updateCommonDetail(1, codeDetail);
+        Assert.assertNotNull(result);
     }
 
-    /**
-     * 공통 코드을 삭제한다.
-     *
-     * @param no
-     * @return Map(자바클래스)
-     */
-    public Map<String, Object> deleteCommonDetail(int no) {
-        codeDetailRepository.delete(no);
-        return new HashMap<String, Object>() {{
-            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
-        }};
+
+    @Test
+    public void deleteCommonGroup() throws Exception {
+        when(codeDetailRepository.findByGroupId(anyString())).thenReturn(codeDetails);
+        doNothing().when(codeDetailRepository).delete(anyInt());
+        Map result = commonCodeService.deleteCommonGroup("id");
+        Assert.assertNotNull(result);
+    }
+
+    @Test
+    public void deleteCommonDetail() throws Exception {
+        doNothing().when(codeDetailRepository).delete(anyInt());
+        Map result = commonCodeService.deleteCommonDetail(1);
+        Assert.assertNotNull(result);
     }
 
 

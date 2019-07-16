@@ -184,7 +184,7 @@ public class CommonCodeService {
      * @return Map(자바클래스)
      */
     public Map<String,Object> insertDetailGroup(CodeGroup codeGroup) {
-        codeGroupRepository.save(codeGroup);
+        codeGroup = codeGroupRepository.save(codeGroup);
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
         }};
@@ -201,7 +201,7 @@ public class CommonCodeService {
         int count = codeDetailRepository.countByGroupId(codeDetail.getGroupId());
         System.out.println(count);
         codeDetail.setOrder(count+1);
-        codeDetailRepository.save(codeDetail);
+        codeDetail = codeDetailRepository.save(codeDetail);
 
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
