@@ -1,10 +1,10 @@
 package org.openpaas.paasta.portal.common.api.domain.email;
 
-import javafx.scene.effect.Reflection;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -12,15 +12,10 @@ import org.mockito.MockitoAnnotations;
 import org.openpaas.paasta.portal.common.api.config.EmailConfig;
 import org.openpaas.paasta.portal.common.api.entity.portal.InviteUser;
 import org.openpaas.paasta.portal.common.api.repository.portal.InviteUserRepository;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
-
-import javax.sql.rowset.CachedRowSet;
 import java.util.*;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -28,7 +23,7 @@ import static org.mockito.Mockito.when;
 /**
  * Created by indra on 2018-06-29.
  */
-//@SpringBootTest
+@RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class EmailServiceTest {
 
