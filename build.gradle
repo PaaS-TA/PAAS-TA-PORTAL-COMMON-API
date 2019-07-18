@@ -85,8 +85,8 @@ dependencies {
     testCompile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.12'
     testCompile group: 'org.jsoup', name: 'jsoup', version: '1.9.2'
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.7.5'
+//    testCompile 'junit:junit:4.12'
+//    testCompile 'org.mockito:mockito-core:2.7.5'
 
 }
 

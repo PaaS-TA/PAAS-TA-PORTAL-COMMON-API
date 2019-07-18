@@ -9,7 +9,6 @@ import org.junit.runners.MethodSorters;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
 import org.openpaas.paasta.portal.common.api.entity.portal.CodeDetail;
@@ -22,10 +21,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.persistence.EntityManager;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -208,7 +210,7 @@ public class CommonCodeServiceTest {
 
     @Test
     public void insertDetail() throws Exception {
-        when(codeDetailRepository.countByGroupId(any())).thenReturn(1);
+        when(codeDetailRepository.countByGroupId(anyString())).thenReturn(1);
         when(codeDetailRepository.save(codeDetail)).thenReturn(codeDetail);
         Map<String, Object> result = commonCodeService.insertDetail(codeDetail);
         Assert.assertNotNull(result);
