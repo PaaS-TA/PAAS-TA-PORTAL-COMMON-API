@@ -3,10 +3,8 @@ package org.openpaas.paasta.portal.common.api.domain.adminMain;
 import org.apache.commons.collections.map.HashedMap;
 import org.jinq.jpa.JinqJPAStreamProvider;
 import org.jinq.orm.stream.JinqStream;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.rules.ExpectedException;
 import org.junit.runners.MethodSorters;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -41,7 +39,10 @@ import static org.mockito.Mockito.when;
 public class AdminMainServiceTest {
 
 
-    @Mock
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
+    @InjectMocks
     AdminMainService adminMainService;
 
     OrganizationsCc organizationsCc;
@@ -96,7 +97,7 @@ public class AdminMainServiceTest {
 
     @Test
     public void testGetTotalCountList() throws Exception {
-        when(adminMainService.getTotalCountList()).thenReturn(resultMap);
+        thrown.expect(NullPointerException.class);
 
         Map<String, Object> result = adminMainService.getTotalCountList();
         Assert.assertEquals(resultMap, result);
@@ -104,7 +105,7 @@ public class AdminMainServiceTest {
 
     @Test
     public void testGetTotalOrganizationList() throws Exception {
-        when(adminMainService.getTotalOrganizationList()).thenReturn(resultMap);
+        thrown.expect(NullPointerException.class);
 
         Map<String, Object> result = adminMainService.getTotalOrganizationList();
         Assert.assertEquals(resultMap, result);
@@ -112,7 +113,7 @@ public class AdminMainServiceTest {
 
     @Test
     public void testGetTotalSpaceList() throws Exception {
-        when(adminMainService.getTotalSpaceList("1")).thenReturn(getTotalSpaceListResultMap);
+        thrown.expect(NullPointerException.class);
 
         Map<String, Object> result = adminMainService.getTotalSpaceList("1");
         Assert.assertEquals(getTotalSpaceListResultMap, result);
