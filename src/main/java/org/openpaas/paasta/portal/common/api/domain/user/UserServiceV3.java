@@ -111,9 +111,7 @@ public class UserServiceV3 {
             /*
              * 여기서 에러나면 Exception으로 빠져버림
              */
-            logger.info("user id : " + body.get("userid").toString() + " 2");
             createUser(userDetail);
-            logger.info("user id : " + body.get("userid").toString() + " 3");
             map = emailServiceV3.createEmail(userDetail.getUserId(), randomId, body.get("seq").toString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -133,9 +131,9 @@ public class UserServiceV3 {
      */
     public Map  resetRequestUser(Map body) {
         Map map = new HashMap();
+
         try {
             String randomId = RandomStringUtils.randomAlphanumeric(17).toUpperCase() + RandomStringUtils.randomAlphanumeric(2).toUpperCase();
-            logger.info("user id : " + body.get("userid").toString() + " 1");
             UserDetail userDetail = getUser(body.get("userid").toString());
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DATE, 1);
@@ -146,9 +144,7 @@ public class UserServiceV3 {
             /*
              * 여기서 에러나면 Exception으로 빠져버림
              */
-            logger.info("user id : " + body.get("userid").toString() + " 2");
             createUser(userDetail);
-            logger.info("user id : " + body.get("userid").toString() + " 3");
             map = emailServiceV3.resetEmail(userDetail.getUserId(), randomId, body.get("seq").toString());
         } catch (Exception e) {
             e.printStackTrace();

@@ -9,22 +9,13 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.openpaas.paasta.portal.common.api.config.dataSource.UaaConfig;
-import org.openpaas.paasta.portal.common.api.domain.common.CommonService;
-import org.openpaas.paasta.portal.common.api.domain.email.EmailService;
 import org.openpaas.paasta.portal.common.api.domain.email.EmailServiceV3;
 import org.openpaas.paasta.portal.common.api.entity.cc.UsersCc;
 import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
 import org.openpaas.paasta.portal.common.api.entity.uaa.Users;
 import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailRepository;
-import org.openpaas.paasta.portal.common.api.repository.uaa.UsersRepository;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Tuple;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import java.math.BigInteger;
 import java.util.*;
 
@@ -32,36 +23,26 @@ import static org.mockito.Mockito.*;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-public class UserServiceTest {
+public class UserServiceV3Test {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    @Mock
-    UaaConfig uaaConfig;
-
-    @Mock
-    CommonService commonService;
-
-    @Mock
-    UsersRepository usersRepository;
-
-    @Mock
-    EmailService emailService;
 
     @Mock
     UserDetailRepository userDetailRepository;
 
+    @Mock
+    EmailServiceV3 emailServiceV3;
+
     @InjectMocks
-    UserService userService;
+    UserServiceV3 userServiceV3;
 
     UserDetail userDetail;
     Users users;
     Map thenReturnMap;
     List<Map> thenReturnMapList;
     UsersCc usersCc;
-
-    private MockMvc mockMvc;
 
     @Before
     public void setUp() {
@@ -71,7 +52,6 @@ public class UserServiceTest {
     }
 
     private void setTestData() {
-
         thenReturnMap = new HashMap();
         thenReturnMap.put("result", true);
         thenReturnMap.put("msg", "You have successfully completed the task.");
@@ -129,64 +109,14 @@ public class UserServiceTest {
 
         thenReturnMapList = Arrays.<Map<String, Object>>asList(thenReturnMap);
 
-
     }
 
-    @Test
-    public void testGetParameter(){
-        userDetail.getActive();
-        userDetail.getAddress();
-        userDetail.getAddressDetail();
-        userDetail.getAdminYn();
-        userDetail.getAuthAccessCnt();
-        userDetail.getAuthAccessTime();
-        userDetail.getRefreshToken();
-        userDetail.getImgPath();
-        userDetail.getSearchKeyword();
-        userDetail.getStatus();
-        userDetail.getTellPhone();
-        userDetail.getUserGuid();
-        userDetail.getUserId();
-        userDetail.getUserName();
-        userDetail.getZipCode();
-        userDetail.toString();
+    public void testGetUser() {
 
-        users.getId();
-        users.getIdentityZoneId();
-        users.getVersion();
-        users.getGivenName();
-        users.getFamilyName();
-        users.getExternalId();
-        users.getEmail();
-        users.getCreated();
-        users.getAuthorities();
-        users.getActive();
-        users.getLastLogonSuccessTime();
-        users.getLastmodified();
-        users.getLegacyVerification_behavior();
-        users.getOrigin();
-        users.getPasswdChange_required();
-        users.getPasswdLastmodified();
-        users.getPassword();
-        users.getPhoneNumber();
-        users.getPreviousLogonSuccessTime();
-        users.getSalt();
-        users.getVerified();
-        users.toString();
+        when(userDetailRepository.findByUserId(anyString())).thenReturn(userDetail);
 
-        usersCc.getCreatedAt();
-        usersCc.getId();
-        usersCc.getGuid();
-        usersCc.getSpaceid();
-        usersCc.getUpdatedAt();
-        usersCc.toString();
-    }
+        UserDetail result = userServiceV3.getUser("userId");
 
-
-    @Test
-    public void testGetUser() throws Exception {
-        when(userDetailRepository.findByUserId(any())).thenReturn(userDetail);
-        UserDetail result = userService.getUser("userId");
 
         Assert.assertEquals(userDetail.getActive(), result.getActive());
         Assert.assertEquals(userDetail.getAddress(), result.getAddress());
@@ -205,75 +135,66 @@ public class UserServiceTest {
 
     }
 
-    @Test
-    public void testUpdateUser() throws Exception {
-        when(userDetailRepository.countByUserId(any())).thenReturn(1);
-
-        int result = userService.updateUser("userId", new UserDetail());
-        Assert.assertEquals(1, result);
-    }
 
     @Test
     public void testCreateUser() throws Exception {
-        int result = userService.createUser(new UserDetail());
+        int result = userServiceV3.createUser(new UserDetail());
         Assert.assertEquals(1, result);
     }
 
     @Test
     public void testCreateRequestUser() throws Exception {
-        when(emailService.createEmail(any(), any())).thenReturn(thenReturnMap);
-        thenReturnMap = userService.createRequestUser(new HashMap());
-        Assert.assertEquals(thenReturnMap, thenReturnMap);
-    }
-
-
-    @Test
-    public void testResetRequestUser() throws Exception {
-        when(emailService.resetEmail(any(), any())).thenReturn(thenReturnMap);
-        when(userService.getUser(anyString())).thenReturn(userDetail);
-
-        Map result = userService.resetRequestUser(new HashMap() {{
-            put("userid", "String");
+        when(emailServiceV3.createEmail(any(), any(), any())).thenReturn(thenReturnMap);
+        Map result = userServiceV3.createRequestUser(new HashMap() {{
+            put("username","username");
+            put("userid","userid");
+            put("seq","1");
         }});
         Assert.assertEquals(thenReturnMap, result);
     }
 
     @Test
-    public void testDeleteUser() throws Exception {
-        Map result = userService.deleteUser("userId");
+    public void testCreateRequestUser_fail() throws Exception {
+        when(emailServiceV3.createEmail(any(), any(), any())).thenThrow(Exception.class);
+        Map result = userServiceV3.createRequestUser(new HashMap() {{
+            put("username","username");
+            put("userid","userid");
+            put("seq","1");
+        }});
+        Map map = new HashMap();
+        map.put("result", false);
+        map.put("msg", null);
+
+        Assert.assertEquals(map, result);
+    }
+
+    @Test
+    public void testResetRequestUser() throws Exception {
+        when(emailServiceV3.resetEmail(any(), any(), anyString())).thenReturn(thenReturnMap);
+        when(userServiceV3.getUser(anyString())).thenReturn(userDetail);
+
+        Map result = userServiceV3.resetRequestUser(new HashMap() {{
+            put("userid", "String");
+            put("seq", "seq");
+        }});
         Assert.assertEquals(thenReturnMap, result);
     }
 
     @Test
-    public void testDeleteUserInfra() throws Exception {
+    public void testResetRequestUser_fail() throws Exception {
+        when(emailServiceV3.resetEmail(any(), any(), anyString())).thenThrow(Exception.class);
+        when(userServiceV3.getUser(anyString())).thenReturn(userDetail);
 
-        when(commonService.procCfApiRestTemplate(any(), any(), any(), any())).thenReturn(thenReturnMap);
-        when(usersRepository.findById(any())).thenReturn(new Users());
-        Map result = userService.deleteUserInfra("guid", "token");
-        Assert.assertEquals(thenReturnMap, result);
+        Map result = userServiceV3.resetRequestUser(new HashMap() {{
+            put("userid", "String");
+            put("seq", "seq");
+        }});
+        Map map = new HashMap();
+        map.put("result", false);
+        map.put("msg", null);
+
+        Assert.assertEquals(map, result);
     }
 
-    @Test
-    public void testGetRefreshTokenUser() throws Exception {
-        when(userService.getRefreshTokenUser(userDetail)).thenReturn(userDetail);
-        UserDetail result = userService.getRefreshTokenUser(userDetail);
-        Assert.assertEquals(userDetail, result);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testGetUserInfo() throws Exception {
-
-        EntityManager portalEm = uaaConfig.uaaEntityManager().getNativeEntityManagerFactory().createEntityManager();
-        CriteriaBuilder cb = portalEm.getCriteriaBuilder();
-        CriteriaQuery<Tuple> cq = cb.createTupleQuery();
-        when(uaaConfig.uaaEntityManager().getNativeEntityManagerFactory().createEntityManager()).thenReturn(portalEm);
-        when(portalEm.getCriteriaBuilder()).thenReturn(cb);
-        when(cb.createTupleQuery()).thenReturn(cq);
-
-        List<Map<String, Object>> result = userService.getUserInfo();
-
-
-        Assert.assertEquals(null, result);
-    }
 }
 
