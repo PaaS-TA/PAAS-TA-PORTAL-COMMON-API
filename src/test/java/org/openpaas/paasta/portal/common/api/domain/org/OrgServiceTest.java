@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.openpaas.paasta.portal.common.api.entity.cc.OrganizationsCc;
+import org.openpaas.paasta.portal.common.api.entity.cc.OrganizationsTolCc;
 import org.openpaas.paasta.portal.common.api.entity.portal.InviteUser;
 import org.openpaas.paasta.portal.common.api.repository.portal.InviteUserRepository;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -51,6 +52,8 @@ public class OrgServiceTest {
 
 
     OrganizationsCc organizationsCc;
+
+    OrganizationsTolCc organizationsTolCc;
 
     @Before
     public void setUp() {
@@ -142,6 +145,27 @@ public class OrgServiceTest {
         organizationsCc.setUserCount(1);
 
 
+        organizationsTolCc = new OrganizationsTolCc();
+        organizationsTolCc.setApplicationCount(1);
+        organizationsTolCc.setBillingEnabled(true);
+        organizationsTolCc.setApplicationCount(1);
+        organizationsTolCc.setCreatedAt(new Date());
+        organizationsTolCc.setDefaultIsolationSegmentGuid("DefaultIsolationSegmentGuid");
+        organizationsTolCc.setGuid("guid");
+        organizationsTolCc.setId(1);
+        organizationsTolCc.setName("name");
+        organizationsTolCc.setQuotaDefinitionId("QuotaDefinitionId");
+        organizationsTolCc.setSpaceCount(1);
+        organizationsTolCc.setStatus("status");
+        organizationsTolCc.setUpdatedAt(new Date());
+        organizationsTolCc.setUserCount(1);
+
+        getInviteUserListResultMap.put("result", inviteUserList4);
+    }
+
+    @Test
+    public void testGetParameter() {
+
         organizationsCc.getApplicationCount();
         organizationsCc.getBillingEnabled();
         organizationsCc.getCreatedAt();
@@ -159,9 +183,22 @@ public class OrgServiceTest {
 
         organizationsCc.toString();
 
-
-        getInviteUserListResultMap.put("result", inviteUserList4);
+        organizationsTolCc.getApplicationCount();
+        organizationsTolCc.getBillingEnabled();
+        organizationsTolCc.getApplicationCount();
+        organizationsTolCc.getCreatedAt();
+        organizationsTolCc.getDefaultIsolationSegmentGuid();
+        organizationsTolCc.getGuid();
+        organizationsTolCc.getId();
+        organizationsTolCc.getName();
+        organizationsTolCc.getQuotaDefinitionId();
+        organizationsTolCc.getSpaceCount();
+        organizationsTolCc.getStatus();
+        organizationsTolCc.getUpdatedAt();
+        organizationsTolCc.getUserCount();
+        organizationsTolCc.toString();
     }
+
 
     @Test
     public void testGetOrgsForAdmin() throws Exception {
@@ -189,7 +226,7 @@ public class OrgServiceTest {
 
     @Test
     public void testGetInviteUserList() throws Exception {
-        when(inviteUserRepository.findByInvitenameAndGubun(anyString(),anyString())).thenReturn(inviteUserList4);
+        when(inviteUserRepository.findByInvitenameAndGubun(anyString(), anyString())).thenReturn(inviteUserList4);
 
         Map<?, ?> result = orgService.getInviteUserList("admin");
         Assert.assertEquals(getInviteUserListResultMap, result);

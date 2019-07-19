@@ -13,6 +13,7 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.openpaas.paasta.portal.common.api.config.EmailConfig;
+import org.openpaas.paasta.portal.common.api.entity.portal.InviteOrgSpace;
 import org.openpaas.paasta.portal.common.api.entity.portal.InviteUser;
 import org.openpaas.paasta.portal.common.api.repository.portal.InviteUserRepository;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -56,6 +57,8 @@ public class EmailServiceV3Test {
     Map param5;
 
     Map inviteOrgEmailSendResultMap;
+
+    InviteOrgSpace inviteOrgSpace;
 
 
     InviteUser inviteUser;
@@ -129,8 +132,44 @@ public class EmailServiceV3Test {
 
         inviteUsers.add(inviteUser);
 
+        inviteOrgSpace = new InviteOrgSpace();
+        inviteOrgSpace.setAccessCnt(1);
+        inviteOrgSpace.setCreateTime(new Date());
+        inviteOrgSpace.setGubun("gubun");
+        inviteOrgSpace.setId(1);
+        inviteOrgSpace.setInviteId(1);
+        inviteOrgSpace.setInviteUserId("userid");
+        inviteOrgSpace.setRoleName("rolename");
+        inviteOrgSpace.setSetyn("y");
+        inviteOrgSpace.setToken("token");
+        inviteOrgSpace.setUserId("userid");
+
 
     }
+
+    @Test
+    public void testGetParameter() {
+        inviteUser.getUserId();
+        inviteUser.getToken();
+        inviteUser.getRole();
+        inviteUser.getOrgGuid();
+        inviteUser.getGubun();
+        inviteUser.getCreated();
+        inviteUser.toString();
+
+        inviteOrgSpace.getAccessCnt();
+        inviteOrgSpace.getCreateTime();
+        inviteOrgSpace.getGubun();
+        inviteOrgSpace.getId();
+        inviteOrgSpace.getInviteId();
+        inviteOrgSpace.getInviteUserId();
+        inviteOrgSpace.getRoleName();
+        inviteOrgSpace.getSetyn();
+        inviteOrgSpace.getToken();
+        inviteOrgSpace.getUserId();
+        inviteOrgSpace.toString();
+    }
+
 
     @Test
     public void testResetEmail() throws Exception {
