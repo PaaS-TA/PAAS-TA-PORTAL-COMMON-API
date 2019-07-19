@@ -2,33 +2,21 @@ package org.openpaas.paasta.portal.common.api.domain.adminMain;
 
 import org.apache.commons.collections.map.HashedMap;
 import org.jinq.jpa.JinqJPAStreamProvider;
-import org.jinq.orm.stream.JinqStream;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runners.MethodSorters;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
-import org.openpaas.paasta.portal.common.api.config.JinqSource;
-import org.openpaas.paasta.portal.common.api.config.dataSource.CcConfig;
 import org.openpaas.paasta.portal.common.api.entity.cc.OrganizationsCc;
 import org.openpaas.paasta.portal.common.api.entity.cc.SpacesCc;
-import org.openpaas.paasta.portal.common.api.repository.cc.SpacesCcRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static org.mockito.Mockito.when;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -91,8 +79,31 @@ public class AdminMainServiceTest {
         getTotalSpaceListResultMap = new HashedMap();
         spacesCcList = new ArrayList<SpacesCc>();
         spacesCc = new SpacesCc();
+        spacesCc.setApplicationCount(1);
+        spacesCc.setId(1);
+        spacesCc.setName("space");
         spacesCcList.add(spacesCc);
         getTotalSpaceListResultMap.put("list", spacesCcList);
+    }
+
+    @Test
+    public void testGetParameter(){
+
+        organizationsCc.getId();
+        organizationsCc.getGuid();
+        organizationsCc.getCreatedAt();
+        organizationsCc.getUpdatedAt();
+        organizationsCc.getName();
+        organizationsCc.getBillingEnabled();
+        organizationsCc.getQuotaDefinitionId();
+        organizationsCc.getStatus();
+        organizationsCc.getDefaultIsolationSegmentGuid();
+        organizationsCc.toString();
+
+        spacesCc.getApplicationCount();
+        spacesCc.getId();
+        spacesCc.getName();
+        spacesCc.toString();
     }
 
     @Test

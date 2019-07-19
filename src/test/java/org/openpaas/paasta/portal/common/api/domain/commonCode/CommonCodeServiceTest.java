@@ -133,6 +133,41 @@ public class CommonCodeServiceTest {
 
 
     @Test
+    public void testGetParameter(){
+        codeDetail.getCreated();
+        codeDetail.getGroupId();
+        codeDetail.getKey();
+        codeDetail.getLastmodified();
+        codeDetail.getNo();
+        codeDetail.getOrder();
+        codeDetail.getOrgId();
+        codeDetail.getOrgKey();
+        codeDetail.getPageNo();
+        codeDetail.getSummary();
+        codeDetail.getPageSize();
+        codeDetail.getUseYn();
+        codeDetail.getValue();
+        codeDetail.getProcType();
+        codeDetail.getUserId();
+        codeDetail.toString();
+
+
+
+        codeGroup.getCreated();
+        codeGroup.getLastmodified();
+        codeGroup.getOrgId();
+        codeGroup.getOrgKey();
+        codeGroup.getPageNo();
+        codeGroup.getPageSize();
+        codeGroup.getProcType();
+        codeGroup.getUserId();
+        codeGroup.getSearchKeyword();
+        codeGroup.toString();
+
+    }
+
+
+    @Test
     public void testGetCommonCodeDetail() throws Exception {
         thrown.expect(NullPointerException.class);
 

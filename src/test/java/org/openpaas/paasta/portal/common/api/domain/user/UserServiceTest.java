@@ -121,6 +121,39 @@ public class UserServiceTest {
     }
 
     @Test
+    public void testGetParameter(){
+        userDetail.getActive();
+        userDetail.getAddress();
+        userDetail.getAddressDetail();
+        userDetail.getAdminYn();
+        userDetail.getAuthAccessCnt();
+        userDetail.getAuthAccessTime();
+        userDetail.getRefreshToken();
+        userDetail.getImgPath();
+        userDetail.getSearchKeyword();
+        userDetail.getStatus();
+        userDetail.getTellPhone();
+        userDetail.getUserGuid();
+        userDetail.getUserId();
+        userDetail.getUserName();
+        userDetail.getZipCode();
+        userDetail.toString();
+
+        users.getId();
+        users.getIdentityZoneId();
+        users.getVersion();
+        users.getGivenName();
+        users.getFamilyName();
+        users.getExternalId();
+        users.getEmail();
+        users.getCreated();
+        users.getAuthorities();
+        users.getActive();
+        users.toString();
+    }
+
+
+    @Test
     public void testGetUser() throws Exception {
         when(userDetailRepository.findByUserId(any())).thenReturn(userDetail);
         UserDetail result = userService.getUser("userId");

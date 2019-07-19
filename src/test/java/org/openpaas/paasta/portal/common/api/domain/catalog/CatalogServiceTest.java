@@ -302,6 +302,100 @@ public class CatalogServiceTest {
     }
 
     @Test
+    public void testGetParameter(){
+
+        starterCategory.getNo();
+        starterCategory.getName();
+        starterCategory.getClassification();
+        starterCategory.getSummary();
+        starterCategory.getDescription();
+        starterCategory.getThumbImgName();
+        starterCategory.getThumbImgPath();
+        starterCategory.getUseYn();
+        starterCategory.getUserId();
+        starterCategory.getCreated();
+        starterCategory.getLastmodified();
+        starterCategory.getTagsParam();
+
+        starterCategory.getServicePackCategoryNoList();
+        starterCategory.getBuildPackCategoryNo();
+        starterCategory.toString();
+
+
+        buildpackCategory.getNo();
+        buildpackCategory.getName();
+        buildpackCategory.getClassification();
+        buildpackCategory.getSummary();
+        buildpackCategory.getDescription();
+        buildpackCategory.getBuildPackName();
+        buildpackCategory.getThumbImgName();
+        buildpackCategory.getThumbImgPath();
+        buildpackCategory.getUseYn();
+        buildpackCategory.getAppSampleFileName();
+        buildpackCategory.getAppSampleFilePath();
+        buildpackCategory.getAppSampleFileSize();
+        buildpackCategory.getUserId();
+        buildpackCategory.getCreated();
+        buildpackCategory.getLastmodified();
+        buildpackCategory.getDocFileUrl();
+        buildpackCategory.getTagsParam();
+        buildpackCategory.toString();
+
+
+        catalogCc.getId();
+        catalogCc.getGuid();
+        catalogCc.getCreatedAt();
+        catalogCc.getUpdatedAt();
+        catalogCc.getHost();
+        catalogCc.getDomainid();
+        catalogCc.getSpaceid();
+        catalogCc.getPath();
+        catalogCc.getPort();
+        catalogCc.toString();
+
+        catalogHistory.getNo();
+        catalogHistory.getCatalogNo();
+        catalogHistory.getCatalogType();
+        catalogHistory.getUserId();
+        catalogHistory.getCreated();
+        catalogHistory.getLastmodified();
+        catalogHistory.toString();
+
+        servicepackCategory.getNo();
+        servicepackCategory.getName();
+        servicepackCategory.getClassification();
+        servicepackCategory.getSummary();
+        servicepackCategory.getDescription();
+        servicepackCategory.getServicePackName();
+        servicepackCategory.getThumbImgName();
+        servicepackCategory.getThumbImgPath();
+        servicepackCategory.getUseYn();
+        servicepackCategory.getUserId();
+        servicepackCategory.getCreated();
+        servicepackCategory.getLastmodified();
+        servicepackCategory.getParameter();
+        servicepackCategory.getAppBindParameter();
+        servicepackCategory.getDashboardUseYn();
+        servicepackCategory.getAppBindYn();
+        servicepackCategory.getDocFileUrl();
+        servicepackCategory.getTagsParam();
+        servicepackCategory.toString();
+
+        starterServicepackRelation.getNo();
+        starterServicepackRelation.getServicepackCategoryNo();
+        starterServicepackRelation.getStarterCatalogNo();
+        starterServicepackRelation.toString();
+
+
+        starterBuildpackRelation.getBuildpackCategoryNo();
+        starterBuildpackRelation.getNo();
+        starterBuildpackRelation.getStarterCatalogNo();
+        starterBuildpackRelation.toString();
+
+    }
+
+
+    @Test
     public void testGetStarterCatalog() throws Exception {
 
         when(starterCategoryRepository.findOne(anyInt())).thenReturn(starterCategory);
@@ -595,6 +689,7 @@ public class CatalogServiceTest {
 
         List<CatalogCc> result = catalogService.getListRoutes();
         Assert.assertEquals(catalogCcs, result);
+
     }
 
     @Test
