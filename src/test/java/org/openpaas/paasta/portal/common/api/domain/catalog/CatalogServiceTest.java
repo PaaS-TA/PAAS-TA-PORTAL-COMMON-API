@@ -18,10 +18,7 @@ import org.openpaas.paasta.portal.common.api.repository.portal.*;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
@@ -201,8 +198,12 @@ public class CatalogServiceTest {
         catalogHistory.setCatalogNo(1);
         catalogHistory.setCatalogType("servicePack");
         catalogHistory.setUserId("admin");
-        catalogHistory.setCreated(null);
-        catalogHistory.setLastmodified(null);
+        catalogHistory.setCreated(new Date());
+        catalogHistory.setLastmodified(new Date());
+        catalogHistory.setSearchKeyword("SearchKeywor");
+        catalogHistory.setSearchTypeColumn("SearchTypeColumn");
+        catalogHistory.setSearchTypeUseYn("SearchTypeUseYn");
+        catalogHistory.setStarterCatalogNo(1);
         catalogHistories.add(catalogHistory);
 
 
@@ -380,7 +381,14 @@ public class CatalogServiceTest {
         catalogHistory.getUserId();
         catalogHistory.getCreated();
         catalogHistory.getLastmodified();
+        catalogHistory.getLastmodified();
+        catalogHistory.getSearchKeyword();
+        catalogHistory.getSearchTypeColumn();
+        catalogHistory.getSearchTypeUseYn();
+        catalogHistory.getStarterCatalogNo();
         catalogHistory.toString();
+
+
 
         servicepackCategory.getNo();
         servicepackCategory.getName();

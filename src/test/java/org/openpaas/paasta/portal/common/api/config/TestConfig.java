@@ -58,7 +58,7 @@ public class TestConfig {
 
     @Test
     public void testGetParameter(){
-
+        Constants constants = new Constants();
         Assert.assertEquals(adminUserName,Constants.adminUserName);
         Assert.assertEquals( BUILD_PACK_CATALOG_ID , Constants.BUILD_PACK_CATALOG_ID);
         Assert.assertEquals( PROC_NAME_COMMON_CODE_DETAIL , Constants.PROC_NAME_COMMON_CODE_DETAIL);
