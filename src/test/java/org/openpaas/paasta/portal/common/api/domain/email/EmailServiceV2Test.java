@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class EmailServiceTest {
+public class EmailServiceV2Test {
 
     @Mock
     EmailConfig emailConfig;
