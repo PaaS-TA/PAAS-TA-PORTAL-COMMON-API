@@ -9,31 +9,23 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
 import org.openpaas.paasta.portal.common.api.config.dataSource.UaaConfig;
 import org.openpaas.paasta.portal.common.api.domain.common.CommonService;
 import org.openpaas.paasta.portal.common.api.domain.email.EmailService;
 import org.openpaas.paasta.portal.common.api.domain.email.EmailServiceV3;
+import org.openpaas.paasta.portal.common.api.entity.cc.UsersCc;
 import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
 import org.openpaas.paasta.portal.common.api.entity.uaa.Users;
 import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailRepository;
 import org.openpaas.paasta.portal.common.api.repository.uaa.UsersRepository;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.EntityManager;
 import javax.persistence.Tuple;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import javax.xml.crypto.Data;
+import java.math.BigInteger;
 import java.util.*;
 
 import static org.mockito.Mockito.*;
@@ -70,6 +62,8 @@ public class UserServiceTest {
     Users users;
     Map thenReturnMap;
     List<Map> thenReturnMapList;
+    UsersCc usersCc;
+
     private MockMvc mockMvc;
 
     @Before
@@ -104,16 +98,37 @@ public class UserServiceTest {
 
 
         users = new Users();
-        users.setId("");
-        users.setIdentityZoneId("");
+        users.setId("Id");
+        users.setIdentityZoneId("IdentityZoneId");
         users.setVersion(1);
-        users.setGivenName("");
-        users.setFamilyName("");
-        users.setExternalId("");
-        users.setEmail("");
+        users.setGivenName("GivenName");
+        users.setFamilyName("FamilyName");
+        users.setExternalId("ExternalId");
+        users.setEmail("Email");
         users.setCreated(new Date());
-        users.setAuthorities("");
+        users.setAuthorities("Authorities");
         users.setActive("Y");
+        users.setLastLogonSuccessTime(BigInteger.ONE);
+        users.setLastmodified(new Date());
+        users.setLegacyVerification_behavior("Verification_behavior");
+        users.setOrigin("orgin");
+        users.setPasswdChange_required("PasswdChange_required");
+        users.setPasswdLastmodified(new Date());
+        users.setPassword("password");
+        users.setPhoneNumber("phonenumber");
+        users.setPreviousLogonSuccessTime(BigInteger.ONE);
+        users.setSalt("salt");
+        users.setVerified("verified");
+
+
+        usersCc = new UsersCc();
+        usersCc.setActive(true);
+        usersCc.setAdmin(true);
+        usersCc.setCreatedAt(new Date());
+        usersCc.setId(1);
+        usersCc.setGuid("guid");
+        usersCc.setSpaceid("spaceid");
+        usersCc.setUpdatedAt(new Date());
 
         thenReturnMapList = Arrays.<Map<String, Object>>asList(thenReturnMap);
 
@@ -149,7 +164,25 @@ public class UserServiceTest {
         users.getCreated();
         users.getAuthorities();
         users.getActive();
+        users.getLastLogonSuccessTime();
+        users.getLastmodified();
+        users.getLegacyVerification_behavior();
+        users.getOrigin();
+        users.getPasswdChange_required();
+        users.getPasswdLastmodified();
+        users.getPassword();
+        users.getPhoneNumber();
+        users.getPreviousLogonSuccessTime();
+        users.getSalt();
+        users.getVerified();
         users.toString();
+
+        usersCc.getCreatedAt();
+        usersCc.getId();
+        usersCc.getGuid();
+        usersCc.getSpaceid();
+        usersCc.getUpdatedAt();
+        usersCc.toString();
     }
 
 

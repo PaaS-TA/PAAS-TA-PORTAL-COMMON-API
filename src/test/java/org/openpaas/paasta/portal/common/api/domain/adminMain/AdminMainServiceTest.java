@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.openpaas.paasta.portal.common.api.entity.cc.OrganizationsCc;
 import org.openpaas.paasta.portal.common.api.entity.cc.SpacesCc;
+import org.openpaas.paasta.portal.common.api.entity.cc.SpacesToCc;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.persistence.EntityManager;
@@ -36,6 +37,8 @@ public class AdminMainServiceTest {
     OrganizationsCc organizationsCc;
 
     SpacesCc spacesCc;
+
+    SpacesToCc spacesToCc;
 
     List<OrganizationsCc> organizationsCcList;
 
@@ -84,6 +87,21 @@ public class AdminMainServiceTest {
         spacesCc.setName("space");
         spacesCcList.add(spacesCc);
         getTotalSpaceListResultMap.put("list", spacesCcList);
+
+
+        spacesToCc = new SpacesToCc();
+        spacesToCc.setCreatedAt(new Date());
+        spacesToCc.setAllowSsh(true);
+        spacesToCc.setGuid("guid");
+        spacesToCc.setId(1);
+        spacesToCc.setIsolationSegmentGuid("isolationSegmentGuid");
+        spacesToCc.setOrganizationId(1);
+        spacesToCc.setSpaceId(1);
+        spacesToCc.setName("name");
+        spacesToCc.setUpdatedAt(new Date());
+        spacesToCc.setUserId(1);
+
+
     }
 
     @Test
@@ -104,6 +122,20 @@ public class AdminMainServiceTest {
         spacesCc.getId();
         spacesCc.getName();
         spacesCc.toString();
+
+
+        spacesToCc.getCreatedAt();
+        spacesToCc.getAllowSsh();
+        spacesToCc.getGuid();
+        spacesToCc.getId();
+        spacesToCc.getIsolationSegmentGuid();
+        spacesToCc.getOrganizationId();
+        spacesToCc.getSpaceId();
+        spacesToCc.getName();
+        spacesToCc.getUpdatedAt();
+        spacesToCc.getUserId();
+        spacesToCc.toString();
+
     }
 
     @Test

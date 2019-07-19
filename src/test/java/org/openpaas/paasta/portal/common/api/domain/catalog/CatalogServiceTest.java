@@ -18,9 +18,13 @@ import org.openpaas.paasta.portal.common.api.repository.portal.*;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static org.mockito.Matchers.*;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -60,6 +64,7 @@ public class CatalogServiceTest {
 
     @InjectMocks
     CatalogService catalogService;
+
 
 
     StarterCategory starterCategory;
