@@ -137,29 +137,32 @@ public class EmailServiceV2Test {
     }
 
     @Test
-    public void testCreateEmail() throws Exception {
+    public void testResetEmail_fail() throws Exception {
         when(emailConfig.getCharset()).thenReturn("UTF-8");
-        when(emailConfig.sendEmail(Matchers.any(), Matchers.any())).thenReturn(true);
-        Map result = emailService.createEmail("userId", "refreshToken");
-        Assert.assertEquals(createEmailResultMap, result);
+        when(emailConfig.sendEmail(Matchers.any(), Matchers.any())).thenThrow(Exception.class);
+        Map result = emailService.resetEmail("userId", "refreshToken");
+        Map assertMap = new HashMap();
+        assertMap.put("result", false);
+        assertMap.put("msg", null);
+        Assert.assertEquals(assertMap, result);
     }
-
-    @Test
-    public void testInviteOrgEmail() throws Exception {
-        when(emailConfig.getCharset()).thenReturn("UTF-8");
-        when(emailConfig.sendEmail(Matchers.any(), Matchers.any())).thenReturn(true);
-        Boolean result = emailService.inviteOrgEmail(param3);
-        Assert.assertEquals(Boolean.TRUE, result);
-    }
-
-
 
     @Test
     public void testResetEmail_false() throws Exception {
         when(emailConfig.getCharset()).thenReturn("UTF-8");
         when(emailConfig.sendEmail(Matchers.any(), Matchers.any())).thenReturn(false);
+        when(inviteUserRepository.save(inviteUser)).thenReturn(inviteUser);
         Map result = emailService.resetEmail("userId", "refreshToken");
         Assert.assertNotNull(result);
+    }
+
+
+    @Test
+    public void testCreateEmail() throws Exception {
+        when(emailConfig.getCharset()).thenReturn("UTF-8");
+        when(emailConfig.sendEmail(Matchers.any(), Matchers.any())).thenReturn(true);
+        Map result = emailService.createEmail("userId", "refreshToken");
+        Assert.assertEquals(createEmailResultMap, result);
     }
 
     @Test
@@ -171,12 +174,42 @@ public class EmailServiceV2Test {
     }
 
     @Test
+    public void testCreateEmail_fail() throws Exception {
+        when(emailConfig.getCharset()).thenReturn("UTF-8");
+        when(emailConfig.sendEmail(Matchers.any(), Matchers.any())).thenThrow(Exception.class);
+        Map result = emailService.createEmail("userId", "refreshToken");
+        Map assertMap = new HashMap();
+        assertMap.put("result", false);
+        assertMap.put("msg", null);
+        Assert.assertEquals(assertMap, result);
+    }
+
+
+    @Test
+    public void testInviteOrgEmail() throws Exception {
+        when(emailConfig.getCharset()).thenReturn("UTF-8");
+        when(emailConfig.sendEmail(Matchers.any(), Matchers.any())).thenReturn(true);
+        Boolean result = emailService.inviteOrgEmail(param3);
+        Assert.assertEquals(Boolean.TRUE, result);
+    }
+
+
+    @Test
     public void testInviteOrgEmail_false() throws Exception {
         when(emailConfig.getCharset()).thenReturn("UTF-8");
         when(emailConfig.sendEmail(Matchers.any(), Matchers.any())).thenReturn(false);
         Boolean result = emailService.inviteOrgEmail(param3);
         Assert.assertEquals(Boolean.TRUE, result);
     }
+
+    @Test
+    public void testInviteOrgEmail_fail() throws Exception {
+        when(emailConfig.getCharset()).thenReturn("UTF-8");
+        when(emailConfig.sendEmail(Matchers.any(), Matchers.any())).thenThrow(Exception.class);
+        Boolean result = emailService.inviteOrgEmail(param3);
+        Assert.assertEquals(Boolean.TRUE, result);
+    }
+
 
     @Test
     public void testInviteAccept() throws Exception {
@@ -187,7 +220,32 @@ public class EmailServiceV2Test {
     }
 
     @Test
+    public void testInviteAccept_false() throws Exception {
+        when(inviteUserRepository.findByTokenAndGubunNot(Matchers.any(), Matchers.any())).thenReturn(null);
+
+        Map result = emailService.inviteAccept(param4);
+        Assert.assertNotNull(result);
+    }
+
+    @Test
+    public void testInviteAccept_fail() throws Exception {
+        when(inviteUserRepository.findByTokenAndGubunNot(Matchers.any(), Matchers.any())).thenThrow(Exception.class);
+
+        Map result = emailService.inviteAccept(param4);
+
+        Assert.assertNotNull(result);
+    }
+
+    @Test
     public void testInviteAcceptUpdate() throws Exception {
+        when(inviteUserRepository.save(inviteUser)).thenReturn(inviteUser);
+        Map result = emailService.inviteAcceptUpdate(param5);
+        Assert.assertNotNull(result);
+    }
+
+    @Test
+    public void testInviteAcceptUpdate_fail() throws Exception {
+        when(inviteUserRepository.save(inviteUser)).thenThrow(Exception.class);
         Map result = emailService.inviteAcceptUpdate(param5);
         Assert.assertNotNull(result);
     }
@@ -201,6 +259,36 @@ public class EmailServiceV2Test {
         when(emailConfig.sendEmail(Matchers.any(), Matchers.any())).thenReturn(true);
         Map result = emailService.inviteOrgEmailSend("1", "test", "UDBVZRVZJ8NB1RRWTFV");
         Assert.assertEquals(inviteOrgEmailSendResultMap, result);
+    }
+
+    @Test
+    public void testInviteOrgEmailSend_false() throws Exception {
+        when(emailConfig.getCharset()).thenReturn("UTF-8");
+        when(emailConfig.getAuth()).thenReturn("auth");
+        when(emailConfig.getInviteUrl()).thenReturn("invite");
+
+        when(emailConfig.sendEmail(Matchers.any(), Matchers.any())).thenReturn(false);
+        Map result = emailService.inviteOrgEmailSend("1", "test", "UDBVZRVZJ8NB1RRWTFV");
+        Map assertMap = new HashMap();
+        assertMap.put("result", false);
+        assertMap.put("msg", "System error.");
+
+        Assert.assertEquals(assertMap, result);
+    }
+
+    @Test
+    public void testInviteOrgEmailSend_fail() throws Exception {
+        when(emailConfig.getCharset()).thenReturn("UTF-8");
+        when(emailConfig.getAuth()).thenReturn("auth");
+        when(emailConfig.getInviteUrl()).thenReturn("invite");
+
+        when(emailConfig.sendEmail(Matchers.any(), Matchers.any())).thenThrow(Exception.class);
+        Map result = emailService.inviteOrgEmailSend("1", "test", "UDBVZRVZJ8NB1RRWTFV");
+        Map assertMap = new HashMap();
+        assertMap.put("result", false);
+        assertMap.put("msg", null);
+
+        Assert.assertEquals(assertMap, result);
     }
 
 

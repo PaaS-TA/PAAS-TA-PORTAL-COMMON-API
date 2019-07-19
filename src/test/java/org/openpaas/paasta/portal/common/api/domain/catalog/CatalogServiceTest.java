@@ -132,7 +132,9 @@ public class CatalogServiceTest {
         starterCategory.setCreated(null);
         starterCategory.setLastmodified(null);
         starterCategory.setTagsParam("{\"paasta\":\"colors6\"}");
-
+        starterCategory.setClassificationValue("ClassificationValue");
+        starterCategory.setClassificationSummary("ClassificationSummary");
+        starterCategory.setSearchKeyword("SearchKeyword");
         ssrIntList.add(1);
         starterCategory.setServicePackCategoryNoList(ssrIntList);
         starterCategory.setBuildPackCategoryNo(1);
@@ -157,6 +159,9 @@ public class CatalogServiceTest {
         buildpackCategory.setLastmodified(null);
         buildpackCategory.setDocFileUrl("https://www.java.com/ko/download/faq/java8.xml");
         buildpackCategory.setTagsParam("{\"community\":\"colors7\",\"free\":\"colors1\"}");
+        buildpackCategory.setClassificationValue("classificationValue");
+        buildpackCategory.setClassificationSummary("classificationSummary");
+        buildpackCategory.setSearchKeyword("searchkey");
         buildpackCategories.add(buildpackCategory);
 
 
@@ -216,6 +221,11 @@ public class CatalogServiceTest {
         servicepackCategory.setAppBindYn("Y");
         servicepackCategory.setDocFileUrl("https://redis.io/");
         servicepackCategory.setTagsParam("{\"paasta\":\"colors6\",\"pay\":\"colors2\"}");
+        servicepackCategory.setClassificationValue("ClassificationValue");
+        servicepackCategory.setClassificationSummary("ClassificationSummary");
+        servicepackCategory.setSearchKeyword("SearchKeyword");
+        servicepackCategory.setOnDemandYn("Y");
+
         servicepackCategories.add(servicepackCategory);
 
 
@@ -319,6 +329,9 @@ public class CatalogServiceTest {
 
         starterCategory.getServicePackCategoryNoList();
         starterCategory.getBuildPackCategoryNo();
+        starterCategory.getClassificationValue();
+        starterCategory.getClassificationSummary();
+        starterCategory.getSearchKeyword();
         starterCategory.toString();
 
 
@@ -339,6 +352,9 @@ public class CatalogServiceTest {
         buildpackCategory.getLastmodified();
         buildpackCategory.getDocFileUrl();
         buildpackCategory.getTagsParam();
+        buildpackCategory.getClassificationValue();
+        buildpackCategory.getClassificationSummary();
+        buildpackCategory.getSearchKeyword();
         buildpackCategory.toString();
 
 
@@ -379,6 +395,10 @@ public class CatalogServiceTest {
         servicepackCategory.getAppBindYn();
         servicepackCategory.getDocFileUrl();
         servicepackCategory.getTagsParam();
+        servicepackCategory.getClassificationValue();
+        servicepackCategory.getClassificationSummary();
+        servicepackCategory.getOnDemandYn();
+        servicepackCategory.getSearchKeyword();
         servicepackCategory.toString();
 
         starterServicepackRelation.getNo();
