@@ -117,7 +117,7 @@ public class EmailServiceV3 {
 
         try {
             userEmails = body.get("userEmail").toString().split(",");
-
+            logger.info("LENGTH ::" + userEmails.length);
             for (String userEmail : userEmails) {
                 userEmail = userEmail.trim();
                 InviteUser inviteUser = new InviteUser();
@@ -143,7 +143,7 @@ public class EmailServiceV3 {
                 inviteOrgEmailSend(userEmail, body.get("orgName").toString(), randomId, body.get("seq").toString());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.info("ERROR ::" + e.getMessage());
             return false;
         }
 

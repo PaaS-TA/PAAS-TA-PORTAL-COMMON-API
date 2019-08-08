@@ -55,5 +55,20 @@ public class EmailControllerV3 {
         return resultMap;
     }
 
+    @PostMapping( "/v3" + "/email/inviteOrg" )
+    public boolean inviteOrgEmail(@RequestBody Map<String, Object> body) {
+        return emailServiceV3.inviteOrgEmail(body);
+    }
+
+    @PostMapping( "/v3" + "/email/inviteAccept" )
+    public Map inviteAccept(@RequestBody Map<String, Object> body) {
+        return emailServiceV3.inviteAccept(body);
+    }
+
+    @PostMapping( "/v3" + "/email/inviteAcceptUpdate" )
+    public Map inviteAcceptUpdate(@RequestBody Map<String, Object> body) {
+        return emailServiceV3.inviteAcceptUpdate(body);
+    }
+
 
 }
