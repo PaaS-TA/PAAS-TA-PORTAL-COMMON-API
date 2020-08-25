@@ -8,6 +8,7 @@ import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
 import org.openpaas.paasta.portal.common.api.config.dataSource.UaaConfig;
 import org.openpaas.paasta.portal.common.api.domain.common.CommonService;
 import org.openpaas.paasta.portal.common.api.domain.email.EmailService;
+import org.openpaas.paasta.portal.common.api.domain.email.EmailServiceV3;
 import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
 import org.openpaas.paasta.portal.common.api.entity.uaa.Users;
 import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailRepository;
@@ -32,11 +33,9 @@ import java.util.stream.Collectors;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-/**
- * Created by SEJI on 2018-02-20.
- */
+
 @Service
-public class UserService {
+public class UserServiceV3 {
 
     private final Logger logger = getLogger(this.getClass());
 
@@ -50,7 +49,7 @@ public class UserService {
     UserDetailRepository userDetailRepository;
 
     @Autowired
-    private EmailService emailService;
+    private EmailServiceV3 emailServiceV3;
 
     @Autowired
     JinqSource jinqSource;
@@ -70,28 +69,6 @@ public class UserService {
     public UserDetail getUser(String userId) {
         return  userDetailRepository.findByUserId(userId);
     }
-
-    public Users getUaaUser(String username) {
-        return usersRepository.findByUserName(username);
-    }
-
-    /**
-     * 사용자 상세화면에서
-     * 사용자 정보 수정
-     *
-     * @param userId     the user id
-     * @param userDetail the user detail
-     * @return Int updateCount
-     */
-    public int updateUser(String userId, UserDetail userDetail) {
-
-        int resultCnt = userDetailRepository.countByUserId(userId);
-        if (resultCnt > 0) {
-            userDetailRepository.save(userDetail);
-        }
-        return resultCnt;
-    }
-
 
     /**
      * 사용자 자동생성
@@ -122,6 +99,7 @@ public class UserService {
             String randomId = RandomStringUtils.randomAlphanumeric(17).toUpperCase() + RandomStringUtils.randomAlphanumeric(2).toUpperCase();
             UserDetail userDetail = new UserDetail();
             userDetail.setUserId(body.get("userid").toString());
+            userDetail.setUserName(body.get("username").toString());
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DATE, 1);
             userDetail.setAuthAccessTime(cal.getTime());
@@ -134,7 +112,7 @@ public class UserService {
              * 여기서 에러나면 Exception으로 빠져버림
              */
             createUser(userDetail);
-            map = emailService.createEmail(userDetail.getUserId(), randomId);
+            map = emailServiceV3.createEmail(userDetail.getUserId(), randomId, body.get("seq").toString());
         } catch (Exception e) {
             e.printStackTrace();
             map.put("result", false);
@@ -151,8 +129,9 @@ public class UserService {
      * @return boolean
      * @throws IOException the io exception
      */
-    public Map resetRequestUser(Map body) {
+    public Map  resetRequestUser(Map body) {
         Map map = new HashMap();
+
         try {
             String randomId = RandomStringUtils.randomAlphanumeric(17).toUpperCase() + RandomStringUtils.randomAlphanumeric(2).toUpperCase();
             UserDetail userDetail = getUser(body.get("userid").toString());
@@ -166,7 +145,7 @@ public class UserService {
              * 여기서 에러나면 Exception으로 빠져버림
              */
             createUser(userDetail);
-            map = emailService.resetEmail(userDetail.getUserId(), randomId);
+            map = emailServiceV3.resetEmail(userDetail.getUserId(), randomId, body.get("seq").toString());
         } catch (Exception e) {
             e.printStackTrace();
             map.put("result", false);
@@ -176,96 +155,6 @@ public class UserService {
 
     }
 
-
-    /**
-     * DB에서 사용자 삭제
-     *
-     * @param userId the user id
-     * @return 삭제 정보
-     */
-    public Map deleteUser(String userId) {
-        Map map = new HashMap();
-        try {
-            int deleteResult = userDetailRepository.deleteByUserId(userId);
-            map.put("result", true);
-            map.put("msg", "You have successfully completed the task.");
-        } catch (Exception e) {
-            e.printStackTrace();
-            map.put("result", false);
-            map.put("msg", e.getMessage());
-        }
-        return map;
-    }
-
-    /**
-     * DB에서 사용자 삭제 후 CF인프라에서도 사용자 삭제
-     *
-     * @return 삭제 정보
-     */
-    public Map deleteUserInfra(String guid, String token) {
-
-        logger.info("userId ::::: " + guid);
-        Map map = new HashMap();
-        try {
-            Users user = usersRepository.findById(guid);
-
-            Map result = commonService.procCfApiRestTemplate("/users/" + guid, HttpMethod.DELETE, null, token);
-            if (result.get("result").toString().equals("true")) {
-                userDetailRepository.deleteByUserId(user.getUserName());
-                map.put("result", true);
-                map.put("msg", "You have successfully completed the task.");
-            } else {
-                map = result;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            map.put("result", false);
-            map.put("msg", e.getMessage());
-        }
-        return map;
-
-
-    }
-
-
-    /**
-     * 전체 UAA 유저의 userName과 userGuid를 가져온다.
-     *
-     * @return userInfo list
-     */
-    public UserDetail getRefreshTokenUser(UserDetail userDetail) {
-        logger.info("getRefreshTokenUser :: " + userDetail.toString());
-        UserDetail data = userDetailRepository.findByUserIdAndRefreshToken(userDetail.getUserId(), userDetail.getRefreshToken());
-        return data;
-    }
-
-    /**
-     * 전체 UAA 유저의 userName과 userGuid를 가져온다.
-     *
-     * @return All Users List( GUID, userName )
-     */
-    public List<Map<String, Object>> getUserInfo() {
-
-        EntityManager portalEm = uaaConfig.uaaEntityManager().getNativeEntityManagerFactory().createEntityManager();
-
-        CriteriaBuilder cb = portalEm.getCriteriaBuilder();
-        CriteriaQuery<Tuple> cq = cb.createTupleQuery();
-        Root<Users> from = cq.from(Users.class);
-
-        //SQL:Select
-        cq.multiselect(from.get("userName").alias("userName"), from.get("id").alias("id"));
-
-        TypedQuery<Tuple> tq = portalEm.createQuery(cq);
-        List<Tuple> resultList = tq.getResultList();
-
-
-        List<Map<String, Object>> userInfo = resultList.stream().map(x -> new HashMap<String, Object>() {{
-            put("userName", x.get("userName"));
-            put("userGuid", x.get("id"));
-        }}).collect(Collectors.toList());
-
-        return userInfo;
-    }
 }
 
 

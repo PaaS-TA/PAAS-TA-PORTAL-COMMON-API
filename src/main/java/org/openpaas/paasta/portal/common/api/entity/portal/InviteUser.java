@@ -15,6 +15,7 @@ import java.util.Date;
 public class InviteUser {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private int id;
 

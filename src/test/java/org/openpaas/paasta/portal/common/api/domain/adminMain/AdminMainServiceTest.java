@@ -2,35 +2,22 @@ package org.openpaas.paasta.portal.common.api.domain.adminMain;
 
 import org.apache.commons.collections.map.HashedMap;
 import org.jinq.jpa.JinqJPAStreamProvider;
-import org.jinq.orm.stream.JinqStream;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.rules.ExpectedException;
 import org.junit.runners.MethodSorters;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
-import org.openpaas.paasta.portal.common.api.config.JinqSource;
-import org.openpaas.paasta.portal.common.api.config.dataSource.CcConfig;
 import org.openpaas.paasta.portal.common.api.entity.cc.OrganizationsCc;
 import org.openpaas.paasta.portal.common.api.entity.cc.SpacesCc;
-import org.openpaas.paasta.portal.common.api.repository.cc.SpacesCcRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.openpaas.paasta.portal.common.api.entity.cc.SpacesToCc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static org.mockito.Mockito.when;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -41,12 +28,17 @@ import static org.mockito.Mockito.when;
 public class AdminMainServiceTest {
 
 
-    @Mock
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
+    @InjectMocks
     AdminMainService adminMainService;
 
     OrganizationsCc organizationsCc;
 
     SpacesCc spacesCc;
+
+    SpacesToCc spacesToCc;
 
     List<OrganizationsCc> organizationsCcList;
 
@@ -90,13 +82,65 @@ public class AdminMainServiceTest {
         getTotalSpaceListResultMap = new HashedMap();
         spacesCcList = new ArrayList<SpacesCc>();
         spacesCc = new SpacesCc();
+        spacesCc.setApplicationCount(1);
+        spacesCc.setId(1);
+        spacesCc.setName("space");
         spacesCcList.add(spacesCc);
         getTotalSpaceListResultMap.put("list", spacesCcList);
+
+
+        spacesToCc = new SpacesToCc();
+        spacesToCc.setCreatedAt(new Date());
+        spacesToCc.setAllowSsh(true);
+        spacesToCc.setGuid("guid");
+        spacesToCc.setId(1);
+        spacesToCc.setIsolationSegmentGuid("isolationSegmentGuid");
+        spacesToCc.setOrganizationId(1);
+        spacesToCc.setSpaceId(1);
+        spacesToCc.setName("name");
+        spacesToCc.setUpdatedAt(new Date());
+        spacesToCc.setUserId(1);
+
+
+    }
+
+    @Test
+    public void testGetParameter(){
+
+        organizationsCc.getId();
+        organizationsCc.getGuid();
+        organizationsCc.getCreatedAt();
+        organizationsCc.getUpdatedAt();
+        organizationsCc.getName();
+        organizationsCc.getBillingEnabled();
+        organizationsCc.getQuotaDefinitionId();
+        organizationsCc.getStatus();
+        organizationsCc.getDefaultIsolationSegmentGuid();
+        organizationsCc.toString();
+
+        spacesCc.getApplicationCount();
+        spacesCc.getId();
+        spacesCc.getName();
+        spacesCc.toString();
+
+
+        spacesToCc.getCreatedAt();
+        spacesToCc.getAllowSsh();
+        spacesToCc.getGuid();
+        spacesToCc.getId();
+        spacesToCc.getIsolationSegmentGuid();
+        spacesToCc.getOrganizationId();
+        spacesToCc.getSpaceId();
+        spacesToCc.getName();
+        spacesToCc.getUpdatedAt();
+        spacesToCc.getUserId();
+        spacesToCc.toString();
+
     }
 
     @Test
     public void testGetTotalCountList() throws Exception {
-        when(adminMainService.getTotalCountList()).thenReturn(resultMap);
+        thrown.expect(NullPointerException.class);
 
         Map<String, Object> result = adminMainService.getTotalCountList();
         Assert.assertEquals(resultMap, result);
@@ -104,7 +148,7 @@ public class AdminMainServiceTest {
 
     @Test
     public void testGetTotalOrganizationList() throws Exception {
-        when(adminMainService.getTotalOrganizationList()).thenReturn(resultMap);
+        thrown.expect(NullPointerException.class);
 
         Map<String, Object> result = adminMainService.getTotalOrganizationList();
         Assert.assertEquals(resultMap, result);
@@ -112,7 +156,7 @@ public class AdminMainServiceTest {
 
     @Test
     public void testGetTotalSpaceList() throws Exception {
-        when(adminMainService.getTotalSpaceList("1")).thenReturn(getTotalSpaceListResultMap);
+        thrown.expect(NullPointerException.class);
 
         Map<String, Object> result = adminMainService.getTotalSpaceList("1");
         Assert.assertEquals(getTotalSpaceListResultMap, result);

@@ -41,7 +41,6 @@ public class CommonCodeService {
      * @param codeDetail CodeDetail(검색조건)
      * @return Map(자바클래스)
      */
-    //@HystrixCommand(commandKey = "getCommonCodeDetail")
     public Map<String, Object> getCommonCodeDetail(CodeDetail codeDetail) {
         JinqStream<CodeDetail> streams = jinqSource.streamAllPortal(CodeDetail.class);
         int no = codeDetail.getNo();
@@ -83,7 +82,6 @@ public class CommonCodeService {
      * @param codeDetail,codeGroup CodeDetail,CodeGroup (모델클래스)
      * @return Map(자바클래스)
      */
-    //@HystrixCommand(commandKey = "getCommonCodeJoinGroup")
     public Map<String, Object> getCommonCodeJoinGroup(CodeDetail codeDetail, CodeGroup codeGroup) {
 
         //공통코드 상세 조회를 한다. ::  공통코드 상세 개수를 조회한다.
@@ -131,7 +129,6 @@ public class CommonCodeService {
      * @param codeGroup CodeGroup(아이디)
      * @return Map(자바클래스)
      */
-    //@HystrixCommand(commandKey = "getGroupDetail")
     public Map<String,Object> getGroupDetail(CodeGroup codeGroup) {
         JinqStream<CodeGroup> streams = jinqSource.streamAllPortal(CodeGroup.class);
         String id = codeGroup.getId();
@@ -169,7 +166,6 @@ public class CommonCodeService {
      * @param groupid groupid(아이디)
      * @return Map(자바클래스)
      */
-    //@HystrixCommand(commandKey = "getGroupDetail")
     public Map<String,Object> getCodeDetail(String groupid) {
         List<CodeDetail> list = codeDetailRepository.findAllByGroupId(groupid);
         list.sort(Comparator.comparingInt(CodeDetail::getValue2));
@@ -187,9 +183,8 @@ public class CommonCodeService {
      * @param codeGroup CodeGroup (모델클래스)
      * @return Map(자바클래스)
      */
-    //@HystrixCommand(commandKey = "insertDetailGroup")
     public Map<String,Object> insertDetailGroup(CodeGroup codeGroup) {
-        codeGroupRepository.save(codeGroup);
+        codeGroup = codeGroupRepository.save(codeGroup);
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
         }};
@@ -202,12 +197,11 @@ public class CommonCodeService {
      * @param codeDetail CodeDetail (모델클래스)
      * @return Map(자바클래스)
      */
-    //@HystrixCommand(commandKey = "insertDetail")
     public Map<String,Object> insertDetail(CodeDetail codeDetail) {
         int count = codeDetailRepository.countByGroupId(codeDetail.getGroupId());
         System.out.println(count);
         codeDetail.setOrder(count+1);
-        codeDetailRepository.save(codeDetail);
+        codeDetail = codeDetailRepository.save(codeDetail);
 
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
@@ -220,7 +214,6 @@ public class CommonCodeService {
      * @param codeGroup CodeGroup (모델클래스)
      * @return Map(자바클래스)
      */
-    //@HystrixCommand(commandKey = "updateCommonGroup")
     public String updateCommonGroup(String id,CodeGroup codeGroup) {
         String resultStr = Constants.RESULT_STATUS_SUCCESS;
 
@@ -241,7 +234,6 @@ public class CommonCodeService {
      * @param codeDetail CodeDetail (모델클래스)
      * @return Map(자바클래스)
      */
-    //@HystrixCommand(commandKey = "updateCommonDetail")
     public Map<String,Object> updateCommonDetail(int no, CodeDetail codeDetail) {
         String resultStr = Constants.RESULT_STATUS_SUCCESS;
         CodeDetail update=codeDetailRepository.findOne(no);
@@ -262,7 +254,6 @@ public class CommonCodeService {
      * @param id
      * * @return Map(자바클래스)
      */
-    //@HystrixCommand(commandKey = "deleteCommonGroup")
     public Map<String,Object> deleteCommonGroup(String id) {
         List<CodeDetail> codeDetailList =  codeDetailRepository.findByGroupId(id);
         for (CodeDetail codeDetail: codeDetailList) {
@@ -284,7 +275,6 @@ public class CommonCodeService {
      * @param no
      * @return Map(자바클래스)
      */
-    //@HystrixCommand(commandKey = "deleteCommonDetail")
     public Map<String,Object> deleteCommonDetail(int no) {
         codeDetailRepository.delete(no);
         return new HashMap<String, Object>() {{

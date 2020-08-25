@@ -60,7 +60,6 @@ public class UserManagementService {
      *
      * @return Map(자바클래스)
      */
-    //@HystrixCommand(commandKey = "getUserInfoList")
     public Map<String, Object> getUserInfoList(String filter, UserDetail detail) {
 
         JinqStream<Users> userStream = jinqSource.streamAllUAA(Users.class);
@@ -129,7 +128,6 @@ public class UserManagementService {
 
     }
 
-    //@HystrixCommand(commandKey = "getUserInfo")
     public Map<String, Object> getUserInfo(String userid) {
         JinqStream<UserDetail> streams = jinqSource.streamAllPortal(UserDetail.class);
         if (null != userid && !"".equals(userid)) {
@@ -142,7 +140,6 @@ public class UserManagementService {
         }};
     }
 
-    //@HystrixCommand(commandKey = "setUserGuid")
     private List<UserDetail> setUserGuid(List<UserDetail> details) {
         List<Users> users = usersRepository.findAll();
         for (UserDetail userDetail : details) {
@@ -159,10 +156,8 @@ public class UserManagementService {
     /**
      * 사용자에게 운영자 권한을 부여한다.
      */
-    //@HystrixCommand(commandKey = "updateOperatingAuthority")
     public Map<String, Object> updateOperatingAuthority(String userId) {
         UserDetail userDetail = userDetailRepository.findByUserId(userId);
-        logger.info(userDetail.toString());
         userDetail.setAdminYn(!userDetail.getAdminYn().equals("Y") ? "Y" : "N");
         userDetailRepository.save(userDetail);
         return new HashMap<String, Object>() {{
@@ -173,7 +168,6 @@ public class UserManagementService {
     /**
      * 사용자를 삭제한다.
      */
-    //@HystrixCommand(commandKey = "deleteUserAccount")
     public Map<String, Object> deleteUserAccount(String userId) {
         userDetailRepository.deleteByUserId(userId);
 
@@ -185,7 +179,6 @@ public class UserManagementService {
     /**
      * 사용자 포탈 접속 성공 유무 수정
      */
-    //@HystrixCommand(commandKey = "UpdateUserActive")
     public Map<String, Object> UpdateUserActive(String userId, UserDetail _userDetail) {
         UserDetail userDetail = userDetailRepository.findByUserId(userId);
         if(userDetail == null || userDetail.getUserId().equals("admin")){
@@ -194,7 +187,7 @@ public class UserManagementService {
             }};
         }
         userDetail.setActive(_userDetail.getActive());
-        userDetailRepository.save(userDetail);
+        userDetail = userDetailRepository.save(userDetail);
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
         }};

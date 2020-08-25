@@ -12,6 +12,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 
 /**
  * The type Security config.
@@ -53,51 +58,66 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-          http
-				.csrf().disable()
+        http
+                .csrf().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                  .antMatchers("/external/**").permitAll()
-                  //Spring boot Admin 정보 접근 URL -  시작
-                  .antMatchers("/").permitAll()
-                  .antMatchers("/index").permitAll()
-                  .antMatchers("/info**").permitAll()
-                  .antMatchers("/env**").permitAll()
-                  .antMatchers("/metrics**").permitAll()
-                  .antMatchers("/trace**").permitAll()
-                  .antMatchers("/dump**").permitAll()
-                  .antMatchers("/jolokia**").permitAll()
-                  .antMatchers("/configprops**").permitAll()
-                  .antMatchers("/logfile**").permitAll()
-                  .antMatchers("/logging**").permitAll()
-                  .antMatchers("/refresh**").permitAll()
-                  .antMatchers("/flyway**").permitAll()
-                  .antMatchers("/liquibase**").permitAll()
-                  .antMatchers("/httptrace**").permitAll()
-                  .antMatchers("/threaddump**").permitAll()
-                  .antMatchers("/heapdump**").permitAll()
-                  .antMatchers("/loggers**").permitAll()
-                  .antMatchers("/auditevents**").permitAll()
-                  .antMatchers("/hystrix.stream**").permitAll()
-                  .antMatchers("/docs**").permitAll()
-                  .antMatchers("/jmx**").permitAll()
-                  .antMatchers("/management/**").permitAll()
-                  .antMatchers("/applications/**").permitAll()
-                  .antMatchers("/applications/**/**").permitAll()
-                  .antMatchers("/applications/**/**/**").permitAll()
-                  .antMatchers("/health**").permitAll()
-                  .antMatchers("/health/**").permitAll()
-                  //Spring boot Admin 정보 접근 URL - 끝
-                  .antMatchers("/resources/**").permitAll()
+                .antMatchers("/external/**").permitAll()
+                .antMatchers("/").permitAll()
+                .antMatchers("/index").permitAll()
+                .antMatchers("/info").permitAll()
                 .antMatchers("/**").hasRole("USER")
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
-                .and()
-                .csrf().disable().cors().disable();
+                .and().csrf().disable().cors().configurationSource(corsConfiguration());
 
     }
 
+    private CorsConfigurationSource corsConfiguration(){
+        return new CorsConfigurationSource() {
+            @Override
+            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                CorsConfiguration config = new CorsConfiguration();
+                config.setAllowedHeaders(Collections.singletonList("*"));
+                config.setAllowedMethods(Collections.singletonList("*"));
+                config.addAllowedOrigin("*");
+                config.setAllowCredentials(true);
+                return config;
+            }
+        };
+    }
+
+
+//    //Spring boot Admin 정보 접근 URL -  시작
+//                  .antMatchers("/").permitAll()
+//                  .antMatchers("/env**").permitAll()
+//                  .antMatchers("/metrics**").permitAll()
+//                  .antMatchers("/trace**").permitAll()
+//                  .antMatchers("/dump**").permitAll()
+//                  .antMatchers("/jolokia**").permitAll()
+//                  .antMatchers("/configprops**").permitAll()
+//                  .antMatchers("/logfile**").permitAll()
+//                  .antMatchers("/logging**").permitAll()
+//                  .antMatchers("/refresh**").permitAll()
+//                  .antMatchers("/flyway**").permitAll()
+//                  .antMatchers("/liquibase**").permitAll()
+//                  .antMatchers("/httptrace**").permitAll()
+//                  .antMatchers("/threaddump**").permitAll()
+//                  .antMatchers("/heapdump**").permitAll()
+//                  .antMatchers("/loggers**").permitAll()
+//                  .antMatchers("/auditevents**").permitAll()
+//                  .antMatchers("/hystrix.stream**").permitAll()
+//                  .antMatchers("/docs**").permitAll()
+//                  .antMatchers("/jmx**").permitAll()
+//                  .antMatchers("/management/**").permitAll()
+//                  .antMatchers("/applications/**").permitAll()
+//                  .antMatchers("/applications/**/**").permitAll()
+//                  .antMatchers("/applications/**/**/**").permitAll()
+//                  .antMatchers("/health**").permitAll()
+//                  .antMatchers("/health/**").permitAll()
+//    //Spring boot Admin 정보 접근 URL - 끝
+//                  .antMatchers("/resources/**").permitAll()
 }
