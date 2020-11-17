@@ -11,6 +11,5 @@ Common API 란? DB API 제공하는 서비스이다.
 - java 1.8 버전
 - SpringCloud Edgware.RELEASE 
 - TomcatEmded 8.5.14
-- Gradle 4.4.1
+- Gradle 4.10.3
 - Spring-boot 1.5.10
-- Redis 1.3.1
