@@ -17,8 +17,8 @@ applications:
     datasource_cc_url: jdbc:<PAAS-TA_DATABASE>://<PAAS-TA_DB_IP>:<PAAS-TA_DB_PORT>/<CC_DB_NAME>  # (e.g. PAAS-TA_DATABASE :: postgresql OR mysql)
     datasource_cc_username: <CC_DB_USER_NAME>
     datasource_cc_password: <CC_DB_USER_PASSWORD>
-    datasource_portal_driver-class-name: com.mysql.jdbc.Driver
-    datasource_portal_url: jdbc:mysql://<PORTAL_DB_IP>:<PORTAL_DB_PORT>/portaldb
+    datasource_portal_driver-class-name: org.mariadb.jdbc.Driver
+    datasource_portal_url: jdbc:mariadb://<PORTAL_DB_IP>:<PORTAL_DB_PORT>/portaldb
     datasource_portal_username: <PORTAL_DB_USER>
     datasource_portal_password: <PORTAL_DB_USER_PASSWORD>
     datasource_uaa_driver-class-name: <PAAS-TA_DB_DRIVER>                                          # (e.g. org.postgresql.Driver OR com.mysql.jdbc.Driver)
