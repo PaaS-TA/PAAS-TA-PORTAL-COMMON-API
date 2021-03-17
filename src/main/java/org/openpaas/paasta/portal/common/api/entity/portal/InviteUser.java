@@ -83,11 +83,11 @@ public class InviteUser {
     }
 
     public Date getCreated() {
-        return created;
+        return created == null ? null : new Date(created.getTime());
     }
 
     public void setCreated(Date created) {
-        this.created = created;
+        this.created = created == null ? null : new Date(created.getTime());
     }
 
     public String getToken() { return token; }

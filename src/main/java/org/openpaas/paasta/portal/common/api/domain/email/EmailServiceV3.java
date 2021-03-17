@@ -175,7 +175,7 @@ public class EmailServiceV3 {
     public Map inviteAcceptUpdate(Map body) {
 
         try {
-            InviteUser inviteUser = new InviteUser();
+            //InviteUser inviteUser = new InviteUser();
             InviteUser user = inviteUserRepository.findById(Integer.parseInt(body.get("id").toString()));
             user.setGubun(body.get("gubun").toString());
             inviteUserRepository.save(user);
@@ -200,10 +200,10 @@ public class EmailServiceV3 {
 
             final Elements elementAhref = doc.select("a[href]");
             if (elementAhref.size() != 0) {
-                String link = String.format("%s/%s?userId=%s&orgName=%s&refreshToken=%s",
+                String link = String.format("%s/%s?userId=%s&orgName=%s&refreshToken=%s&seq=%s",
                         emailConfig.getAuthUrl(), emailConfig.getInviteUrl(), userId, orgName, refreshToken, seq);
                 logger.info("link : {}", link);
-                link += "&seq="+seq;
+                //link += "&seq="+seq;
                 elementAhref.get(0).attr("href", link);
             }
 

@@ -95,7 +95,7 @@ public class CatalogService {
         logger.info("getStarterNamesList :: " + param.toString());
         JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class);
 
-        int no = param.getNo();
+        //int no = param.getNo();
         String searchKeyword = param.getSearchKeyword();
 
         if (null != searchKeyword && !"".equals(searchKeyword)) {
@@ -470,7 +470,8 @@ public class CatalogService {
         BuildpackCategory update = buildpackCategoryRepository.findOne(param.getNo());
         param.setCreated(update.getCreated());
         param.setLastmodified(new Date());
-        BuildpackCategory buildpackCategory = buildpackCategoryRepository.save(param);
+        //BuildpackCategory buildpackCategory = buildpackCategoryRepository.save(param);
+        buildpackCategoryRepository.save(param);
 
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
@@ -492,7 +493,8 @@ public class CatalogService {
         param.setParameter(jsonCheck(param.getParameter()));
         logger.info("updateServicePackCatalog2 :: " + param.toString());
 
-        ServicepackCategory servicepackCategory = servicepackCategoryRepository.save(param);
+        //ServicepackCategory servicepackCategory = servicepackCategoryRepository.save(param);
+        servicepackCategoryRepository.save(param);
 
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
@@ -580,6 +582,7 @@ public class CatalogService {
                 resultHistory.add(starterCategory);
             }
         } catch (Exception e) {
+            logger.info("starterpacknum none");
         }
 
         try {
@@ -589,6 +592,7 @@ public class CatalogService {
                 resultHistory.add(buildpackCategory);
             }
         } catch (Exception e) {
+            logger.info("buildpacknum none");
         }
 
         try {
@@ -598,8 +602,9 @@ public class CatalogService {
                 resultHistory.add(servicepackCategory);
             }
         } catch (Exception e) {
-
+            logger.info("servicepacknum none");
         }
+
         return new HashMap<String, Object>() {{
             put("list", resultHistory);
         }};

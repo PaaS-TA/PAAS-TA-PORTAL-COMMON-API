@@ -96,7 +96,7 @@ public class UserController {
 //                if (user.getImgPath() != null) glusterfsService.delete(user.getImgPath());
                 user.setImgPath((String) body.get("imgPath"));
             }
-            user.toString();
+            LOGGER.info(user.toString());
             int cnt = userService.updateUser(userId, user);
             result.put("result", cnt);
         }

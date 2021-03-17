@@ -170,7 +170,7 @@ public class EmailService {
     }
     public Map inviteAcceptUpdate(Map body) {
         try {
-            InviteUser inviteUser = new InviteUser();
+            //InviteUser inviteUser = new InviteUser();
 
             InviteUser user = inviteUserRepository.findById(Integer.parseInt(body.get("id").toString()));
 

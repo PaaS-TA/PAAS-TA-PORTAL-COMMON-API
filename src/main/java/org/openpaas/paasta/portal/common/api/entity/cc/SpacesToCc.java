@@ -70,19 +70,19 @@ public class SpacesToCc {
     }
 
     public Date getCreatedAt() {
-        return createdAt;
+        return createdAt == null ? null : new Date(createdAt.getTime());
     }
 
     public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+        this.createdAt = createdAt == null ? null : new Date(createdAt.getTime());
     }
 
     public Date getUpdatedAt() {
-        return updatedAt;
+        return updatedAt == null ? null : new Date(updatedAt.getTime());
     }
 
     public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
+        this.updatedAt = updatedAt == null ? null : new Date(updatedAt.getTime());
     }
 
     public String getName() {

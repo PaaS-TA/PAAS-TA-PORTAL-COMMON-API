@@ -1,6 +1,7 @@
 package org.openpaas.paasta.portal.common.api.domain.commonCode;
 
 
+import ch.qos.logback.core.CoreConstants;
 import org.jinq.orm.stream.JinqStream;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
@@ -184,9 +185,11 @@ public class CommonCodeService {
      * @return Map(자바클래스)
      */
     public Map<String,Object> insertDetailGroup(CodeGroup codeGroup) {
-        codeGroup = codeGroupRepository.save(codeGroup);
+        codeGroupRepository.save(codeGroup);
+
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+
         }};
     }
 
@@ -201,7 +204,7 @@ public class CommonCodeService {
         int count = codeDetailRepository.countByGroupId(codeDetail.getGroupId());
         System.out.println(count);
         codeDetail.setOrder(count+1);
-        codeDetail = codeDetailRepository.save(codeDetail);
+        codeDetailRepository.save(codeDetail);
 
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);

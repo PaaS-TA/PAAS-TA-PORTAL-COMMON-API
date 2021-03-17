@@ -79,7 +79,7 @@ public class EmailConfig {
     public boolean sendEmail(String to, String contents) {
         Boolean bRtn = false;
         try {
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            //ByteArrayOutputStream os = new ByteArrayOutputStream();
             // 인증
             Authenticator auth = auth();
 
@@ -116,6 +116,7 @@ public class EmailConfig {
     @Bean
     public MailProperties mailProperties() {
 
+        /*
         MailProperties mailProperties = new MailProperties() {{
             setHost(host);
             setPort(port);
@@ -123,6 +124,13 @@ public class EmailConfig {
             setPassword(password);
             setDefaultEncoding( Charset.forName(charset) );
         }};
+        */
+        MailProperties mailProperties = new MailProperties();
+        mailProperties.setHost(host);
+        mailProperties.setPort(port);
+        mailProperties.setUsername(useremail);
+        mailProperties.setPassword(password);
+        mailProperties.setDefaultEncoding(Charset.forName(charset));
 
         return mailProperties;
     }

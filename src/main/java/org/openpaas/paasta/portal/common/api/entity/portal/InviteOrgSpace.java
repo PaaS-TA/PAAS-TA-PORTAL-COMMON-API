@@ -107,11 +107,11 @@ public class InviteOrgSpace {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     public Date getCreateTime() {
-        return createTime;
+        return createTime == null ? null : new Date(createTime.getTime());
     }
 
     public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+        this.createTime = createTime == null ? null : new Date(createTime.getTime());
     }
 
     public int getAccessCnt() {

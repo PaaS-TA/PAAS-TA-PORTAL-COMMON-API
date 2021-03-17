@@ -179,7 +179,7 @@ public class UserManagementService {
     /**
      * 사용자 포탈 접속 성공 유무 수정
      */
-    public Map<String, Object> UpdateUserActive(String userId, UserDetail _userDetail) {
+    public Map<String, Object> updateUserActive(String userId, UserDetail _userDetail) {
         UserDetail userDetail = userDetailRepository.findByUserId(userId);
         if(userDetail == null || userDetail.getUserId().equals("admin")){
             return new HashMap<String, Object>() {{
@@ -187,7 +187,8 @@ public class UserManagementService {
             }};
         }
         userDetail.setActive(_userDetail.getActive());
-        userDetail = userDetailRepository.save(userDetail);
+        //userDetail = userDetailRepository.save(userDetail);
+        userDetailRepository.save(userDetail);
         return new HashMap<String, Object>() {{
             put("RESULT", Constants.RESULT_STATUS_SUCCESS);
         }};

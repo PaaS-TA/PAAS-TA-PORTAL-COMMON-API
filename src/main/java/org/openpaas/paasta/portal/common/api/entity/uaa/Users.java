@@ -99,19 +99,19 @@ public class Users {
     }
 
     public Date getCreated() {
-        return created;
+        return created == null ? null : new Date(created.getTime());
     }
 
     public void setCreated(Date created) {
-        this.created = created;
+        this.created = created == null ? null : new Date(created.getTime());
     }
 
     public Date getLastmodified() {
-        return lastmodified;
+        return lastmodified == null ? null : new Date(lastmodified.getTime());
     }
 
     public void setLastmodified(Date lastmodified) {
-        this.lastmodified = lastmodified;
+        this.lastmodified = lastmodified == null ? null : new Date(lastmodified.getTime());
     }
 
     public int getVersion() {
@@ -227,11 +227,11 @@ public class Users {
     }
 
     public Date getPasswdLastmodified() {
-        return passwdLastmodified;
+        return passwdLastmodified == null ? null : new Date(passwdLastmodified.getTime());
     }
 
     public void setPasswdLastmodified(Date passwdLastmodified) {
-        this.passwdLastmodified = passwdLastmodified;
+        this.passwdLastmodified = passwdLastmodified == null ? null : new Date(passwdLastmodified.getTime());
     }
 
     public String getLegacyVerification_behavior() {

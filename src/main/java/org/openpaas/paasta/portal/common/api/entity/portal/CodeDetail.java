@@ -166,20 +166,20 @@ public class CodeDetail {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     public Date getCreated() {
-        return created;
+        return created == null ? null : new Date(created.getTime());
     }
 
     public void setCreated(Date created) {
-        this.created = created;
+        this.created = created == null ? null : new Date(created.getTime());
     }
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     public Date getLastmodified() {
-        return lastmodified;
+        return lastmodified == null ? null : new Date(lastmodified.getTime());
     }
 
     public void setLastmodified(Date lastmodified) {
-        this.lastmodified = lastmodified;
+        this.lastmodified = lastmodified == null ? null : new Date(lastmodified.getTime());
     }
 
     public String getOrgKey() {

@@ -5,12 +5,15 @@ import org.openpaas.paasta.portal.common.api.entity.portal.BuildpackCategory;
 import org.openpaas.paasta.portal.common.api.entity.portal.CatalogHistory;
 import org.openpaas.paasta.portal.common.api.entity.portal.ServicepackCategory;
 import org.openpaas.paasta.portal.common.api.entity.portal.StarterCategory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Created by SEJI on 2018-03-06.
@@ -19,10 +22,11 @@ import java.util.Map;
 
 public class CatalogController {
 
+    private static final Logger logger = getLogger(CatalogController.class);
+    private final String V2_URL = "/v2";
+
     @Autowired
     private CatalogService catalogService;
-
-    private final String V2_URL = "/v2";
 
     /**
      * [앱 템플릿] 카탈로그 목록을 조회한다.
@@ -32,6 +36,7 @@ public class CatalogController {
      */
     @GetMapping(V2_URL + "/starterpacks")
     public Map<String, Object> getStarterNames(@ModelAttribute StarterCategory param) {
+        logger.info("getStarterNames");
         return catalogService.getStarterNamesList(param);
     }
 

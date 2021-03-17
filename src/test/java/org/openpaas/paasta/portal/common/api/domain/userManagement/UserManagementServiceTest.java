@@ -188,7 +188,7 @@ public class UserManagementServiceTest {
 
         when(userDetailRepository.findByUserId(anyString())).thenReturn(userDetail);
         when(userDetailRepository.save(userDetail)).thenReturn(userDetail);
-        Map<String, Object> result = userManagementService.UpdateUserActive("userId", new UserDetail());
+        Map<String, Object> result = userManagementService.updateUserActive("userId", new UserDetail());
 
         Assert.assertEquals(thenReturnMap, result);
     }

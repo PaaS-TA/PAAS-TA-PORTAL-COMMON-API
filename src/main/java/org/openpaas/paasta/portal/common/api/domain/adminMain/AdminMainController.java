@@ -1,11 +1,14 @@
 package org.openpaas.paasta.portal.common.api.domain.adminMain;
 
 import org.openpaas.paasta.portal.common.api.entity.cc.OrganizationsCc;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Created by indra on 2018-02-12.
@@ -13,6 +16,7 @@ import java.util.Map;
 @RestController
 public class AdminMainController {
 
+    private static final Logger logger = getLogger(AdminMainController.class);
     private final String V2_URL = "/v2";
 
     @Autowired
@@ -48,6 +52,7 @@ public class AdminMainController {
      */
     @GetMapping(value = {V2_URL + "/statistics/organizations/{organizationId}/spaces"})
     public Map<String, Object> getTotalSpaceList(@PathVariable String organizationId) {
+        logger.info("getTotalSpaceList");
         return adminMainService.getTotalSpaceList(organizationId);
     }
 }
