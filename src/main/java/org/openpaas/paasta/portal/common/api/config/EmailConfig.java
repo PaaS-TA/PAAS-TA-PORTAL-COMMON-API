@@ -152,6 +152,11 @@ public class EmailConfig {
         MailProperties mailProperties = mailProperties();
         Properties props = new Properties() {{
             // SSL 사용하는 경우
+            put("mail.smtp.starttls.enable", starttls_enable);
+            put("mail.transport.protocol", "smtp");
+            put("mail.smtp.ssl.trust", mailProperties.getHost());
+            put("mail.smtp.ssl.protocols", "TLSv1.2");
+
             put("mail.smtp.host", mailProperties.getHost()); //SMTP Host
             put("mail.smtp.socketFactory.port", mailProperties.getPort()); //SSL Port
             put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory"); //SSL Factory Class
