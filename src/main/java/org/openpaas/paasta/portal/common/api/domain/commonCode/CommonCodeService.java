@@ -185,10 +185,17 @@ public class CommonCodeService {
      * @return Map(자바클래스)
      */
     public Map<String,Object> insertDetailGroup(CodeGroup codeGroup) {
-        codeGroupRepository.save(codeGroup);
+        String resultStr;
+
+        if (codeGroupRepository.findById(codeGroup.getId()).isEmpty()) {
+            resultStr = Constants.RESULT_STATUS_SUCCESS;
+            codeGroupRepository.save(codeGroup);
+        } else {
+            resultStr = Constants.RESULT_STATUS_FAIL_DUPLICATED;
+        }
 
         return new HashMap<String, Object>() {{
-            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+            put("RESULT", resultStr);
 
         }};
     }
@@ -220,7 +227,7 @@ public class CommonCodeService {
     public String updateCommonGroup(String id,CodeGroup codeGroup) {
         String resultStr = Constants.RESULT_STATUS_SUCCESS;
 
-        if(codeGroupRepository.findById(id) != null) {
+        if(!codeGroupRepository.findById(id).isEmpty()) {
             codeGroup.setId(codeGroup.getId());
             codeGroup.setName(codeGroup.getName());
             codeGroup.setUserId(codeGroup.getUserId());
