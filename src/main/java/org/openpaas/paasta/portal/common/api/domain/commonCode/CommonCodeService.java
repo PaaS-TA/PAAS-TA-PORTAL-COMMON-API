@@ -208,13 +208,21 @@ public class CommonCodeService {
      * @return Map(자바클래스)
      */
     public Map<String,Object> insertDetail(CodeDetail codeDetail) {
-        int count = codeDetailRepository.countByGroupId(codeDetail.getGroupId());
-        System.out.println(count);
-        codeDetail.setOrder(count+1);
-        codeDetailRepository.save(codeDetail);
+        String resultStr;
+
+        if (!codeDetailRepository.existsByKey(codeDetail.getKey())) {
+            resultStr = Constants.RESULT_STATUS_SUCCESS;
+
+            int count = codeDetailRepository.countByGroupId(codeDetail.getGroupId());
+            System.out.println(count);
+            codeDetail.setOrder(count+1);
+            codeDetailRepository.save(codeDetail);
+        } else {
+            resultStr = Constants.RESULT_STATUS_FAIL_DUPLICATED;
+        }
 
         return new HashMap<String, Object>() {{
-            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+            put("RESULT", resultStr);
         }};
     }
 
