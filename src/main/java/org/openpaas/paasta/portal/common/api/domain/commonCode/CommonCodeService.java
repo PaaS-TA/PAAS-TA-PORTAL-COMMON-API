@@ -184,14 +184,15 @@ public class CommonCodeService {
      * @param codeGroup CodeGroup (모델클래스)
      * @return Map(자바클래스)
      */
-    public Map<String,Object> insertDetailGroup(CodeGroup codeGroup) {
+    public Map<String,Object> insertDetailGroup(CodeGroup codeGroup){
         String resultStr;
+        String id = codeGroup.getId();
 
-        if (codeGroupRepository.findById(codeGroup.getId()).isEmpty()) {
-            resultStr = Constants.RESULT_STATUS_SUCCESS;
+        if(codeGroupRepository.findById(id).size() == 0) {
             codeGroupRepository.save(codeGroup);
-        } else {
-            resultStr = Constants.RESULT_STATUS_FAIL_DUPLICATED;
+            resultStr = Constants.RESULT_STATUS_SUCCESS;
+        }else {
+            resultStr = Constants.RESULT_STATUS_FAIL;
         }
 
         return new HashMap<String, Object>() {{
@@ -208,21 +209,13 @@ public class CommonCodeService {
      * @return Map(자바클래스)
      */
     public Map<String,Object> insertDetail(CodeDetail codeDetail) {
-        String resultStr;
-
-        if (!codeDetailRepository.existsByKey(codeDetail.getKey())) {
-            resultStr = Constants.RESULT_STATUS_SUCCESS;
-
-            int count = codeDetailRepository.countByGroupId(codeDetail.getGroupId());
-            System.out.println(count);
-            codeDetail.setOrder(count+1);
-            codeDetailRepository.save(codeDetail);
-        } else {
-            resultStr = Constants.RESULT_STATUS_FAIL_DUPLICATED;
-        }
+        int count = codeDetailRepository.countByGroupId(codeDetail.getGroupId());
+        System.out.println(count);
+        codeDetail.setOrder(count+1);
+        codeDetailRepository.save(codeDetail);
 
         return new HashMap<String, Object>() {{
-            put("RESULT", resultStr);
+            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
         }};
     }
 
@@ -235,7 +228,7 @@ public class CommonCodeService {
     public String updateCommonGroup(String id,CodeGroup codeGroup) {
         String resultStr = Constants.RESULT_STATUS_SUCCESS;
 
-        if(!codeGroupRepository.findById(id).isEmpty()) {
+        if(codeGroupRepository.findById(id) != null) {
             codeGroup.setId(codeGroup.getId());
             codeGroup.setName(codeGroup.getName());
             codeGroup.setUserId(codeGroup.getUserId());
