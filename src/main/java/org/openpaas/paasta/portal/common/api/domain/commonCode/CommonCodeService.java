@@ -2,6 +2,7 @@ package org.openpaas.paasta.portal.common.api.domain.commonCode;
 
 
 import ch.qos.logback.core.CoreConstants;
+import org.aspectj.apache.bcel.classfile.Code;
 import org.jinq.orm.stream.JinqStream;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
@@ -189,15 +190,23 @@ public class CommonCodeService {
         String id = codeGroup.getId();
 
         if(codeGroupRepository.findById(id).size() == 0) {
-            codeGroupRepository.save(codeGroup);
+            try {
+                //throw new Exception();
+                codeGroupRepository.save(codeGroup);
+            } catch (Exception e){
+                e.printStackTrace();
+                return new HashMap<String, Object>() {{
+                    put("RESULT", Constants.RESULT_STATUS_FAIL);
+                }};
+            }
             resultStr = Constants.RESULT_STATUS_SUCCESS;
-        }else {
-            resultStr = Constants.RESULT_STATUS_FAIL;
+        } else {
+            resultStr = Constants.RESULT_STATUS_FAIL_DUPLICATED;
         }
+
 
         return new HashMap<String, Object>() {{
             put("RESULT", resultStr);
-
         }};
     }
 
@@ -209,13 +218,32 @@ public class CommonCodeService {
      * @return Map(자바클래스)
      */
     public Map<String,Object> insertDetail(CodeDetail codeDetail) {
-        int count = codeDetailRepository.countByGroupId(codeDetail.getGroupId());
-        System.out.println(count);
-        codeDetail.setOrder(count+1);
-        codeDetailRepository.save(codeDetail);
+        String resultStr;
+        String groupId = codeDetail.getGroupId();
+        String key = codeDetail.getKey();
+
+        if(codeDetailRepository.findByGroupIdAndKey(groupId, key).size() == 0) {
+            try {
+                int count = codeDetailRepository.countByGroupId(codeDetail.getGroupId());
+                System.out.println(count);
+                codeDetail.setOrder(count+1);
+
+                codeDetailRepository.save(codeDetail);
+            } catch (Exception e){
+                e.printStackTrace();
+                return new HashMap<String, Object>() {{
+                    put("RESULT", Constants.RESULT_STATUS_FAIL);
+                }};
+            }
+
+            resultStr = Constants.RESULT_STATUS_SUCCESS;
+        } else {
+            resultStr = Constants.RESULT_STATUS_FAIL_DUPLICATED;
+        }
+
 
         return new HashMap<String, Object>() {{
-            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+            put("RESULT", resultStr);
         }};
     }
 
@@ -246,16 +274,32 @@ public class CommonCodeService {
      * @return Map(자바클래스)
      */
     public Map<String,Object> updateCommonDetail(int no, CodeDetail codeDetail) {
-        String resultStr = Constants.RESULT_STATUS_SUCCESS;
+        String resultStr;
+
         CodeDetail update=codeDetailRepository.findOne(no);
+        String groupId = codeDetail.getGroupId();
+        String key = codeDetail.getKey();
 
-        codeDetail.setGroupId(update.getGroupId());
-        codeDetail.setCreated(update.getCreated());
 
-        codeDetailRepository.save(codeDetail);
+        if(codeDetailRepository.findByGroupIdAndKey(groupId, key).size() == 0) {
+            try {
+                codeDetail.setGroupId(update.getGroupId());
+                codeDetail.setCreated(update.getCreated());
+                codeDetailRepository.save(codeDetail);
+            } catch (Exception e){
+                e.printStackTrace();
+                return new HashMap<String, Object>() {{
+                    put("RESULT", Constants.RESULT_STATUS_FAIL);
+                }};
+            }
+
+            resultStr = Constants.RESULT_STATUS_SUCCESS;
+        } else {
+            resultStr = Constants.RESULT_STATUS_FAIL_DUPLICATED;
+        }
 
         return new HashMap<String, Object>() {{
-            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+            put("RESULT", resultStr);
         }};
     }
 
