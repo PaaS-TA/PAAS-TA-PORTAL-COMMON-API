@@ -276,17 +276,23 @@ public class CommonCodeService {
     public Map<String,Object> updateCommonDetail(int no, CodeDetail codeDetail) {
         String resultStr;
 
-        CodeDetail update=codeDetailRepository.findOne(no);
+        CodeDetail update = codeDetailRepository.findOne(no);
         String groupId = codeDetail.getGroupId();
         String key = codeDetail.getKey();
 
-
-        if(codeDetailRepository.findByGroupIdAndKey(groupId, key).size() == 0) {
+        if (!update.getKey().equals(key) && codeDetailRepository.findByGroupIdAndKey(groupId, key).size() != 0) {
+            resultStr = Constants.RESULT_STATUS_FAIL_DUPLICATED;
+        } else {
             try {
-                codeDetail.setGroupId(update.getGroupId());
-                codeDetail.setCreated(update.getCreated());
-                codeDetailRepository.save(codeDetail);
-            } catch (Exception e){
+                if(update.getKey().equals(key)) {
+                    update.setKey(codeDetail.getKey());
+                }
+                update.setValue(codeDetail.getValue());
+                update.setSummary(codeDetail.getSummary());
+                update.setUseYn(codeDetail.getUseYn());
+
+                codeDetailRepository.save(update);
+            } catch (Exception e) {
                 e.printStackTrace();
                 return new HashMap<String, Object>() {{
                     put("RESULT", Constants.RESULT_STATUS_FAIL);
@@ -294,8 +300,6 @@ public class CommonCodeService {
             }
 
             resultStr = Constants.RESULT_STATUS_SUCCESS;
-        } else {
-            resultStr = Constants.RESULT_STATUS_FAIL_DUPLICATED;
         }
 
         return new HashMap<String, Object>() {{
