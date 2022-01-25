@@ -284,9 +284,7 @@ public class CommonCodeService {
             resultStr = Constants.RESULT_STATUS_FAIL_DUPLICATED;
         } else {
             try {
-                if(update.getKey().equals(key)) {
-                    update.setKey(codeDetail.getKey());
-                }
+                update.setKey(codeDetail.getKey());
                 update.setValue(codeDetail.getValue());
                 update.setSummary(codeDetail.getSummary());
                 update.setUseYn(codeDetail.getUseYn());
