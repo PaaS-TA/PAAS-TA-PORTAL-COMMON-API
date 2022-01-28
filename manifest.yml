@@ -13,34 +13,34 @@ applications:
     spring_security_username: admin
     spring_security_password: openpaasta
 
-    datasource_cc_driver-class-name: <PAAS-TA_DB_DRIVER>                                         # (e.g. org.postgresql.Driver OR com.mysql.jdbc.Driver)
-    datasource_cc_url: jdbc:<PAAS-TA_DATABASE>://<PAAS-TA_DB_IP>:<PAAS-TA_DB_PORT>/<CC_DB_NAME>  # (e.g. PAAS-TA_DATABASE :: postgresql OR mysql)
-    datasource_cc_username: <CC_DB_USER_NAME>
-    datasource_cc_password: <CC_DB_USER_PASSWORD>
+    datasource_cc_driver-class-name: com.mysql.jdbc.Driver                                         # (e.g. org.postgresql.Driver OR com.mysql.jdbc.Driver)
+    datasource_cc_url: jdbc:mysql://10.0.1.119:13307/cloud_controller  # (e.g. PAAS-TA_DATABASE :: postgresql OR mysql)
+    datasource_cc_username: cloud_controller
+    datasource_cc_password: cc_admin
     datasource_portal_driver-class-name: org.mariadb.jdbc.Driver
-    datasource_portal_url: jdbc:mariadb://<PORTAL_DB_IP>:<PORTAL_DB_PORT>/portaldb
-    datasource_portal_username: <PORTAL_DB_USER>
-    datasource_portal_password: <PORTAL_DB_USER_PASSWORD>
-    datasource_uaa_driver-class-name: <PAAS-TA_DB_DRIVER>                                          # (e.g. org.postgresql.Driver OR com.mysql.jdbc.Driver)
-    datasource_uaa_url: jdbc:<PAAS-TA_DATABASE>://<PAAS-TA_DB_IP>:<PAAS-TA_DB_PORT>/<UAA_DB_NAME>  # (e.g. PAAS-TA_DATABASE :: postgresql OR mysql)
-    datasource_uaa_username: <UAA_DB_USER_NAME>
-    datasource_uaa_password: <UAA_DB_USER_PASSWORD>
+    datasource_portal_url: jdbc:mariadb://10.0.1.121:13306/portaldb          # (e.g. PORTAL_DB_IP : portal-container-infra IP)
+    datasource_portal_username: root
+    datasource_portal_password: Paasta@2019
+    datasource_uaa_driver-class-name: com.mysql.jdbc.Driver                                          # (e.g. org.postgresql.Driver OR com.mysql.jdbc.Driver)
+    datasource_uaa_url: jdbc:mysql://10.0.1.119:13307/uaa  # (e.g. PAAS-TA_DATABASE :: postgresql OR mysql)
+    datasource_uaa_username: uaa
+    datasource_uaa_password: uaa_admin
 
     jpa_show-sql: true
     jpa_hibernate_ddl-auto: none
     jpa_hibernate_naming_strategy: org.hibernate.dialect.MySQL5Dialect
     jpa_generate-ddl: false
 
-    mail_smtp_host: <MAIL_SMTP_HOST>
-    mail_smtp_port: <MAIL_SMTP_PORT>
-    mail_smtp_username: <MAIL_SMTP_USERNAME>
-    mail_smtp_password: <MAIL_SMTP_PASSWORD>
-    mail_smtp_useremail: <MAIL_SMTP_USEREMAIL>
+    mail_smtp_host: smtp.gmail.com                                         # (e.g. smtp.gmail.com)
+    mail_smtp_port: 465                                         # (e.g. 465)
+    mail_smtp_username: dyoonnam                                 # (e.g. paasta)
+    mail_smtp_password: crossent                                 # (e.g. paasta)
+    mail_smtp_useremail: dyoonnam@crossent.com                               # (e.g. paas-ta@gmail.com)
     mail_smtp_properties_auth: true
     mail_smtp_properties_starttls_enable: true
     mail_smtp_properties_starttls_required: true
     mail_smtp_properties_maximumTotalQps: 90
-    mail_smtp_properties_authUrl: http://<MAIL_SMTP_PROPERTIES_AUTHURL>
+    mail_smtp_properties_authUrl: http://portal-web-user.10.0.1.221.nip.io      # (e.g. portal-web-user.10.0.1.221.nip.io)
     mail_smtp_properties_charset: UTF-8
     mail_smtp_properties_subject: "PaaS-TA User Potal"
     mail_smtp_properties_createUrl: authcreate
@@ -48,11 +48,11 @@ applications:
     mail_smtp_properties_inviteUrl: inviteorg
 
     paasta_portal_api_authorization_base64: Basic YWRtaW46b3BlbnBhYXN0YQ==
-    paasta_portal_api_zuulUrl_cfapi: http://portal-gateway.<DOMAIN>/portalapi
-    paasta_portal_api_zuulUrl_commonapi: http://portal-gateway.<DOMAIN>/commonapi
-    paasta_portal_api_zuulUrl_storageapi: http://portal-gateway.<DOMAIN>/storageapi
+    paasta_portal_api_zuulUrl_cfapi: http://portal-gateway.10.0.1.221.nip.io/portalapi
+    paasta_portal_api_zuulUrl_commonapi: http://portal-gateway.10.0.1.221.nip.io/commonapi
+    paasta_portal_api_zuulUrl_storageapi: http://portal-gateway.10.0.1.221.nip.io/storageapi
     paasta_portal_storageapi_type: swift
 
-    eureka_client_serviceUrl_defaultZone: http://portal-registration.<DOMAIN>/eureka/
+    eureka_client_serviceUrl_defaultZone: http://portal-registration.10.0.1.221.nip.io/eureka/
     eureka_instance_hostname: ${vcap.application.uris[0]}
     eureka_instance_nonSecurePort: 80
