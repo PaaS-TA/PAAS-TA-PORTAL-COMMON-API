@@ -2,6 +2,7 @@ package org.openpaas.paasta.portal.common.api.domain.commonCode;
 
 
 import ch.qos.logback.core.CoreConstants;
+import org.aspectj.apache.bcel.classfile.Code;
 import org.jinq.orm.stream.JinqStream;
 import org.openpaas.paasta.portal.common.api.config.Constants;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
@@ -184,12 +185,28 @@ public class CommonCodeService {
      * @param codeGroup CodeGroup (모델클래스)
      * @return Map(자바클래스)
      */
-    public Map<String,Object> insertDetailGroup(CodeGroup codeGroup) {
-        codeGroupRepository.save(codeGroup);
+    public Map<String,Object> insertDetailGroup(CodeGroup codeGroup){
+        String resultStr;
+        String id = codeGroup.getId();
+
+        if(codeGroupRepository.findById(id).size() == 0) {
+            try {
+                //throw new Exception();
+                codeGroupRepository.save(codeGroup);
+            } catch (Exception e){
+                e.printStackTrace();
+                return new HashMap<String, Object>() {{
+                    put("RESULT", Constants.RESULT_STATUS_FAIL);
+                }};
+            }
+            resultStr = Constants.RESULT_STATUS_SUCCESS;
+        } else {
+            resultStr = Constants.RESULT_STATUS_FAIL_DUPLICATED;
+        }
+
 
         return new HashMap<String, Object>() {{
-            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
-
+            put("RESULT", resultStr);
         }};
     }
 
@@ -201,13 +218,32 @@ public class CommonCodeService {
      * @return Map(자바클래스)
      */
     public Map<String,Object> insertDetail(CodeDetail codeDetail) {
-        int count = codeDetailRepository.countByGroupId(codeDetail.getGroupId());
-        System.out.println(count);
-        codeDetail.setOrder(count+1);
-        codeDetailRepository.save(codeDetail);
+        String resultStr;
+        String groupId = codeDetail.getGroupId();
+        String key = codeDetail.getKey();
+
+        if(codeDetailRepository.findByGroupIdAndKey(groupId, key).size() == 0) {
+            try {
+                int count = codeDetailRepository.countByGroupId(codeDetail.getGroupId());
+                System.out.println(count);
+                codeDetail.setOrder(count+1);
+
+                codeDetailRepository.save(codeDetail);
+            } catch (Exception e){
+                e.printStackTrace();
+                return new HashMap<String, Object>() {{
+                    put("RESULT", Constants.RESULT_STATUS_FAIL);
+                }};
+            }
+
+            resultStr = Constants.RESULT_STATUS_SUCCESS;
+        } else {
+            resultStr = Constants.RESULT_STATUS_FAIL_DUPLICATED;
+        }
+
 
         return new HashMap<String, Object>() {{
-            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+            put("RESULT", resultStr);
         }};
     }
 
@@ -238,16 +274,34 @@ public class CommonCodeService {
      * @return Map(자바클래스)
      */
     public Map<String,Object> updateCommonDetail(int no, CodeDetail codeDetail) {
-        String resultStr = Constants.RESULT_STATUS_SUCCESS;
-        CodeDetail update=codeDetailRepository.findOne(no);
+        String resultStr;
 
-        codeDetail.setGroupId(update.getGroupId());
-        codeDetail.setCreated(update.getCreated());
+        CodeDetail update = codeDetailRepository.findOne(no);
+        String groupId = codeDetail.getGroupId();
+        String key = codeDetail.getKey();
 
-        codeDetailRepository.save(codeDetail);
+        if (!update.getKey().equals(key) && codeDetailRepository.findByGroupIdAndKey(groupId, key).size() != 0) {
+            resultStr = Constants.RESULT_STATUS_FAIL_DUPLICATED;
+        } else {
+            try {
+                update.setKey(codeDetail.getKey());
+                update.setValue(codeDetail.getValue());
+                update.setSummary(codeDetail.getSummary());
+                update.setUseYn(codeDetail.getUseYn());
+
+                codeDetailRepository.save(update);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new HashMap<String, Object>() {{
+                    put("RESULT", Constants.RESULT_STATUS_FAIL);
+                }};
+            }
+
+            resultStr = Constants.RESULT_STATUS_SUCCESS;
+        }
 
         return new HashMap<String, Object>() {{
-            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+            put("RESULT", resultStr);
         }};
     }
 
