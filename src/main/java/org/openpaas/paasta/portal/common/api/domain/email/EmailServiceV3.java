@@ -16,9 +16,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -37,10 +35,16 @@ public class EmailServiceV3 {
     @Autowired
     CommonService commonService;
 
-    public Map resetEmail(String userId, String refreshToken, String seq) {
+    public Map resetEmail(String userId, String refreshToken, String seq, String useLang) {
         logger.info("createEmail >> userId : " + userId + " " + "seq : " + seq);
         Map map = new HashMap();
-        ClassPathResource cpr = new ClassPathResource("template/loginpass.html");
+
+        String templatePath = "template/ko/loginpass.html";
+        if (Objects.equals(useLang, "en")) {
+            templatePath = "template/en/loginpass.html";
+        }
+
+        ClassPathResource cpr = new ClassPathResource(templatePath);
 
         try {
             byte[] bdata = FileCopyUtils.copyToByteArray(cpr.getInputStream());
@@ -76,11 +80,17 @@ public class EmailServiceV3 {
 
     }
 
-    public Map createEmail(String userId, String refreshToken, String seq) {
+    public Map createEmail(String userId, String refreshToken, String seq, String useLang) {
         logger.info("createEmail >> userId : " + userId + " " + "seq : " + seq);
         Map map = new HashMap();
+
+        String templatePath = "template/ko/loginemail.html";;
+        if (Objects.equals(useLang, "en")) {
+            templatePath = "template/en/loginemail.html";
+        }
+
         try {
-            ClassPathResource cpr = new ClassPathResource("template/loginemail.html");
+            ClassPathResource cpr = new ClassPathResource(templatePath);
             byte[] bdata = FileCopyUtils.copyToByteArray(cpr.getInputStream());
             String data = new String(bdata, emailConfig.getCharset());
             Document doc = Jsoup.parse(data);
@@ -109,7 +119,7 @@ public class EmailServiceV3 {
         return map;
     }
 
-    public Boolean inviteOrgEmail(Map body) {
+    public Boolean inviteOrgEmail(Map body, String useLang) {
         String[] userEmails;
 
         if (body.get("userEmail").toString().equals(""))
@@ -140,7 +150,7 @@ public class EmailServiceV3 {
                 //TODO 성공한 사람만 email 날릴 것인지
                 inviteUserRepository.save(inviteUser);
 
-                inviteOrgEmailSend(userEmail, body.get("orgName").toString(), randomId, body.get("seq").toString());
+                inviteOrgEmailSend(userEmail, body.get("orgName").toString(), randomId, body.get("seq").toString(), useLang);
             }
         } catch (Exception e) {
             logger.info("ERROR ::" + e.getMessage());
@@ -189,11 +199,17 @@ public class EmailServiceV3 {
         return body;
     }
 
-    public Map inviteOrgEmailSend(String userId, String orgName, String refreshToken, String seq) {
+    public Map inviteOrgEmailSend(String userId, String orgName, String refreshToken, String seq, String useLang) {
         logger.info("inviteOrgEmailSend >> userId : " + userId + "seq : " + seq);
         Map map = new HashMap();
+
+        String templatePath = "template/ko/invitation.html";;
+        if (Objects.equals(useLang, "en")) {
+            templatePath = "template/en/invitation.html";
+        }
+
         try {
-            ClassPathResource cpr = new ClassPathResource("template/invitation.html");
+            ClassPathResource cpr = new ClassPathResource(templatePath);
             byte[] bdata = FileCopyUtils.copyToByteArray(cpr.getInputStream());
             String data = new String(bdata, emailConfig.getCharset());
             Document doc = Jsoup.parse(data);

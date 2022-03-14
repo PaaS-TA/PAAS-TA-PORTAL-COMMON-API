@@ -219,21 +219,21 @@ public class UserController {
      * @throws Exception the exception
      */
     @PostMapping(V2_URL + "/users/create/email")
-    public Map<String, Object> createUserEmail(@RequestBody Map body) throws Exception {
-        Map result = userService.createRequestUser(body);
+    public Map<String, Object> createUserEmail(@RequestBody Map body, @RequestHeader("useLang") String lang) throws Exception {
+        Map result = userService.createRequestUser(body, lang);
         return result;
     }
 
     /**
-     * 사용자를 생성하기 위해 인증 메일을 발송한다.
+     * 비밀번호를 초기화하기 위해 인증 메일을 발송한다.
      *
      * @return map all user name
      * @throws Exception the exception
      */
 
     @PostMapping(V2_URL + "/users/password/email")
-    public Map<String, Object> resetRequestUser(@RequestBody Map body) throws Exception {
-        Map result = userService.resetRequestUser(body);
+    public Map<String, Object> resetRequestUser(@RequestBody Map body, @RequestHeader("useLang") String lang) throws Exception {
+        Map result = userService.resetRequestUser(body, lang);
         return result;
     }
 
