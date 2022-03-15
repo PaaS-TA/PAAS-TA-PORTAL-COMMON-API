@@ -16,7 +16,10 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -84,7 +87,7 @@ public class EmailServiceV3 {
         logger.info("createEmail >> userId : " + userId + " " + "seq : " + seq);
         Map map = new HashMap();
 
-        String templatePath = "template/ko/loginemail.html";;
+        String templatePath = "template/ko/loginemail.html";
         if (Objects.equals(useLang, "en")) {
             templatePath = "template/en/loginemail.html";
         }
@@ -203,7 +206,7 @@ public class EmailServiceV3 {
         logger.info("inviteOrgEmailSend >> userId : " + userId + "seq : " + seq);
         Map map = new HashMap();
 
-        String templatePath = "template/ko/invitation.html";;
+        String templatePath = "template/ko/invitation.html";
         if (Objects.equals(useLang, "en")) {
             templatePath = "template/en/invitation.html";
         }

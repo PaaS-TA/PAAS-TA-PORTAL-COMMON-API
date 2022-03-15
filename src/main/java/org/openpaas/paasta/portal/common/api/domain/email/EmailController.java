@@ -1,6 +1,5 @@
 package org.openpaas.paasta.portal.common.api.domain.email;
 
-import org.openpaas.paasta.portal.common.api.entity.portal.InviteUser;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,9 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import static org.slf4j.LoggerFactory.getLogger;

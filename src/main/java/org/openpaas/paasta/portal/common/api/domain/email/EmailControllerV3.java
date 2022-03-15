@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Locale;
 import java.util.Map;
 
 import static org.slf4j.LoggerFactory.getLogger;

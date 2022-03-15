@@ -86,7 +86,7 @@ public class EmailService {
         logger.info("createEmail ::: " + userId);
         Map map = new HashMap();
 
-        String templatePath = "template/ko/loginemail.html";;
+        String templatePath = "template/ko/loginemail.html";
         if (Objects.equals(useLang, "en")) {
             templatePath = "template/en/loginemail.html";
         }
@@ -202,7 +202,7 @@ public class EmailService {
         logger.info("createEmail ::: " + userId);
         Map map = new HashMap();
 
-        String templatePath = "template/ko/invitation.html";;
+        String templatePath = "template/ko/invitation.html";
         if (Objects.equals(useLang, "en")) {
             templatePath = "template/en/invitation.html";
         }
