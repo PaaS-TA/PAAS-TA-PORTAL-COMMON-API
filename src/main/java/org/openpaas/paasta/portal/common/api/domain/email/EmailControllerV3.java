@@ -28,7 +28,7 @@ public class EmailControllerV3 {
      * @return the menu list
      */
     @PostMapping(value = {"/v3/email/reset"})
-    public Map<String, Object> expiredEmail(HttpServletRequest request, @RequestBody Map body, @RequestHeader("useLang") String lang) {
+    public Map<String, Object> expiredEmail(HttpServletRequest request, @RequestBody Map body, @RequestHeader(value = "useLang") String lang) {
         String seq =  request.getParameter("seq");
         body.put("seq",seq);
         String refreshToken = "";
@@ -45,7 +45,7 @@ public class EmailControllerV3 {
      * @return the menu list
      */
     @PostMapping(value = {"/v3/email/create"})
-    public Map<String, Object> createEmail(HttpServletRequest request, @RequestBody Map body, @RequestHeader("useLang") String lang) {
+    public Map<String, Object> createEmail(HttpServletRequest request, @RequestBody Map body, @RequestHeader(value = "useLang") String lang) {
         String seq =  request.getParameter("seq");
         body.put("seq",seq);
         String refreshToken = "";

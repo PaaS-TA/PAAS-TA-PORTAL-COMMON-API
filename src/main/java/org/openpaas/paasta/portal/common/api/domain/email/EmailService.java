@@ -7,6 +7,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.openpaas.paasta.portal.common.api.config.EmailConfig;
+import org.openpaas.paasta.portal.common.api.config.LanguageConfig;
 import org.openpaas.paasta.portal.common.api.domain.common.CommonService;
 import org.openpaas.paasta.portal.common.api.entity.portal.InviteUser;
 import org.openpaas.paasta.portal.common.api.repository.portal.InviteUserRepository;
@@ -19,7 +20,6 @@ import org.springframework.util.FileCopyUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -38,13 +38,18 @@ public class EmailService {
     @Autowired
     CommonService commonService;
 
+    @Autowired
+    LanguageConfig languageConfig;
+
     public Map resetEmail(String userId, String refreshToken, String useLang) {
         logger.info("resetEmail ::: " + userId);
         Map map = new HashMap();
 
         String templatePath = "template/ko/loginpass.html";
-        if (Objects.equals(useLang, "en")) {
-            templatePath = "template/en/loginpass.html";
+
+        List<String> languageList = languageConfig.getLanguageList();
+        if(languageList.contains(useLang)) {
+            templatePath = "template/" + useLang + "/loginpass.html";
         }
 
         ClassPathResource cpr = new ClassPathResource(templatePath);
@@ -87,8 +92,10 @@ public class EmailService {
         Map map = new HashMap();
 
         String templatePath = "template/ko/loginemail.html";
-        if (Objects.equals(useLang, "en")) {
-            templatePath = "template/en/loginemail.html";
+
+        List<String> languageList = languageConfig.getLanguageList();
+        if(languageList.contains(useLang)) {
+            templatePath = "template/" + useLang + "/loginemail.html";
         }
 
         try {
@@ -203,8 +210,10 @@ public class EmailService {
         Map map = new HashMap();
 
         String templatePath = "template/ko/invitation.html";
-        if (Objects.equals(useLang, "en")) {
-            templatePath = "template/en/invitation.html";
+
+        List<String> languageList = languageConfig.getLanguageList();
+        if(languageList.contains(useLang)) {
+            templatePath = "template/" + useLang + "/invitation.html";
         }
 
         try {

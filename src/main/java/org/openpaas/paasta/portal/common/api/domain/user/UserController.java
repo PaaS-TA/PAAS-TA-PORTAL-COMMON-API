@@ -215,7 +215,7 @@ public class UserController {
      * @throws Exception the exception
      */
     @PostMapping(V2_URL + "/users/create/email")
-    public Map<String, Object> createUserEmail(@RequestBody Map body, @RequestHeader("useLang") String lang) throws Exception {
+    public Map<String, Object> createUserEmail(@RequestBody Map body, @RequestHeader(value = "useLang") String lang) throws Exception {
         Map result = userService.createRequestUser(body, lang);
         return result;
     }
@@ -228,7 +228,7 @@ public class UserController {
      */
 
     @PostMapping(V2_URL + "/users/password/email")
-    public Map<String, Object> resetRequestUser(@RequestBody Map body, @RequestHeader("useLang") String lang) throws Exception {
+    public Map<String, Object> resetRequestUser(@RequestBody Map body, @RequestHeader(value = "useLang") String lang) throws Exception {
         Map result = userService.resetRequestUser(body, lang);
         return result;
     }

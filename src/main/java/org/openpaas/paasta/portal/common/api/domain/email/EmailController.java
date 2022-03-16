@@ -30,7 +30,7 @@ public class EmailController {
      * @return the menu list
      */
     @PostMapping(value = {"/v2/email/reset"})
-    public Map<String, Object> expiredEmail(@RequestBody Map body, @RequestHeader("useLang") String lang) {
+    public Map<String, Object> expiredEmail(@RequestBody Map body, @RequestHeader(value = "useLang") String lang) {
         String refreshToken = "";
         if (body.get("refreshToken") != null) {
             refreshToken = body.get("refreshToken").toString();
@@ -48,7 +48,7 @@ public class EmailController {
      * @return the menu list
      */
     @PostMapping(value = {"/v2/email/create"})
-    public Map<String, Object> createEmail(@RequestBody Map body, @RequestHeader("useLang") String lang) {
+    public Map<String, Object> createEmail(@RequestBody Map body, @RequestHeader(value = "useLang") String lang) {
         String refreshToken = "";
         if (body.get("refreshToken") != null) {
             refreshToken = body.get("refreshToken").toString();
