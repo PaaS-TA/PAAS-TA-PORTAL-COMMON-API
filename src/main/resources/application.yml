@@ -83,7 +83,7 @@ eureka:
     lease-renewal-interval-in-seconds: 10
 
 # internationalization
-languageList: ko,en,ja,zh
+languageList: <PORTAL_USE_LANGUAGE>
 
 #Hystrix Setting(current version not used)
 #hystrix:

@@ -56,3 +56,5 @@ applications:
     eureka_client_serviceUrl_defaultZone: http://portal-registration.<DOMAIN>/eureka/
     eureka_instance_hostname: ${vcap.application.uris[0]}
     eureka_instance_nonSecurePort: 80
+
+    languageList: <PORTAL_USE_LANGUAGE>
