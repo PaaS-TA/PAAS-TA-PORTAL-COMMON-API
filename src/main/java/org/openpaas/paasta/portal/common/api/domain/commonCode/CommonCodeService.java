@@ -43,8 +43,8 @@ public class CommonCodeService {
      * @param codeDetail CodeDetail(검색조건)
      * @return Map(자바클래스)
      */
-    public Map<String, Object> getCommonCodeDetail(CodeDetail codeDetail) {
-        JinqStream<CodeDetail> streams = jinqSource.streamAllPortal(CodeDetail.class);
+    public Map<String, Object> getCommonCodeDetail(CodeDetail codeDetail, String lang) {
+        JinqStream<CodeDetail> streams = jinqSource.streamAllPortal(CodeDetail.class).where(c -> c.getLanguage().equals(lang));
         int no = codeDetail.getNo();
         String groudId = codeDetail.getGroupId();
         String key = codeDetail.getKey();

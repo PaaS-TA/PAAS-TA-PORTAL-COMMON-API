@@ -30,8 +30,9 @@ public class CommonCodeController {
      * @return Map(자바클래스)
      */
     @GetMapping(V2_URL+"/codedetail")
-    public Map<String, Object> getCodeDetail(@ModelAttribute CodeDetail codeDetail) {
-        return commonCodeService.getCommonCodeDetail(codeDetail);
+    public Map<String, Object> getCodeDetail(@ModelAttribute CodeDetail codeDetail, @RequestHeader("useLang") String lang) {
+	logger.info("codedetail call, useLang :: " + lang);
+        return commonCodeService.getCommonCodeDetail(codeDetail, lang);
     }
 
 
@@ -42,9 +43,10 @@ public class CommonCodeController {
      * @return Map(자바클래스)
      */
     @GetMapping(V2_URL + "/codedetail/{no}")
-    public Map<String, Object> getCodeDetail(@PathVariable("no") int no, @ModelAttribute CodeDetail codeDetail) {
+    public Map<String, Object> getCodeDetail(@PathVariable("no") int no, @ModelAttribute CodeDetail codeDetail, @RequestHeader("useLang") String lang) {
+	logger.info("codedetail no call, useLang :: " + lang);    
         codeDetail.setNo(no);
-        return commonCodeService.getCommonCodeDetail(codeDetail);
+        return commonCodeService.getCommonCodeDetail(codeDetail, lang);
     }
 
     /**
@@ -54,10 +56,11 @@ public class CommonCodeController {
      * @return Map(자바클래스)
      */
     @GetMapping(V2_URL +"/{groupid}/codedetail")
-    public Map<String, Object> getCodeDetail(@PathVariable String groupid) {
+    public Map<String, Object> getCodeDetail(@PathVariable String groupid, @RequestHeader("useLang") String lang) {
+	logger.info("groupid codedetail call, useLang :: " + lang);
         CodeDetail codeDetail = new CodeDetail();
         codeDetail.setGroupId(groupid);
-        return commonCodeService.getCommonCodeDetail(codeDetail);
+        return commonCodeService.getCommonCodeDetail(codeDetail, lang);
     }
 
 

@@ -51,6 +51,9 @@ public class CodeDetail {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastmodified;
 
+    @Column(name = "language")
+    private String language;
+
     @Transient
     private int pageNo;
 
@@ -198,6 +201,12 @@ public class CodeDetail {
         this.orgId = orgId;
     }
 
+    public String getLanguage() { return language; }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
     @Override
     public String toString() {
         return "CodeDetail{" +
@@ -211,6 +220,7 @@ public class CodeDetail {
                 ", userId='" + userId + '\'' +
                 ", created=" + created +
                 ", lastmodified=" + lastmodified +
+		", language='" + language + '\'' +
                 ", pageNo=" + pageNo +
                 ", pageSize=" + pageSize +
                 ", procType='" + procType + '\'' +

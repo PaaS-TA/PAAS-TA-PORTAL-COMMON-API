@@ -58,12 +58,14 @@ public class StarterCategory {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastmodified;
 
-    @Formula("(SELECT cd.value FROM code_detail cd WHERE cd.key = classification AND cd.group_id = 'STARTER_CATALOG')")
+    @Formula("(SELECT cd.value FROM code_detail cd WHERE cd.key = classification AND cd.group_id = 'STARTER_CATALOG' AND cd.language = language)")
     private String classificationValue;
 
-    @Formula("(SELECT cd.summary FROM code_detail cd WHERE cd.key = classification AND cd.group_id = 'STARTER_CATALOG')")
+    @Formula("(SELECT cd.summary FROM code_detail cd WHERE cd.key = classification AND cd.group_id = 'STARTER_CATALOG' AND cd.language = language)")
     private String classificationSummary;
 
+    @Column(name = "language")
+    private String language;
 
     @Transient
     private int buildPackCategoryNo;
@@ -212,8 +214,16 @@ public class StarterCategory {
         this.tagsParam = tagsParam;
     }
 
+    public String getLanguage() {
+	return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
     @Override
     public String toString() {
-        return "StarterCategory{" + "no=" + no + ", name='" + name + '\'' + ", classification='" + classification + '\'' + ", summary='" + summary + '\'' + ", description='" + description + '\'' + ", thumbImgName='" + thumbImgName + '\'' + ", thumbImgPath='" + thumbImgPath + '\'' + ", useYn='" + useYn + '\'' + ", userId='" + userId + '\'' + ", tagsParam='" + tagsParam + '\'' + ", created=" + created + ", lastmodified=" + lastmodified + ", classificationValue='" + classificationValue + '\'' + ", classificationSummary='" + classificationSummary + '\'' + ", buildPackCategoryNo=" + buildPackCategoryNo + ", servicePackCategoryNoList=" + servicePackCategoryNoList + ", searchKeyword='" + searchKeyword + '\'' + '}';
+        return "StarterCategory{" + "no=" + no + ", name='" + name + '\'' + ", classification='" + classification + '\'' + ", summary='" + summary + '\'' + ", description='" + description + '\'' + ", thumbImgName='" + thumbImgName + '\'' + ", thumbImgPath='" + thumbImgPath + '\'' + ", useYn='" + useYn + '\'' + ", userId='" + userId + '\'' + ", tagsParam='" + tagsParam + '\'' + ", created=" + created + ", lastmodified=" + lastmodified + ", classificationValue='" + classificationValue + '\'' + ", classificationSummary='" + classificationSummary + '\'' + ", language='" + language + '\'' + ", buildPackCategoryNo=" + buildPackCategoryNo + ", servicePackCategoryNoList=" + servicePackCategoryNoList + ", searchKeyword='" + searchKeyword + '\'' + '}';
     }
 }

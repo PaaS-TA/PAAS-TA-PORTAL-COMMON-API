@@ -35,9 +35,9 @@ public class CatalogController {
      * @return Map
      */
     @GetMapping(V2_URL + "/starterpacks")
-    public Map<String, Object> getStarterNames(@ModelAttribute StarterCategory param) {
+    public Map<String, Object> getStarterNames(@RequestHeader("useLang") String lang, @ModelAttribute StarterCategory param) {
         logger.info("getStarterNames");
-        return catalogService.getStarterNamesList(param);
+        return catalogService.getStarterNamesList(param, lang);
     }
 
     /**
@@ -47,8 +47,8 @@ public class CatalogController {
      * @return Map
      */
     @GetMapping(V2_URL + "/{use}/starterpacks")
-    public Map<String, Object> getStarterList(@PathVariable String use) {
-        return catalogService.getStarterList(use);
+    public Map<String, Object> getStarterList(@RequestHeader("useLang") String lang, @PathVariable String use) {
+        return catalogService.getStarterList(use, lang);
     }
 
     /**
@@ -69,8 +69,8 @@ public class CatalogController {
      * @return Map
      */
     @GetMapping(V2_URL + "/developpacks")
-    public Map<String, Object> getBuildPackCatalogList(@ModelAttribute BuildpackCategory param) {
-        return catalogService.getBuildPackCatalogList(param);
+    public Map<String, Object> getBuildPackCatalogList(@RequestHeader("useLang") String lang, @ModelAttribute BuildpackCategory param) {
+        return catalogService.getBuildPackCatalogList(param, lang);
     }
 
     /**
@@ -83,7 +83,7 @@ public class CatalogController {
     @GetMapping(V2_URL + "/developpacks/{catalogNo}")
     public Map<String, Object> getBuildPackCatalogList(@PathVariable int catalogNo, @ModelAttribute BuildpackCategory param) {
         param.setNo(catalogNo);
-        return catalogService.getBuildPackCatalogList(param);
+        return catalogService.getBuildPackCatalogList(param, null);
     }
 
     /**
@@ -93,8 +93,8 @@ public class CatalogController {
      * @return Map
      */
     @GetMapping(V2_URL + "/{use}/developpacks")
-    public Map<String, Object> getBuildPackList(@PathVariable String use) {
-        return catalogService.getBuildPackList(use);
+    public Map<String, Object> getBuildPackList(@RequestHeader("useLang") String lang, @PathVariable String use) {
+        return catalogService.getBuildPackList(use, lang);
     }
 
 
@@ -111,8 +111,8 @@ public class CatalogController {
      * @return Map
      */
     @GetMapping(V2_URL + "/servicepacks")
-    public Map<String, Object> getServicePackCatalogList(@ModelAttribute ServicepackCategory param) {
-        return catalogService.getServicePackCatalogList(param);
+    public Map<String, Object> getServicePackCatalogList(@RequestHeader("useLang") String lang, @ModelAttribute ServicepackCategory param) {
+        return catalogService.getServicePackCatalogList(param, lang);
     }
 
     /**
@@ -122,8 +122,8 @@ public class CatalogController {
      * @return Map
      */
     @GetMapping(V2_URL + "/{use}/servicepacks")
-    public Map<String, Object> getServicePackList(@PathVariable String use) {
-        return catalogService.getServicePackList(use);
+    public Map<String, Object> getServicePackList(@RequestHeader("useLang") String lang, @PathVariable String use) {
+        return catalogService.getServicePackList(use, lang);
     }
 
     /**
@@ -136,7 +136,7 @@ public class CatalogController {
     @GetMapping(V2_URL + "/servicepacks/{catalogNo}")
     public Map<String, Object> getServicePackCatalogList(@PathVariable int catalogNo, @ModelAttribute ServicepackCategory param) {
         param.setNo(catalogNo);
-        return catalogService.getServicePackCatalogList(param);
+        return catalogService.getServicePackCatalogList(param, null);
     }
 
     /**
@@ -146,8 +146,8 @@ public class CatalogController {
      * @return Map
      */
     @GetMapping(V2_URL + "/starterpacks/count")
-    public Map<String, Object> getStarterCatalogCount(@ModelAttribute StarterCategory param) {
-        int starterCatalogCount = catalogService.getStarterCatalogCount(param);
+    public Map<String, Object> getStarterCatalogCount(@RequestHeader("useLang") String lang, @ModelAttribute StarterCategory param) {
+        int starterCatalogCount = catalogService.getStarterCatalogCount(param, lang);
 
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("startpackcount", starterCatalogCount);
@@ -162,8 +162,8 @@ public class CatalogController {
      * @return Map
      */
     @GetMapping(V2_URL + "/developpacks/count")
-    public Map<String, Object> getBuildPackCatalogCount(@ModelAttribute BuildpackCategory param) {
-        int buildPackCnt = catalogService.getBuildPackCatalogCount(param);
+    public Map<String, Object> getBuildPackCatalogCount(@RequestHeader("useLang") String lang, @ModelAttribute BuildpackCategory param) {
+        int buildPackCnt = catalogService.getBuildPackCatalogCount(param, lang);
 
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("buildpackcount", buildPackCnt);
@@ -177,8 +177,8 @@ public class CatalogController {
      * @return Map
      */
     @GetMapping(V2_URL + "/servicepacks/count")
-    public Map<String, Object> getServicePackCatalogCount(@ModelAttribute ServicepackCategory param) {
-        int servicePackCnt = catalogService.getServicePackCatalogCount(param);
+    public Map<String, Object> getServicePackCatalogCount(@RequestHeader("useLang") String lang, @ModelAttribute ServicepackCategory param) {
+        int servicePackCnt = catalogService.getServicePackCatalogCount(param, lang);
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("servicepackcount", servicePackCnt);
 
@@ -227,7 +227,6 @@ public class CatalogController {
      */
     @PutMapping(value = {V2_URL + "/starterpacks/{catalogNo}"})
     public Map<String, Object> updatesStarterPackCatalog(@PathVariable int catalogNo, @RequestBody StarterCategory param) {
-
         param.setNo(catalogNo);
         return catalogService.updateStarterCatalog(param);
     }

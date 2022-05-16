@@ -74,11 +74,14 @@ public class BuildpackCategory {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastmodified;
 
-    @Formula("(SELECT cd.value FROM code_detail cd WHERE cd.key = classification AND cd.group_id = 'BUILD_PACK_CATALOG')")
+    @Formula("(SELECT cd.value FROM code_detail cd WHERE cd.key = classification AND cd.group_id = 'BUILD_PACK_CATALOG' AND cd.language = language)")
     private String classificationValue;
 
-    @Formula("(SELECT cd.summary FROM code_detail cd WHERE cd.key = classification AND cd.group_id = 'BUILD_PACK_CATALOG')")
+    @Formula("(SELECT cd.summary FROM code_detail cd WHERE cd.key = classification AND cd.group_id = 'BUILD_PACK_CATALOG' AND cd.language = language)")
     private String classificationSummary;
+
+    @Column(name = "language")
+    private String language;
 
     @Transient
     private String searchKeyword;
@@ -246,8 +249,16 @@ public class BuildpackCategory {
         this.tagsParam = tagsParam;
     }
 
+    public String getLanguage() {
+	return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
     @Override
     public String toString() {
-        return "BuildpackCategory{" + "no=" + no + ", name='" + name + '\'' + ", classification='" + classification + '\'' + ", summary='" + summary + '\'' + ", description='" + description + '\'' + ", buildPackName='" + buildPackName + '\'' + ", thumbImgName='" + thumbImgName + '\'' + ", thumbImgPath='" + thumbImgPath + '\'' + ", useYn='" + useYn + '\'' + ", appSampleFileName='" + appSampleFileName + '\'' + ", appSampleFilePath='" + appSampleFilePath + '\'' + ", docFileUrl='" + docFileUrl + '\'' + ", appSampleFileSize='" + appSampleFileSize + '\'' + ", userId='" + userId + '\'' + ", tagsParam='" + tagsParam + '\'' + ", created=" + created + ", lastmodified=" + lastmodified + ", classificationValue='" + classificationValue + '\'' + ", classificationSummary='" + classificationSummary + '\'' + ", searchKeyword='" + searchKeyword + '\'' + '}';
+        return "BuildpackCategory{" + "no=" + no + ", name='" + name + '\'' + ", classification='" + classification + '\'' + ", summary='" + summary + '\'' + ", description='" + description + '\'' + ", buildPackName='" + buildPackName + '\'' + ", thumbImgName='" + thumbImgName + '\'' + ", thumbImgPath='" + thumbImgPath + '\'' + ", useYn='" + useYn + '\'' + ", appSampleFileName='" + appSampleFileName + '\'' + ", appSampleFilePath='" + appSampleFilePath + '\'' + ", docFileUrl='" + docFileUrl + '\'' + ", appSampleFileSize='" + appSampleFileSize + '\'' + ", userId='" + userId + '\'' + ", tagsParam='" + tagsParam + '\'' + ", created=" + created + ", lastmodified=" + lastmodified + ", classificationValue='" + classificationValue + '\'' + ", classificationSummary='" + classificationSummary + '\'' + ", language='" + language + '\'' + ", searchKeyword='" + searchKeyword + '\'' + '}';
     }
 }

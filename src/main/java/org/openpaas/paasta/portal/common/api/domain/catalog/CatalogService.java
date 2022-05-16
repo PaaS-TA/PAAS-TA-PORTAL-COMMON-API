@@ -57,6 +57,7 @@ public class CatalogService {
     public Map<String, Object> getStarterCatalog(int no) {
         logger.info("" + no);
         StarterCategory starterCategory = starterCategoryRepository.findOne(no);
+
         try {
             //기존 스타터 서비스 릴레이션 가져오기
             List<Integer> ssrIntList = new ArrayList<>();
@@ -75,8 +76,8 @@ public class CatalogService {
              * -> List로 왜 뽑냐면...Buildpack relation 하나만 들어간다는 전제가 걸려야함
              * -> JPA상에서 에러를 배출...Unique 값이 아닌데 하나만 나오게 했다고 그래서 List로 뽑음
              */
-            List<StarterBuildpackRelation> sbr = starterBuildPackRelationRepository.findByStarterCatalogNo(no);
-            starterCategory.setBuildPackCategoryNo(sbr.get(0).getBuildpackCategoryNo());
+                List<StarterBuildpackRelation> sbr = starterBuildPackRelationRepository.findByStarterCatalogNo(no);
+                starterCategory.setBuildPackCategoryNo(sbr.get(0).getBuildpackCategoryNo());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -91,9 +92,9 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    public Map<String, Object> getStarterNamesList(StarterCategory param) {
+    public Map<String, Object> getStarterNamesList(StarterCategory param, String lang) {
         logger.info("getStarterNamesList :: " + param.toString());
-        JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class);
+        JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class).where(c -> c.getLanguage().equals(lang));
 
         //int no = param.getNo();
         String searchKeyword = param.getSearchKeyword();
@@ -117,8 +118,8 @@ public class CatalogService {
      * @param use String
      * @return Map(자바클래스)
      */
-    public Map<String, Object> getStarterList(String use) {
-        JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class);
+    public Map<String, Object> getStarterList(String use, String lang) {
+        JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class).where(c -> c.getLanguage().equals(lang));
         if (null != use && !"".equals(use)) {
             streams = streams.where(c -> c.getUseYn().equals(use));
         }
@@ -135,9 +136,16 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    public Map<String, Object> getBuildPackCatalogList(BuildpackCategory param) {
+    public Map<String, Object> getBuildPackCatalogList(BuildpackCategory param, String lang) {
         logger.info("getBuildPackCatalogList :: " + param.toString());
-        JinqStream<BuildpackCategory> streams = jinqSource.streamAllPortal(BuildpackCategory.class);
+	
+	JinqStream<BuildpackCategory> streams;
+
+	if(lang == null) {
+		streams = jinqSource.streamAllPortal(BuildpackCategory.class);
+	} else {
+		streams = jinqSource.streamAllPortal(BuildpackCategory.class).where(c -> c.getLanguage().equals(lang));
+	}
 
         int no = param.getNo();
         String searchKeyword = param.getSearchKeyword();
@@ -163,8 +171,8 @@ public class CatalogService {
      * @param use String
      * @return Map(자바클래스)
      */
-    public Map<String, Object> getBuildPackList(String use) {
-        JinqStream<BuildpackCategory> streams = jinqSource.streamAllPortal(BuildpackCategory.class);
+    public Map<String, Object> getBuildPackList(String use, String lang) {
+        JinqStream<BuildpackCategory> streams = jinqSource.streamAllPortal(BuildpackCategory.class).where(c -> c.getLanguage().equals(lang));
         if (null != use && !"".equals(use)) {
             streams = streams.where(c -> c.getUseYn().equals(use));
         }
@@ -200,8 +208,8 @@ public class CatalogService {
      * @param use String
      * @return Map(자바클래스)
      */
-    public Map<String, Object> getServicePackList(String use) {
-        JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class);
+    public Map<String, Object> getServicePackList(String use, String lang) {
+        JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class).where(c -> c.getLanguage().equals(lang));
         logger.info(use);
         if (null != use && !"".equals(use)) {
             streams = streams.where(c -> c.getUseYn().equals(use));
@@ -220,9 +228,17 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    public Map<String, Object> getServicePackCatalogList(ServicepackCategory param) {
+    public Map<String, Object> getServicePackCatalogList(ServicepackCategory param, String lang) {
         logger.info("getServicePackCatalogList :: " + param.toString());
-        JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class);
+
+	JinqStream<ServicepackCategory> streams;
+
+	if(lang == null) {
+		streams = jinqSource.streamAllPortal(ServicepackCategory.class);
+        } else {
+                streams = jinqSource.streamAllPortal(ServicepackCategory.class).where(c -> c.getLanguage().equals(lang));
+        }
+
         int no = param.getNo();
         String searchKeyword = param.getSearchKeyword();
         if (null != searchKeyword && !"".equals(searchKeyword)) {
@@ -247,9 +263,9 @@ public class CatalogService {
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
-    public int getStarterCatalogCount(StarterCategory param) {
+    public int getStarterCatalogCount(StarterCategory param, String lang) {
         logger.info("getStarterCatalogCount :: " + param.toString());
-        JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class);
+        JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class).where(c -> c.getLanguage().equals(lang));
 
         int startPackCnt = 0;
         String name = param.getName();
@@ -269,9 +285,9 @@ public class CatalogService {
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
-    public int getBuildPackCatalogCount(BuildpackCategory param) {
+    public int getBuildPackCatalogCount(BuildpackCategory param, String lang) {
         logger.info("getBuildPackCatalogCount :: " + param.toString());
-        JinqStream<BuildpackCategory> streams = jinqSource.streamAllPortal(BuildpackCategory.class);
+        JinqStream<BuildpackCategory> streams = jinqSource.streamAllPortal(BuildpackCategory.class).where(c -> c.getLanguage().equals(lang));
 
         int buildPackCnt = 0;
         String name = param.getName();
@@ -293,9 +309,9 @@ public class CatalogService {
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
-    public int getServicePackCatalogCount(ServicepackCategory param) {
+    public int getServicePackCatalogCount(ServicepackCategory param, String lang) {
         logger.info("getServicePackCatalogCount :: " + param.toString());
-        JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class);
+        JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class).where(c -> c.getLanguage().equals(lang));
 
         int servicePackCnt = 0;
         String name = param.getName();
