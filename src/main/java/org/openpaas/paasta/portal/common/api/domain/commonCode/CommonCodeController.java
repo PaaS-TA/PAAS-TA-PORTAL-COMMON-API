@@ -30,8 +30,8 @@ public class CommonCodeController {
      * @return Map(자바클래스)
      */
     @GetMapping(V2_URL+"/codedetail")
-    public Map<String, Object> getCodeDetail(@ModelAttribute CodeDetail codeDetail) {
-        return commonCodeService.getCommonCodeDetail(codeDetail);
+    public Map<String, Object> getCodeDetail(@ModelAttribute CodeDetail codeDetail, @RequestHeader("useLang") String lang) {
+        return commonCodeService.getCommonCodeDetail(codeDetail, lang);
     }
 
 
@@ -44,7 +44,7 @@ public class CommonCodeController {
     @GetMapping(V2_URL + "/codedetail/{no}")
     public Map<String, Object> getCodeDetail(@PathVariable("no") int no, @ModelAttribute CodeDetail codeDetail) {
         codeDetail.setNo(no);
-        return commonCodeService.getCommonCodeDetail(codeDetail);
+        return commonCodeService.getCommonCodeDetail(codeDetail, null);
     }
 
     /**
@@ -54,10 +54,13 @@ public class CommonCodeController {
      * @return Map(자바클래스)
      */
     @GetMapping(V2_URL +"/{groupid}/codedetail")
-    public Map<String, Object> getCodeDetail(@PathVariable String groupid) {
+    public Map<String, Object> getCodeDetail(@PathVariable String groupid, @RequestHeader("useLang") String lang) {
+//    public Map<String, Object> getCodeDetail(@PathVariable int groupno, @RequestHeader("useLang") String lang) {
+	logger.info("groupid codedetail call, useLang :: " + lang);
         CodeDetail codeDetail = new CodeDetail();
         codeDetail.setGroupId(groupid);
-        return commonCodeService.getCommonCodeDetail(codeDetail);
+//        codeDetail.setGroupNo(groupno);
+        return commonCodeService.getCommonCodeDetail(codeDetail, lang);
     }
 
 
@@ -68,7 +71,8 @@ public class CommonCodeController {
      * @return Map(자바클래스)
      */
     @GetMapping(V2_URL +"/codegroup")
-    public Map<String, Object> getGroupDetail(@ModelAttribute CodeGroup codeGroup) {
+    public Map<String, Object> getGroupDetail(@RequestHeader("useLang") String lang, @ModelAttribute CodeGroup codeGroup) {
+        codeGroup.setLanguage(lang);
         return commonCodeService.getGroupDetail(codeGroup);
     }
 
@@ -80,20 +84,21 @@ public class CommonCodeController {
      * @return Map(자바클래스)
      */
     @GetMapping(V2_URL +"/codegroup/{id}")
-    public Map<String, Object> getGroupDetail(@PathVariable("id") String  id, @ModelAttribute CodeGroup codeGroup) {
+    public Map<String, Object> getGroupDetail(@RequestHeader("useLang") String lang, @PathVariable("id") String id, @ModelAttribute CodeGroup codeGroup) {
         codeGroup.setId(id);
+        codeGroup.setLanguage(lang);
         return commonCodeService.getGroupDetail(codeGroup);
     }
 
     /**
      *  Detail Table 전체목록 조회한다.
      *
-     * @param groupid groupid(아이디)
+     * @param groupid groupno(아이디)
      * @return Map(자바클래스)
      */
     @GetMapping(V2_URL +"/{groupid}/codegroup")
-    public Map<String, Object> getGroupDetail(@PathVariable String  groupid) {
-        return commonCodeService.getCodeDetail(groupid);
+    public Map<String, Object> getGroupDetail(@PathVariable String groupid, @RequestHeader("useLang") String lang) {
+        return commonCodeService.getCodeDetail(groupid, lang);
     }
 
 
@@ -116,7 +121,8 @@ public class CommonCodeController {
      * @return Map(자바클래스)
      */
     @PostMapping(V2_URL +"/codegroup")
-    public Map<String, Object> insertDetailGroup(@RequestBody CodeGroup codeGroup) {
+    public Map<String, Object> insertDetailGroup(@RequestBody CodeGroup codeGroup, @RequestHeader("useLang") String lang) {
+        codeGroup.setLanguage(lang);
         return commonCodeService.insertDetailGroup(codeGroup);
     }
 
@@ -141,9 +147,10 @@ public class CommonCodeController {
      * @return Map(자바클래스)
      */
     @PutMapping(V2_URL +"/codegroup/{id}")
-    public Map<String, Object> updateCommonGroup(@PathVariable String id, @RequestBody CodeGroup codeGroup) {
+    public Map<String, Object> updateCommonGroup(@PathVariable String id, @RequestBody CodeGroup codeGroup, @RequestHeader("useLang") String lang) {
+        codeGroup.setLanguage(lang);
         Map<String, Object> resultMap = new HashMap<>();
-        String resultStr = commonCodeService.updateCommonGroup(id, codeGroup);
+        String resultStr = commonCodeService.updateCommonGroup(id, codeGroup, lang);
         resultMap.put("RESULT", resultStr);
         return resultMap;
     }
@@ -168,8 +175,8 @@ public class CommonCodeController {
      * * @return Map(자바클래스)
      */
     @DeleteMapping(V2_URL +"/codegroup/{id}")
-    public Map<String, Object> deleteCommonGroup(@PathVariable String id) {
-        return commonCodeService.deleteCommonGroup(id);
+    public Map<String, Object> deleteCommonGroup(@PathVariable String id, @RequestHeader("useLang") String lang) {
+        return commonCodeService.deleteCommonGroup(id, lang);
     }
 
 

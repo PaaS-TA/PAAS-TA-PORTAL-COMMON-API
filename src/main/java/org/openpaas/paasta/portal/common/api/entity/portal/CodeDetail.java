@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by indra on 2018-02-23.
@@ -29,8 +31,8 @@ public class CodeDetail {
     @Column(name = "summary")
     private String summary;
 
-    @Column(name = "group_id",nullable = false)
-    private String groupId;
+    @Column(name = "group_no",nullable=false)
+    private int groupNo;
 
     @Column(name = "use_yn")
     private String useYn;
@@ -51,6 +53,9 @@ public class CodeDetail {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastmodified;
 
+    @Column(name = "language")
+    private String language;
+
     @Transient
     private int pageNo;
 
@@ -65,6 +70,12 @@ public class CodeDetail {
 
     @Transient
     private String orgId;
+
+    @Transient
+    private String groupId;
+
+    @Transient
+    private List<String> languageList;
 
     @Transient
     public int getValue2() {
@@ -108,12 +119,12 @@ public class CodeDetail {
         this.summary = summary;
     }
 
-    public String getGroupId() {
-        return groupId;
+    public int getGroupNo() {
+        return groupNo;
     }
 
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
+    public void setGroupNo(int groupNo) {
+        this.groupNo = groupNo;
     }
 
     public String getUseYn() {
@@ -198,6 +209,24 @@ public class CodeDetail {
         this.orgId = orgId;
     }
 
+    public String getGroupId() { return groupId; }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public String getLanguage() { return language; }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public List<String> getLanguageList() { return languageList; }
+
+    public void setLanguageList(List<String> languageList) {
+        this.languageList = languageList;
+    }
+
     @Override
     public String toString() {
         return "CodeDetail{" +
@@ -205,18 +234,21 @@ public class CodeDetail {
                 ", key='" + key + '\'' +
                 ", value='" + value + '\'' +
                 ", summary='" + summary + '\'' +
-                ", groupId='" + groupId + '\'' +
+                ", groupNo='" + groupNo +
                 ", useYn='" + useYn + '\'' +
                 ", order=" + order +
                 ", userId='" + userId + '\'' +
                 ", created=" + created +
                 ", lastmodified=" + lastmodified +
+		        ", language='" + language + '\'' +
                 ", pageNo=" + pageNo +
                 ", pageSize=" + pageSize +
                 ", procType='" + procType + '\'' +
                 ", orgKey='" + orgKey + '\'' +
                 ", orgId='" + orgId + '\'' +
+                ", groupId='" + groupId + '\'' +
                 ", value2='" + getValue2() + '\'' +
+                ", languageList='" + languageList + '\'' +
                 '}';
     }
 }
