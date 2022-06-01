@@ -322,7 +322,6 @@ public class CommonCodeService {
 
             for(CodeGroup cg : codeGroupList) {
                 int cgNo = cg.getNo();
-                List<CodeDetail> cdTestList = codeDetailRepository.findByGroupNoAndKey(cgNo, key);
                 codeDetailList.addAll(codeDetailRepository.findByGroupNoAndKey(cgNo, key));
             }
         }
@@ -359,22 +358,35 @@ public class CommonCodeService {
      * 공통 코드 그룹을 삭제한다.
      *
      * @param id
+     * @param isCatalog
      * * @return Map(자바클래스)
      */
-    public Map<String,Object> deleteCommonGroup(String id, String lang) {
-        int no = codeGroupRepository.findByIdAndLanguage(id, lang).getNo();
+    public Map<String,Object> deleteCommonGroup(String id, String lang, String isCatalog) {
+        List<CodeGroup> codeGroupList = new ArrayList<>();
+        String result = "";
 
-        List<CodeDetail> codeDetailList = codeDetailRepository.findAllByGroupNoAndLanguage(no, lang);
-        for (CodeDetail codeDetail: codeDetailList) {
-            codeDetailRepository.delete(codeDetail.getNo());
+        if(isCatalog.equals("no")) {
+            codeGroupList.add(codeGroupRepository.findByIdAndLanguage(id, lang));
+        } else {
+            codeGroupList.addAll(codeGroupRepository.findById(id));
         }
 
-        CodeGroup codeGroup = new CodeGroup();
-        codeGroup.setNo(no);
-        codeGroupRepository.delete(codeGroup);
+        for(CodeGroup cg : codeGroupList) {
+            List<CodeDetail> codeDetailList = codeDetailRepository.findByGroupNo(cg.getNo());
+            codeDetailRepository.delete(codeDetailList);
+        }
 
+        try {
+            codeGroupRepository.delete(codeGroupList);
+            result = Constants.RESULT_STATUS_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = Constants.RESULT_STATUS_FAIL;
+        }
+
+        String finalResult = result;
         return new HashMap<String, Object>() {{
-            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+            put("RESULT", finalResult);
         }};
     }
 
@@ -382,12 +394,40 @@ public class CommonCodeService {
      * 공통 코드을 삭제한다.
      *
      * @param no
+     * @param isCatalog
      * @return Map(자바클래스)
      */
-    public Map<String,Object> deleteCommonDetail(int no) {
-        codeDetailRepository.delete(no);
+    public Map<String,Object> deleteCommonDetail(int no, String isCatalog) {
+        String result = "";
+
+        if(isCatalog.equals("no")) {
+            codeDetailRepository.delete(no);
+            result = Constants.RESULT_STATUS_SUCCESS;
+        } else {
+            CodeDetail originCodeDetail = codeDetailRepository.findOne(no);
+            int groupNo = originCodeDetail.getGroupNo();
+            String groupId = codeGroupRepository.findOne(groupNo).getId();
+
+            List<CodeGroup> codeGroupList = codeGroupRepository.findById(groupId);
+            List<CodeDetail> codeDetailList = new ArrayList<>();
+
+            for (CodeGroup codeGroup : codeGroupList) {
+                CodeDetail cd = codeDetailRepository.findByGroupNoAndKey(codeGroup.getNo(), originCodeDetail.getKey()).get(0);
+                codeDetailList.add(cd);
+            }
+
+            try {
+                codeDetailRepository.delete(codeDetailList);
+                result = Constants.RESULT_STATUS_SUCCESS;
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = Constants.RESULT_STATUS_FAIL;
+            }
+        }
+
+        String finalResult = result;
         return new HashMap<String, Object>() {{
-            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+            put("RESULT", finalResult);
         }};
     }
 

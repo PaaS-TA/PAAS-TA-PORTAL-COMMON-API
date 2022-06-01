@@ -175,8 +175,8 @@ public class CommonCodeController {
      * * @return Map(자바클래스)
      */
     @DeleteMapping(V2_URL +"/codegroup/{id}")
-    public Map<String, Object> deleteCommonGroup(@PathVariable String id, @RequestHeader("useLang") String lang) {
-        return commonCodeService.deleteCommonGroup(id, lang);
+    public Map<String, Object> deleteCommonGroup(@PathVariable String id, @RequestHeader("useLang") String lang, @RequestParam(value = "isCatalog", required = false, defaultValue = "no") String isCatalog) {
+        return commonCodeService.deleteCommonGroup(id, lang, isCatalog);
     }
 
 
@@ -187,7 +187,7 @@ public class CommonCodeController {
      * @return Map(자바클래스)
      */
     @DeleteMapping(V2_URL +"/codedetail/{no}")
-    public Map<String, Object> deleteCommonDetail(@PathVariable int no) {
-        return commonCodeService.deleteCommonDetail(no);
+    public Map<String, Object> deleteCommonDetail(@PathVariable int no, @RequestParam(value = "isCatalog", required = false, defaultValue = "no") String isCatalog) {
+        return commonCodeService.deleteCommonDetail(no, isCatalog);
     }
 }
