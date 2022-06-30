@@ -315,8 +315,10 @@ public class CommonCodeService {
         List<CodeDetail> codeDetailList = new ArrayList<>();
 
         if(codeDetail.getLanguageList().size() == 1) {
-            codeDetail.setLanguage(codeDetail.getLanguageList().get(0));
-            codeDetailList.add(codeDetail);
+//            codeDetail.setLanguage(codeDetail.getLanguageList().get(0));
+//            codeDetailList.add(codeDetail);
+            originCodeDetail.setLanguage(codeDetail.getLanguageList().get(0));
+	    codeDetailList.add(originCodeDetail);
         } else {
             List<CodeGroup> codeGroupList = codeGroupRepository.findById(groupId);
 

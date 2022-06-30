@@ -42,12 +42,13 @@ public class EmailServiceV3 {
     LanguageConfig languageConfig;
 
     public Map resetEmail(String userId, String refreshToken, String seq, String useLang) {
-        logger.info("createEmail >> userId : " + userId + " " + "seq : " + seq);
+        logger.info("resetEmail >> userId : " + userId + " " + "seq : " + seq);
         Map map = new HashMap();
 
         String templatePath = "template/ko/loginpass.html";
 
         List<String> languageList = languageConfig.getLanguageList();
+
         if(languageList.contains(useLang)) {
             templatePath = "template/" + useLang + "/loginpass.html";
         }
