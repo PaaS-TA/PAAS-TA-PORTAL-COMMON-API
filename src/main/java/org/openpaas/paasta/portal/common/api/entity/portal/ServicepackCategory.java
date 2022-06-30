@@ -44,12 +44,17 @@ public class ServicepackCategory {
     @Column(name = "doc_file_url")
     private String docFileUrl;
 
-
     @Column(name = "use_yn", nullable = false)
     private String useYn;
 
     @Column(name = "user_id", nullable = false)
     private String userId;
+
+    @Column(name = "group_no")
+    private int codeGroupNo;
+
+    @Column(name = "code_detail_no")
+    private int codeDetailNo;
 
     @CreationTimestamp
     @Column(name = "created", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false)
@@ -76,15 +81,20 @@ public class ServicepackCategory {
     @Column(name = "app_bind_yn")
     private String appBindYn;
 
-    @Formula("(SELECT cd.value FROM code_detail cd WHERE cd.key = classification AND cd.group_id = 'SERVICE_PACK_CATALOG')")
+    @Formula("(SELECT cd.value FROM code_detail cd WHERE cd.key = classification AND cd.group_no = group_no)")
     private String classificationValue;
 
-    @Formula("(SELECT cd.summary FROM code_detail cd WHERE cd.key = classification AND cd.group_id = 'SERVICE_PACK_CATALOG')")
+    @Formula("(SELECT cd.summary FROM code_detail cd WHERE cd.key = classification AND cd.group_no = group_no)")
     private String classificationSummary;
 
+    @Formula("(SELECT cd.key FROM code_detail cd WHERE cd.no = code_detail_no)")
+    private String classificationCode;
 
     @Column(name = "tags_param")
     private String tagsParam;
+
+    @Column(name = "language")
+    private String language;
 
 //    @Transient
 //    private String app_bind_parameter;
@@ -250,6 +260,13 @@ public class ServicepackCategory {
         this.classificationSummary = classificationSummary;
     }
 
+    public String getClassificationCode() {
+        return classificationCode;
+    }
+
+    public void setClassificationCode(String classificationCode) {
+        this.classificationCode = classificationCode;
+    }
 
     //    public String getApp_bind_parameter() {
 //        return app_bind_parameter;
@@ -275,8 +292,32 @@ public class ServicepackCategory {
         this.tagsParam = tagsParam;
     }
 
+    public String getLanguage() {
+	return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public int getCodeGroupNo() {
+        return codeGroupNo;
+    }
+
+    public void setCodeGroupNo(int codeGroupNo) {
+        this.codeGroupNo = codeGroupNo;
+    }
+
+    public int getCodeDetailNo() {
+        return codeDetailNo;
+    }
+
+    public void setCodeDetailNo(int codeDetailNo) {
+        this.codeDetailNo = codeDetailNo;
+    }
+
     @Override
     public String toString() {
-        return "ServicepackCategory{" + "no=" + no + ", name='" + name + '\'' + ", classification='" + classification + '\'' + ", summary='" + summary + '\'' + ", description='" + description + '\'' + ", servicePackName='" + servicePackName + '\'' + ", thumbImgName='" + thumbImgName + '\'' + ", thumbImgPath='" + thumbImgPath + '\'' + ", docFileUrl='" + docFileUrl + '\'' + ", useYn='" + useYn + '\'' + ", userId='" + userId + '\'' + ", created=" + created + ", lastmodified=" + lastmodified + ", parameter='" + parameter + '\'' + ", appBindParameter='" + appBindParameter + '\'' + ", dashboardUseYn='" + dashboardUseYn + '\'' + ", appBindYn='" + appBindYn + '\'' + ", classificationValue='" + classificationValue + '\'' + ", classificationSummary='" + classificationSummary + '\'' + ", tagsParam='" + tagsParam + '\'' + ", searchKeyword='" + searchKeyword + '\'' + '}';
+        return "ServicepackCategory{" + "no=" + no + ", name='" + name + '\'' + ", classification='" + classification + '\'' + ", summary='" + summary + '\'' + ", description='" + description + '\'' + ", servicePackName='" + servicePackName + '\'' + ", thumbImgName='" + thumbImgName + '\'' + ", thumbImgPath='" + thumbImgPath + '\'' + ", docFileUrl='" + docFileUrl + '\'' + ", useYn='" + useYn + '\'' + ", userId='" + userId + '\'' + ", codeGroupNo='" + codeGroupNo + '\'' + ", codeDetailNo='" + codeDetailNo + '\'' + ", created=" + created + ", lastmodified=" + lastmodified + ", parameter='" + parameter + '\'' + ", appBindParameter='" + appBindParameter + '\'' + ", dashboardUseYn='" + dashboardUseYn + '\'' + ", appBindYn='" + appBindYn + '\'' + ", classificationValue='" + classificationValue + '\'' + ", classificationSummary='" + classificationSummary + '\'' + ", classificationCode='" + classificationCode + '\'' + ", tagsParam='" + tagsParam + '\'' + ", language='" + language + '\'' + ", searchKeyword='" + searchKeyword + '\'' + '}';
     }
 }

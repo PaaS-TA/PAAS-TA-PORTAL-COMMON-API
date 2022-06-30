@@ -7,6 +7,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.openpaas.paasta.portal.common.api.config.EmailConfig;
+import org.openpaas.paasta.portal.common.api.config.LanguageConfig;
 import org.openpaas.paasta.portal.common.api.domain.common.CommonService;
 import org.openpaas.paasta.portal.common.api.entity.portal.InviteUser;
 import org.openpaas.paasta.portal.common.api.repository.portal.InviteUserRepository;
@@ -37,10 +38,21 @@ public class EmailServiceV3 {
     @Autowired
     CommonService commonService;
 
-    public Map resetEmail(String userId, String refreshToken, String seq) {
+    @Autowired
+    LanguageConfig languageConfig;
+
+    public Map resetEmail(String userId, String refreshToken, String seq, String useLang) {
         logger.info("createEmail >> userId : " + userId + " " + "seq : " + seq);
         Map map = new HashMap();
-        ClassPathResource cpr = new ClassPathResource("template/loginpass.html");
+
+        String templatePath = "template/ko/loginpass.html";
+
+        List<String> languageList = languageConfig.getLanguageList();
+        if(languageList.contains(useLang)) {
+            templatePath = "template/" + useLang + "/loginpass.html";
+        }
+
+        ClassPathResource cpr = new ClassPathResource(templatePath);
 
         try {
             byte[] bdata = FileCopyUtils.copyToByteArray(cpr.getInputStream());
@@ -76,11 +88,19 @@ public class EmailServiceV3 {
 
     }
 
-    public Map createEmail(String userId, String refreshToken, String seq) {
+    public Map createEmail(String userId, String refreshToken, String seq, String useLang) {
         logger.info("createEmail >> userId : " + userId + " " + "seq : " + seq);
         Map map = new HashMap();
+
+        String templatePath = "template/ko/loginemail.html";
+
+        List<String> languageList = languageConfig.getLanguageList();
+        if(languageList.contains(useLang)) {
+            templatePath = "template/" + useLang + "/loginemail.html";
+        }
+
         try {
-            ClassPathResource cpr = new ClassPathResource("template/loginemail.html");
+            ClassPathResource cpr = new ClassPathResource(templatePath);
             byte[] bdata = FileCopyUtils.copyToByteArray(cpr.getInputStream());
             String data = new String(bdata, emailConfig.getCharset());
             Document doc = Jsoup.parse(data);
@@ -109,7 +129,7 @@ public class EmailServiceV3 {
         return map;
     }
 
-    public Boolean inviteOrgEmail(Map body) {
+    public Boolean inviteOrgEmail(Map body, String useLang) {
         String[] userEmails;
 
         if (body.get("userEmail").toString().equals(""))
@@ -140,7 +160,7 @@ public class EmailServiceV3 {
                 //TODO 성공한 사람만 email 날릴 것인지
                 inviteUserRepository.save(inviteUser);
 
-                inviteOrgEmailSend(userEmail, body.get("orgName").toString(), randomId, body.get("seq").toString());
+                inviteOrgEmailSend(userEmail, body.get("orgName").toString(), randomId, body.get("seq").toString(), useLang);
             }
         } catch (Exception e) {
             logger.info("ERROR ::" + e.getMessage());
@@ -189,11 +209,19 @@ public class EmailServiceV3 {
         return body;
     }
 
-    public Map inviteOrgEmailSend(String userId, String orgName, String refreshToken, String seq) {
+    public Map inviteOrgEmailSend(String userId, String orgName, String refreshToken, String seq, String useLang) {
         logger.info("inviteOrgEmailSend >> userId : " + userId + "seq : " + seq);
         Map map = new HashMap();
+
+        String templatePath = "template/ko/invitation.html";
+
+        List<String> languageList = languageConfig.getLanguageList();
+        if(languageList.contains(useLang)) {
+            templatePath = "template/" + useLang + "/invitation.html";
+        }
+
         try {
-            ClassPathResource cpr = new ClassPathResource("template/invitation.html");
+            ClassPathResource cpr = new ClassPathResource(templatePath);
             byte[] bdata = FileCopyUtils.copyToByteArray(cpr.getInputStream());
             String data = new String(bdata, emailConfig.getCharset());
             Document doc = Jsoup.parse(data);

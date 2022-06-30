@@ -16,6 +16,9 @@ public class CodeGroup {
 
     @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "no")
+    private int no;
+
     @Column(name = "id")
     private String id;
 
@@ -31,6 +34,9 @@ public class CodeGroup {
     @Column(name = "lastmodified", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastmodified;
+
+    @Column(name = "language")
+    private String language;
 
     @Transient
     private int pageNo;
@@ -52,6 +58,15 @@ public class CodeGroup {
 
     @Column(name = "user_id")
     private String userId;
+
+
+    public int getNo() {
+        return no;
+    }
+
+    public void setNo(int no) {
+        this.no = no;
+    }
 
     public String getId() {
         return id;
@@ -141,5 +156,13 @@ public class CodeGroup {
 
     public void setSearchKeyword(String searchKeyword) {
         this.searchKeyword = searchKeyword;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }

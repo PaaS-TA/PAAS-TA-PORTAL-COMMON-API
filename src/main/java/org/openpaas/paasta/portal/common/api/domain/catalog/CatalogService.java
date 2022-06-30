@@ -48,6 +48,9 @@ public class CatalogService {
     @Autowired
     CatalogCcRepository catalogCcRepository;
 
+    @Autowired
+    CodeDetailRepository codeDetailRepository;
+
     /**
      * 앱 템플릿 카탈로그 조회
      *
@@ -57,6 +60,7 @@ public class CatalogService {
     public Map<String, Object> getStarterCatalog(int no) {
         logger.info("" + no);
         StarterCategory starterCategory = starterCategoryRepository.findOne(no);
+
         try {
             //기존 스타터 서비스 릴레이션 가져오기
             List<Integer> ssrIntList = new ArrayList<>();
@@ -91,9 +95,9 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    public Map<String, Object> getStarterNamesList(StarterCategory param) {
+    public Map<String, Object> getStarterNamesList(StarterCategory param, String lang) {
         logger.info("getStarterNamesList :: " + param.toString());
-        JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class);
+        JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class).where(c -> c.getLanguage().equals(lang));
 
         //int no = param.getNo();
         String searchKeyword = param.getSearchKeyword();
@@ -117,11 +121,13 @@ public class CatalogService {
      * @param use String
      * @return Map(자바클래스)
      */
-    public Map<String, Object> getStarterList(String use) {
-        JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class);
+    public Map<String, Object> getStarterList(String use, String lang) {
+        JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class).where(c -> c.getLanguage().equals(lang));;
+
         if (null != use && !"".equals(use)) {
             streams = streams.where(c -> c.getUseYn().equals(use));
         }
+
         streams = streams.sortedDescendingBy(c -> c.getNo());
         List<StarterCategory> starterCategoryList = streams.toList();
         return new HashMap<String, Object>() {{
@@ -135,19 +141,30 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    public Map<String, Object> getBuildPackCatalogList(BuildpackCategory param) {
+    public Map<String, Object> getBuildPackCatalogList(BuildpackCategory param, String lang, String isRequiredList) {
         logger.info("getBuildPackCatalogList :: " + param.toString());
-        JinqStream<BuildpackCategory> streams = jinqSource.streamAllPortal(BuildpackCategory.class);
+	
+	    JinqStream<BuildpackCategory> streams = jinqSource.streamAllPortal(BuildpackCategory.class);
+
+        if(lang != null && !"".equals(lang) && isRequiredList == "no") {
+            streams = streams.where(c -> c.getLanguage().equals(lang));
+        }
 
         int no = param.getNo();
         String searchKeyword = param.getSearchKeyword();
-
         if (null != searchKeyword && !"".equals(searchKeyword)) {
             streams = streams.where(c -> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
         }
 
-        if (no != 0) {
-            streams = streams.where(c -> c.getNo() == no);
+        if (no != 0) {  // 상세조회 시
+            BuildpackCategory bc = buildpackCategoryRepository.findOne(no);
+            String classificationCode = codeDetailRepository.findOne(bc.getCodeDetailNo()).getKey();
+
+            if (isRequiredList.equals("yes")) {  // 유저페이지에서 요청하는 경우
+                streams = streams.where(c -> c.getClassificationCode().equals(classificationCode));
+            } else {    // 관리자페이지에서 요청하는 경우
+                streams = streams.where(c -> c.getNo() == no);
+            }
         }
 
         streams = streams.sortedDescendingBy(c -> c.getNo());
@@ -163,11 +180,12 @@ public class CatalogService {
      * @param use String
      * @return Map(자바클래스)
      */
-    public Map<String, Object> getBuildPackList(String use) {
-        JinqStream<BuildpackCategory> streams = jinqSource.streamAllPortal(BuildpackCategory.class);
+    public Map<String, Object> getBuildPackList(String use, String lang) {
+        JinqStream<BuildpackCategory> streams = jinqSource.streamAllPortal(BuildpackCategory.class).where(c -> c.getLanguage().equals(lang));
         if (null != use && !"".equals(use)) {
             streams = streams.where(c -> c.getUseYn().equals(use));
         }
+
         streams = streams.sortedDescendingBy(c -> c.getNo());
         List<BuildpackCategory> starterCategoryList = streams.toList();
         return new HashMap<String, Object>() {{
@@ -200,12 +218,13 @@ public class CatalogService {
      * @param use String
      * @return Map(자바클래스)
      */
-    public Map<String, Object> getServicePackList(String use) {
-        JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class);
+    public Map<String, Object> getServicePackList(String use, String lang) {
+        JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class).where(c -> c.getLanguage().equals(lang));
         logger.info(use);
         if (null != use && !"".equals(use)) {
             streams = streams.where(c -> c.getUseYn().equals(use));
         }
+
         streams = streams.sortedDescendingBy(c -> c.getNo());
         List<ServicepackCategory> starterCategoryList = streams.toList();
         return new HashMap<String, Object>() {{
@@ -220,22 +239,45 @@ public class CatalogService {
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
      */
-    public Map<String, Object> getServicePackCatalogList(ServicepackCategory param) {
+    public Map<String, Object> getServicePackCatalogList(ServicepackCategory param, String lang, String isRequiredList) {
         logger.info("getServicePackCatalogList :: " + param.toString());
-        JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class);
+
+	    JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class);
+
+	    if(lang != null && !"".equals(lang) && isRequiredList == "no") {
+            streams = streams.where(c -> c.getLanguage().equals(lang));
+        }
+
         int no = param.getNo();
         String searchKeyword = param.getSearchKeyword();
         if (null != searchKeyword && !"".equals(searchKeyword)) {
             streams = streams.where(c -> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
         }
 
+        logger.info("서비스 카탈로그 번호 확인 --> " + no);
         if (no != 0) {
-            streams = streams.where(c -> c.getNo() == no);
+            ServicepackCategory sc = servicepackCategoryRepository.findOne(no);
+            logger.info("서비스팩 카테고리 확인 --> " + sc.toString());
+            String classificationCode = codeDetailRepository.findOne(sc.getCodeDetailNo()).getKey();
+            logger.info("분류 코드 확인 --> " + classificationCode);
+
+            logger.info("getServicePackCatalogLsit -> isRequiredList :: " + isRequiredList);
+
+            if(isRequiredList.equals("yes")) {
+                logger.info("목록 반환");
+                streams = streams.where(c -> c.getClassificationCode().equals(classificationCode));
+            } else {
+                logger.info("단순 객체 반환");
+                streams = streams.where(c -> c.getNo() == no);
+            }
         }
 
         streams = streams.sortedDescendingBy(c -> c.getNo());
         List<ServicepackCategory> servicePackCatalogList = streams.toList();
 
+        for(ServicepackCategory sc : servicePackCatalogList) {
+            logger.info("서비스팩 카탈로그 리스트 확인 --> " + sc.toString());
+        }
         return new HashMap<String, Object>() {{
             put("list", servicePackCatalogList);
         }};
@@ -247,9 +289,9 @@ public class CatalogService {
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
-    public int getStarterCatalogCount(StarterCategory param) {
+    public int getStarterCatalogCount(StarterCategory param, String lang) {
         logger.info("getStarterCatalogCount :: " + param.toString());
-        JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class);
+        JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class).where(c -> c.getLanguage().equals(lang));
 
         int startPackCnt = 0;
         String name = param.getName();
@@ -260,6 +302,10 @@ public class CatalogService {
             List<StarterCategory> starterCategoryList = streams.toList();
             startPackCnt = starterCategoryList.size();
         }
+
+        int codeDetailNo = param.getCodeDetailNo();
+
+
         return startPackCnt;
     }
 
@@ -269,9 +315,9 @@ public class CatalogService {
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
-    public int getBuildPackCatalogCount(BuildpackCategory param) {
+    public int getBuildPackCatalogCount(BuildpackCategory param, String lang) {
         logger.info("getBuildPackCatalogCount :: " + param.toString());
-        JinqStream<BuildpackCategory> streams = jinqSource.streamAllPortal(BuildpackCategory.class);
+        JinqStream<BuildpackCategory> streams = jinqSource.streamAllPortal(BuildpackCategory.class).where(c -> c.getLanguage().equals(lang));
 
         int buildPackCnt = 0;
         String name = param.getName();
@@ -293,9 +339,9 @@ public class CatalogService {
      * @return Map(자바클래스)
      * @throws Exception Exception(자바클래스)
      */
-    public int getServicePackCatalogCount(ServicepackCategory param) {
+    public int getServicePackCatalogCount(ServicepackCategory param, String lang) {
         logger.info("getServicePackCatalogCount :: " + param.toString());
-        JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class);
+        JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class).where(c -> c.getLanguage().equals(lang));
 
         int servicePackCnt = 0;
         String name = param.getName();
@@ -394,7 +440,7 @@ public class CatalogService {
     }
 
     /**
-     * 앱 개발환경 카탈로그를 수정한다.
+     * 앱 템플릿 카탈로그를 수정한다.
      *
      * @param param Catalog(모델클래스)
      * @return Map(자바클래스)
@@ -471,6 +517,7 @@ public class CatalogService {
         param.setCreated(update.getCreated());
         param.setLastmodified(new Date());
         //BuildpackCategory buildpackCategory = buildpackCategoryRepository.save(param);
+        logger.info("앱 개발환경 카탈로그 확인 --> " + param.toString());
         buildpackCategoryRepository.save(param);
 
         return new HashMap<String, Object>() {{
@@ -571,13 +618,13 @@ public class CatalogService {
     /**
      * 최신항목을 가져온다.
      */
-    public Map<String, Object> getHistory(String userid) {
+    public Map<String, Object> getHistory(String userid, String lang) {
         List<CatalogHistory> catalogHistories = catalogHistoryRepository.findAllByUserIdOrderByLastmodifiedDesc(userid);
         List<Object> resultHistory = new ArrayList<>();
 
         try {
             final int starterpacknum = catalogHistories.stream().filter(a -> a.getCatalogType().equals("starter")).findFirst().get().getCatalogNo();
-            final StarterCategory starterCategory = starterCategoryRepository.findByNo(starterpacknum);
+            final StarterCategory starterCategory = starterCategoryRepository.findByNoAndLanguage(starterpacknum, lang);
             if (starterCategory != null) {
                 resultHistory.add(starterCategory);
             }
@@ -587,7 +634,7 @@ public class CatalogService {
 
         try {
             final int buildpacknum = catalogHistories.stream().filter(a -> a.getCatalogType().equals("buildPack")).findFirst().get().getCatalogNo();
-            final BuildpackCategory buildpackCategory = buildpackCategoryRepository.findByNo(buildpacknum);
+            final BuildpackCategory buildpackCategory = buildpackCategoryRepository.findByNoAndLanguage(buildpacknum, lang);
             if (buildpackCategory != null) {
                 resultHistory.add(buildpackCategory);
             }
@@ -597,7 +644,7 @@ public class CatalogService {
 
         try {
             final int servicepacknum = catalogHistories.stream().filter(a -> a.getCatalogType().equals("servicePack")).findFirst().get().getCatalogNo();
-            final ServicepackCategory servicepackCategory = servicepackCategoryRepository.findByNo(servicepacknum);
+            final ServicepackCategory servicepackCategory = servicepackCategoryRepository.findByNoAndLanguage(servicepacknum, lang);
             if (servicepackCategory != null) {
                 resultHistory.add(servicepackCategory);
             }
@@ -614,24 +661,41 @@ public class CatalogService {
     /**
      * 릴레이션에 속한 목록을 가져온다.
      */
-    public Map<String, Object> getStarterRelation(int no) {
-        StarterCategory starterCategory = starterCategoryRepository.findByNo(no);
-        List<ServicepackCategory> servicepackCategories = new ArrayList<>();
-        JinqStream<StarterServicepackRelation> streams = jinqSource.streamAllPortal(StarterServicepackRelation.class);
-        streams = streams.where(c -> c.getStarterCatalogNo() == no);
-        List<Integer> integerlist = streams.select(c -> c.getServicepackCategoryNo()).distinct().toList();
-        for (Integer number : integerlist) {
-            ServicepackCategory servicepackCategory = servicepackCategoryRepository.findByNo(number);
-            if (servicepackCategory != null) {
-                servicepackCategories.add(servicepackCategory);
-            }
+    public Map<String, Object> getStarterRelation(int no, String isRequiredList) {
+        int codeDetailNo = starterCategoryRepository.findByNo(no).getCodeDetailNo();
+        String classificationCode = codeDetailRepository.findOne(codeDetailNo).getKey();
+        List<StarterCategory> starterCategoryList = starterCategoryRepository.findAllByClassificationCode(classificationCode);
+
+        List<Integer> starterCatalogNoList = new ArrayList<>();
+        for(StarterCategory sc : starterCategoryList) {
+            starterCatalogNoList.add(sc.getNo());
         }
-        StarterBuildpackRelation starterBuildpackRelation = starterBuildPackRelationRepository.findFirstByStarterCatalogNo(no);
-        BuildpackCategory buildpackCategory = buildpackCategoryRepository.findByNo(starterBuildpackRelation.getBuildpackCategoryNo());
+
+        Map<Integer, List<ServicepackCategory>> servicepackCategoryMap = new HashMap<>();
+        Map<Integer, BuildpackCategory> buildpackCategoryMap = new HashMap<>();
+
+        for(Integer starterCatalogNo : starterCatalogNoList) {
+            //servicepack 카테고리
+            List<ServicepackCategory> servicepackCategories = new ArrayList<>();
+            List<Integer> integerlist = starterServicePackRelationRepository.getServicePackCategoryNoList(starterCatalogNo);
+            for (Integer number : integerlist) {
+                ServicepackCategory servicepackCategory = servicepackCategoryRepository.findByNo(number);
+                if (servicepackCategory != null) {
+                    servicepackCategories.add(servicepackCategory);
+                }
+            }
+            servicepackCategoryMap.put(starterCatalogNo, servicepackCategories);
+
+            // builpack 카테고리
+            StarterBuildpackRelation sbr = starterBuildPackRelationRepository.findFirstByStarterCatalogNo(starterCatalogNo);
+            BuildpackCategory buildpackCategory = buildpackCategoryRepository.findByNo(sbr.getBuildpackCategoryNo());
+            buildpackCategoryMap.put(starterCatalogNo, buildpackCategory);
+        }
+
         return new HashMap<String, Object>() {{
-            put("Starter", starterCategory);
-            put("Servicepack", servicepackCategories);
-            put("Buildpack", buildpackCategory);
+            put("Starter", starterCategoryList);
+            put("Servicepack", servicepackCategoryMap);
+            put("Buildpack", buildpackCategoryMap);
         }};
     }
 
@@ -644,6 +708,22 @@ public class CatalogService {
 
     public List<CatalogCc> getListRoutes() {
         return catalogCcRepository.findAll();
+    }
+
+    /**
+     * 앱 샘플 존재 여부를 체크합니다.
+     */
+    public Map<String, Object> getAppSample(int no) {
+        BuildpackCategory buildpackCategory = buildpackCategoryRepository.findOne(no);
+
+        if (buildpackCategory == null) {
+            return new HashMap<String, Object>() {{
+                put("RESULT", Constants.RESULT_STATUS_FAIL);
+            }};
+        }
+        return new HashMap<String, Object>() {{
+            put("RESULT", Constants.RESULT_STATUS_SUCCESS);
+        }};
     }
 
 

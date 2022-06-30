@@ -10,11 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.POST;
-import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -219,21 +215,21 @@ public class UserController {
      * @throws Exception the exception
      */
     @PostMapping(V2_URL + "/users/create/email")
-    public Map<String, Object> createUserEmail(@RequestBody Map body) throws Exception {
-        Map result = userService.createRequestUser(body);
+    public Map<String, Object> createUserEmail(@RequestBody Map body, @RequestHeader(value = "useLang") String lang) throws Exception {
+        Map result = userService.createRequestUser(body, lang);
         return result;
     }
 
     /**
-     * 사용자를 생성하기 위해 인증 메일을 발송한다.
+     * 비밀번호를 초기화하기 위해 인증 메일을 발송한다.
      *
      * @return map all user name
      * @throws Exception the exception
      */
 
     @PostMapping(V2_URL + "/users/password/email")
-    public Map<String, Object> resetRequestUser(@RequestBody Map body) throws Exception {
-        Map result = userService.resetRequestUser(body);
+    public Map<String, Object> resetRequestUser(@RequestBody Map body, @RequestHeader(value = "useLang") String lang) throws Exception {
+        Map result = userService.resetRequestUser(body, lang);
         return result;
     }
 

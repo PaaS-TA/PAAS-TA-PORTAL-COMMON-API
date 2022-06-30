@@ -1,35 +1,23 @@
 package org.openpaas.paasta.portal.common.api.domain.user;
 
 
-
 import org.apache.commons.lang.RandomStringUtils;
 import org.openpaas.paasta.portal.common.api.config.JinqSource;
 import org.openpaas.paasta.portal.common.api.config.dataSource.PortalConfig;
 import org.openpaas.paasta.portal.common.api.config.dataSource.UaaConfig;
 import org.openpaas.paasta.portal.common.api.domain.common.CommonService;
-import org.openpaas.paasta.portal.common.api.domain.email.EmailService;
 import org.openpaas.paasta.portal.common.api.domain.email.EmailServiceV3;
 import org.openpaas.paasta.portal.common.api.entity.portal.UserDetail;
-import org.openpaas.paasta.portal.common.api.entity.uaa.Users;
 import org.openpaas.paasta.portal.common.api.repository.portal.UserDetailRepository;
 import org.openpaas.paasta.portal.common.api.repository.uaa.UsersRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Tuple;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -93,7 +81,7 @@ public class UserServiceV3 {
      * @return boolean
      * @throws IOException the io exception
      */
-    public Map createRequestUser(Map body) {
+    public Map createRequestUser(Map body, String useLang) {
         Map map = new HashMap();
         try {
             String randomId = RandomStringUtils.randomAlphanumeric(17).toUpperCase() + RandomStringUtils.randomAlphanumeric(2).toUpperCase();
@@ -112,7 +100,7 @@ public class UserServiceV3 {
              * 여기서 에러나면 Exception으로 빠져버림
              */
             createUser(userDetail);
-            map = emailServiceV3.createEmail(userDetail.getUserId(), randomId, body.get("seq").toString());
+            map = emailServiceV3.createEmail(userDetail.getUserId(), randomId, body.get("seq").toString(), useLang);
         } catch (Exception e) {
             e.printStackTrace();
             map.put("result", false);
@@ -129,7 +117,7 @@ public class UserServiceV3 {
      * @return boolean
      * @throws IOException the io exception
      */
-    public Map  resetRequestUser(Map body) {
+    public Map  resetRequestUser(Map body, String useLang) {
         Map map = new HashMap();
 
         try {
@@ -145,7 +133,7 @@ public class UserServiceV3 {
              * 여기서 에러나면 Exception으로 빠져버림
              */
             createUser(userDetail);
-            map = emailServiceV3.resetEmail(userDetail.getUserId(), randomId, body.get("seq").toString());
+            map = emailServiceV3.resetEmail(userDetail.getUserId(), randomId, body.get("seq").toString(), useLang);
         } catch (Exception e) {
             e.printStackTrace();
             map.put("result", false);

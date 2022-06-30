@@ -82,6 +82,9 @@ eureka:
     lease-expiration-duration-in-seconds: 5
     lease-renewal-interval-in-seconds: 10
 
+# internationalization
+languageList: <PORTAL_USE_LANGUAGE>
+
 #Hystrix Setting(current version not used)
 #hystrix:
 #  threadpool:

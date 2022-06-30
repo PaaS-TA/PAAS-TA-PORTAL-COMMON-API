@@ -48,6 +48,12 @@ public class StarterCategory {
     @Column(name = "tags_param")
     private String tagsParam;
 
+    @Column(name = "group_no")
+    private int codeGroupNo;
+
+    @Column(name = "code_detail_no")
+    private int codeDetailNo;
+
     @CreationTimestamp
     @Column(name = "created", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -58,12 +64,17 @@ public class StarterCategory {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastmodified;
 
-    @Formula("(SELECT cd.value FROM code_detail cd WHERE cd.key = classification AND cd.group_id = 'STARTER_CATALOG')")
+    @Formula("(SELECT cd.value FROM code_detail cd WHERE cd.key = classification AND cd.group_no = group_no)")
     private String classificationValue;
 
-    @Formula("(SELECT cd.summary FROM code_detail cd WHERE cd.key = classification AND cd.group_id = 'STARTER_CATALOG')")
+    @Formula("(SELECT cd.summary FROM code_detail cd WHERE cd.key = classification AND cd.group_no = group_no)")
     private String classificationSummary;
 
+    @Formula("(SELECT cd.key FROM code_detail cd WHERE cd.no = code_detail_no)")
+    private String classificationCode;
+
+    @Column(name = "language")
+    private String language;
 
     @Transient
     private int buildPackCategoryNo;
@@ -73,6 +84,7 @@ public class StarterCategory {
 
     @Transient
     private String searchKeyword;
+
 
     public int getNo() {
         return no;
@@ -180,6 +192,14 @@ public class StarterCategory {
         this.classificationSummary = classificationSummary;
     }
 
+    public String getClassificationCode() {
+        return classificationCode;
+    }
+
+    public void setClassificationCode(String classificationCode) {
+        this.classificationCode = classificationCode;
+    }
+
     public int getBuildPackCategoryNo() {
         return buildPackCategoryNo;
     }
@@ -212,8 +232,32 @@ public class StarterCategory {
         this.tagsParam = tagsParam;
     }
 
+    public String getLanguage() {
+	return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public int getCodeGroupNo() {
+        return codeGroupNo;
+    }
+
+    public void setCodeGroupNo(int codeGroupNo) {
+        this.codeGroupNo = codeGroupNo;
+    }
+
+    public int getCodeDetailNo() {
+        return codeDetailNo;
+    }
+
+    public void setCodeDetailNo(int codeDetailNo) {
+        this.codeDetailNo = codeDetailNo;
+    }
+
     @Override
     public String toString() {
-        return "StarterCategory{" + "no=" + no + ", name='" + name + '\'' + ", classification='" + classification + '\'' + ", summary='" + summary + '\'' + ", description='" + description + '\'' + ", thumbImgName='" + thumbImgName + '\'' + ", thumbImgPath='" + thumbImgPath + '\'' + ", useYn='" + useYn + '\'' + ", userId='" + userId + '\'' + ", tagsParam='" + tagsParam + '\'' + ", created=" + created + ", lastmodified=" + lastmodified + ", classificationValue='" + classificationValue + '\'' + ", classificationSummary='" + classificationSummary + '\'' + ", buildPackCategoryNo=" + buildPackCategoryNo + ", servicePackCategoryNoList=" + servicePackCategoryNoList + ", searchKeyword='" + searchKeyword + '\'' + '}';
+        return "StarterCategory{" + "no=" + no + ", name='" + name + '\'' + ", classification='" + classification + '\'' + ", summary='" + summary + '\'' + ", description='" + description + '\'' + ", thumbImgName='" + thumbImgName + '\'' + ", thumbImgPath='" + thumbImgPath + '\'' + ", useYn='" + useYn + '\'' + ", userId='" + userId + '\'' + ", tagsParam='" + tagsParam + '\'' + ", codeGroupNo='" + codeGroupNo + '\'' + ", codeDetailNo='" + codeDetailNo + '\'' + ", created=" + created + ", lastmodified=" + lastmodified + ", classificationValue='" + classificationValue + '\'' + ", classificationSummary='" + classificationSummary + '\'' + ", classificationCode='" + classificationCode + ", language='" + language + '\'' + ", buildPackCategoryNo=" + buildPackCategoryNo + ", servicePackCategoryNoList=" + servicePackCategoryNoList + ", searchKeyword='" + searchKeyword + '\'' + '}';
     }
 }

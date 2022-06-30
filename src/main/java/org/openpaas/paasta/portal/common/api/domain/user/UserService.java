@@ -116,7 +116,7 @@ public class UserService {
      * @return boolean
      * @throws IOException the io exception
      */
-    public Map createRequestUser(Map body) {
+    public Map createRequestUser(Map body, String useLang) {
         Map map = new HashMap();
         try {
             String randomId = RandomStringUtils.randomAlphanumeric(17).toUpperCase() + RandomStringUtils.randomAlphanumeric(2).toUpperCase();
@@ -134,7 +134,7 @@ public class UserService {
              * 여기서 에러나면 Exception으로 빠져버림
              */
             createUser(userDetail);
-            map = emailService.createEmail(userDetail.getUserId(), randomId);
+            map = emailService.createEmail(userDetail.getUserId(), randomId, useLang);
         } catch (Exception e) {
             e.printStackTrace();
             map.put("result", false);
@@ -151,7 +151,7 @@ public class UserService {
      * @return boolean
      * @throws IOException the io exception
      */
-    public Map resetRequestUser(Map body) {
+    public Map resetRequestUser(Map body, String useLang) {
         Map map = new HashMap();
         try {
             String randomId = RandomStringUtils.randomAlphanumeric(17).toUpperCase() + RandomStringUtils.randomAlphanumeric(2).toUpperCase();
@@ -166,7 +166,7 @@ public class UserService {
              * 여기서 에러나면 Exception으로 빠져버림
              */
             createUser(userDetail);
-            map = emailService.resetEmail(userDetail.getUserId(), randomId);
+            map = emailService.resetEmail(userDetail.getUserId(), randomId, useLang);
         } catch (Exception e) {
             e.printStackTrace();
             map.put("result", false);

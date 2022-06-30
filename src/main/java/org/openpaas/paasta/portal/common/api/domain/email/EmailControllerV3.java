@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,14 +28,14 @@ public class EmailControllerV3 {
      * @return the menu list
      */
     @PostMapping(value = {"/v3/email/reset"})
-    public Map<String, Object> expiredEmail(HttpServletRequest request, @RequestBody Map body) {
+    public Map<String, Object> expiredEmail(HttpServletRequest request, @RequestBody Map body, @RequestHeader(value = "useLang") String lang) {
         String seq =  request.getParameter("seq");
         body.put("seq",seq);
         String refreshToken = "";
         if (body.get("refreshToken") != null) {
             refreshToken = body.get("refreshToken").toString();
         }
-        Map<String, Object> resultMap = emailServiceV3.resetEmail(body.get("userid").toString(), refreshToken, body.get("seq").toString());
+        Map<String, Object> resultMap = emailServiceV3.resetEmail(body.get("userid").toString(), refreshToken, body.get("seq").toString(), lang);
         return resultMap;
     }
 
@@ -44,20 +45,20 @@ public class EmailControllerV3 {
      * @return the menu list
      */
     @PostMapping(value = {"/v3/email/create"})
-    public Map<String, Object> createEmail(HttpServletRequest request, @RequestBody Map body) {
+    public Map<String, Object> createEmail(HttpServletRequest request, @RequestBody Map body, @RequestHeader(value = "useLang") String lang) {
         String seq =  request.getParameter("seq");
         body.put("seq",seq);
         String refreshToken = "";
         if (body.get("refreshToken") != null) {
             refreshToken = body.get("refreshToken").toString();
         }
-        Map<String, Object> resultMap = emailServiceV3.createEmail(body.get("userid").toString(), refreshToken, body.get("seq").toString());
+        Map<String, Object> resultMap = emailServiceV3.createEmail(body.get("userid").toString(), refreshToken, body.get("seq").toString(), lang);
         return resultMap;
     }
 
     @PostMapping( "/v3" + "/email/inviteOrg" )
-    public boolean inviteOrgEmail(@RequestBody Map<String, Object> body) {
-        return emailServiceV3.inviteOrgEmail(body);
+    public boolean inviteOrgEmail(@RequestBody Map<String, Object> body, @RequestHeader("useLang") String lang) {
+        return emailServiceV3.inviteOrgEmail(body, lang);
     }
 
     @PostMapping( "/v3" + "/email/inviteAccept" )

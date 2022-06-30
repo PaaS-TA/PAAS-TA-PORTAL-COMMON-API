@@ -1,38 +1,135 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<!--<html lang="ko">-->
 <head>
     <meta charset="UTF-8">
     <meta content='IE=edge' http-equiv='X-UA-Compatible'>
     <meta name='format-detection' content='telephone=no'/>
     <title>PaaSTa</title>
     <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <style>
-        *{margin:0;padding:0;box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;}
-        .maT10{margin-top:10px !important;}
-        .maT30{margin-top:30px !important;}
-        .maT50{margin-top:50px !important;}
-        body{height:100%;color:#4c5667;background:#f0f2f2;font-weight:400;font-size:16px;line-height:1.42857143;}
-        img{vertical-align:middle; border:0;}
-        body.email{background:#ffffff; min-width: 800px;}
-        body.email h4{color:#293133;font-size:18px;margin-bottom:10px;line-height:1.1;}
-        .loginheader{height:76px; line-height: 76px; background:#2a6575;}
-        .logo_topbg{position: absolute;top:0; right: 0; z-index: 1;}
-        .email_wrap{margin-left: 40px;}
-        .email_wrap p{font-size: 16px; color:#808487; line-height: 1.4;}
-        .email_wrap p span{color:#293133;}
-        .email_wrap p.maT10{font-size: 16px; color:#293133; margin-bottom:22px;}
-        .email_wrap button{min-width: 145px;}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+        }
 
-        .logo_w{margin-left: 40px;}
-        .loginfoot{width: 100%; min-width: 800px; background:#f0f2f2; margin-top:80px;}
-        .loginfoot p{font-family: "굴림"; font-size: 12px; padding:27px 0 22px 40px; color:#72777a;}
+        .maT10 {
+            margin-top: 10px !important;
+        }
 
-        button{font-size:16px;}
-        .colors4{background:#008fa1;color:#fff;}
-        .btns{height:32px;line-height:32px;padding:0 10px;border-radius:3px;border:none;font-weight:bold;}
+        .maT30 {
+            margin-top: 30px !important;
+        }
+
+        .maT50 {
+            margin-top: 50px !important;
+        }
+
+        body {
+            height: 100%;
+            color: #4c5667;
+            background: #f0f2f2;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 1.42857143;
+        }
+
+        img {
+            vertical-align: middle;
+            border: 0;
+        }
+
+        body.email {
+            background: #ffffff;
+            min-width: 800px;
+        }
+
+        body.email h4 {
+            color: #293133;
+            font-size: 18px;
+            margin-bottom: 10px;
+            line-height: 1.1;
+        }
+
+        .loginheader {
+            height: 76px;
+            line-height: 76px;
+            background: #2a6575;
+        }
+
+        .logo_topbg {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 1;
+        }
+
+        .email_wrap {
+            margin-left: 40px;
+        }
+
+        .email_wrap p {
+            font-size: 16px;
+            color: #808487;
+            line-height: 1.4;
+        }
+
+        .email_wrap p span {
+            color: #293133;
+        }
+
+        .email_wrap p.maT10 {
+            font-size: 16px;
+            color: #293133;
+            margin-bottom: 22px;
+        }
+
+        .email_wrap button {
+            min-width: 145px;
+        }
+
+        .logo_w {
+            margin-left: 40px;
+        }
+
+        .loginfoot {
+            width: 100%;
+            min-width: 800px;
+            background: #f0f2f2;
+            margin-top: 80px;
+        }
+
+        .loginfoot p {
+            font-family: "굴림";
+            font-size: 12px;
+            padding: 27px 0 22px 40px;
+            color: #72777a;
+        }
+
+        button {
+            font-size: 16px;
+        }
+
+        .colors4 {
+            background: #008fa1;
+            color: #fff;
+        }
+
+        .btns {
+            height: 32px;
+            line-height: 32px;
+            padding: 0 10px;
+            border-radius: 3px;
+            border: none;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body class="email">
@@ -51,11 +148,11 @@
     background-size: 50%;
     background-repeat: no-repeat;
     background-position: center;">
-        <p class="maT50">안녕하세요?</p>
-        <p class="maT10">개방형 클라우드 플랫폼 파스-타 입니다.</p><br>
-        <p>파스-타를 사용하기 위해서는 이메일 인증이 필요합니다. <br/>아래 링크를 클릭하여 인증 완료 후 계정 생성을 진행하세요.</p><br>
-        <a class="btns colors4 maT30" href="a[href]" target='_blank' name="link">이메일 주소 확인</a>
-        <p class="maT50">가입을 원하지 않는 경우, 이 메시지를 무시합니다.</p><br>
+        <h4 class="maT50">Hello?</h4>
+        <p class="maT10">Welcome to the open cloud platform, PaaS-TA.</p>
+        <p>Email verification is required to use PaaS-TA. <br/>Click the link below to create an account after the verification.</p>
+        <a class="btns colors4 maT30" href="a[href]" target='_blank' name="link">Verifiy an Email </a>
+        <p class="maT50">If you do not wish to sign-up, please ignore this message.</p>
     </div>
     <div class="loginfoot">
         <p>Copyright © 2018 PaaS-TA. All rights reserved</p>
