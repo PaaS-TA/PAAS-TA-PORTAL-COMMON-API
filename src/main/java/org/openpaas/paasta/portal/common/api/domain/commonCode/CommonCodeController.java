@@ -55,8 +55,6 @@ public class CommonCodeController {
      */
     @GetMapping(V2_URL +"/{groupid}/codedetail")
     public Map<String, Object> getCodeDetail(@PathVariable String groupid, @RequestHeader("useLang") String lang) {
-//    public Map<String, Object> getCodeDetail(@PathVariable int groupno, @RequestHeader("useLang") String lang) {
-	logger.info("groupid codedetail call, useLang :: " + lang);
         CodeDetail codeDetail = new CodeDetail();
         codeDetail.setGroupId(groupid);
 //        codeDetail.setGroupNo(groupno);
