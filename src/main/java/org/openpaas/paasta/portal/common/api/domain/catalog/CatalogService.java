@@ -96,7 +96,7 @@ public class CatalogService {
      * @return Map(자바클래스)
      */
     public Map<String, Object> getStarterNamesList(StarterCategory param, String lang) {
-        logger.info("getStarterNamesList :: " + param.toString());
+        logger.debug("getStarterNamesList :: " + param.toString());
         JinqStream<StarterCategory> streams = jinqSource.streamAllPortal(StarterCategory.class).where(c -> c.getLanguage().equals(lang));
 
         //int no = param.getNo();
@@ -142,7 +142,7 @@ public class CatalogService {
      * @return Map(자바클래스)
      */
     public Map<String, Object> getBuildPackCatalogList(BuildpackCategory param, String lang, String isRequiredList) {
-        logger.info("getBuildPackCatalogList :: " + param.toString());
+        logger.debug("getBuildPackCatalogList :: " + param.toString());
 	
 	    JinqStream<BuildpackCategory> streams = jinqSource.streamAllPortal(BuildpackCategory.class);
 
@@ -240,7 +240,7 @@ public class CatalogService {
      * @return Map(자바클래스)
      */
     public Map<String, Object> getServicePackCatalogList(ServicepackCategory param, String lang, String isRequiredList) {
-        logger.info("getServicePackCatalogList :: " + param.toString());
+        logger.debug("getServicePackCatalogList :: " + param.toString());
 
 	    JinqStream<ServicepackCategory> streams = jinqSource.streamAllPortal(ServicepackCategory.class);
 
@@ -254,20 +254,15 @@ public class CatalogService {
             streams = streams.where(c -> c.getName().contains(searchKeyword) || c.getDescription().contains(searchKeyword) || c.getSummary().contains(searchKeyword));
         }
 
-        logger.info("서비스 카탈로그 번호 확인 --> " + no);
         if (no != 0) {
             ServicepackCategory sc = servicepackCategoryRepository.findOne(no);
-            logger.info("서비스팩 카테고리 확인 --> " + sc.toString());
             String classificationCode = codeDetailRepository.findOne(sc.getCodeDetailNo()).getKey();
-            logger.info("분류 코드 확인 --> " + classificationCode);
 
-            logger.info("getServicePackCatalogLsit -> isRequiredList :: " + isRequiredList);
+            logger.debug("getServicePackCatalogLsit -> isRequiredList :: " + isRequiredList);
 
             if(isRequiredList.equals("yes")) {
-                logger.info("목록 반환");
                 streams = streams.where(c -> c.getClassificationCode().equals(classificationCode));
             } else {
-                logger.info("단순 객체 반환");
                 streams = streams.where(c -> c.getNo() == no);
             }
         }
@@ -275,9 +270,6 @@ public class CatalogService {
         streams = streams.sortedDescendingBy(c -> c.getNo());
         List<ServicepackCategory> servicePackCatalogList = streams.toList();
 
-        for(ServicepackCategory sc : servicePackCatalogList) {
-            logger.info("서비스팩 카탈로그 리스트 확인 --> " + sc.toString());
-        }
         return new HashMap<String, Object>() {{
             put("list", servicePackCatalogList);
         }};
@@ -517,7 +509,6 @@ public class CatalogService {
         param.setCreated(update.getCreated());
         param.setLastmodified(new Date());
         //BuildpackCategory buildpackCategory = buildpackCategoryRepository.save(param);
-        logger.info("앱 개발환경 카탈로그 확인 --> " + param.toString());
         buildpackCategoryRepository.save(param);
 
         return new HashMap<String, Object>() {{

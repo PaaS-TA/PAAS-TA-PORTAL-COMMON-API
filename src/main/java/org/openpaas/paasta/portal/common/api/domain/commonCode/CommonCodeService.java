@@ -52,7 +52,7 @@ public class CommonCodeService {
 
         int no = codeDetail.getNo();
 //        int groupNo = codeDetail.getGroupNo();
-//        logger.info("groupNo --> " + groupNo);
+//        logger.debug("groupNo --> " + groupNo);
         String groupId = codeDetail.getGroupId();
         String key = codeDetail.getKey();
 
@@ -65,8 +65,10 @@ public class CommonCodeService {
         }
         if (null != groupId && !"".equals(groupId) && !"null".equals(groupId.toLowerCase())) {
 //            streams = streams.where(c -> c.getGroupId().equals(groupId));
-            int groupNo = codeGroupRepository.findByIdAndLanguage(groupId, lang).getNo();
-            streams = streams.where(c -> c.getGroupNo() == groupNo);
+            if(codeGroupRepository.findByIdAndLanguage(groupId, lang) != null) {
+                int groupNo = codeGroupRepository.findByIdAndLanguage(groupId, lang).getNo();
+                streams = streams.where(c -> c.getGroupNo() == groupNo);
+            }
         }
 
 //        if (0 != groupNo) {
