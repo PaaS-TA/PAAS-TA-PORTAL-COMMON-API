@@ -6,8 +6,10 @@ applications:
   - java_buildpack
   path: build/libs/paas-ta-portal-common-api.jar
   env:
-    server_port: 80
+    server_port: 8080
 
+    BP_JVM_VERSION: 8
+    BP_SPRING_CLOUD_BINDINGS_DISABLED: true
     spring_application_name: PortalCommonApi
 
     spring_security_username: admin
@@ -48,12 +50,12 @@ applications:
     mail_smtp_properties_inviteUrl: inviteorg
 
     paasta_portal_api_authorization_base64: Basic YWRtaW46b3BlbnBhYXN0YQ==
-    paasta_portal_api_zuulUrl_cfapi: http://portal-gateway.<DOMAIN>/portalapi
-    paasta_portal_api_zuulUrl_commonapi: http://portal-gateway.<DOMAIN>/commonapi
-    paasta_portal_api_zuulUrl_storageapi: http://portal-gateway.<DOMAIN>/storageapi
+    paasta_portal_api_zuulUrl_cfapi: http://portal-gateway.<APP_DOMAIN>/portalapi
+    paasta_portal_api_zuulUrl_commonapi: http://portal-gateway.<APP_DOMAIN>/commonapi
+    paasta_portal_api_zuulUrl_storageapi: http://portal-gateway.<APP_DOMAIN>/storageapi
     paasta_portal_storageapi_type: swift
 
-    eureka_client_serviceUrl_defaultZone: http://portal-registration.<DOMAIN>/eureka/
+    eureka_client_serviceUrl_defaultZone: http://portal-registration.<APP_DOMAIN>/eureka/
     eureka_instance_hostname: ${vcap.application.uris[0]}
     eureka_instance_nonSecurePort: 80
 
